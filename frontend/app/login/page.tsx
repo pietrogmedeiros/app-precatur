@@ -1,0 +1,96 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "@/lib/api";
+import { setSession } from "@/lib/auth";
+import { PrecaturMark } from "@/components/logo";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      const { token, user } = await login(email, password);
+      setSession(token, user);
+      router.push("/sales");
+      router.refresh();
+    } catch (err: any) {
+      setError(err?.message ?? "Falha ao entrar.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 flex flex-col items-center text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#33484d] text-white">
+            <PrecaturMark className="h-8 w-8" />
+          </div>
+          <h1 className="mt-4 text-xl font-semibold tracking-tight">App Precatur</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Entre para acessar o painel</p>
+        </div>
+
+        <Card>
+          <CardContent className="p-6">
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label htmlFor="email" className="text-sm font-medium">
+                  E-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="voce@precatur.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Senha
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  required
+                />
+              </div>
+
+              {error ? (
+                <p className="rounded-md bg-secondary px-3 py-2 text-sm text-foreground">{error}</p>
+              ) : null}
+
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Entrando…" : "Entrar"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          App Precatur · Painel de vendas
+        </p>
+      </div>
+    </div>
+  );
+}

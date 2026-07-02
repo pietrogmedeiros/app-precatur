@@ -1,0 +1,19 @@
+# Production / VM: runs ONLY the API. Postgres already exists on the VM,
+# so point DATABASE_URL at it (see .env). No database container here.
+#
+# If Postgres runs on the VM host (not in Docker), you can reach it from the
+# container via "host.docker.internal" thanks to the extra_hosts mapping, e.g.:
+#   DATABASE_URL=postgres://user:pass@host.docker.internal:5432/precatur
+#
+# For local development with a throwaway Postgres, use:
+#   docker compose -f docker-compose.dev.yml up
+services:
+  api:
+    build: ./backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

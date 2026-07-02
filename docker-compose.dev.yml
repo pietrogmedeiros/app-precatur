@@ -1,0 +1,43 @@
+# Local development ONLY: spins up a throwaway Postgres + the API.
+# On the VM you do NOT use this file — the VM already has its own Postgres.
+#   docker compose -f docker-compose.dev.yml up --build
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: precatur
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d precatur"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/precatur
+      PORT: "8080"
+      CORS_ORIGIN: "*"
+      ADMIN_NAME: Admin
+      ADMIN_EMAIL: admin@precatur.com
+      ADMIN_PASSWORD: precatur
+      JWT_SECRET: dev-secret-change-me
+      JWT_TTL: 12h
+      MIGRATE_ON_START: "true"
+      SEED_ON_START: "true"
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:
