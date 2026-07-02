@@ -6,6 +6,17 @@ dotenv.config();
 const connectionString = process.env.DATABASE_URL;
 const sslOption = process.env.PGSSL === "true" ? { rejectUnauthorized: false } : undefined;
 
+// Password can be provided raw (PGPASSWORD) or base64-encoded (PGPASSWORD_B64).
+// Base64 avoids any file-parser issues with special chars like # @ (a '#' in a
+// .env line starts a comment). Encode once: printf '%s' 'yourpass' | base64
+function resolvePassword(): string | undefined {
+  const b64 = process.env.PGPASSWORD_B64;
+  if (b64 && b64.trim()) {
+    return Buffer.from(b64.trim(), "base64").toString("utf8");
+  }
+  return process.env.PGPASSWORD;
+}
+
 let poolConfig: import("pg").PoolConfig;
 
 if (connectionString) {
@@ -23,7 +34,7 @@ if (connectionString) {
     host: process.env.PGHOST,
     port: Number(process.env.PGPORT ?? 5432),
     user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
+    password: resolvePassword(),
     database: process.env.PGDATABASE,
     ssl: sslOption,
   };
