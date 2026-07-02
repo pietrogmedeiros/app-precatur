@@ -32,6 +32,7 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals and static assets.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)"],
+  // Skip Next internals, static assets, and the /api proxy (auth is enforced by
+  // the backend on those routes — the middleware must not redirect them).
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)"],
 };
