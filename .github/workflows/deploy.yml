@@ -1,0 +1,17 @@
+name: Deploy (EasyPanel)
+
+# Dispara o rebuild/deploy no EasyPanel a cada push na main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # permite disparo manual pela aba Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger EasyPanel deploy webhook
+        run: |
+          curl -fsS -X POST "${{ secrets.EASYPANEL_DEPLOY_WEBHOOK }}" \
+            && echo "Deploy disparado no EasyPanel." \
+            || (echo "Falha ao disparar o webhook do EasyPanel." && exit 1)
