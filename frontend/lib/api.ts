@@ -3,7 +3,10 @@
 
 import { getToken, clearSession, type Role, type SessionUser } from "./auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+// Empty default = same-origin: the browser calls /api/* and Next.js proxies it
+// to the backend (see rewrites() in next.config.mjs). No CORS, works on the
+// single-domain all-in-one deploy. Override only for a split front/back setup.
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export interface SummaryMetrics {
   total_leads: number;
