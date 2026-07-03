@@ -23,3 +23,13 @@ export function formatPercent(fraction: number): string {
 export function formatNumber(value: number): string {
   return new Intl.NumberFormat("pt-BR").format(value);
 }
+
+// BRL with cents — used on the proposal (formatCurrency rounds to whole reais).
+export function formatMoney(value: number): string {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number.isFinite(value) ? value : 0);
+}

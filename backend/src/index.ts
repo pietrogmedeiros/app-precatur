@@ -7,6 +7,7 @@ import { seed, seedAdmin } from "./seed";
 import { metricsRouter } from "./routes/metrics";
 import { authRouter } from "./routes/auth";
 import { usersRouter } from "./routes/users";
+import { proposalsRouter } from "./routes/proposals";
 import { requireAuth, requireAdmin } from "./auth";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.get("/api/health", async (_req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/metrics", requireAuth, metricsRouter);
 app.use("/api/users", requireAuth, requireAdmin, usersRouter);
+app.use("/api/propostas", requireAuth, requireAdmin, proposalsRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

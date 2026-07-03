@@ -64,3 +64,36 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+/* Print: isolate the proposal sheet so "Salvar como PDF" yields a clean A4. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .proposal-sheet,
+  .proposal-sheet * {
+    visibility: visible !important;
+  }
+  .proposal-sheet {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

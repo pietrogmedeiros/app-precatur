@@ -41,6 +41,30 @@ export interface UserRecord {
   created_at: string;
 }
 
+export interface Proposal {
+  id: number;
+  proposal_number: string | null;
+  proposal_date: string | null;
+  client_name: string;
+  client_doc: string | null;
+  client_contact: string | null;
+  precatorio_number: string | null;
+  tribunal: string | null;
+  ente_devedor: string | null;
+  natureza: string | null;
+  valor_face: number;
+  valor_proposta: number;
+  desagio: number;
+  forma_pagamento: string | null;
+  validade: string | null;
+  observacoes: string | null;
+  responsavel: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export type ProposalInput = Omit<Proposal, "id" | "created_by" | "created_at">;
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
@@ -87,5 +111,12 @@ export const api = {
     create: (payload: { name: string; email: string; password: string; role: Role }) =>
       request<UserRecord>("/api/users", { method: "POST", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/users/${id}`, { method: "DELETE" }),
+  },
+  proposals: {
+    list: () => request<Proposal[]>("/api/propostas"),
+    get: (id: number) => request<Proposal>(`/api/propostas/${id}`),
+    create: (payload: ProposalInput) =>
+      request<Proposal>("/api/propostas", { method: "POST", body: JSON.stringify(payload) }),
+    remove: (id: number) => request<void>(`/api/propostas/${id}`, { method: "DELETE" }),
   },
 };

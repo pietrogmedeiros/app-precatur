@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, PanelLeft, LogOut, Menu, X, UserCog } from "lucide-react";
+import { BarChart3, Users, PanelLeft, LogOut, Menu, X, UserCog, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { PrecaturMark } from "@/components/logo";
@@ -13,6 +13,8 @@ const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
   { href: "/individual", label: "Dados Individuais", icon: Users },
 ];
+
+const PROPOSAL_NAV = [{ href: "/proposta", label: "Gerar Proposta", icon: FileText }];
 
 const ADMIN_NAV = [{ href: "/users", label: "Usuários", icon: UserCog }];
 
@@ -99,6 +101,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
+          {isAdmin ? (
+            <NavGroup
+              title="Proposta"
+              items={PROPOSAL_NAV}
+              collapsed={collapsed}
+              pathname={pathname}
+            />
+          ) : null}
           {isAdmin ? (
             <NavGroup
               title="Administração"
