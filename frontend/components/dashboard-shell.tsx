@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, PanelLeft, LogOut, Menu, X, UserCog, FileText } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { PrecaturMark } from "@/components/logo";
@@ -81,6 +81,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
+        {/* Collapse toggle — floating circle on the sidebar's right edge (desktop only) */}
+        <button
+          onClick={toggleCollapsed}
+          aria-label={collapsed ? "Expandir menu" : "Recolher menu"}
+          className="absolute top-14 -right-3.5 z-50 hidden h-7 w-7 items-center justify-center rounded-full border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-foreground md:flex"
+        >
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </button>
+
         {/* Brand */}
         <div className="flex h-16 items-center gap-3 border-b px-4">
           <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#33484d] text-white">
@@ -133,15 +142,6 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <header className="sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:px-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden md:inline-flex"
-            onClick={toggleCollapsed}
-            aria-label="Recolher menu"
-          >
-            <PanelLeft className="h-5 w-5" />
-          </Button>
           <Button
             variant="ghost"
             size="icon"
