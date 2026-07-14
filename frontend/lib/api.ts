@@ -101,8 +101,14 @@ export async function login(email: string, password: string): Promise<LoginResul
   });
 }
 
+export interface MetabaseToken {
+  token: string;
+  instanceUrl: string;
+}
+
 export const api = {
   summary: () => request<SummaryMetrics>("/api/metrics/summary"),
+  metabaseToken: () => request<MetabaseToken>("/api/metabase/token"),
   byOwner: () => request<OwnerMetrics[]>("/api/metrics/by-owner"),
   funnel: () => request<FunnelStage[]>("/api/metrics/funnel"),
   timeseries: () => request<TimeseriesPoint[]>("/api/metrics/timeseries"),

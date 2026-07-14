@@ -1,142 +1,97 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Users, CheckCircle2, Trophy, Filter, Target, Wallet } from "lucide-react";
-import { api, type SummaryMetrics, type FunnelStage, type TimeseriesPoint } from "@/lib/api";
-import { KpiCard } from "@/components/kpi-card";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FunnelChart } from "@/components/charts/funnel-chart";
-import { RateRadial } from "@/components/charts/rate-radial";
-import { TimeseriesArea } from "@/components/charts/timeseries-area";
-import { formatCurrency, formatNumber, formatPercent } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
+import Script from "next/script";
+import { api } from "@/lib/api";
+import { Card, CardContent } from "@/components/ui/card";
 
-export default function SalesPage() {
-  const [summary, setSummary] = useState<SummaryMetrics | null>(null);
-  const [funnel, setFunnel] = useState<FunnelStage[]>([]);
-  const [series, setSeries] = useState<TimeseriesPoint[]>([]);
+// The Metabase embed ships a custom element <metabase-dashboard>. Declare it so
+// TSX accepts it and its embedding attributes.
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "metabase-dashboard": React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement> & {
+          token?: string;
+          "with-title"?: string;
+          "with-downloads"?: string;
+        },
+        HTMLElement
+      >;
+    }
+  }
+  interface Window {
+    metabaseConfig?: Record<string, unknown>;
+  }
+}
+
+// Refetch a little before the backend's 10-minute token expiry so the dashboard
+// never goes stale while the tab is open.
+const REFRESH_MS = 8 * 60 * 1000;
+
+export default function DashboardPage() {
+  const [token, setToken] = useState<string | null>(null);
+  const [instanceUrl, setInstanceUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    Promise.all([api.summary(), api.funnel(), api.timeseries()])
-      .then(([s, f, t]) => {
-        setSummary(s);
-        setFunnel(f);
-        setSeries(t);
-      })
-      .catch((e) => setError(e.message));
+    let active = true;
+
+    async function load() {
+      try {
+        const { token, instanceUrl } = await api.metabaseToken();
+        if (!active) return;
+        // metabaseConfig MUST exist before embed.js runs; embed.js is rendered
+        // only once instanceUrl is set below, so this always lands first.
+        window.metabaseConfig = {
+          theme: { preset: "light" },
+          isGuest: true,
+          instanceUrl,
+        };
+        setInstanceUrl(instanceUrl);
+        setToken(token);
+      } catch (e) {
+        if (active) setError(e instanceof Error ? e.message : String(e));
+      }
+    }
+
+    load();
+    timer.current = setInterval(load, REFRESH_MS);
+    return () => {
+      active = false;
+      if (timer.current) clearInterval(timer.current);
+    };
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 md:p-8">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Dados Sales</h1>
-        <p className="text-sm text-muted-foreground">Visão agregada do pipeline de vendas.</p>
-      </header>
-
-      {error ? (
-        <Card>
-          <CardContent className="p-6 text-sm text-muted-foreground">
-            Não foi possível carregar os dados: {error}. Verifique se a API está no ar em{" "}
-            <code>NEXT_PUBLIC_API_URL</code>.
-          </CardContent>
-        </Card>
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
+      {instanceUrl ? (
+        <Script src={`${instanceUrl}/app/embed.js`} strategy="afterInteractive" />
       ) : null}
 
-      {/* KPI row — the six Dados Sales metrics */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <KpiCard
-          title="Total de Leads"
-          value={summary ? formatNumber(summary.total_leads) : "—"}
-          hint="Leads no período"
-          icon={Users}
+      {error ? (
+        <div className="p-4 sm:p-6 md:p-8">
+          <Card>
+            <CardContent className="p-6 text-sm text-muted-foreground">
+              Não foi possível carregar o dashboard: {error}. Verifique se a API está no ar e se{" "}
+              <code>METABASE_SECRET_KEY</code> está configurada no servidor.
+            </CardContent>
+          </Card>
+        </div>
+      ) : token ? (
+        <metabase-dashboard
+          token={token}
+          with-title="true"
+          with-downloads="true"
+          className="flex-1"
+          style={{ display: "block", width: "100%", height: "100%" }}
         />
-        <KpiCard
-          title="Qualificados"
-          value={summary ? formatNumber(summary.qualificados) : "—"}
-          hint="Alcançaram qualificação"
-          icon={CheckCircle2}
-        />
-        <KpiCard
-          title="Convertidos"
-          value={summary ? formatNumber(summary.convertidos) : "—"}
-          hint="Fechados como ganho"
-          icon={Trophy}
-        />
-        <KpiCard
-          title="Taxa de Qualificação"
-          value={summary ? formatPercent(summary.taxa_qualificacao) : "—"}
-          hint="Qualificados / Leads"
-          icon={Filter}
-        />
-        <KpiCard
-          title="Taxa de Conversão"
-          value={summary ? formatPercent(summary.taxa_conversao) : "—"}
-          hint="Convertidos / Qualificados"
-          icon={Target}
-        />
-        <KpiCard
-          title="Valor de Pipeline"
-          value={summary ? formatCurrency(summary.valor_pipeline) : "—"}
-          hint="Em aberto (novo + qualificado)"
-          icon={Wallet}
-        />
-      </div>
-
-      {/* Funnel + rate gauges */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Funil de Conversão</CardTitle>
-            <CardDescription>Leads → Qualificados → Convertidos</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {funnel.length ? <FunnelChart data={funnel} /> : <ChartSkeleton />}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Taxa de Qualificação</CardTitle>
-            <CardDescription>Proporção de leads qualificados</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {summary ? (
-              <RateRadial value={summary.taxa_qualificacao} label="Qualificação" />
-            ) : (
-              <ChartSkeleton />
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Taxa de Conversão</CardTitle>
-            <CardDescription>Qualificados que fecharam</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {summary ? (
-              <RateRadial value={summary.taxa_conversao} label="Conversão" />
-            ) : (
-              <ChartSkeleton />
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Timeseries */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Evolução mensal</CardTitle>
-          <CardDescription>Leads e convertidos ao longo do tempo</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {series.length ? <TimeseriesArea data={series} /> : <ChartSkeleton />}
-        </CardContent>
-      </Card>
+      ) : (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-muted border-t-primary" />
+        </div>
+      )}
     </div>
   );
-}
-
-function ChartSkeleton() {
-  return <div className="h-[200px] w-full animate-pulse rounded-md bg-muted" />;
 }

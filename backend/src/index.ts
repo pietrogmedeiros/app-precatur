@@ -5,6 +5,7 @@ import { pool } from "./db";
 import { runMigrations } from "./migrate";
 import { seed, seedAdmin } from "./seed";
 import { metricsRouter } from "./routes/metrics";
+import { metabaseRouter } from "./routes/metabase";
 import { authRouter } from "./routes/auth";
 import { usersRouter } from "./routes/users";
 import { proposalsRouter } from "./routes/proposals";
@@ -36,6 +37,7 @@ app.get("/api/health", async (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/metrics", requireAuth, metricsRouter);
+app.use("/api/metabase", requireAuth, metabaseRouter);
 app.use("/api/users", requireAuth, requireAdmin, usersRouter);
 app.use("/api/propostas", requireAuth, requireAdmin, proposalsRouter);
 

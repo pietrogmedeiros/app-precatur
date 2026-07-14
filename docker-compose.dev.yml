@@ -34,6 +34,11 @@ services:
       ADMIN_PASSWORD: precatur
       JWT_SECRET: dev-secret-change-me
       JWT_TTL: 12h
+      # Não versionar o segredo real aqui. Defina METABASE_SECRET_KEY no seu
+      # ambiente/.env local; o compose faz o passthrough abaixo.
+      METABASE_SECRET_KEY: ${METABASE_SECRET_KEY:-}
+      METABASE_INSTANCE_URL: https://precatur-metabase.ty9ddu.easypanel.host
+      METABASE_DASHBOARD_ID: "2"
       MIGRATE_ON_START: "true"
       SEED_ON_START: "true"
     ports:
