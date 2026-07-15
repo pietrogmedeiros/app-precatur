@@ -129,6 +129,28 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               pathname={pathname}
             />
           ) : null}
+
+          {/* Meu Acesso — ações pessoais, disponíveis a qualquer usuário */}
+          <div className="pb-1">
+            <p
+              className={cn(
+                "px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+                collapsed && "md:sr-only"
+              )}
+            >
+              Meu Acesso
+            </p>
+            <NavAction
+              label="Trocar senha"
+              icon={KeyRound}
+              collapsed={collapsed}
+              onClick={() => {
+                setPwOpen(true);
+                setMobileOpen(false);
+              }}
+            />
+            <NavAction label="Sair" icon={LogOut} collapsed={collapsed} onClick={logout} />
+          </div>
         </nav>
 
         <div
@@ -155,29 +177,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <Menu className="h-5 w-5" />
           </Button>
 
-          <div className="ml-auto flex items-center gap-2 sm:gap-3">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-semibold">
-                {user ? initials(user.name) : "…"}
-              </div>
-              <div className="hidden leading-tight sm:block">
-                <div className="text-sm font-medium">{user?.name ?? ""}</div>
-                <div className="text-[11px] capitalize text-muted-foreground">{user?.role ?? ""}</div>
-              </div>
+          <div className="ml-auto flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-semibold">
+              {user ? initials(user.name) : "…"}
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPwOpen(true)}
-              className="gap-2"
-            >
-              <KeyRound className="h-4 w-4" />
-              <span className="hidden sm:inline">Alterar senha</span>
-            </Button>
-            <Button variant="outline" size="sm" onClick={logout} className="gap-2">
-              <LogOut className="h-4 w-4" />
-              Sair
-            </Button>
+            <div className="hidden leading-tight sm:block">
+              <div className="text-sm font-medium">{user?.name ?? ""}</div>
+              <div className="text-[11px] capitalize text-muted-foreground">{user?.role ?? ""}</div>
+            </div>
           </div>
         </header>
 
@@ -186,6 +193,34 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
     </div>
+  );
+}
+
+// Item de menu que dispara uma ação (não navega), com o mesmo visual do NavGroup.
+function NavAction({
+  label,
+  icon: Icon,
+  collapsed,
+  onClick,
+}: {
+  label: string;
+  icon: typeof Users;
+  collapsed: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      title={collapsed ? label : undefined}
+      className={cn(
+        "mb-1 flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+        "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+        collapsed && "md:justify-center md:px-0"
+      )}
+    >
+      <Icon className="h-4 w-4 flex-shrink-0" />
+      <span className={cn(collapsed && "md:hidden")}>{label}</span>
+    </button>
   );
 }
 
