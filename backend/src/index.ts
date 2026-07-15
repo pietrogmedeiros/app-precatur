@@ -40,7 +40,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/metrics", requireAuth, metricsRouter);
 app.use("/api/metabase", requireAuth, metabaseRouter);
 app.use("/api/users", requireAuth, requireAdmin, usersRouter);
-app.use("/api/propostas", requireAuth, requireAdmin, proposalsRouter);
+app.use("/api/propostas", requireAuth, proposalsRouter);
 app.use("/api/bitrix", requireAuth, bitrixRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.

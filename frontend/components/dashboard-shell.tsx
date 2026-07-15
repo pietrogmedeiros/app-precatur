@@ -113,14 +113,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
-          {isAdmin ? (
-            <NavGroup
-              title="Proposta"
-              items={PROPOSAL_NAV}
-              collapsed={collapsed}
-              pathname={pathname}
-            />
-          ) : null}
+          <NavGroup title="Proposta" items={PROPOSAL_NAV} collapsed={collapsed} pathname={pathname} />
           {isAdmin ? (
             <NavGroup
               title="Administração"
