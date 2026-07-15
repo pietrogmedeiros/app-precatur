@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, UserPlus } from "lucide-react";
+import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check } from "lucide-react";
 import { api, type UserRecord } from "@/lib/api";
 import { type Role } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,15 +22,60 @@ function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
+// Índice aleatório criptográfico (crypto.getRandomValues) — melhor que Math.random.
+function randInt(max: number): number {
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  return Math.floor((buf[0] / 2 ** 32) * max);
+}
+
+// Gera uma senha forte de 16 chars, sem caracteres ambíguos (0/O/1/l/I),
+// garantindo ao menos 1 maiúscula, 1 minúscula, 1 dígito e 1 símbolo.
+function generatePassword(length = 16): string {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower = "abcdefghijkmnpqrstuvwxyz";
+  const digits = "23456789";
+  const symbols = "!@#$%&*?-_=+";
+  const all = upper + lower + digits + symbols;
+  const pick = (set: string) => set[randInt(set.length)];
+  const chars = [pick(upper), pick(lower), pick(digits), pick(symbols)];
+  while (chars.length < length) chars.push(pick(all));
+  // Embaralha (Fisher–Yates) para não fixar a posição dos obrigatórios.
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = randInt(i + 1);
+    [chars[i], chars[j]] = [chars[j], chars[i]];
+  }
+  return chars.join("");
+}
+
 export default function UsersPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("padrao");
+  const [showPass, setShowPass] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+
+  function handleGenerate() {
+    setPassword(generatePassword());
+    setShowPass(true); // revela para o admin poder copiar e repassar
+    setCopied(false);
+  }
+
+  async function handleCopy() {
+    if (!password) return;
+    try {
+      await navigator.clipboard.writeText(password);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard indisponível — ignora */
+    }
+  }
 
   function load() {
     api.users
@@ -53,6 +98,8 @@ export default function UsersPage() {
       setEmail("");
       setPassword("");
       setRole("padrao");
+      setShowPass(false);
+      setCopied(false);
       load();
     } catch (e: any) {
       setError(e.message);
@@ -100,8 +147,47 @@ export default function UsersPage() {
                 <input id="u-email" type="email" className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
               <div className="space-y-1.5">
-                <label htmlFor="u-pass" className="text-sm font-medium">Senha</label>
-                <input id="u-pass" type="password" className={inputClass} value={password} onChange={(e) => setPassword(e.target.value)} minLength={4} required />
+                <div className="flex items-center justify-between">
+                  <label htmlFor="u-pass" className="text-sm font-medium">Senha</label>
+                  <button
+                    type="button"
+                    onClick={handleGenerate}
+                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  >
+                    <Wand2 className="h-3.5 w-3.5" />
+                    Gerar senha segura
+                  </button>
+                </div>
+                <div className="relative">
+                  <input
+                    id="u-pass"
+                    type={showPass ? "text" : "password"}
+                    className={inputClass + " pr-16 font-mono"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={4}
+                    required
+                  />
+                  <div className="absolute inset-y-0 right-1 flex items-center gap-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setShowPass((v) => !v)}
+                      className="rounded p-1 text-muted-foreground hover:text-foreground"
+                      aria-label={showPass ? "Ocultar senha" : "Mostrar senha"}
+                    >
+                      {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      disabled={!password}
+                      className="rounded p-1 text-muted-foreground hover:text-foreground disabled:opacity-40"
+                      aria-label="Copiar senha"
+                    >
+                      {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="space-y-1.5">
                 <label htmlFor="u-role" className="text-sm font-medium">Perfil</label>

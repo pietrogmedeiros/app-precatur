@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { ChangePasswordModal } from "@/components/change-password-modal";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
@@ -30,6 +31,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [pwOpen, setPwOpen] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
 
   // Restore collapse preference and session user (client only).
@@ -163,6 +165,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 <div className="text-[11px] capitalize text-muted-foreground">{user?.role ?? ""}</div>
               </div>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPwOpen(true)}
+              className="gap-2"
+            >
+              <KeyRound className="h-4 w-4" />
+              <span className="hidden sm:inline">Alterar senha</span>
+            </Button>
             <Button variant="outline" size="sm" onClick={logout} className="gap-2">
               <LogOut className="h-4 w-4" />
               Sair
@@ -172,6 +183,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         <main className="flex-1">{children}</main>
       </div>
+
+      <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
     </div>
   );
 }

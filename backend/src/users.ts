@@ -49,6 +49,18 @@ export async function createUser(input: {
   return rows[0];
 }
 
+export async function findById(id: number): Promise<UserWithHash | null> {
+  const rows = await query<UserWithHash>(
+    `SELECT id, name, email, password, role, created_at FROM users WHERE id = $1`,
+    [id]
+  );
+  return rows[0] ?? null;
+}
+
+export async function updatePassword(id: number, newPlain: string): Promise<void> {
+  await query(`UPDATE users SET password = $2 WHERE id = $1`, [id, hashPassword(newPlain)]);
+}
+
 export async function deleteUser(id: number): Promise<void> {
   await query(`DELETE FROM users WHERE id = $1`, [id]);
 }
