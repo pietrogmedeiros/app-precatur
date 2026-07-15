@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Printer, Save, Trash2, RotateCcw } from "lucide-react";
+import { FileText, Printer, Save, Trash2, RotateCcw, Download } from "lucide-react";
 import { api, type Proposal, type ProposalInput } from "@/lib/api";
-import { formatMoney } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import { PrecaturMark } from "@/components/logo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -15,8 +15,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
-const BRAND = "#33484d";
 
 const inputClass =
   "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring";
@@ -63,15 +61,52 @@ export default function PropostaPage() {
   const [ok, setOk] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  // Importação do Bitrix
+  const [bitrixRef, setBitrixRef] = useState("");
+  const [bitrixLoading, setBitrixLoading] = useState(false);
+  const [bitrixErr, setBitrixErr] = useState<string | null>(null);
+
   const faceNum = num(valorFace);
   const propostaNum = num(valorProposta);
   const desagio = faceNum > 0 ? (1 - propostaNum / faceNum) * 100 : 0;
+  // Deságio só é exibível quando há face (>0) e proposta preenchidos; senão "—".
+  const desagioDisplay =
+    valorFace.trim() && valorProposta.trim() && faceNum > 0 ? `${desagio.toFixed(1)}%` : "—";
 
   function loadHistory() {
     api.proposals
       .list()
       .then(setHistory)
       .catch((e) => setError(e.message));
+  }
+
+  async function importBitrix() {
+    setBitrixErr(null);
+    setOk(null);
+    const ref = bitrixRef.trim();
+    if (!ref) {
+      setBitrixErr("Cole o link ou o ID do deal.");
+      return;
+    }
+    setBitrixLoading(true);
+    try {
+      const d = await api.bitrixDeal(ref);
+      // Preenche apenas os campos não-nulos; null preserva o que já foi digitado.
+      if (d.clientName != null) setClientName(d.clientName);
+      if (d.clientDoc != null) setClientDoc(d.clientDoc);
+      if (d.clientContact != null) setClientContact(d.clientContact);
+      if (d.precatorioNumber != null) setPrecatorioNumber(d.precatorioNumber);
+      if (d.tribunal != null) setTribunal(d.tribunal);
+      if (d.enteDevedor != null) setEnteDevedor(d.enteDevedor);
+      if (d.natureza === "alimentar" || d.natureza === "comum") setNatureza(d.natureza);
+      if (d.valorFace != null) setValorFace(String(d.valorFace));
+      if (d.valorProposta != null) setValorProposta(String(d.valorProposta));
+      setOk(`Deal #${d.dealId} importado.`);
+    } catch (e: any) {
+      setBitrixErr(e.message);
+    } finally {
+      setBitrixLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -192,6 +227,40 @@ export default function PropostaPage() {
         <div className="no-print space-y-6">
           <Card>
             <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                Importar do Bitrix
+              </CardTitle>
+              <CardDescription>
+                Cole o link ou o ID do deal para preencher os campos automaticamente.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex gap-2">
+                <input
+                  className={inputClass}
+                  placeholder="Link do deal ou ID (ex.: 1745)"
+                  value={bitrixRef}
+                  onChange={(e) => setBitrixRef(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      importBitrix();
+                    }
+                  }}
+                />
+                <Button onClick={importBitrix} disabled={bitrixLoading} className="shrink-0">
+                  {bitrixLoading ? "Buscando…" : "Buscar"}
+                </Button>
+              </div>
+              {bitrixErr ? (
+                <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{bitrixErr}</p>
+              ) : null}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Dados da proposta</CardTitle>
               <CardDescription>Número e data que aparecem no cabeçalho.</CardDescription>
             </CardHeader>
@@ -288,104 +357,112 @@ export default function PropostaPage() {
 
         {/* ---------- Live A4 preview ---------- */}
         <div className="lg:sticky lg:top-20 lg:self-start">
-          <div className="proposal-sheet mx-auto w-full max-w-[820px] overflow-hidden rounded-lg bg-white text-neutral-900 shadow-sm ring-1 ring-neutral-200">
-            {/* Header */}
-            <div className="flex items-start justify-between gap-4 px-10 pt-10 pb-6">
-              <div className="flex items-center gap-3">
-                <div
-                  className="flex h-12 w-12 items-center justify-center rounded-lg text-white"
-                  style={{ backgroundColor: BRAND }}
-                >
-                  <PrecaturMark className="h-7 w-7" />
+          <div className="proposal-sheet mx-auto w-full max-w-[820px] rounded-lg bg-white shadow-sm ring-1 ring-neutral-200">
+            <div className="ps-body">
+              {/* Cabeçalho */}
+              <header className="ps-header">
+                <div className="ps-header-top">
+                  <div className="ps-brand">
+                    <PrecaturMark className="ps-mark" />
+                    <span className="ps-wordmark">PRECATUR</span>
+                  </div>
+                  <div className="ps-meta">
+                    Nº {proposalNumber || "—"} · {proposalDate || "—"}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-lg font-semibold tracking-tight">App Precatur</div>
-                  <div className="text-xs text-neutral-500">Proposta de Aquisição de Precatório</div>
-                </div>
-              </div>
-              <div className="text-right text-xs text-neutral-500">
-                <div>
-                  <span className="font-medium text-neutral-700">Proposta:</span> {proposalNumber || "—"}
-                </div>
-                <div>
-                  <span className="font-medium text-neutral-700">Data:</span> {proposalDate || "—"}
-                </div>
-              </div>
-            </div>
-            <div className="h-1" style={{ backgroundColor: BRAND }} />
+                <h1 className="ps-title">
+                  Proposta de Cessão de Crédito
+                  {clientName.trim() ? ` — ${clientName.trim()}` : ""}
+                </h1>
+                <div className="ps-subtitle">Documento gerado em {proposalDate || "—"}</div>
+              </header>
 
-            <div className="space-y-7 px-10 py-8">
-              {/* Cliente */}
-              <section>
-                <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-                  Proposta apresentada a
-                </h3>
-                <div className="text-base font-semibold">{clientName || "—"}</div>
-                {clientDoc ? <div className="text-sm text-neutral-600">CPF/CNPJ: {clientDoc}</div> : null}
-                {clientContact ? <div className="text-sm text-neutral-600">Contato: {clientContact}</div> : null}
-              </section>
-
-              {/* Precatório */}
-              <section>
-                <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-                  Dados do precatório
-                </h3>
-                <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-                  <PreviewField label="Nº do precatório" value={precatorioNumber} />
-                  <PreviewField label="Tribunal" value={tribunal} />
-                  <PreviewField label="Ente devedor" value={enteDevedor} />
-                  <PreviewField label="Natureza" value={naturezaLabel(natureza)} />
+              {/* 1 · Dados do cliente */}
+              <section className="ps-section">
+                <div className="ps-section-title">1 · Dados do cliente</div>
+                <div className="ps-grid">
+                  <PsField label="Nome / Razão social" value={clientName} />
+                  <PsField label="CPF / CNPJ" value={clientDoc} />
+                  <PsField label="Contato" value={clientContact} full />
                 </div>
               </section>
 
-              {/* Financeiro */}
-              <section className="overflow-hidden rounded-lg border border-neutral-200">
-                <div className="grid grid-cols-3 divide-x divide-neutral-200 text-center">
-                  <div className="p-4">
-                    <div className="text-[11px] uppercase tracking-wide text-neutral-500">Valor de Face</div>
-                    <div className="mt-1 text-base font-semibold">{formatMoney(faceNum)}</div>
-                  </div>
-                  <div className="p-4">
-                    <div className="text-[11px] uppercase tracking-wide text-neutral-500">Deságio</div>
-                    <div className="mt-1 text-base font-semibold">{desagio.toFixed(1)}%</div>
-                  </div>
-                  <div className="p-4 text-white" style={{ backgroundColor: BRAND }}>
-                    <div className="text-[11px] uppercase tracking-wide opacity-80">Valor da Proposta</div>
-                    <div className="mt-1 text-base font-bold">{formatMoney(propostaNum)}</div>
+              {/* 2 · Precatório */}
+              <section className="ps-section">
+                <div className="ps-section-title">2 · Precatório</div>
+                <div className="ps-grid">
+                  <PsField label="Nº do precatório" value={precatorioNumber} />
+                  <PsField label="Tribunal" value={tribunal} />
+                  <PsField label="Ente devedor" value={enteDevedor} />
+                  <div className="ps-field">
+                    <div className="ps-field-label">Natureza</div>
+                    <div className="ps-field-value">
+                      {natureza === "alimentar" || natureza === "comum" ? (
+                        <span
+                          className={cn(
+                            "ps-chip",
+                            natureza === "alimentar" ? "ps-chip-alimentar" : "ps-chip-comum"
+                          )}
+                        >
+                          {naturezaLabel(natureza)}
+                        </span>
+                      ) : (
+                        "—"
+                      )}
+                    </div>
                   </div>
                 </div>
               </section>
 
-              {/* Condições */}
-              <section className="space-y-2 text-sm leading-relaxed">
-                {formaPagamento ? (
-                  <p>
-                    <span className="font-semibold">Forma de pagamento: </span>
-                    {formaPagamento}
-                  </p>
-                ) : null}
-                {validade ? (
-                  <p>
-                    <span className="font-semibold">Validade da proposta: </span>
-                    {validade}
-                  </p>
-                ) : null}
-                {observacoes ? (
-                  <p>
-                    <span className="font-semibold">Observações: </span>
+              {/* 3 · Proposta */}
+              <section className="ps-section">
+                <div className="ps-section-title">3 · Proposta</div>
+
+                {/* Bloco RESULTADO em destaque */}
+                <div className="ps-result">
+                  <div className="ps-result-left">
+                    <div>
+                      <div className="ps-result-item-label">Valor de face</div>
+                      <div className="ps-result-item-value">{formatMoney(faceNum)}</div>
+                    </div>
+                    <div>
+                      <div className="ps-result-item-label">Deságio</div>
+                      <div className="ps-result-item-value">{desagioDisplay}</div>
+                    </div>
+                  </div>
+                  <div className="ps-result-main">
+                    <div className="ps-result-main-label">Valor da proposta</div>
+                    <div className="ps-result-main-value">{formatMoney(propostaNum)}</div>
+                  </div>
+                </div>
+
+                {/* Condições */}
+                <div className="ps-grid">
+                  <PsField label="Forma de pagamento" value={formaPagamento} full />
+                  <PsField label="Validade" value={validade} />
+                  <PsField label="Responsável" value={responsavel} />
+                </div>
+
+                {/* Observações (caixa creme, só se preenchida) */}
+                {observacoes.trim() ? (
+                  <div className="ps-note">
+                    <span className="ps-note-label">Observações: </span>
                     {observacoes}
-                  </p>
+                  </div>
                 ) : null}
               </section>
-
-              {/* Assinatura */}
-              <section className="pt-12">
-                <div className="mx-auto w-64 border-t border-neutral-400 pt-2 text-center">
-                  <div className="text-sm font-medium">{responsavel || "Responsável"}</div>
-                  <div className="text-xs text-neutral-500">App Precatur</div>
-                </div>
-              </section>
             </div>
+
+            {/* Rodapé */}
+            <footer className="ps-footer">
+              <div className="ps-footer-line">
+                CNPJ 57.866.623/0001-69 · (27) 99613-8930 · www.precatur.com.br
+              </div>
+              <div className="ps-footer-line">
+                R. Prof. Almeida Cousin, 125, loja 09/10 — Ed. Enseada Trade Center, Enseada do Suá,
+                Vitória/ES
+              </div>
+            </footer>
           </div>
         </div>
       </div>
@@ -456,11 +533,11 @@ function Labeled({ label, children }: { label: string; children: React.ReactNode
   );
 }
 
-function PreviewField({ label, value }: { label: string; value: string }) {
+function PsField({ label, value, full }: { label: string; value: string; full?: boolean }) {
   return (
-    <div>
-      <div className="text-[11px] uppercase tracking-wide text-neutral-400">{label}</div>
-      <div className="text-sm text-neutral-800">{value || "—"}</div>
+    <div className={cn("ps-field", full && "ps-field-full")}>
+      <div className="ps-field-label">{label}</div>
+      <div className="ps-field-value">{value.trim() || "—"}</div>
     </div>
   );
 }

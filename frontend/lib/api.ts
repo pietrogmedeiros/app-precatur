@@ -65,6 +65,22 @@ export interface Proposal {
 
 export type ProposalInput = Omit<Proposal, "id" | "created_by" | "created_at">;
 
+// Deal hydrated from the Bitrix CRM (GET /api/bitrix/deal?ref=<link|id>).
+// Only CRM-owned fields; every absent field is null (never omitted / "").
+export interface BitrixDeal {
+  dealId: string;
+  clientName: string | null;
+  clientDoc: string | null;
+  clientContact: string | null;
+  precatorioNumber: string | null;
+  tribunal: string | null;
+  enteDevedor: string | null;
+  natureza: "alimentar" | "comum" | null;
+  valorFace: number | null;
+  valorProposta: number | null;
+  meta: { fetchedAt: string; source: string };
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
@@ -83,7 +99,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(body?.message ?? `API ${path} respondeu ${res.status}`);
+    // Backend may reply with a nested envelope { error: { code, message } }
+    // (e.g. /api/bitrix/deal) or a flat { message }. Support both.
+    const message = body?.error?.message ?? body?.message;
+    throw new Error(message ?? `API ${path} respondeu ${res.status}`);
   }
   if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
@@ -118,6 +137,8 @@ export const api = {
       request<UserRecord>("/api/users", { method: "POST", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/users/${id}`, { method: "DELETE" }),
   },
+  bitrixDeal: (ref: string) =>
+    request<BitrixDeal>("/api/bitrix/deal?ref=" + encodeURIComponent(ref)),
   proposals: {
     list: () => request<Proposal[]>("/api/propostas"),
     get: (id: number) => request<Proposal>(`/api/propostas/${id}`),

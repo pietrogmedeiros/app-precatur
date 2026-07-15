@@ -65,7 +65,15 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] flex-col">
+    // Pin the embed to exactly the space below the app header (h-16 = 4rem) and
+    // clip overflow. embed.js sizes the iframe to height:100% of this host with
+    // no content auto-resize, so a fixed-height host keeps it filling the pane
+    // instead of stretching the page and leaving a tall blank area at the bottom.
+    // The embed's "Desenvolvido por Metabase" footer bar sits at the very bottom
+    // of the iframe; there is no config flag to hide it (removal is a whitelabel
+    // feature). We make the iframe FOOTER_CROP px taller than the visible pane so
+    // that bar is pushed just below the clip line — content stays fully visible.
+    <div className="h-[calc(100vh-4rem)] w-full overflow-hidden">
       {instanceUrl ? (
         <Script src={`${instanceUrl}/app/embed.js`} strategy="afterInteractive" />
       ) : null}
@@ -84,11 +92,15 @@ export default function DashboardPage() {
           token={token}
           with-title="true"
           with-downloads="true"
-          className="flex-1"
-          style={{ display: "block", width: "100%", height: "100%" }}
+          style={{
+            display: "block",
+            width: "100%",
+            // 4rem header + FOOTER_CROP (56px) to clip the Metabase footer bar.
+            height: "calc(100vh - 4rem + 56px)",
+          }}
         />
       ) : (
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex h-full items-center justify-center">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-muted border-t-primary" />
         </div>
       )}

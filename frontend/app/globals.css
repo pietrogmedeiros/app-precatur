@@ -65,7 +65,205 @@
   }
 }
 
-/* Print: isolate the proposal sheet so "Salvar como PDF" yields a clean A4. */
+/* ==========================================================================
+   Proposta comercial — .proposal-sheet (documento A4 formal, identidade brand)
+   Tokens escopados ao sheet para não colidir com o tema shadcn da app.
+   ========================================================================== */
+.proposal-sheet {
+  --brand: #33484d; /* cabeçalho, réguas, valor destaque */
+  --ink: #1c2427; /* texto de valores */
+  --label: #6b7680; /* rótulos e subtítulos cinza */
+  --line: #d9dde0; /* bordas 1px das caixas */
+  --warn-bg: #f7f2e7; /* caixa creme de observações */
+  --warn-brd: #e6d9b8;
+  --sheet-pad: 16mm; /* margem interna útil do A4 (usada no print) */
+  color: var(--ink);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding: 40px; /* respiro na tela; o print troca por --sheet-pad */
+}
+
+.ps-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Cabeçalho --- */
+.ps-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--brand);
+}
+.ps-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ps-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand);
+}
+.ps-mark {
+  height: 34px;
+  width: auto;
+  color: var(--brand);
+}
+.ps-wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--brand);
+}
+.ps-meta {
+  font-size: 11px;
+  text-align: right;
+  color: var(--label);
+  white-space: nowrap;
+}
+.ps-title {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.ps-subtitle {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--label);
+}
+
+/* --- Seções --- */
+.ps-section {
+  margin-top: 18px;
+}
+.ps-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+
+/* --- Grade de campos (trava em 2 colunas p/ o impresso) --- */
+.ps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.ps-field {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 6px 8px;
+}
+.ps-field-full {
+  grid-column: 1 / -1;
+}
+.ps-field-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--label);
+}
+.ps-field-value {
+  margin-top: 1px;
+  font-size: 13px;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+/* --- Chip de natureza (só texto + borda, sem fundo forte) --- */
+.ps-chip {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1.3;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.ps-chip-alimentar {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.ps-chip-comum {
+  border-color: var(--line);
+  color: var(--label);
+}
+
+/* --- Bloco RESULTADO em destaque --- */
+.ps-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid var(--brand);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.ps-result-left {
+  display: flex;
+  gap: 28px;
+}
+.ps-result-item-label,
+.ps-result-main-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--label);
+}
+.ps-result-item-value {
+  margin-top: 2px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ps-result-main {
+  text-align: right;
+}
+.ps-result-main-value {
+  margin-top: 2px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--brand);
+}
+
+/* --- Caixa creme de observações --- */
+.ps-note {
+  margin-top: 10px;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-brd);
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.ps-note-label {
+  font-weight: 600;
+}
+
+/* --- Rodapé --- */
+.ps-footer {
+  margin-top: 24px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.ps-footer-line {
+  font-size: 9px;
+  line-height: 1.5;
+  color: var(--label);
+}
+
+/* Print: isolate the proposal sheet so "Salvar como PDF" yields a clean A4.
+   Isolamento por visibility (o sheet vive aninhado na página) + regras do
+   design.md: A4 retrato, flex-column p/ ancorar o rodapé, break-inside e
+   print-color-adjust p/ fidelidade das réguas/chips. */
 @media print {
   body * {
     visibility: hidden !important;
@@ -78,19 +276,42 @@
     position: absolute !important;
     left: 0;
     top: 0;
-    width: 100% !important;
+    width: 210mm !important;
+    min-height: 297mm;
     max-width: none !important;
     margin: 0 !important;
+    padding: var(--sheet-pad) !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* footer empurrado para o fim */
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .ps-body {
+    flex: 1 1 auto; /* ocupa o meio; empurra o footer para baixo */
+  }
+  .ps-footer {
+    margin-top: auto; /* rodapé no rodapé, mesmo com pouco conteúdo */
+  }
+  /* não quebrar seção no meio da página */
+  .ps-section,
+  .ps-result,
+  .ps-field,
+  .ps-note,
+  .ps-header,
+  .ps-footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
   .no-print {
     display: none !important;
   }
   @page {
-    size: A4;
-    margin: 14mm;
+    size: A4 portrait;
+    margin: 0; /* margem controlada pelo padding do sheet */
   }
   * {
     -webkit-print-color-adjust: exact !important;

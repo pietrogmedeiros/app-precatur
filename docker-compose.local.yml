@@ -1,0 +1,53 @@
+# Ambiente LOCAL de visualização: Postgres descartável + API + Frontend.
+# Sobe a stack completa para abrir no navegador em http://localhost:3000
+#   docker compose -f docker-compose.local.yml up --build
+# O METABASE_SECRET_KEY vem por substituição do arquivo .env (não fica no arquivo).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: precatur
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d precatur"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/precatur
+      PORT: "8080"
+      CORS_ORIGIN: "*"
+      ADMIN_NAME: Admin
+      ADMIN_EMAIL: admin@precatur.com
+      ADMIN_PASSWORD: precatur
+      JWT_SECRET: dev-secret-change-me
+      JWT_TTL: 12h
+      METABASE_SECRET_KEY: ${METABASE_SECRET_KEY:-}
+      METABASE_INSTANCE_URL: https://precatur-metabase.ty9ddu.easypanel.host
+      METABASE_DASHBOARD_ID: "2"
+      # Webhook do Bitrix (token vem do .env local por substituição; não fica no arquivo).
+      BITRIX_WEBHOOK_BASE: ${BITRIX_WEBHOOK_BASE:-}
+      MIGRATE_ON_START: "true"
+      SEED_ON_START: "true"
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://api:8080
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"

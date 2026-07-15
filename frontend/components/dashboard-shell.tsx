@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
-  { href: "/individual", label: "Dados Individuais", icon: Users },
 ];
 
 const PROPOSAL_NAV = [{ href: "/proposta", label: "Gerar Proposta", icon: FileText }];
