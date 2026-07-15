@@ -149,13 +149,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                 setMobileOpen(false);
               }}
             />
-            <NavAction label="Sair" icon={LogOut} collapsed={collapsed} onClick={logout} />
           </div>
         </nav>
 
+        {/* Sair — fixado no rodapé do menu (nav é flex-1 e empurra pra baixo) */}
+        <div className="border-t p-3">
+          <NavAction label="Sair" icon={LogOut} collapsed={collapsed} onClick={logout} />
+        </div>
+
         <div
           className={cn(
-            "border-t p-4 text-xs text-muted-foreground",
+            "p-4 text-xs text-muted-foreground",
             collapsed && "md:hidden"
           )}
         >
