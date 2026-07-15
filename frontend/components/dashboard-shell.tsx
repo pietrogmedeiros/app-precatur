@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
-import { PrecaturMark } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 
 const DASHBOARD_NAV = [
@@ -91,9 +90,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         {/* Brand */}
         <div className="flex h-16 items-center gap-3 border-b px-4">
-          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#33484d] text-white">
-            <PrecaturMark />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/precatur-shield.png"
+            alt="Precatur"
+            className="h-9 w-9 flex-shrink-0 object-contain"
+          />
           {!collapsed ? (
             <span className="truncate text-[15px] font-semibold tracking-tight">App Precatur</span>
           ) : null}

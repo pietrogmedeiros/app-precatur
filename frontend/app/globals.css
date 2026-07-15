@@ -104,16 +104,10 @@
   gap: 8px;
   color: var(--brand);
 }
-.ps-mark {
-  height: 34px;
+.ps-logo {
+  height: 42px;
   width: auto;
-  color: var(--brand);
-}
-.ps-wordmark {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--brand);
+  display: block;
 }
 .ps-meta {
   font-size: 11px;

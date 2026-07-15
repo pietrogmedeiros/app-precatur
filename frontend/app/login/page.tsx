@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/api";
 import { setSession } from "@/lib/auth";
-import { PrecaturMark } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -35,11 +34,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#33484d] text-white">
-            <PrecaturMark className="h-8 w-8" />
-          </div>
-          <h1 className="mt-4 text-xl font-semibold tracking-tight">App Precatur</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Entre para acessar o painel</p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/precatur-logo.png" alt="Precatur" className="h-16 w-auto" />
+          <p className="mt-4 text-sm text-muted-foreground">Entre para acessar o painel</p>
         </div>
 
         <Card>

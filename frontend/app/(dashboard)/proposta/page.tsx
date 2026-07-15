@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { FileText, Printer, Save, Trash2, RotateCcw, Download } from "lucide-react";
 import { api, type Proposal, type ProposalInput } from "@/lib/api";
 import { cn, formatMoney } from "@/lib/utils";
-import { PrecaturMark } from "@/components/logo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -363,8 +362,8 @@ export default function PropostaPage() {
               <header className="ps-header">
                 <div className="ps-header-top">
                   <div className="ps-brand">
-                    <PrecaturMark className="ps-mark" />
-                    <span className="ps-wordmark">PRECATUR</span>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/precatur-logo.png" alt="Precatur" className="ps-logo" />
                   </div>
                   <div className="ps-meta">
                     Nº {proposalNumber || "—"} · {proposalDate || "—"}
