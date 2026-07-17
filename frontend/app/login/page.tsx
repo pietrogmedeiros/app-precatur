@@ -14,6 +14,22 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Pede ao gerenciador de senhas do navegador para salvar as credenciais.
+  // Necessário porque o login usa navegação client-side (router.push), e o
+  // Chrome não dispara o prompt "salvar senha" sozinho em SPAs. Chromium-only;
+  // Safari/Firefox salvam pelos atributos name/autocomplete do formulário.
+  async function saveCredential(id: string, secret: string) {
+    try {
+      const PasswordCredential = (window as any).PasswordCredential;
+      if (PasswordCredential && navigator.credentials?.store) {
+        const cred = new PasswordCredential({ id, password: secret, name: id });
+        await navigator.credentials.store(cred);
+      }
+    } catch {
+      /* sem suporte ou usuário recusou — ignora silenciosamente */
+    }
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
@@ -21,6 +37,7 @@ export default function LoginPage() {
     try {
       const { token, user } = await login(email, password);
       setSession(token, user);
+      await saveCredential(email, password);
       router.push("/sales");
       router.refresh();
     } catch (err: any) {
@@ -48,8 +65,9 @@ export default function LoginPage() {
                 </label>
                 <input
                   id="email"
+                  name="email"
                   type="email"
-                  autoComplete="email"
+                  autoComplete="username"
                   placeholder="voce@precatur.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -64,6 +82,7 @@ export default function LoginPage() {
                 </label>
                 <input
                   id="password"
+                  name="password"
                   type="password"
                   autoComplete="current-password"
                   value={password}
