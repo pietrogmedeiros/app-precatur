@@ -22,6 +22,18 @@ function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
+// Data + hora do último acesso; "Nunca" quando o usuário ainda não logou.
+function fmtLastLogin(iso: string | null): string {
+  if (!iso) return "Nunca";
+  return new Date(iso).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 // Índice aleatório criptográfico (crypto.getRandomValues) — melhor que Math.random.
 function randInt(max: number): number {
   const buf = new Uint32Array(1);
@@ -224,7 +236,8 @@ export default function UsersPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead>E-mail</TableHead>
                 <TableHead>Perfil</TableHead>
-                <TableHead className="hidden sm:table-cell">Criado em</TableHead>
+                <TableHead className="hidden sm:table-cell">Último acesso</TableHead>
+                <TableHead className="hidden md:table-cell">Criado em</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -245,7 +258,14 @@ export default function UsersPage() {
                       {u.role === "admin" ? "Admin" : "Padrão"}
                     </span>
                   </TableCell>
-                  <TableCell className="hidden text-muted-foreground sm:table-cell">{fmtDate(u.created_at)}</TableCell>
+                  <TableCell className="hidden text-muted-foreground sm:table-cell">
+                    {u.last_login_at ? (
+                      fmtLastLogin(u.last_login_at)
+                    ) : (
+                      <span className="italic opacity-70">Nunca</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="hidden text-muted-foreground md:table-cell">{fmtDate(u.created_at)}</TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => onDelete(u)} aria-label={`Excluir ${u.name}`}>
                       <Trash2 className="h-4 w-4" />
@@ -255,7 +275,7 @@ export default function UsersPage() {
               ))}
               {!users.length ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                     Nenhum usuário ainda.
                   </TableCell>
                 </TableRow>

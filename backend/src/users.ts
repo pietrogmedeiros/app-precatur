@@ -9,6 +9,7 @@ export interface User {
   email: string;
   role: Role;
   created_at: string;
+  last_login_at: string | null;
 }
 
 interface UserWithHash extends User {
@@ -22,7 +23,7 @@ export function hashPassword(plain: string): string {
 
 export async function findByEmail(email: string): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, created_at FROM users WHERE email = $1`,
+    `SELECT id, name, email, password, role, created_at, last_login_at FROM users WHERE email = $1`,
     [email.toLowerCase()]
   );
   return rows[0] ?? null;
@@ -30,7 +31,7 @@ export async function findByEmail(email: string): Promise<UserWithHash | null> {
 
 export async function listUsers(): Promise<User[]> {
   return query<User>(
-    `SELECT id, name, email, role, created_at FROM users ORDER BY created_at ASC`
+    `SELECT id, name, email, role, created_at, last_login_at FROM users ORDER BY created_at ASC`
   );
 }
 
@@ -43,15 +44,20 @@ export async function createUser(input: {
   const rows = await query<User>(
     `INSERT INTO users (name, email, password, role)
      VALUES ($1, $2, $3, $4)
-     RETURNING id, name, email, role, created_at`,
+     RETURNING id, name, email, role, created_at, last_login_at`,
     [input.name, input.email.toLowerCase(), hashPassword(input.password), input.role]
   );
   return rows[0];
 }
 
+// Carimba o horário do último acesso. Chamado após um login bem-sucedido.
+export async function recordLogin(id: number): Promise<void> {
+  await query(`UPDATE users SET last_login_at = now() WHERE id = $1`, [id]);
+}
+
 export async function findById(id: number): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, created_at FROM users WHERE id = $1`,
+    `SELECT id, name, email, password, role, created_at, last_login_at FROM users WHERE id = $1`,
     [id]
   );
   return rows[0] ?? null;

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate, signToken, requireAuth, type AuthedRequest } from "../auth";
-import { findById, updatePassword, hashPassword } from "../users";
+import { findById, updatePassword, hashPassword, recordLogin } from "../users";
 
 export const authRouter = Router();
 
@@ -14,6 +14,7 @@ authRouter.post("/login", async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: "invalid_credentials", message: "E-mail ou senha incorretos." });
     }
+    await recordLogin(user.id);
     const token = signToken(user);
     res.json({ token, user: { name: user.name, email: user.email, role: user.role } });
   } catch (err) {

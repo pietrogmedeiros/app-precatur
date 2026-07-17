@@ -39,6 +39,7 @@ export interface UserRecord {
   email: string;
   role: Role;
   created_at: string;
+  last_login_at: string | null;
 }
 
 export interface Proposal {
