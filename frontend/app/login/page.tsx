@@ -1,18 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/api";
 import { setSession } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+// Chave única do "Lembrar-me". Guarda e-mail + senha para pré-preencher o
+// próximo login. Atenção: a senha fica em texto puro no navegador — só use em
+// máquinas pessoais/confiáveis.
+const REMEMBER_KEY = "precatur:remember";
+
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Ao abrir a tela, restaura as credenciais salvas (se o "Lembrar-me" estava
+  // marcado da última vez).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(REMEMBER_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw) as { email?: string; password?: string };
+      if (saved.email) setEmail(saved.email);
+      if (saved.password) setPassword(saved.password);
+      setRemember(true);
+    } catch {
+      /* dados corrompidos — ignora */
+    }
+  }, []);
 
   // Pede ao gerenciador de senhas do navegador para salvar as credenciais.
   // Necessário porque o login usa navegação client-side (router.push), e o
@@ -37,6 +58,12 @@ export default function LoginPage() {
     try {
       const { token, user } = await login(email, password);
       setSession(token, user);
+      // Persiste (ou limpa) as credenciais conforme o "Lembrar-me".
+      if (remember) {
+        localStorage.setItem(REMEMBER_KEY, JSON.stringify({ email, password }));
+      } else {
+        localStorage.removeItem(REMEMBER_KEY);
+      }
       await saveCredential(email, password);
       router.push("/sales");
       router.refresh();
@@ -91,6 +118,17 @@ export default function LoginPage() {
                   required
                 />
               </div>
+
+              <label htmlFor="remember" className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  id="remember"
+                  type="checkbox"
+                  checked={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                  className="h-4 w-4 rounded border-input accent-primary"
+                />
+                Lembrar meu login e senha neste dispositivo
+              </label>
 
               {error ? (
                 <p className="rounded-md bg-secondary px-3 py-2 text-sm text-foreground">{error}</p>
