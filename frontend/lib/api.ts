@@ -81,18 +81,23 @@ export interface BitrixDeal {
   meta: { fetchedAt: string; source: string };
 }
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+async function request<T>(path: string, init?: RequestInit & { skipAuthRedirect?: boolean }): Promise<T> {
+  const { skipAuthRedirect, ...fetchInit } = init ?? {};
   const token = getToken();
   const res = await fetch(`${API_URL}${path}`, {
     cache: "no-store",
-    ...init,
+    ...fetchInit,
     headers: {
-      ...(init?.body ? { "Content-Type": "application/json" } : {}),
+      ...(fetchInit.body ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(init?.headers ?? {}),
+      ...(fetchInit.headers ?? {}),
     },
   });
-  if (res.status === 401) {
+  // A 401 on a normal (already-authenticated) call means the session expired, so
+  // we clear it and bounce to /login. But on the login call itself a 401 just
+  // means wrong credentials — let it fall through so the real message surfaces
+  // instead of a silent hard reload.
+  if (res.status === 401 && !skipAuthRedirect) {
     clearSession();
     if (typeof window !== "undefined") window.location.href = "/login";
     throw new Error("Sessão expirada.");
@@ -117,6 +122,7 @@ export async function login(email: string, password: string): Promise<LoginResul
   return request<LoginResult>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
+    skipAuthRedirect: true,
   });
 }
 
