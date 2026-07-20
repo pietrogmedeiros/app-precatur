@@ -176,7 +176,7 @@
 /* --------------------- Páginas de conteúdo (2 e 3) ----------------------- */
 .pp-band {
   background: var(--band);
-  padding: 5cqh 6cqw;
+  padding: 4cqh 6cqw;
 }
 .pp-band h2 {
   font-size: 4cqw;
@@ -189,7 +189,7 @@
   background: var(--teal);
 }
 .pp-content-body {
-  padding: 4cqh 6cqw;
+  padding: 3.5cqh 6cqw;
 }
 
 /* Passos "Como funciona" */
@@ -260,7 +260,7 @@
 .pp-rows {
   display: flex;
   flex-direction: column;
-  gap: 1.1cqh;
+  gap: 0.9cqh;
 }
 .pp-row {
   display: flex;
@@ -268,7 +268,7 @@
   justify-content: space-between;
   gap: 2cqw;
   background: var(--panel);
-  padding: 2.1cqh 3cqw;
+  padding: 1.8cqh 3cqw;
 }
 .pp-row-label {
   font-size: 2.1cqw;
@@ -295,22 +295,22 @@
 /* Página 3 · CTA "Vamos conversar?" */
 .pp-cta {
   background: var(--band);
-  margin-top: 2cqh;
-  padding: 2.4cqh 3cqw;
+  margin-top: 1.5cqh;
+  padding: 2cqh 3cqw;
 }
 .pp-cta-title {
-  font-size: 3cqw;
+  font-size: 2.6cqw;
   font-weight: 800;
   color: var(--teal);
-  margin-bottom: 1.2cqh;
+  margin-bottom: 1cqh;
 }
 .pp-cta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 3cqw;
-  font-size: 2cqw;
+  gap: 2.4cqw;
+  font-size: 1.7cqw;
   color: #eef2f3;
-  margin-bottom: 1.4cqh;
+  margin-bottom: 1cqh;
 }
 .pp-cta-item {
   display: inline-flex;
@@ -318,9 +318,10 @@
   gap: 0.8cqw;
 }
 .pp-cta-item svg {
-  width: 2.2cqw;
-  height: 2.2cqw;
+  width: 1.9cqw;
+  height: 1.9cqw;
   color: var(--teal);
+  flex: none;
 }
 .pp-cta-sub {
   font-size: 1.7cqw;
@@ -356,6 +357,9 @@
     margin: 0 !important;
   }
   .proposal-doc {
+    /* display:block (não flex): flexbox + quebra de página no Chrome gera
+       uma folha em branco no início. Como block, cada .pp-page pagina limpo. */
+    display: block !important;
     gap: 0 !important;
     width: 100% !important;
     max-width: none !important;
