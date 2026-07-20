@@ -383,7 +383,7 @@ export default function PropostaPage() {
         <section className="pp-page pp-cover">
           <div className="pp-cover-inner">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/precatur-logo.png" alt="Precatur" className="pp-cover-logo" />
+            <img src="/precatur-logo-branco.png" alt="Precatur" className="pp-cover-logo" />
             <h1 className="pp-cover-title">Proposta de Antecipação de Precatórios</h1>
             <div className="pp-cover-meta">
               <div className="pp-cover-meta-row">

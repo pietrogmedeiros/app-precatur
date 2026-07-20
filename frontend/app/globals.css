@@ -131,8 +131,7 @@
 .pp-cover-logo {
   height: 13cqh;
   width: auto;
-  /* logo é azul-escuro sobre transparente → inverte para prata/branco */
-  filter: brightness(0) invert(0.92);
+  /* usa o logo branco oficial (precatur-logo-branco.png) — sem filtro */
   margin-bottom: 3cqh;
 }
 .pp-cover-title {
