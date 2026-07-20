@@ -203,7 +203,7 @@ export default function PropostaPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6 md:p-8">
+    <div className="proposta-page mx-auto max-w-6xl space-y-8 p-4 sm:p-6 md:p-8">
       <header className="no-print flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
@@ -229,8 +229,10 @@ export default function PropostaPage() {
       {error ? <p className="no-print rounded-md bg-secondary px-3 py-2 text-sm">{error}</p> : null}
       {ok ? <p className="no-print rounded-md bg-secondary px-3 py-2 text-sm">{ok}</p> : null}
 
-      {/* ---------- Form ---------- */}
-      <div className="no-print grid gap-6 lg:grid-cols-2">
+      {/* ---------- Form (esquerda) + preview ao vivo (direita) ---------- */}
+      <div className="proposta-layout grid gap-8 lg:grid-cols-2 lg:items-start">
+        {/* ---------- Form ---------- */}
+        <div className="no-print space-y-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -370,8 +372,13 @@ export default function PropostaPage() {
         </Card>
       </div>
 
-      {/* ---------- Preview do documento (3 páginas, paisagem) ---------- */}
-      <div className="proposal-doc mx-auto w-full max-w-5xl">
+        {/* ---------- Preview do documento (3 páginas, paisagem) ---------- */}
+        <div className="proposta-preview space-y-3 lg:sticky lg:top-6">
+          <div className="no-print flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <FileText className="h-4 w-4" />
+            Pré-visualização · 3 páginas
+          </div>
+          <div className="proposal-doc w-full">
         {/* Página 1 · Capa */}
         <section className="pp-page pp-cover">
           <div className="pp-cover-inner">
@@ -495,6 +502,8 @@ export default function PropostaPage() {
             </div>
           </div>
         </section>
+          </div>
+        </div>
       </div>
 
       {/* ---------- Histórico ---------- */}

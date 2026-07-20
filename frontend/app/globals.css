@@ -189,7 +189,7 @@
   background: var(--teal);
 }
 .pp-content-body {
-  padding: 5cqh 6cqw;
+  padding: 4cqh 6cqw;
 }
 
 /* Passos "Como funciona" */
@@ -260,7 +260,7 @@
 .pp-rows {
   display: flex;
   flex-direction: column;
-  gap: 1.4cqh;
+  gap: 1.1cqh;
 }
 .pp-row {
   display: flex;
@@ -268,7 +268,7 @@
   justify-content: space-between;
   gap: 2cqw;
   background: var(--panel);
-  padding: 2.6cqh 3cqw;
+  padding: 2.1cqh 3cqw;
 }
 .pp-row-label {
   font-size: 2.1cqw;
@@ -295,14 +295,14 @@
 /* Página 3 · CTA "Vamos conversar?" */
 .pp-cta {
   background: var(--band);
-  margin-top: 3cqh;
-  padding: 3cqh 3cqw;
+  margin-top: 2cqh;
+  padding: 2.4cqh 3cqw;
 }
 .pp-cta-title {
   font-size: 3cqw;
   font-weight: 800;
   color: var(--teal);
-  margin-bottom: 1.8cqh;
+  margin-bottom: 1.2cqh;
 }
 .pp-cta-row {
   display: flex;
@@ -327,24 +327,39 @@
   color: #aeb7ba;
 }
 
-/* ========================== Impressão (A4 paisagem) ====================== */
+/* ========================== Impressão (A4 paisagem) ======================
+   Tudo que não é o documento tem .no-print → basta ocultá-los e zerar as
+   margens/paddings dos contêineres pais para o .pp-page bater exatamente no
+   A4 paisagem. Sem position:absolute (que gerava página em branco). */
 @media print {
   @page {
     size: A4 landscape;
     margin: 0;
   }
-  body * {
-    visibility: hidden !important;
+  .no-print {
+    display: none !important;
   }
-  .proposal-doc,
-  .proposal-doc * {
-    visibility: visible !important;
+  /* Neutraliza o respiro da app para o documento começar no topo da folha. */
+  .proposta-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .proposta-page > * {
+    margin-top: 0 !important;
+  }
+  .proposta-layout {
+    display: block !important;
+  }
+  .proposta-preview {
+    position: static !important;
+    margin: 0 !important;
   }
   .proposal-doc {
-    position: absolute !important;
-    left: 0;
-    top: 0;
     gap: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
   }
   .pp-page {
     width: 297mm !important;
@@ -361,9 +376,6 @@
   .pp-page:last-child {
     break-after: auto;
     page-break-after: auto;
-  }
-  .no-print {
-    display: none !important;
   }
   * {
     -webkit-print-color-adjust: exact !important;
