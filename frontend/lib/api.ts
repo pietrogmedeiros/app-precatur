@@ -79,6 +79,9 @@ export interface BitrixDeal {
   natureza: "alimentar" | "comum" | null;
   valorFace: number | null;
   valorProposta: number | null;
+  responsavelName: string | null;
+  responsavelEmail: string | null;
+  responsavelPhone: string | null;
   meta: { fetchedAt: string; source: string };
 }
 

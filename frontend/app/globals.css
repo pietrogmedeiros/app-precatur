@@ -66,246 +66,304 @@
 }
 
 /* ==========================================================================
-   Proposta comercial — .proposal-sheet (documento A4 formal, identidade brand)
-   Tokens escopados ao sheet para não colidir com o tema shadcn da app.
+   Proposta comercial — .proposal-doc
+   Apresentação de 3 páginas em PAISAGEM (A4 landscape), fiel ao modelo Precatur:
+   1) Capa escura   2) Como funciona / Quem atendemos   3) Proposta personalizada
+   Tokens escopados ao documento para não colidir com o tema shadcn da app.
    ========================================================================== */
-.proposal-sheet {
-  --brand: #33484d; /* cabeçalho, réguas, valor destaque */
-  --ink: #1c2427; /* texto de valores */
-  --label: #6b7680; /* rótulos e subtítulos cinza */
-  --line: #d9dde0; /* bordas 1px das caixas */
-  --warn-bg: #f7f2e7; /* caixa creme de observações */
-  --warn-brd: #e6d9b8;
-  --sheet-pad: 16mm; /* margem interna útil do A4 (usada no print) */
-  color: var(--ink);
+.proposal-doc {
+  --dark: #10171a; /* fundo escuro da capa */
+  --band: #2b3338; /* faixa de título das páginas 2 e 3 */
+  --teal: #2f8f92; /* acento teal (títulos, réguas, barra de valor) */
+  --teal-deep: #14746f; /* barra "valor líquido" */
+  --green: #14655a; /* números/headings verdes da pág. 2 */
+  --ink: #1c2427; /* texto escuro */
+  --muted: #6b7680; /* rótulos e textos secundários */
+  --panel: #f1f3f4; /* caixas cinza-claro */
+  --line: #dfe3e5;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  padding: 40px; /* respiro na tela; o print troca por --sheet-pad */
-}
-
-.ps-body {
+  color: var(--ink);
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-/* --- Cabeçalho --- */
-.ps-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--brand);
+/* Cada "página" é um A4 paisagem (razão 297/210). Na tela, escala fluida. */
+.pp-page {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 297 / 210;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  /* Container query units: dimensiona a tipografia em relação à página,
+     assim a mesma folha fica idêntica na tela e no papel. */
+  container-type: size;
+  font-size: 2.1cqw;
 }
-.ps-header-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+
+/* ------------------------------- Página 1 · Capa ------------------------- */
+.pp-cover {
+  background: radial-gradient(120% 90% at 50% 0%, #172226 0%, var(--dark) 60%);
+  color: #e7ecee;
 }
-.ps-brand {
+.pp-cover::before {
+  /* faixa vertical teal sutil na borda esquerda */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1.4cqw;
+  background: linear-gradient(180deg, rgba(47, 143, 146, 0.55), rgba(47, 143, 146, 0.05));
+}
+.pp-cover-inner {
+  position: absolute;
+  inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  color: var(--brand);
+  justify-content: center;
+  text-align: center;
+  padding: 8cqh 10cqw;
 }
-.ps-logo {
-  height: 42px;
+.pp-cover-logo {
+  height: 13cqh;
   width: auto;
-  display: block;
+  /* logo é azul-escuro sobre transparente → inverte para prata/branco */
+  filter: brightness(0) invert(0.92);
+  margin-bottom: 3cqh;
 }
-.ps-meta {
-  font-size: 11px;
-  text-align: right;
-  color: var(--label);
-  white-space: nowrap;
-}
-.ps-title {
-  margin-top: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--ink);
-}
-.ps-subtitle {
-  margin-top: 2px;
-  font-size: 11px;
-  color: var(--label);
-}
-
-/* --- Seções --- */
-.ps-section {
-  margin-top: 18px;
-}
-.ps-section-title {
-  font-size: 12px;
+.pp-cover-title {
+  font-size: 4.2cqw;
   font-weight: 600;
-  color: var(--brand);
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 8px;
+  letter-spacing: 0.01em;
+  color: var(--teal);
+  margin-bottom: 4cqh;
+}
+.pp-cover-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqh;
+  font-size: 2.3cqw;
+  color: #cbd3d6;
+}
+.pp-cover-meta .pp-cover-meta-row {
+  display: flex;
+  gap: 2.4cqw;
+  justify-content: center;
+}
+.pp-cover-tagline {
+  margin-top: 4cqh;
+  font-size: 2.7cqw;
+  color: #eef2f3;
+}
+.pp-cover-rule {
+  width: 15cqw;
+  height: 0.6cqh;
+  border-radius: 999px;
+  background: var(--teal);
+  margin: 4cqh 0;
+}
+.pp-cover-stats {
+  font-size: 1.9cqw;
+  line-height: 1.7;
+  color: var(--teal);
+  opacity: 0.9;
 }
 
-/* --- Grade de campos (trava em 2 colunas p/ o impresso) --- */
-.ps-grid {
+/* --------------------- Páginas de conteúdo (2 e 3) ----------------------- */
+.pp-band {
+  background: var(--band);
+  padding: 5cqh 6cqw;
+}
+.pp-band h2 {
+  font-size: 4cqw;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.pp-band-rule {
+  height: 0.7cqh;
+  background: var(--teal);
+}
+.pp-content-body {
+  padding: 5cqh 6cqw;
+}
+
+/* Passos "Como funciona" */
+.pp-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2cqw;
+}
+.pp-step {
+  background: var(--panel);
+  border-top: 0.9cqh solid var(--green);
+  padding: 2.4cqh 1.6cqw;
+  min-height: 26cqh;
+}
+.pp-step-num {
+  font-size: 6cqw;
+  font-weight: 800;
+  color: var(--green);
+  line-height: 1;
+  margin-bottom: 1.4cqh;
+}
+.pp-step-title {
+  font-size: 2cqw;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.8cqh;
+}
+.pp-step-desc {
+  font-size: 1.7cqw;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.pp-h3 {
+  font-size: 3cqw;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 4cqh 0 2cqh;
+}
+.pp-audience {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 2cqw;
 }
-.ps-field {
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 6px 8px;
+.pp-aud-card {
+  background: var(--panel);
+  padding: 2.6cqh 2cqw;
+  min-height: 18cqh;
 }
-.ps-field-full {
-  grid-column: 1 / -1;
+.pp-aud-title {
+  font-size: 2.2cqw;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 1.4cqh;
 }
-.ps-field-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--label);
-}
-.ps-field-value {
-  margin-top: 1px;
-  font-size: 13px;
-  color: var(--ink);
-  word-break: break-word;
-}
-
-/* --- Chip de natureza (só texto + borda, sem fundo forte) --- */
-.ps-chip {
-  display: inline-block;
-  font-size: 12px;
-  line-height: 1.3;
-  padding: 1px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
+.pp-aud-list {
+  list-style: none;
+  font-size: 1.8cqw;
+  line-height: 1.7;
   color: var(--ink);
 }
-.ps-chip-alimentar {
-  border-color: var(--brand);
-  color: var(--brand);
-}
-.ps-chip-comum {
-  border-color: var(--line);
-  color: var(--label);
+.pp-aud-list li::before {
+  content: "• ";
+  color: var(--ink);
 }
 
-/* --- Bloco RESULTADO em destaque --- */
-.ps-result {
+/* Página 3 · linhas da proposta */
+.pp-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqh;
+}
+.pp-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  border: 1px solid var(--brand);
-  border-radius: 4px;
-  padding: 12px 16px;
-  margin-bottom: 10px;
+  gap: 2cqw;
+  background: var(--panel);
+  padding: 2.6cqh 3cqw;
 }
-.ps-result-left {
-  display: flex;
-  gap: 28px;
-}
-.ps-result-item-label,
-.ps-result-main-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--label);
-}
-.ps-result-item-value {
-  margin-top: 2px;
-  font-size: 15px;
-  font-weight: 600;
+.pp-row-label {
+  font-size: 2.1cqw;
+  font-weight: 700;
   color: var(--ink);
 }
-.ps-result-main {
+.pp-row-value {
+  font-size: 2.1cqw;
+  color: var(--muted);
   text-align: right;
 }
-.ps-result-main-value {
-  margin-top: 2px;
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1.1;
-  color: var(--brand);
+.pp-row-highlight {
+  background: var(--teal-deep);
+}
+.pp-row-highlight .pp-row-label {
+  color: #fff;
+}
+.pp-row-highlight .pp-row-value {
+  color: #fff;
+  font-weight: 800;
+  font-size: 2.6cqw;
 }
 
-/* --- Caixa creme de observações --- */
-.ps-note {
-  margin-top: 10px;
-  background: var(--warn-bg);
-  border: 1px solid var(--warn-brd);
-  border-radius: 3px;
-  padding: 8px 10px;
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--ink);
+/* Página 3 · CTA "Vamos conversar?" */
+.pp-cta {
+  background: var(--band);
+  margin-top: 3cqh;
+  padding: 3cqh 3cqw;
 }
-.ps-note-label {
-  font-weight: 600;
+.pp-cta-title {
+  font-size: 3cqw;
+  font-weight: 800;
+  color: var(--teal);
+  margin-bottom: 1.8cqh;
+}
+.pp-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3cqw;
+  font-size: 2cqw;
+  color: #eef2f3;
+  margin-bottom: 1.4cqh;
+}
+.pp-cta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8cqw;
+}
+.pp-cta-item svg {
+  width: 2.2cqw;
+  height: 2.2cqw;
+  color: var(--teal);
+}
+.pp-cta-sub {
+  font-size: 1.7cqw;
+  color: #aeb7ba;
 }
 
-/* --- Rodapé --- */
-.ps-footer {
-  margin-top: 24px;
-  padding-top: 8px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-}
-.ps-footer-line {
-  font-size: 9px;
-  line-height: 1.5;
-  color: var(--label);
-}
-
-/* Print: isolate the proposal sheet so "Salvar como PDF" yields a clean A4.
-   Isolamento por visibility (o sheet vive aninhado na página) + regras do
-   design.md: A4 retrato, flex-column p/ ancorar o rodapé, break-inside e
-   print-color-adjust p/ fidelidade das réguas/chips. */
+/* ========================== Impressão (A4 paisagem) ====================== */
 @media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
   body * {
     visibility: hidden !important;
   }
-  .proposal-sheet,
-  .proposal-sheet * {
+  .proposal-doc,
+  .proposal-doc * {
     visibility: visible !important;
   }
-  .proposal-sheet {
+  .proposal-doc {
     position: absolute !important;
     left: 0;
     top: 0;
-    width: 210mm !important;
-    min-height: 297mm;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: var(--sheet-pad) !important;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column; /* footer empurrado para o fim */
-    box-shadow: none !important;
-    border: none !important;
+    gap: 0 !important;
+  }
+  .pp-page {
+    width: 297mm !important;
+    height: 210mm !important;
+    aspect-ratio: auto !important;
     border-radius: 0 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .ps-body {
-    flex: 1 1 auto; /* ocupa o meio; empurra o footer para baixo */
-  }
-  .ps-footer {
-    margin-top: auto; /* rodapé no rodapé, mesmo com pouco conteúdo */
-  }
-  /* não quebrar seção no meio da página */
-  .ps-section,
-  .ps-result,
-  .ps-field,
-  .ps-note,
-  .ps-header,
-  .ps-footer {
+    box-shadow: none !important;
+    /* container-type já ativo → cqw/cqh continuam válidos no papel */
+    break-after: page;
+    page-break-after: always;
     break-inside: avoid;
     page-break-inside: avoid;
   }
+  .pp-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
   .no-print {
     display: none !important;
-  }
-  @page {
-    size: A4 portrait;
-    margin: 0; /* margem controlada pelo padding do sheet */
   }
   * {
     -webkit-print-color-adjust: exact !important;

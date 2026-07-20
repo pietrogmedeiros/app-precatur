@@ -107,6 +107,10 @@ bitrixRouter.get("/deal", async (req, res) => {
   let deal: any;
   let contactPhone: string | null = null;
   let contactEmail: string | null = null;
+  // Responsável pelo negócio (ASSIGNED_BY_ID → user.get): vai para o rodapé da proposta.
+  let responsavelName: string | null = null;
+  let responsavelEmail: string | null = null;
+  let responsavelPhone: string | null = null;
   try {
     const dealResp = await bitrixGet("crm.deal.get", { id });
     // Erro de negócio do Bitrix: "Not found" → 404; qualquer outro erro → 502.
@@ -135,6 +139,19 @@ bitrixRouter.get("/deal", async (req, res) => {
         contactEmail = c.EMAIL?.[0]?.VALUE ? String(c.EMAIL[0].VALUE) : null;
       }
     }
+
+    // Responsável do deal: nome + e-mail (e telefone, se cadastrado no perfil).
+    const assignedId = String(deal.ASSIGNED_BY_ID ?? "");
+    if (/^\d+$/.test(assignedId) && parseInt(assignedId, 10) > 0) {
+      const userResp = await bitrixGet("user.get", { ID: assignedId });
+      const u = Array.isArray(userResp?.result) ? userResp.result[0] : userResp?.result;
+      if (u) {
+        responsavelName = str([str(u.NAME), str(u.LAST_NAME)].filter(Boolean).join(" "));
+        responsavelEmail = str(u.EMAIL);
+        // Preferência: celular pessoal → telefone comercial → telefone pessoal.
+        responsavelPhone = str(u.PERSONAL_MOBILE) ?? str(u.WORK_PHONE) ?? str(u.PERSONAL_PHONE);
+      }
+    }
   } catch (err) {
     // Timeout ou erro do upstream Bitrix.
     console.error("[bitrix] upstream error:", err);
@@ -158,6 +175,9 @@ bitrixRouter.get("/deal", async (req, res) => {
     natureza: normalizeNatureza(deal.UF_CRM_1769029436243),
     valorFace: parseMoney(deal.UF_CRM_1769029177954),
     valorProposta: parseMoney(deal.UF_CRM_1769087212986),
+    responsavelName,
+    responsavelEmail,
+    responsavelPhone,
     meta: {
       fetchedAt: new Date().toISOString(),
       source: "bitrix",
