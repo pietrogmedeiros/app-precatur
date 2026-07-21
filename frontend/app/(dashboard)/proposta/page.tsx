@@ -1,9 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FileText, Printer, Save, Trash2, RotateCcw, Download, Globe, Mail, Phone } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  FileText,
+  Printer,
+  Save,
+  Trash2,
+  RotateCcw,
+  Download,
+  Globe,
+  Mail,
+  Phone,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { api, type Proposal, type ProposalInput } from "@/lib/api";
-import { formatMoney } from "@/lib/utils";
+import { cn, formatMoney } from "@/lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -59,6 +72,10 @@ export default function PropostaPage() {
   const [responsavelPhone, setResponsavelPhone] = useState("(27) 99613-8930");
 
   const [history, setHistory] = useState<Proposal[]>([]);
+  // Busca por nome do cliente + paginação (5 por página) no histórico.
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 5;
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -74,6 +91,16 @@ export default function PropostaPage() {
   // Deságio só é exibível quando há face (>0) e proposta preenchidos; senão "—".
   const desagioDisplay =
     valorFace.trim() && valorProposta.trim() && faceNum > 0 ? `${desagio.toFixed(1)}%` : "—";
+
+  // Histórico filtrado pelo nome do cliente e recortado por página.
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return history;
+    return history.filter((p) => p.client_name.toLowerCase().includes(q));
+  }, [history, search]);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   function loadHistory() {
     api.proposals
@@ -525,9 +552,27 @@ export default function PropostaPage() {
 
       {/* ---------- Histórico ---------- */}
       <Card className="no-print">
-        <CardHeader>
-          <CardTitle>Propostas recentes</CardTitle>
-          <CardDescription>{history.length} proposta(s) salva(s)</CardDescription>
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <CardTitle>Propostas recentes</CardTitle>
+            <CardDescription>
+              {search.trim()
+                ? `${filtered.length} resultado(s) de ${history.length}`
+                : `${history.length} proposta(s) salva(s)`}
+            </CardDescription>
+          </div>
+          <div className="relative w-full sm:w-72">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              className={cn(inputClass, "pl-9")}
+              placeholder="Buscar por nome do cliente…"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+            />
+          </div>
         </CardHeader>
         <CardContent className="px-0">
           <Table>
@@ -542,7 +587,7 @@ export default function PropostaPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {history.map((p) => (
+              {paged.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell className="font-medium">{p.client_name}</TableCell>
                   <TableCell className="hidden text-muted-foreground sm:table-cell">
@@ -565,15 +610,45 @@ export default function PropostaPage() {
                   </TableCell>
                 </TableRow>
               ))}
-              {!history.length ? (
+              {!filtered.length ? (
                 <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    Nenhuma proposta salva ainda.
+                    {history.length ? "Nenhuma proposta encontrada." : "Nenhuma proposta salva ainda."}
                   </TableCell>
                 </TableRow>
               ) : null}
             </TableBody>
           </Table>
+
+          {filtered.length > PAGE_SIZE ? (
+            <div className="flex items-center justify-between px-6 pt-4">
+              <span className="text-sm text-muted-foreground">
+                Página {currentPage} de {totalPages}
+              </span>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1"
+                  disabled={currentPage <= 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                >
+                  Próxima
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </CardContent>
       </Card>
     </div>
