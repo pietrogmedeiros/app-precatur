@@ -166,9 +166,26 @@ export default function PropostaPage() {
     }
   }
 
+  // Imprime usando o nome do cliente (separado por "_") como nome do arquivo:
+  // o Chrome usa document.title como sugestão de nome no "Salvar como PDF".
+  function printProposal() {
+    const prev = document.title;
+    const safe = clientName
+      .trim()
+      .replace(/[\/\\:*?"<>|]+/g, "") // remove caracteres inválidos em nome de arquivo
+      .replace(/\s+/g, "_"); // espaços → _
+    document.title = safe || "Proposta";
+    const restore = () => {
+      document.title = prev;
+      window.removeEventListener("afterprint", restore);
+    };
+    window.addEventListener("afterprint", restore);
+    window.print();
+  }
+
   async function saveAndPrint() {
     const done = await save();
-    if (done) setTimeout(() => window.print(), 150);
+    if (done) setTimeout(printProposal, 150);
   }
 
   function reprint(p: Proposal) {
@@ -215,7 +232,7 @@ export default function PropostaPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.print()} className="gap-2">
+          <Button variant="outline" onClick={printProposal} className="gap-2">
             <Printer className="h-4 w-4" />
             Gerar PDF
           </Button>

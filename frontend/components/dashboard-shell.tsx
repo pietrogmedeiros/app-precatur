@@ -66,7 +66,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Mobile backdrop */}
       {mobileOpen ? (
         <div
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
+          className="no-print fixed inset-0 z-30 bg-black/40 md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       ) : null}
@@ -74,6 +74,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}
       <aside
         className={cn(
+          "no-print",
           "z-40 flex flex-col border-r bg-card transition-all duration-200",
           "fixed inset-y-0 left-0 md:sticky md:top-0 md:h-screen md:translate-x-0",
           collapsed ? "md:w-[74px]" : "md:w-64",
@@ -163,7 +164,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:px-6">
+        <header className="no-print sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:px-6">
           <Button
             variant="ghost"
             size="icon"
