@@ -58,7 +58,8 @@ async function seedAdmin(): Promise<void> {
   const name = process.env.ADMIN_NAME ?? "Admin";
   const email = process.env.ADMIN_EMAIL ?? "admin@precatur.com";
   const password = process.env.ADMIN_PASSWORD ?? "precatur";
-  await createUser({ name, email, password, role: "admin" });
+  const phone = process.env.ADMIN_PHONE ?? "(27) 99613-8930";
+  await createUser({ name, email, password, role: "admin", phone });
   console.log(`[seed] created admin user: ${email}`);
 }
 

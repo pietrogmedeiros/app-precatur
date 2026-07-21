@@ -38,8 +38,17 @@ export interface UserRecord {
   name: string;
   email: string;
   role: Role;
+  phone: string | null;
   created_at: string;
   last_login_at: string | null;
+}
+
+export interface Me {
+  id: number;
+  name: string;
+  email: string;
+  role: Role;
+  phone: string | null;
 }
 
 export interface Proposal {
@@ -79,9 +88,6 @@ export interface BitrixDeal {
   natureza: "alimentar" | "comum" | null;
   valorFace: number | null;
   valorProposta: number | null;
-  responsavelName: string | null;
-  responsavelEmail: string | null;
-  responsavelPhone: string | null;
   meta: { fetchedAt: string; source: string };
 }
 
@@ -143,10 +149,15 @@ export const api = {
   timeseries: () => request<TimeseriesPoint[]>("/api/metrics/timeseries"),
   users: {
     list: () => request<UserRecord[]>("/api/users"),
-    create: (payload: { name: string; email: string; password: string; role: Role }) =>
+    create: (payload: { name: string; email: string; password: string; role: Role; phone: string }) =>
       request<UserRecord>("/api/users", { method: "POST", body: JSON.stringify(payload) }),
+    update: (id: number, payload: { phone: string }) =>
+      request<UserRecord>(`/api/users/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/users/${id}`, { method: "DELETE" }),
   },
+  me: () => request<Me>("/api/auth/me"),
+  updateProfile: (payload: { phone: string }) =>
+    request<Me>("/api/auth/profile", { method: "PATCH", body: JSON.stringify(payload) }),
   bitrixDeal: (ref: string) =>
     request<BitrixDeal>("/api/bitrix/deal?ref=" + encodeURIComponent(ref)),
   changePassword: (currentPassword: string, newPassword: string) =>

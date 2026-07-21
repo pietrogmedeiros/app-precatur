@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check } from "lucide-react";
+import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check, Pencil, X } from "lucide-react";
 import { api, type UserRecord } from "@/lib/api";
 import { type Role } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -64,6 +64,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("padrao");
   const [showPass, setShowPass] = useState(false);
@@ -71,6 +72,8 @@ export default function UsersPage() {
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  // Edição de telefone de um usuário (modal).
+  const [editing, setEditing] = useState<UserRecord | null>(null);
 
   function handleGenerate() {
     setPassword(generatePassword());
@@ -104,10 +107,11 @@ export default function UsersPage() {
     setOk(null);
     setSaving(true);
     try {
-      const created = await api.users.create({ name, email, password, role });
+      const created = await api.users.create({ name, email, password, role, phone });
       setOk(`Usuário ${created.name} criado.`);
       setName("");
       setEmail("");
+      setPhone("");
       setPassword("");
       setRole("padrao");
       setShowPass(false);
@@ -157,6 +161,10 @@ export default function UsersPage() {
               <div className="space-y-1.5">
                 <label htmlFor="u-email" className="text-sm font-medium">E-mail</label>
                 <input id="u-email" type="email" className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} required />
+              </div>
+              <div className="space-y-1.5">
+                <label htmlFor="u-phone" className="text-sm font-medium">Telefone</label>
+                <input id="u-phone" className={inputClass} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(27) 99999-9999" required />
               </div>
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
@@ -235,6 +243,7 @@ export default function UsersPage() {
               <TableRow>
                 <TableHead>Nome</TableHead>
                 <TableHead>E-mail</TableHead>
+                <TableHead className="hidden lg:table-cell">Telefone</TableHead>
                 <TableHead>Perfil</TableHead>
                 <TableHead className="hidden sm:table-cell">Último acesso</TableHead>
                 <TableHead className="hidden md:table-cell">Criado em</TableHead>
@@ -246,6 +255,9 @@ export default function UsersPage() {
                 <TableRow key={u.id}>
                   <TableCell className="font-medium">{u.name}</TableCell>
                   <TableCell className="text-muted-foreground">{u.email}</TableCell>
+                  <TableCell className="hidden text-muted-foreground lg:table-cell">
+                    {u.phone ? u.phone : <span className="italic opacity-70">—</span>}
+                  </TableCell>
                   <TableCell>
                     <span
                       className={
@@ -267,6 +279,9 @@ export default function UsersPage() {
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground md:table-cell">{fmtDate(u.created_at)}</TableCell>
                   <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" onClick={() => setEditing(u)} aria-label={`Editar telefone de ${u.name}`}>
+                      <Pencil className="h-4 w-4" />
+                    </Button>
                     <Button variant="ghost" size="icon" onClick={() => onDelete(u)} aria-label={`Excluir ${u.name}`}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -275,7 +290,7 @@ export default function UsersPage() {
               ))}
               {!users.length ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
                     Nenhum usuário ainda.
                   </TableCell>
                 </TableRow>
@@ -284,6 +299,93 @@ export default function UsersPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {editing ? (
+        <EditPhoneModal
+          user={editing}
+          onClose={() => setEditing(null)}
+          onSaved={() => {
+            setEditing(null);
+            load();
+          }}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function EditPhoneModal({
+  user,
+  onClose,
+  onSaved,
+}: {
+  user: UserRecord;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [phone, setPhone] = useState(user.phone ?? "");
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    if (!phone.trim()) {
+      setError("Informe o telefone.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await api.users.update(user.id, { phone: phone.trim() });
+      onSaved();
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className="w-full max-w-sm rounded-lg border bg-card p-6 shadow-lg" onClick={(e) => e.stopPropagation()}>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <Pencil className="h-5 w-5" />
+            Telefone de {user.name}
+          </h2>
+          <button onClick={onClose} className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground" aria-label="Fechar">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium">Telefone</label>
+            <input
+              className={inputClass}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="(27) 99999-9999"
+              autoFocus
+              required
+            />
+          </div>
+          {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm">{error}</p> : null}
+          <div className="flex justify-end gap-2 pt-1">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancelar
+            </Button>
+            <Button type="submit" disabled={saving}>
+              {saving ? "Salvando…" : "Salvar"}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

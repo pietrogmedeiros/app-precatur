@@ -12,6 +12,7 @@ export interface SessionUser {
   name: string;
   email: string;
   role: Role;
+  phone: string | null;
 }
 
 function readCookie(name: string): string | null {
@@ -45,6 +46,15 @@ export function clearSession(): void {
   deleteCookie(TOKEN);
   deleteCookie(ROLE);
   if (typeof localStorage !== "undefined") localStorage.removeItem(USER);
+}
+
+// Atualiza parcialmente o usuário salvo na sessão (ex.: após editar o telefone
+// no próprio perfil), sem exigir novo login.
+export function patchSessionUser(patch: Partial<SessionUser>): void {
+  if (typeof localStorage === "undefined") return;
+  const cur = getUser();
+  if (!cur) return;
+  localStorage.setItem(USER, JSON.stringify({ ...cur, ...patch }));
 }
 
 export function getUser(): SessionUser | null {

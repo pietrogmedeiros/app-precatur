@@ -67,9 +67,10 @@ export default function PropostaPage() {
   const [validade, setValidade] = useState("10 dias corridos a partir da data de emissão.");
   const [observacoes, setObservacoes] = useState("");
   const [responsavel, setResponsavel] = useState("");
-  // Contato do responsável no rodapé da proposta (default: contato padrão Precatur).
-  const [responsavelEmail, setResponsavelEmail] = useState("henrique.tanure@precatur.com.br");
-  const [responsavelPhone, setResponsavelPhone] = useState("(27) 99613-8930");
+  // Contato do responsável no rodapé: preenchido com o usuário logado (nome,
+  // e-mail e telefone) via /me; permanece editável.
+  const [responsavelEmail, setResponsavelEmail] = useState("");
+  const [responsavelPhone, setResponsavelPhone] = useState("");
 
   const [history, setHistory] = useState<Proposal[]>([]);
   // Busca por nome do cliente + paginação (5 por página) no histórico.
@@ -130,11 +131,6 @@ export default function PropostaPage() {
       if (d.natureza === "alimentar" || d.natureza === "comum") setNatureza(d.natureza);
       if (d.valorFace != null) setValorFace(String(d.valorFace));
       if (d.valorProposta != null) setValorProposta(String(d.valorProposta));
-      // Responsável do negócio: nome + e-mail vêm do Bitrix; telefone só sobrescreve
-      // se o perfil do responsável tiver um cadastrado (senão mantém o preenchível).
-      if (d.responsavelName != null) setResponsavel(d.responsavelName);
-      if (d.responsavelEmail != null) setResponsavelEmail(d.responsavelEmail);
-      if (d.responsavelPhone != null) setResponsavelPhone(d.responsavelPhone);
       setOk(`Deal #${d.dealId} importado.`);
     } catch (e: any) {
       setBitrixErr(e.message);
@@ -149,6 +145,17 @@ export default function PropostaPage() {
     setProposalDate(d.toLocaleDateString("pt-BR"));
     setProposalNumber(`PROP-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`);
     loadHistory();
+    // Contato do responsável = usuário logado (dados frescos do banco).
+    api
+      .me()
+      .then((me) => {
+        setResponsavel(me.name);
+        setResponsavelEmail(me.email);
+        setResponsavelPhone(me.phone ?? "");
+      })
+      .catch(() => {
+        /* sem sessão/rede — campos ficam editáveis manualmente */
+      });
   }, []);
 
   function payload(): ProposalInput {
@@ -405,11 +412,11 @@ export default function PropostaPage() {
               <input className={inputClass} value={responsavel} onChange={(e) => setResponsavel(e.target.value)} />
             </Labeled>
             <div className="grid grid-cols-2 gap-4">
-              <Labeled label="E-mail do responsável (Bitrix)">
+              <Labeled label="E-mail do responsável">
                 <input className={inputClass} value={responsavelEmail} onChange={(e) => setResponsavelEmail(e.target.value)} />
               </Labeled>
               <Labeled label="Telefone do responsável">
-                <input className={inputClass} value={responsavelPhone} onChange={(e) => setResponsavelPhone(e.target.value)} placeholder="Preencha se não vier do Bitrix" />
+                <input className={inputClass} value={responsavelPhone} onChange={(e) => setResponsavelPhone(e.target.value)} placeholder="Cadastre no seu perfil" />
               </Labeled>
             </div>
           </CardContent>

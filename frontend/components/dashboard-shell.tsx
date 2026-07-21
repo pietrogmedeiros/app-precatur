@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { ChangePasswordModal } from "@/components/change-password-modal";
+import { ProfileModal } from "@/components/profile-modal";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
@@ -32,6 +33,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
 
   // Restore collapse preference and session user (client only).
@@ -135,6 +137,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               Meu Acesso
             </p>
             <NavAction
+              label="Meu perfil"
+              icon={UserRound}
+              collapsed={collapsed}
+              onClick={() => {
+                setProfileOpen(true);
+                setMobileOpen(false);
+              }}
+            />
+            <NavAction
               label="Trocar senha"
               icon={KeyRound}
               collapsed={collapsed}
@@ -190,6 +201,11 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
+      <ProfileModal
+        open={profileOpen}
+        onClose={() => setProfileOpen(false)}
+        onSaved={(phone) => setUser((u) => (u ? { ...u, phone } : u))}
+      />
     </div>
   );
 }
