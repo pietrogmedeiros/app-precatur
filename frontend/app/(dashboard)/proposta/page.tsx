@@ -65,6 +65,9 @@ export default function PropostaPage() {
   const [natureza, setNatureza] = useState("alimentar");
   const [valorFace, setValorFace] = useState("");
   const [valorProposta, setValorProposta] = useState("");
+  // Deságio na proposta é opcional: oculto por padrão (maioria dos clientes),
+  // marcado quando o destinatário é advogado e o % deve aparecer no PDF.
+  const [showDesagio, setShowDesagio] = useState(false);
   const [formaPagamento, setFormaPagamento] = useState(
     "À vista, em até 5 dias úteis após a assinatura do contrato de cessão de crédito."
   );
@@ -394,6 +397,15 @@ export default function PropostaPage() {
             <div className="col-span-2 rounded-md bg-secondary px-3 py-2 text-sm">
               Deságio calculado: <span className="font-semibold">{desagio.toFixed(1)}%</span>
             </div>
+            <label className="col-span-2 flex items-center gap-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                className="h-4 w-4"
+                checked={showDesagio}
+                onChange={(e) => setShowDesagio(e.target.checked)}
+              />
+              Mostrar deságio na proposta (recomendado só para advogados)
+            </label>
           </CardContent>
         </Card>
 
@@ -524,10 +536,12 @@ export default function PropostaPage() {
                 <span className="pp-row-label">Valor de face</span>
                 <span className="pp-row-value">{formatMoney(faceNum)}</span>
               </div>
-              <div className="pp-row">
-                <span className="pp-row-label">Deságio aplicado</span>
-                <span className="pp-row-value">{desagioDisplay}</span>
-              </div>
+              {showDesagio ? (
+                <div className="pp-row">
+                  <span className="pp-row-label">Deságio aplicado</span>
+                  <span className="pp-row-value">{desagioDisplay}</span>
+                </div>
+              ) : null}
               <div className="pp-row pp-row-highlight">
                 <span className="pp-row-label">VALOR LÍQUIDO A RECEBER</span>
                 <span className="pp-row-value">{formatMoney(propostaNum)}</span>
