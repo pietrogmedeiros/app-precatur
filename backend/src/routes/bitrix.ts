@@ -33,6 +33,23 @@ function parseMoney(v: unknown): number | null {
   return Number.isNaN(n) ? null : n;
 }
 
+// "Cálculo Atualizado (Valor)" vem como string PT-BR:
+// "R$ 171.861,96 (Atualizado p/ Julho/2026)" → 171861.96.
+// Ignora "R$", o sufixo entre parênteses e converte milhar "." / decimal ",".
+// Aceita também o formato money "171861.96|BRL" como fallback.
+function parseMoneyBR(v: unknown): number | null {
+  if (v === undefined || v === null || v === "") return null;
+  let s = String(v).trim();
+  if (s.includes("|")) return parseMoney(s);        // campo money "VALOR|BRL"
+  const paren = s.indexOf("(");
+  if (paren >= 0) s = s.slice(0, paren);            // corta "(Atualizado p/ ...)"
+  const m = s.match(/[\d.,]+/);                     // "R$ 171.861,96" → "171.861,96"
+  if (!m) return null;
+  const num = m[0].replace(/\./g, "").replace(",", "."); // PT-BR → 171861.96
+  const n = parseFloat(num);
+  return Number.isNaN(n) ? null : n;
+}
+
 // String não-vazia (com trim) → string; caso contrário null. Nunca "".
 function str(v: unknown): string | null {
   if (v === undefined || v === null) return null;
@@ -156,7 +173,7 @@ bitrixRouter.get("/deal", async (req, res) => {
     tribunal: tribunalFromCNJ(processo),
     enteDevedor: str(deal.UF_CRM_1769029263875),
     natureza: normalizeNatureza(deal.UF_CRM_1769029436243),
-    valorFace: parseMoney(deal.UF_CRM_1769029177954),
+    valorFace: parseMoneyBR(deal.UF_CRM_1769608301759), // "Cálculo Atualizado (Valor)", não "Valor do Ofício"
     valorProposta: parseMoney(deal.UF_CRM_1769087212986),
     meta: {
       fetchedAt: new Date().toISOString(),
