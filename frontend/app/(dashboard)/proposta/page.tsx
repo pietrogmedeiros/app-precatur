@@ -48,6 +48,10 @@ function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
+function fmtTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
 export default function PropostaPage() {
   // Form state
   const [proposalNumber, setProposalNumber] = useState("");
@@ -589,6 +593,7 @@ export default function PropostaPage() {
                 <TableHead className="hidden sm:table-cell">Precatório</TableHead>
                 <TableHead className="text-right">Valor líquido</TableHead>
                 <TableHead className="hidden text-right sm:table-cell">Deságio</TableHead>
+                <TableHead className="hidden lg:table-cell">Gerado por</TableHead>
                 <TableHead className="hidden md:table-cell">Criada em</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
@@ -604,8 +609,12 @@ export default function PropostaPage() {
                   <TableCell className="hidden text-right text-muted-foreground sm:table-cell">
                     {p.desagio.toFixed(1)}%
                   </TableCell>
+                  <TableCell className="hidden text-muted-foreground lg:table-cell">
+                    {p.created_by ?? "—"}
+                  </TableCell>
                   <TableCell className="hidden text-muted-foreground md:table-cell">
-                    {fmtDate(p.created_at)}
+                    <div>{fmtDate(p.created_at)}</div>
+                    <div className="text-xs">{fmtTime(p.created_at)}</div>
                   </TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" onClick={() => reprint(p)} aria-label="Carregar no formulário">
@@ -619,7 +628,7 @@ export default function PropostaPage() {
               ))}
               {!filtered.length ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
                     {history.length ? "Nenhuma proposta encontrada." : "Nenhuma proposta salva ainda."}
                   </TableCell>
                 </TableRow>
