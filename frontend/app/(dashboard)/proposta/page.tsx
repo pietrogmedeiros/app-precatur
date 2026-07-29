@@ -65,6 +65,9 @@ export default function PropostaPage() {
   const [natureza, setNatureza] = useState("alimentar");
   const [valorFace, setValorFace] = useState("");
   const [valorProposta, setValorProposta] = useState("");
+  // Valor de face na proposta é opcional: exibido por padrão, desmarcado quando
+  // o cliente só deve ver o líquido a receber.
+  const [showValorFace, setShowValorFace] = useState(true);
   // Deságio na proposta é opcional: oculto por padrão (maioria dos clientes),
   // marcado quando o destinatário é advogado e o % deve aparecer no PDF.
   const [showDesagio, setShowDesagio] = useState(false);
@@ -401,6 +404,15 @@ export default function PropostaPage() {
               <input
                 type="checkbox"
                 className="h-4 w-4"
+                checked={showValorFace}
+                onChange={(e) => setShowValorFace(e.target.checked)}
+              />
+              Mostrar valor de face na proposta
+            </label>
+            <label className="col-span-2 flex items-center gap-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                className="h-4 w-4"
                 checked={showDesagio}
                 onChange={(e) => setShowDesagio(e.target.checked)}
               />
@@ -532,10 +544,12 @@ export default function PropostaPage() {
                 <span className="pp-row-label">Tipo de precatório</span>
                 <span className="pp-row-value">{naturezaLabel(natureza)}</span>
               </div>
-              <div className="pp-row">
-                <span className="pp-row-label">Valor de face</span>
-                <span className="pp-row-value">{formatMoney(faceNum)}</span>
-              </div>
+              {showValorFace ? (
+                <div className="pp-row">
+                  <span className="pp-row-label">Valor de face</span>
+                  <span className="pp-row-value">{formatMoney(faceNum)}</span>
+                </div>
+              ) : null}
               {showDesagio ? (
                 <div className="pp-row">
                   <span className="pp-row-label">Deságio aplicado</span>
