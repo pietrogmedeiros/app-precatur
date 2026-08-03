@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,9 @@ const DASHBOARD_NAV = [
 ];
 
 const PROPOSAL_NAV = [{ href: "/proposta", label: "Gerar Proposta", icon: FileText }];
+
+// Wiki Sales — base de conhecimento do time comercial. Por enquanto só Follow-up.
+const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSquareText }];
 
 const ADMIN_NAV = [{ href: "/users", label: "Usuários", icon: UserCog }];
 
@@ -117,6 +120,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
           <NavGroup title="Proposta" items={PROPOSAL_NAV} collapsed={collapsed} pathname={pathname} />
+          <NavGroup title="Wiki - Sales" items={WIKI_NAV} collapsed={collapsed} pathname={pathname} />
           {isAdmin ? (
             <NavGroup
               title="Administração"

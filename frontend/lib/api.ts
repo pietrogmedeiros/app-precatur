@@ -75,6 +75,23 @@ export interface Proposal {
 
 export type ProposalInput = Omit<Proposal, "id" | "created_by" | "created_at">;
 
+// Wiki Sales · modelo de follow-up compartilhado entre os usuários.
+export interface Followup {
+  id: number;
+  title: string;
+  body: string;
+  created_by_id: number | null;
+  created_by: string | null;
+  created_by_name: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FollowupInput {
+  title: string;
+  body: string;
+}
+
 // Deal hydrated from the Bitrix CRM (GET /api/bitrix/deal?ref=<link|id>).
 // Only CRM-owned fields; every absent field is null (never omitted / "").
 export interface BitrixDeal {
@@ -171,5 +188,14 @@ export const api = {
     create: (payload: ProposalInput) =>
       request<Proposal>("/api/propostas", { method: "POST", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/propostas/${id}`, { method: "DELETE" }),
+  },
+  followups: {
+    list: () => request<Followup[]>("/api/followups"),
+    get: (id: number) => request<Followup>(`/api/followups/${id}`),
+    create: (payload: FollowupInput) =>
+      request<Followup>("/api/followups", { method: "POST", body: JSON.stringify(payload) }),
+    update: (id: number, payload: FollowupInput) =>
+      request<Followup>(`/api/followups/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
+    remove: (id: number) => request<void>(`/api/followups/${id}`, { method: "DELETE" }),
   },
 };

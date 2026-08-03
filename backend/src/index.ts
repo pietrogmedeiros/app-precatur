@@ -9,6 +9,7 @@ import { metabaseRouter } from "./routes/metabase";
 import { authRouter } from "./routes/auth";
 import { usersRouter } from "./routes/users";
 import { proposalsRouter } from "./routes/proposals";
+import { followupsRouter } from "./routes/followups";
 import { bitrixRouter } from "./routes/bitrix";
 import { requireAuth, requireAdmin } from "./auth";
 
@@ -41,6 +42,7 @@ app.use("/api/metrics", requireAuth, metricsRouter);
 app.use("/api/metabase", requireAuth, metabaseRouter);
 app.use("/api/users", requireAuth, requireAdmin, usersRouter);
 app.use("/api/propostas", requireAuth, proposalsRouter);
+app.use("/api/followups", requireAuth, followupsRouter);
 app.use("/api/bitrix", requireAuth, bitrixRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.
