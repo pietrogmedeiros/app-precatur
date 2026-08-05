@@ -18,6 +18,9 @@ export interface Proposal {
   validade: string | null;
   observacoes: string | null;
   responsavel: string | null;
+  ano_pagamento_estado: number | null;
+  observacoes_proposta: string | null;
+  detalhes_processo: string | null;
   created_by: string | null;
   created_at: string;
 }
@@ -39,6 +42,9 @@ export interface ProposalInput {
   validade?: string | null;
   observacoes?: string | null;
   responsavel?: string | null;
+  ano_pagamento_estado?: number | null;
+  observacoes_proposta?: string | null;
+  detalhes_processo?: string | null;
 }
 
 // Numeric columns come back from pg as strings — normalize to number.
@@ -48,13 +54,17 @@ function normalize(row: any): Proposal {
     valor_face: Number(row.valor_face),
     valor_proposta: Number(row.valor_proposta),
     desagio: Number(row.desagio),
+    // INTEGER nullable: preserva null em vez de virar 0 (ano não informado).
+    ano_pagamento_estado:
+      row.ano_pagamento_estado == null ? null : Number(row.ano_pagamento_estado),
   };
 }
 
 const RETURNING = `
   id, proposal_number, proposal_date, client_name, client_doc, client_contact,
   precatorio_number, tribunal, ente_devedor, natureza, valor_face, valor_proposta,
-  desagio, forma_pagamento, validade, observacoes, responsavel, created_by, created_at
+  desagio, forma_pagamento, validade, observacoes, responsavel,
+  ano_pagamento_estado, observacoes_proposta, detalhes_processo, created_by, created_at
 `;
 
 export async function listProposals(): Promise<Proposal[]> {
@@ -80,9 +90,11 @@ export async function createProposal(
     `INSERT INTO proposals (
        proposal_number, proposal_date, client_name, client_doc, client_contact,
        precatorio_number, tribunal, ente_devedor, natureza, valor_face, valor_proposta,
-       desagio, forma_pagamento, validade, observacoes, responsavel, created_by
+       desagio, forma_pagamento, validade, observacoes, responsavel,
+       ano_pagamento_estado, observacoes_proposta, detalhes_processo, created_by
      ) VALUES (
-       $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
+       $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16,
+       $17, $18, $19, $20
      )
      RETURNING ${RETURNING}`,
     [
@@ -102,6 +114,9 @@ export async function createProposal(
       input.validade ?? null,
       input.observacoes ?? null,
       input.responsavel ?? null,
+      input.ano_pagamento_estado ?? null,
+      input.observacoes_proposta ?? null,
+      input.detalhes_processo ?? null,
       createdBy,
     ]
   );

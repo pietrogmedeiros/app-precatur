@@ -76,6 +76,15 @@ export default function PropostaPage() {
   );
   const [validade, setValidade] = useState("10 dias corridos a partir da data de emissão.");
   const [observacoes, setObservacoes] = useState("");
+  // Campos que SAEM no PDF: o ano vira a linha "Previsão de pagamento pelo
+  // Estado" na página 3; os dois textos livres formam a página 4, que só existe
+  // quando algum deles está preenchido.
+  const [anoPagamentoEstado, setAnoPagamentoEstado] = useState("");
+  const [detalhesProcesso, setDetalhesProcesso] = useState("");
+  const [observacoesProposta, setObservacoesProposta] = useState("");
+  // Ano corrente só depois de montar: evita divergência entre o render do
+  // servidor e o do cliente na virada de ano.
+  const [anoAtual, setAnoAtual] = useState(0);
   const [responsavel, setResponsavel] = useState("");
   // Contato do responsável no rodapé: preenchido com o usuário logado (nome,
   // e-mail e telefone) via /me; permanece editável.
@@ -102,6 +111,24 @@ export default function PropostaPage() {
   // Deságio só é exibível quando há face (>0) e proposta preenchidos; senão "—".
   const desagioDisplay =
     valorFace.trim() && valorProposta.trim() && faceNum > 0 ? `${desagio.toFixed(1)}%` : "—";
+
+  // Previsão de pagamento pelo Estado: mostra o ano e a espera aproximada, que é
+  // o contraste com o "até 24h úteis" da Precatur logo abaixo na mesma página.
+  const anoEstadoNum = parseInt(anoPagamentoEstado, 10);
+  const anoEstadoValido =
+    Number.isInteger(anoEstadoNum) && anoEstadoNum >= 1900 && anoEstadoNum <= 2200;
+  const anosEspera = anoEstadoValido && anoAtual > 0 ? anoEstadoNum - anoAtual : 0;
+  const previsaoDisplay = !anoEstadoValido
+    ? null
+    : anosEspera >= 2
+      ? `${anoEstadoNum} · cerca de ${anosEspera} anos de espera`
+      : anosEspera === 1
+        ? `${anoEstadoNum} · cerca de 1 ano de espera`
+        : `${anoEstadoNum}`;
+
+  // A página 4 é condicional — sem conteúdo, a proposta segue com 3 páginas.
+  const temInfoComplementar = !!(detalhesProcesso.trim() || observacoesProposta.trim());
+  const totalPaginas = temInfoComplementar ? 4 : 3;
 
   // Histórico filtrado pelo nome do cliente e recortado por página.
   const filtered = useMemo(() => {
@@ -152,6 +179,7 @@ export default function PropostaPage() {
   useEffect(() => {
     const d = new Date();
     const pad = (n: number) => String(n).padStart(2, "0");
+    setAnoAtual(d.getFullYear());
     setProposalDate(d.toLocaleDateString("pt-BR"));
     setProposalNumber(`PROP-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`);
     loadHistory();
@@ -186,6 +214,9 @@ export default function PropostaPage() {
       validade: validade || null,
       observacoes: observacoes || null,
       responsavel: responsavel || null,
+      ano_pagamento_estado: anoEstadoValido ? anoEstadoNum : null,
+      observacoes_proposta: observacoesProposta.trim() || null,
+      detalhes_processo: detalhesProcesso.trim() || null,
     };
   }
 
@@ -247,6 +278,9 @@ export default function PropostaPage() {
     setFormaPagamento(p.forma_pagamento ?? "");
     setValidade(p.validade ?? "");
     setObservacoes(p.observacoes ?? "");
+    setAnoPagamentoEstado(p.ano_pagamento_estado ? String(p.ano_pagamento_estado) : "");
+    setObservacoesProposta(p.observacoes_proposta ?? "");
+    setDetalhesProcesso(p.detalhes_processo ?? "");
     setResponsavel(p.responsavel ?? "");
     setOk(null);
     setError(null);
@@ -272,7 +306,7 @@ export default function PropostaPage() {
             Gerar Proposta
           </h1>
           <p className="text-sm text-muted-foreground">
-            Monte uma proposta de antecipação de precatório e gere o PDF (3 páginas).
+            Monte uma proposta de antecipação de precatório e gere o PDF ({totalPaginas} páginas).
           </p>
         </div>
         <div className="flex gap-2">
@@ -382,6 +416,23 @@ export default function PropostaPage() {
                 <option value="comum">Comum</option>
               </select>
             </Labeled>
+            <Labeled label="Ano previsto de pagamento pelo Estado">
+              <input
+                type="number"
+                min="1900"
+                max="2200"
+                step="1"
+                className={inputClass}
+                value={anoPagamentoEstado}
+                onChange={(e) => setAnoPagamentoEstado(e.target.value)}
+                placeholder="Ex.: 2032"
+              />
+              <p className="text-xs text-muted-foreground">
+                {previsaoDisplay
+                  ? `Sai na proposta como "${previsaoDisplay}".`
+                  : "Deixe vazio para omitir a linha na proposta."}
+              </p>
+            </Labeled>
           </CardContent>
         </Card>
 
@@ -423,6 +474,46 @@ export default function PropostaPage() {
 
         <Card>
           <CardHeader>
+            <CardTitle>Informações complementares</CardTitle>
+            <CardDescription>
+              {temInfoComplementar
+                ? "Formam a página 4 da proposta."
+                : "Se preenchidas, geram uma página 4 na proposta."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Labeled label="Dados do processo / precatório (sai na proposta)">
+              <textarea
+                className={textareaClass}
+                rows={5}
+                maxLength={600}
+                value={detalhesProcesso}
+                onChange={(e) => setDetalhesProcesso(e.target.value)}
+                placeholder="Ex.: nº do processo, vara, data do trânsito em julgado, situação da fila de pagamento…"
+              />
+              <p className="text-xs text-muted-foreground">
+                Gera credibilidade com advogados e parceiros. {detalhesProcesso.length}/600
+              </p>
+            </Labeled>
+            <Labeled label="Observações (sai na proposta)">
+              <textarea
+                className={textareaClass}
+                rows={4}
+                maxLength={600}
+                value={observacoesProposta}
+                onChange={(e) => setObservacoesProposta(e.target.value)}
+                placeholder="Qualquer informação útil que deva aparecer para o cliente…"
+              />
+              <p className="text-xs text-muted-foreground">
+                Não confundir com as Observações de registro interno, abaixo, que não
+                são impressas. {observacoesProposta.length}/600
+              </p>
+            </Labeled>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Condições e contato</CardTitle>
             <CardDescription>Validade aparece na capa; contato aparece no rodapé.</CardDescription>
           </CardHeader>
@@ -455,7 +546,7 @@ export default function PropostaPage() {
         <div className="proposta-preview space-y-3 lg:sticky lg:top-6">
           <div className="no-print flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <FileText className="h-4 w-4" />
-            Pré-visualização · 3 páginas
+            Pré-visualização · {totalPaginas} páginas
           </div>
           <div className="proposal-doc w-full">
         {/* Página 1 · Capa */}
@@ -556,6 +647,12 @@ export default function PropostaPage() {
                   <span className="pp-row-value">{desagioDisplay}</span>
                 </div>
               ) : null}
+              {previsaoDisplay ? (
+                <div className="pp-row">
+                  <span className="pp-row-label">Previsão de pagamento pelo Estado</span>
+                  <span className="pp-row-value">{previsaoDisplay}</span>
+                </div>
+              ) : null}
               <div className="pp-row pp-row-highlight">
                 <span className="pp-row-label">VALOR LÍQUIDO A RECEBER</span>
                 <span className="pp-row-value">{formatMoney(propostaNum)}</span>
@@ -585,6 +682,32 @@ export default function PropostaPage() {
             </div>
           </div>
         </section>
+
+        {/* Página 4 · Informações complementares — só existe se preenchida */}
+        {temInfoComplementar ? (
+          <section className="pp-page">
+            <div className="pp-band">
+              <h2>Informações complementares</h2>
+            </div>
+            <div className="pp-band-rule" />
+            <div className="pp-content-body">
+              <div className="pp-info">
+                {detalhesProcesso.trim() ? (
+                  <div className="pp-info-block">
+                    <div className="pp-info-title">Dados do processo</div>
+                    <div className="pp-info-box">{detalhesProcesso.trim()}</div>
+                  </div>
+                ) : null}
+                {observacoesProposta.trim() ? (
+                  <div className="pp-info-block">
+                    <div className="pp-info-title">Observações</div>
+                    <div className="pp-info-box">{observacoesProposta.trim()}</div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </section>
+        ) : null}
           </div>
         </div>
       </div>

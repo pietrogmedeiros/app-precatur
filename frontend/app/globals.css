@@ -291,6 +291,47 @@
   font-size: 2.6cqw;
 }
 
+/* --------- Página 4 · Informações complementares (condicional) -----------
+   Só é renderizada quando há observações da proposta ou dados do processo.
+   Os blocos crescem lado a lado; `overflow: hidden` no box garante que um texto
+   exagerado seja recortado dentro da própria caixa, sem empurrar o rodapé nem
+   estourar a folha A4. */
+.pp-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4cqh;
+}
+.pp-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1cqh;
+  min-height: 0;
+}
+.pp-info-title {
+  font-size: 2.4cqw;
+  font-weight: 800;
+  color: var(--teal);
+}
+.pp-info-box {
+  background: var(--panel);
+  border-left: 0.5cqw solid var(--teal);
+  padding: 2cqh 2.6cqw;
+  font-size: 1.6cqw;
+  line-height: 1.6;
+  color: var(--ink);
+  /* preserva os parágrafos digitados no formulário */
+  white-space: pre-wrap;
+  /* Altura casada com o maxLength de 600 do formulário (~7 linhas de ~85
+     caracteres). O overflow é a rede de segurança: recorta dentro da caixa em
+     vez de empurrar o rodapé para fora do A4. */
+  max-height: 30cqh;
+  overflow: hidden;
+}
+/* Bloco sozinho na página ganha o espaço que sobrou do outro. */
+.pp-info-block:only-child .pp-info-box {
+  max-height: 64cqh;
+}
+
 /* Página 3 · CTA "Vamos conversar?" */
 .pp-cta {
   background: var(--band);

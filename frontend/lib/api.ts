@@ -69,6 +69,11 @@ export interface Proposal {
   validade: string | null;
   observacoes: string | null;
   responsavel: string | null;
+  // Campos que saem no PDF. `observacoes_proposta` é impressa; `observacoes`
+  // (acima) segue sendo registro interno.
+  ano_pagamento_estado: number | null;
+  observacoes_proposta: string | null;
+  detalhes_processo: string | null;
   created_by: string | null;
   created_at: string;
 }

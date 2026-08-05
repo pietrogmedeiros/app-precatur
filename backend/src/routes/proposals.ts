@@ -15,6 +15,20 @@ function toNumber(v: unknown): number {
   return Number.isFinite(n) ? n : 0;
 }
 
+// Ano opcional: vazio/inválido volta como null (não 0), para o PDF omitir a linha.
+function toYear(v: unknown): number | null {
+  if (v == null || v === "") return null;
+  const n = typeof v === "string" ? parseInt(v, 10) : (v as number);
+  if (!Number.isInteger(n) || n < 1900 || n > 2200) return null;
+  return n;
+}
+
+function toText(v: unknown): string | null {
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  return t ? t : null;
+}
+
 proposalsRouter.get("/", async (_req, res, next) => {
   try {
     res.json(await listProposals());
@@ -65,6 +79,9 @@ proposalsRouter.post("/", async (req: AuthedRequest, res, next) => {
       validade: body.validade ?? null,
       observacoes: body.observacoes ?? null,
       responsavel: body.responsavel ?? null,
+      ano_pagamento_estado: toYear(body.ano_pagamento_estado),
+      observacoes_proposta: toText(body.observacoes_proposta),
+      detalhes_processo: toText(body.detalhes_processo),
     };
     const createdBy = req.user?.email ?? req.user?.name ?? null;
     const proposal = await createProposal(input, createdBy);
