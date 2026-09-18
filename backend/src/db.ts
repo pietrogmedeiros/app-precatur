@@ -45,7 +45,18 @@ if (connectionString) {
   );
 }
 
+// Não deixa a conexão pendurar para sempre quando o Postgres está inacessível:
+// sem isso, o boot trava sem erro e a API nunca chega a escutar na porta.
+poolConfig.connectionTimeoutMillis = Number(process.env.PGCONNECT_TIMEOUT_MS ?? 10000);
+
 export const pool = new Pool(poolConfig);
+
+// O pg emite 'error' no pool quando um cliente ocioso cai (restart do banco,
+// queda de rede). Sem listener, o Node trata como exceção não capturada e mata
+// o processo — derrubando a API inteira por causa de uma conexão ociosa.
+pool.on("error", (err) => {
+  console.error("[db] erro em cliente ocioso do pool (conexão será descartada):", err.message);
+});
 
 export async function query<T = any>(text: string, params?: any[]): Promise<T[]> {
   const result = await pool.query(text, params);
