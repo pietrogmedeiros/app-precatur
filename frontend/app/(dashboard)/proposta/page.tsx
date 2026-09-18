@@ -180,6 +180,24 @@ export default function PropostaPage() {
     const d = new Date();
     const pad = (n: number) => String(n).padStart(2, "0");
     setAnoAtual(d.getFullYear());
+    // Vindo da aba Precificação ("Usar na proposta"): pré-preenche os valores
+    // calculados e limpa a URL, para um F5 não desfazer o que for editado depois.
+    const q = new URLSearchParams(window.location.search);
+    const num = (k: string) => {
+      const v = q.get(k);
+      return v !== null && v.trim() !== "" && Number.isFinite(Number(v)) ? v : null;
+    };
+    const qFace = num("face");
+    const qLiquido = num("liquido");
+    const qAno = num("ano");
+    if (qFace) setValorFace(qFace);
+    if (qLiquido) setValorProposta(qLiquido);
+    if (qAno) setAnoPagamentoEstado(qAno);
+    if (q.get("ente")) setEnteDevedor(q.get("ente")!.slice(0, 120));
+    if (qFace || qLiquido || qAno) {
+      setOk("Valores trazidos da Precificação. Confira e complete os dados do cliente.");
+      window.history.replaceState(null, "", window.location.pathname);
+    }
     setProposalDate(d.toLocaleDateString("pt-BR"));
     setProposalNumber(`PROP-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`);
     loadHistory();

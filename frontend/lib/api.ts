@@ -97,6 +97,31 @@ export interface FollowupInput {
   body: string;
 }
 
+// Precificação · tabela de preço máximo de compra por ente (fonte única no banco).
+export interface PricingRow {
+  year: string;
+  values: number[]; // 4 trimestres, em % (76 = 76%)
+  asset: string;
+}
+
+export interface PricingEntity {
+  key: string;
+  label: string;
+  description: string;
+  position: number;
+  fixed_deduction: number;
+  municipal_reference: boolean;
+  rows: PricingRow[];
+  updated_by: string | null;
+  updated_at: string;
+}
+
+export interface PricingImport {
+  federal?: PricingRow[];
+  estadual?: PricingRow[];
+  municipal?: PricingRow[];
+}
+
 // Deal hydrated from the Bitrix CRM (GET /api/bitrix/deal?ref=<link|id>).
 // Only CRM-owned fields; every absent field is null (never omitted / "").
 export interface BitrixDeal {
@@ -202,5 +227,18 @@ export const api = {
     update: (id: number, payload: FollowupInput) =>
       request<Followup>(`/api/followups/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/followups/${id}`, { method: "DELETE" }),
+  },
+  pricing: {
+    list: () => request<PricingEntity[]>("/api/pricing"),
+    update: (
+      key: string,
+      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string }
+    ) =>
+      request<PricingEntity[]>(`/api/pricing/${key}`, { method: "PUT", body: JSON.stringify(payload) }),
+    import: (payload: PricingImport) =>
+      request<{ updated: string[]; entities: PricingEntity[] }>("/api/pricing/import", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
   },
 };

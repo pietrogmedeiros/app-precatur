@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,11 @@ const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
 ];
 
-const PROPOSAL_NAV = [{ href: "/proposta", label: "Gerar Proposta", icon: FileText }];
+const PROPOSAL_NAV = [
+  { href: "/proposta", label: "Gerar Proposta", icon: FileText },
+  // Tabela de preço + calculadora + simulador: une as duas ferramentas avulsas.
+  { href: "/precificacao", label: "Precificação", icon: Calculator },
+];
 
 // Wiki Sales — base de conhecimento do time comercial. Por enquanto só Follow-up.
 const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSquareText }];
