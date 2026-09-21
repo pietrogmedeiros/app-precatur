@@ -56,6 +56,54 @@ export function yearsUntil(label: string, currentYear: number): number | null {
   return y === null ? null : Math.max(1, y - currentYear);
 }
 
+/* ------------------------------- Mural ---------------------------------- */
+
+// Até que ano de previsão de pagamento a região ainda é comprada. O rótulo da
+// safra É o ano previsto de pagamento ("Safra / ano de previsão de pagamento"
+// na ferramenta original), então o horizonte é o maior ano das linhas. Regiões
+// com regra sem ano ("Regra vigente", em MG) devolvem null — e a tela mostra o
+// rótulo em vez de inventar uma data.
+export interface PaymentHorizon {
+  until: number | null;
+  from: number | null;
+  ruleLabel: string | null; // usado quando não há ano
+}
+
+export function paymentHorizon(entity: PricingEntity): PaymentHorizon {
+  const years = entity.rows
+    .map((r) => paymentYearOf(r.year))
+    .filter((y): y is number => y !== null);
+  if (!years.length) {
+    return { until: null, from: null, ruleLabel: entity.rows[0]?.year ?? null };
+  }
+  return { until: Math.max(...years), from: Math.min(...years), ruleLabel: null };
+}
+
+// Regras de corte já cadastradas, em frases prontas para leitura. Não inventa
+// nada: sai do abatimento fixo, da referência municipal e dos tipos de ativo.
+export function cutRules(entity: PricingEntity): string[] {
+  const rules: string[] = [];
+  if (entity.fixed_deduction > 0) {
+    rules.push(`Abatimento fixo de ${formatBRL(entity.fixed_deduction)} sobre a proposta.`);
+  }
+  if (entity.municipal_reference) {
+    rules.push("Segue a curva do Regime Geral Municipal.");
+  }
+  if (hasAssetChoice(entity)) {
+    rules.push("Preço definido por tipo de ativo (precatório ou direito creditório).");
+  } else {
+    const assets = assetsOf(entity);
+    if (assets.length > 1) {
+      const porAtivo = assets.map((a) => {
+        const anos = entity.rows.filter((r) => r.asset === a).map((r) => r.year);
+        return `${a}: ${anos[0]}${anos.length > 1 ? ` a ${anos[anos.length - 1]}` : ""}`;
+      });
+      rules.push(`Muda de ativo conforme a safra — ${porAtivo.join("; ")}.`);
+    }
+  }
+  return rules;
+}
+
 /* ----------------------------- Simulador -------------------------------- */
 
 export interface SimInput {

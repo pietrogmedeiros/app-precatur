@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ const DASHBOARD_NAV = [
 ];
 
 const PROPOSAL_NAV = [
+  { href: "/mural", label: "Mural", icon: ClipboardList },
   { href: "/proposta", label: "Gerar Proposta", icon: FileText },
   // Tabela de preço + calculadora + simulador: une as duas ferramentas avulsas.
   { href: "/precificacao", label: "Precificação", icon: Calculator },
@@ -25,8 +26,11 @@ const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSq
 
 const ADMIN_NAV = [{ href: "/users", label: "Usuários", icon: UserCog }];
 
-// Único item do perfil Jurídico.
-const JURIDICO_NAV = [{ href: "/precificacao", label: "Precificação", icon: Calculator }];
+// Perfil Jurídico: o mural é a porta de entrada, com a Precificação ao lado.
+const JURIDICO_NAV = [
+  { href: "/mural", label: "Mural", icon: ClipboardList },
+  { href: "/precificacao", label: "Precificação", icon: Calculator },
+];
 
 function initials(name: string): string {
   return name
@@ -129,7 +133,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
           {isJuridico ? (
-            <NavGroup title="Precificação" items={JURIDICO_NAV} collapsed={collapsed} pathname={pathname} />
+            <NavGroup title="Consulta" items={JURIDICO_NAV} collapsed={collapsed} pathname={pathname} />
           ) : (
             <>
               <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />

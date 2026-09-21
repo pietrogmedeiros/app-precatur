@@ -15,7 +15,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const home = role === "juridico" ? "/precificacao" : "/sales";
+  const home = role === "juridico" ? "/mural" : "/sales";
 
   if (token && isLogin) {
     const url = req.nextUrl.clone();
@@ -23,10 +23,11 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Jurídico só acessa a Precificação (o backend aplica a mesma regra na API).
-  if (token && role === "juridico" && !pathname.startsWith("/precificacao")) {
+  // Jurídico só acessa o mural e a Precificação (a API aplica a mesma regra).
+  const juridicoOk = ["/mural", "/precificacao"];
+  if (token && role === "juridico" && !juridicoOk.some((p) => pathname.startsWith(p))) {
     const url = req.nextUrl.clone();
-    url.pathname = "/precificacao";
+    url.pathname = "/mural";
     return NextResponse.redirect(url);
   }
 

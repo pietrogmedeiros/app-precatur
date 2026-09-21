@@ -22,7 +22,7 @@ export function roleLabel(role: string | null | undefined): string {
 // Perfil Jurídico só enxerga a Precificação, então não pode cair em /sales.
 // Fonte única do destino pós-login, usada também pela home e pelo middleware.
 export function landingFor(role: string | null | undefined): string {
-  return role === "juridico" ? "/precificacao" : "/sales";
+  return role === "juridico" ? "/mural" : "/sales";
 }
 
 export interface SessionUser {
