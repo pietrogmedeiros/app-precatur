@@ -14,14 +14,19 @@ import {
 } from "chart.js";
 import { Camera, Link2, Link2Off } from "lucide-react";
 import { simulate, formatBRL, formatDecimal, parseBRL } from "@/lib/pricing";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Filler, Legend, Tooltip);
 
-// Paleta escura do gerador de gráficos original — mantida de propósito, porque
-// é esse visual que sai no PNG enviado ao cliente.
-const GREEN = "#10b981";
-const RED = "#ef4444";
-const BG = "#0f172a";
+// Cores no tema claro do app (tokens neutros do shadcn em globals.css). Verde e
+// vermelho seguem marcando os dois cenários, em tons que leem bem sobre branco.
+const GREEN = "#059669";
+const RED = "#dc2626";
+const INK = "#0a0a0a"; // --foreground
+const MUTED = "#737373"; // --muted-foreground
+const GRID = "#e5e5e5"; // --border
+const BG = "#ffffff"; // --card
 
 const brl0 = (v: number) => formatBRL(v, 0);
 const pct1 = (v: number) => v.toFixed(1).replace(".", ",") + "%";
@@ -69,7 +74,7 @@ export function Simulator({ suggested }: { suggested: SimulatorSuggestion }) {
     if (!ctx) return;
     const grad = (rgb: string) => {
       const g = ctx.createLinearGradient(0, 0, 0, 350);
-      g.addColorStop(0, `rgba(${rgb}, 0.25)`);
+      g.addColorStop(0, `rgba(${rgb}, 0.12)`);
       g.addColorStop(1, `rgba(${rgb}, 0)`);
       return g;
     };
@@ -78,30 +83,30 @@ export function Simulator({ suggested }: { suggested: SimulatorSuggestion }) {
       data: {
         labels: [],
         datasets: [
-          { label: "ANTECIPAR AGORA", data: [], borderColor: GREEN, backgroundColor: grad("16, 185, 129"), fill: true, tension: 0.35, borderWidth: 3, pointRadius: 3, pointHoverRadius: 6 },
-          { label: "ESPERAR PELO GOVERNO", data: [], borderColor: RED, backgroundColor: grad("239, 68, 68"), fill: true, tension: 0.35, borderWidth: 3, pointRadius: 3, pointHoverRadius: 6 },
+          { label: "ANTECIPAR AGORA", data: [], borderColor: GREEN, backgroundColor: grad("5, 150, 105"), fill: true, tension: 0.35, borderWidth: 3, pointRadius: 3, pointHoverRadius: 6 },
+          { label: "ESPERAR PELO GOVERNO", data: [], borderColor: RED, backgroundColor: grad("220, 38, 38"), fill: true, tension: 0.35, borderWidth: 3, pointRadius: 3, pointHoverRadius: 6 },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: "top", labels: { font: { size: 12, weight: 600 }, color: "#f8fafc", usePointStyle: true, padding: 20 } },
+          legend: { position: "top", labels: { font: { size: 12, weight: 600 }, color: INK, usePointStyle: true, padding: 20 } },
           tooltip: {
-            backgroundColor: "#1e293b",
-            titleColor: "#f8fafc",
-            bodyColor: "#cbd5e1",
-            borderColor: "#334155",
+            backgroundColor: BG,
+            titleColor: INK,
+            bodyColor: INK,
+            borderColor: GRID,
             borderWidth: 1,
             callbacks: { label: (c) => ` ${c.dataset.label}: ${brl0(Number(c.raw))}` },
           },
         },
         scales: {
-          x: { grid: { color: "#334155" }, ticks: { color: "#94a3b8" } },
+          x: { grid: { color: GRID }, ticks: { color: MUTED } },
           y: {
-            grid: { color: "#334155" },
+            grid: { color: GRID },
             ticks: {
-              color: "#94a3b8",
+              color: MUTED,
               callback: (v) => {
                 const n = Number(v);
                 if (n >= 1_000_000) return "R$ " + (n / 1_000_000).toFixed(1) + "M";
@@ -128,7 +133,7 @@ export function Simulator({ suggested }: { suggested: SimulatorSuggestion }) {
     chart.update();
   }, [data]);
 
-  // Mesma exportação do gerador: esconde a série que não vai, desenha a faixa
+  // Mesma exportação do gerador (agora em fundo claro, como a tela): esconde a série que não vai, desenha a faixa
   // com o líquido final por cima do gráfico e baixa o PNG. A faixa agora escala
   // com a densidade da tela — no original, em tela retina, o texto saía miúdo.
   function exportGraph(mode: "antecipar" | "esperar" | "ambos") {
@@ -165,7 +170,7 @@ export function Simulator({ suggested }: { suggested: SimulatorSuggestion }) {
       c.fillStyle = RED;
       c.fillText(`ESPERAR GOVERNO (Líquido): ${brl0(data.summary2.net)}`, x, 63 * k);
     }
-    c.strokeStyle = "#334155";
+    c.strokeStyle = GRID;
     c.lineWidth = k;
     c.beginPath();
     c.moveTo(x, banner - 5 * k);
@@ -186,78 +191,75 @@ export function Simulator({ suggested }: { suggested: SimulatorSuggestion }) {
   const unlink = () => setLinked(false);
 
   return (
-    <div className="space-y-5 rounded-lg border border-[#334155] bg-[#1e293b] p-4 text-[#f8fafc] sm:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h3 className="text-lg font-semibold">Antecipar agora × Esperar o governo</h3>
-          <p className="text-sm text-[#94a3b8]">
+    <Card>
+      <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
+        <div className="space-y-1.5">
+          <CardTitle>Antecipar agora × Esperar o governo</CardTitle>
+          <CardDescription>
             Projeção para mostrar ao cliente quanto a antecipação rende frente à espera pelo pagamento.
-          </p>
+          </CardDescription>
         </div>
         {linked ? (
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-[#334155] px-2.5 py-1 text-xs text-[#94a3b8]">
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs text-muted-foreground">
             <Link2 className="h-3.5 w-3.5" />
             Sincronizado com a calculadora
           </span>
         ) : (
-          <button
-            onClick={() => setLinked(true)}
-            className="inline-flex items-center gap-1.5 rounded-md border border-[#475569] bg-[#334155] px-2.5 py-1 text-xs font-medium hover:bg-[#475569]"
-          >
+          <Button variant="outline" size="sm" className="shrink-0 gap-1.5" onClick={() => setLinked(true)}>
             <Link2Off className="h-3.5 w-3.5" />
             Voltar a sincronizar com a calculadora
-          </button>
+          </Button>
         )}
-      </div>
+      </CardHeader>
 
-      <div className="grid gap-5 rounded-lg border border-[#334155] bg-[#0f172a] p-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Slider label="Prazo (anos)" value={years} display={`${years} anos`} min={1} max={30} step={1}
-          onChange={(v) => { setYears(v); unlink(); }} />
-        <Slider label="Taxa CDI (% a.a.)" value={cdi} display={`${cdi}%`} min={3} max={20} step={0.1} onChange={setCdi} />
-        <Slider label="IPCA estimado (% a.a.)" value={ipca} display={`${ipca}%`} min={1} max={15} step={0.1} onChange={setIpca} />
-        <Slider label="Alíquota IR (%)" value={ir} display={`${ir.toFixed(1)}%`} min={0} max={22.5} step={2.5} onChange={setIr} />
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-4 rounded-lg border border-[#334155] border-t-4 border-t-[#10b981] bg-[#0f172a] p-4">
-          <h4 className="font-semibold text-[#10b981]">ANTECIPAR AGORA</h4>
-          <MoneyField label="Valor recebido hoje (proposta)" text={text1}
-            onText={(t) => { setText1(t); unlink(); }}
-            onCommit={() => { const v = parseBRL(text1); setInit1(v); setText1(formatDecimal(v)); }} />
-          <Slider label="Prêmio sobre CDI (% a.a.)" value={spread1} display={`${spread1 >= 0 ? "+" : ""}${spread1}%`}
-            min={-5} max={15} step={0.5} onChange={setSpread1} accent={GREEN} />
+      <CardContent className="space-y-5">
+        <div className="grid gap-5 rounded-lg border bg-secondary/40 p-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Slider label="Prazo" value={years} display={`${years} ${years === 1 ? "ano" : "anos"}`} min={1} max={30} step={1}
+            onChange={(v) => { setYears(v); unlink(); }} />
+          <Slider label="Taxa CDI (% a.a.)" value={cdi} display={`${cdi}%`} min={3} max={20} step={0.1} onChange={setCdi} />
+          <Slider label="IPCA estimado (% a.a.)" value={ipca} display={`${ipca}%`} min={1} max={15} step={0.1} onChange={setIpca} />
+          <Slider label="Alíquota IR (%)" value={ir} display={`${ir.toFixed(1)}%`} min={0} max={22.5} step={2.5} onChange={setIr} />
         </div>
-        <div className="space-y-4 rounded-lg border border-[#334155] border-t-4 border-t-[#ef4444] bg-[#0f172a] p-4">
-          <h4 className="font-semibold text-[#ef4444]">ESPERAR PELO GOVERNO</h4>
-          <MoneyField label="Valor cheio do crédito" text={text2}
-            onText={(t) => { setText2(t); unlink(); }}
-            onCommit={() => { const v = parseBRL(text2); setInit2(v); setText2(formatDecimal(v)); }} />
-          <Slider label="Prêmio sobre IPCA (% a.a.)" value={spread2} display={`${spread2 >= 0 ? "+" : ""}${spread2}%`}
-            min={-2} max={10} step={0.5} onChange={setSpread2} accent={RED} />
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-4 rounded-lg border border-t-4 p-4" style={{ borderTopColor: GREEN }}>
+            <h4 className="text-sm font-semibold tracking-wide" style={{ color: GREEN }}>ANTECIPAR AGORA</h4>
+            <MoneyField label="Valor recebido hoje (proposta)" text={text1}
+              onText={(t) => { setText1(t); unlink(); }}
+              onCommit={() => { const v = parseBRL(text1); setInit1(v); setText1(formatDecimal(v)); }} />
+            <Slider label="Prêmio sobre CDI (% a.a.)" value={spread1} display={`${spread1 >= 0 ? "+" : ""}${spread1}%`}
+              min={-5} max={15} step={0.5} onChange={setSpread1} accent={GREEN} />
+          </div>
+          <div className="space-y-4 rounded-lg border border-t-4 p-4" style={{ borderTopColor: RED }}>
+            <h4 className="text-sm font-semibold tracking-wide" style={{ color: RED }}>ESPERAR PELO GOVERNO</h4>
+            <MoneyField label="Valor cheio do crédito" text={text2}
+              onText={(t) => { setText2(t); unlink(); }}
+              onCommit={() => { const v = parseBRL(text2); setInit2(v); setText2(formatDecimal(v)); }} />
+            <Slider label="Prêmio sobre IPCA (% a.a.)" value={spread2} display={`${spread2 >= 0 ? "+" : ""}${spread2}%`}
+              min={-2} max={10} step={0.5} onChange={setSpread2} accent={RED} />
+          </div>
         </div>
-      </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Summary title="ANTECIPAR AGORA (Líquido)" color={GREEN} rateLabel="CDI + prêmio"
-          rate={data.rate1} s={data.summary1} />
-        <Summary title="ESPERAR PELO GOVERNO (Líquido)" color={RED} rateLabel="IPCA + prêmio"
-          rate={data.rate2} s={data.summary2} />
-      </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Summary title="Antecipar agora (líquido)" tone="green" rateLabel="CDI + prêmio" rate={data.rate1} s={data.summary1} />
+          <Summary title="Esperar pelo governo (líquido)" tone="red" rateLabel="IPCA + prêmio" rate={data.rate2} s={data.summary2} />
+        </div>
 
-      <div className="flex flex-wrap justify-end gap-2">
-        <ExportButton onClick={() => exportGraph("antecipar")}>Baixar &quot;Antecipar agora&quot;</ExportButton>
-        <ExportButton onClick={() => exportGraph("esperar")}>Baixar &quot;Esperar governo&quot;</ExportButton>
-        <ExportButton onClick={() => exportGraph("ambos")}>Baixar comparativo</ExportButton>
-      </div>
+        <div className="flex flex-wrap justify-end gap-2">
+          <ExportButton onClick={() => exportGraph("antecipar")}>Baixar &quot;Antecipar agora&quot;</ExportButton>
+          <ExportButton onClick={() => exportGraph("esperar")}>Baixar &quot;Esperar governo&quot;</ExportButton>
+          <ExportButton onClick={() => exportGraph("ambos")}>Baixar comparativo</ExportButton>
+        </div>
 
-      <div className="relative h-[320px] rounded-lg border border-[#334155] bg-[#0f172a] p-4 sm:h-[420px]">
-        <canvas ref={canvasRef} />
-      </div>
+        <div className="relative h-[320px] rounded-lg border p-4 sm:h-[420px]">
+          <canvas ref={canvasRef} />
+        </div>
 
-      <p className="text-center text-xs text-[#94a3b8]">
-        *Projeções simuladas com capitalização anual e IR sobre o ganho, ao final do período.
-      </p>
-    </div>
+        <p className="text-center text-xs text-muted-foreground">
+          *Projeções simuladas com capitalização anual e IR sobre o ganho, ao final do período.
+        </p>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -269,11 +271,11 @@ function Slider({ label, value, display, min, max, step, onChange, accent }: {
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2 text-sm font-medium">
         <span>{label}</span>
-        <span className="rounded-md border border-[#334155] bg-[#334155] px-2 py-0.5 text-xs font-semibold">{display}</span>
+        <span className="rounded-md bg-secondary px-2 py-0.5 text-xs font-semibold tabular-nums">{display}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full cursor-pointer" style={{ accentColor: accent ?? "#94a3b8" }} />
+        className="w-full cursor-pointer" style={{ accentColor: accent ?? INK }} />
     </div>
   );
 }
@@ -284,26 +286,28 @@ function MoneyField({ label, text, onText, onCommit }: {
   return (
     <label className="block space-y-1.5 text-sm font-medium">
       <span>{label}</span>
-      <div className="flex items-center rounded-md border border-[#334155] bg-[#1e293b] px-3">
-        <span className="text-[#94a3b8]">R$</span>
+      <div className="flex h-9 items-center rounded-md border border-input px-3 shadow-sm focus-within:ring-1 focus-within:ring-ring">
+        <span className="text-muted-foreground">R$</span>
         <input value={text} inputMode="decimal"
           onChange={(e) => onText(e.target.value)} onBlur={onCommit}
           onKeyDown={(e) => e.key === "Enter" && onCommit()}
-          className="h-9 w-full bg-transparent px-2 text-sm outline-none" />
+          className="h-full w-full bg-transparent px-2 text-sm outline-none" />
       </div>
     </label>
   );
 }
 
-function Summary({ title, color, rateLabel, rate, s }: {
-  title: string; color: string; rateLabel: string; rate: number;
+function Summary({ title, tone, rateLabel, rate, s }: {
+  title: string; tone: "green" | "red"; rateLabel: string; rate: number;
   s: { gross: number; tax: number; net: number };
 }) {
+  const box = tone === "green" ? "border-emerald-200 bg-emerald-50" : "border-red-200 bg-red-50";
+  const color = tone === "green" ? GREEN : RED;
   return (
-    <div className="rounded-lg border p-4" style={{ borderColor: `${color}4d`, background: `${color}1f` }}>
-      <div className="mb-2 text-xs font-semibold uppercase tracking-wider" style={{ color }}>{title}</div>
-      <div className="mb-3 text-2xl font-bold">{brl0(s.net)}</div>
-      <div className="space-y-1 border-t border-white/10 pt-2 text-xs text-[#94a3b8]">
+    <div className={`rounded-lg border p-4 ${box}`}>
+      <div className="mb-1 text-xs font-semibold uppercase tracking-wider" style={{ color }}>{title}</div>
+      <div className="mb-3 text-2xl font-bold tabular-nums">{brl0(s.net)}</div>
+      <div className="space-y-1 border-t border-black/5 pt-2 text-xs text-muted-foreground">
         <Line k={`Taxa bruta (${rateLabel})`} v={pct1(rate)} />
         <Line k="Montante bruto" v={brl0(s.gross)} />
         <Line k="Imposto estimado" v={brl0(s.tax)} />
@@ -316,17 +320,16 @@ function Line({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex justify-between gap-3">
       <span>{k}</span>
-      <strong className="text-[#f8fafc]">{v}</strong>
+      <strong className="tabular-nums text-foreground">{v}</strong>
     </div>
   );
 }
 
 function ExportButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
-    <button onClick={onClick}
-      className="inline-flex items-center gap-2 rounded-md border border-[#334155] bg-[#334155] px-3 py-2 text-xs font-semibold hover:bg-[#475569]">
+    <Button variant="outline" size="sm" className="gap-2" onClick={onClick}>
       <Camera className="h-3.5 w-3.5" />
       {children}
-    </button>
+    </Button>
   );
 }
