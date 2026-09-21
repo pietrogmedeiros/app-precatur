@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { clearSession, getUser, type SessionUser } from "@/lib/auth";
+import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { ChangePasswordModal } from "@/components/change-password-modal";
 import { ProfileModal } from "@/components/profile-modal";
@@ -24,6 +24,9 @@ const PROPOSAL_NAV = [
 const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSquareText }];
 
 const ADMIN_NAV = [{ href: "/users", label: "Usuários", icon: UserCog }];
+
+// Único item do perfil Jurídico.
+const JURIDICO_NAV = [{ href: "/precificacao", label: "Precificação", icon: Calculator }];
 
 function initials(name: string): string {
   return name
@@ -50,6 +53,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   const isAdmin = user?.role === "admin";
+  // Jurídico só tem a Precificação: os demais grupos somem do menu (o middleware
+  // e a API barram o acesso direto por URL).
+  const isJuridico = user?.role === "juridico";
 
   function toggleCollapsed() {
     setCollapsed((v) => {
@@ -122,9 +128,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-          <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
-          <NavGroup title="Proposta" items={PROPOSAL_NAV} collapsed={collapsed} pathname={pathname} />
-          <NavGroup title="Wiki - Sales" items={WIKI_NAV} collapsed={collapsed} pathname={pathname} />
+          {isJuridico ? (
+            <NavGroup title="Precificação" items={JURIDICO_NAV} collapsed={collapsed} pathname={pathname} />
+          ) : (
+            <>
+              <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
+              <NavGroup title="Proposta" items={PROPOSAL_NAV} collapsed={collapsed} pathname={pathname} />
+              <NavGroup title="Wiki - Sales" items={WIKI_NAV} collapsed={collapsed} pathname={pathname} />
+            </>
+          )}
           {isAdmin ? (
             <NavGroup
               title="Administração"
@@ -200,7 +212,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             </div>
             <div className="hidden leading-tight sm:block">
               <div className="text-sm font-medium">{user?.name ?? ""}</div>
-              <div className="text-[11px] capitalize text-muted-foreground">{user?.role ?? ""}</div>
+              <div className="text-[11px] text-muted-foreground">{user ? roleLabel(user.role) : ""}</div>
             </div>
           </div>
         </header>

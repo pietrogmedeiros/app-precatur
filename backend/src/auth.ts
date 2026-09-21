@@ -51,6 +51,16 @@ export function requireAuth(req: AuthedRequest, res: Response, next: NextFunctio
   }
 }
 
+// Perfil Jurídico só enxerga a Precificação. Aplicado nas demais rotas de
+// negócio; escrever na Precificação já é barrado pelo requireAdmin.
+export function blockJuridico(req: AuthedRequest, res: Response, next: NextFunction) {
+  if (req.user?.role !== "juridico") return next();
+  res.status(403).json({
+    error: "forbidden",
+    message: "O perfil Jurídico tem acesso apenas à Precificação.",
+  });
+}
+
 export function requireAdmin(req: AuthedRequest, res: Response, next: NextFunction) {
   if (req.user?.role !== "admin") {
     return res.status(403).json({ error: "forbidden", message: "Acesso restrito a administradores." });

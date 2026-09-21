@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check, Pencil, X } from "lucide-react";
 import { api, type UserRecord } from "@/lib/api";
-import { type Role } from "@/lib/auth";
+import { roleLabel, type Role } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -213,6 +213,7 @@ export default function UsersPage() {
                 <label htmlFor="u-role" className="text-sm font-medium">Perfil</label>
                 <select id="u-role" className={inputClass} value={role} onChange={(e) => setRole(e.target.value as Role)}>
                   <option value="padrao">Padrão</option>
+                  <option value="juridico">Jurídico</option>
                   <option value="admin">Admin</option>
                 </select>
               </div>
@@ -267,7 +268,7 @@ export default function UsersPage() {
                           : "bg-secondary text-secondary-foreground")
                       }
                     >
-                      {u.role === "admin" ? "Admin" : "Padrão"}
+                      {roleLabel(u.role)}
                     </span>
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground sm:table-cell">

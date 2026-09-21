@@ -6,7 +6,24 @@ const TOKEN = "token";
 const ROLE = "role";
 const USER = "precatur:user";
 
-export type Role = "admin" | "padrao";
+export type Role = "admin" | "padrao" | "juridico";
+
+// Nome de exibição dos perfis (a chave no banco é sem acento).
+export const ROLE_LABEL: Record<string, string> = {
+  admin: "Admin",
+  padrao: "Padrão",
+  juridico: "Jurídico",
+};
+
+export function roleLabel(role: string | null | undefined): string {
+  return ROLE_LABEL[role ?? ""] ?? "Padrão";
+}
+
+// Perfil Jurídico só enxerga a Precificação, então não pode cair em /sales.
+// Fonte única do destino pós-login, usada também pela home e pelo middleware.
+export function landingFor(role: string | null | undefined): string {
+  return role === "juridico" ? "/precificacao" : "/sales";
+}
 
 export interface SessionUser {
   name: string;

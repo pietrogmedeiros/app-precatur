@@ -15,16 +15,25 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  const home = role === "juridico" ? "/precificacao" : "/sales";
+
   if (token && isLogin) {
     const url = req.nextUrl.clone();
-    url.pathname = "/sales";
+    url.pathname = home;
+    return NextResponse.redirect(url);
+  }
+
+  // Jurídico só acessa a Precificação (o backend aplica a mesma regra na API).
+  if (token && role === "juridico" && !pathname.startsWith("/precificacao")) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/precificacao";
     return NextResponse.redirect(url);
   }
 
   // /users is admin-only (backend also enforces this).
   if (token && pathname.startsWith("/users") && role !== "admin") {
     const url = req.nextUrl.clone();
-    url.pathname = "/sales";
+    url.pathname = home;
     return NextResponse.redirect(url);
   }
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/api";
-import { setSession } from "@/lib/auth";
+import { setSession, landingFor } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
         localStorage.removeItem(REMEMBER_KEY);
       }
       await saveCredential(email, password);
-      router.push("/sales");
+      router.push(landingFor(user.role));
       router.refresh();
     } catch (err: any) {
       setError(err?.message ?? "Falha ao entrar.");

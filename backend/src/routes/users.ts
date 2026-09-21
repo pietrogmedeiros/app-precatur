@@ -1,4 +1,5 @@
 import { Router } from "express";
+import type { Role } from "../users";
 import { listUsers, createUser, deleteUser, updateUserPhone } from "../users";
 import type { AuthedRequest } from "../auth";
 
@@ -30,7 +31,7 @@ usersRouter.post("/", async (req, res, next) => {
         message: "Nome, e-mail, telefone e senha (mín. 4 caracteres) são obrigatórios.",
       });
     }
-    const finalRole = role === "admin" ? "admin" : "padrao";
+    const finalRole: Role = role === "admin" || role === "juridico" ? role : "padrao";
     const user = await createUser({
       name: name.trim(),
       email: email.trim(),

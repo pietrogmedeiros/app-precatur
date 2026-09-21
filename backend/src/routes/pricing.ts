@@ -7,7 +7,7 @@ import {
   IMPORTABLE_KEYS,
   type PricingPatch,
 } from "../pricing";
-import { requireAdmin, type AuthedRequest } from "../auth";
+import { requireAdmin, blockJuridico, type AuthedRequest } from "../auth";
 
 export const pricingRouter = Router();
 
@@ -30,7 +30,7 @@ function sendError(res: any, err: unknown, next: (e: unknown) => void) {
 
 // Edição manual de um ente (tabela, abatimento fixo, descrição) — só admin,
 // porque define o preço máximo que a empresa paga.
-pricingRouter.put("/:key", requireAdmin, async (req: AuthedRequest, res, next) => {
+pricingRouter.put("/:key", blockJuridico, requireAdmin, async (req: AuthedRequest, res, next) => {
   try {
     const body = req.body ?? {};
     const patch: PricingPatch = {};
@@ -66,7 +66,7 @@ pricingRouter.put("/:key", requireAdmin, async (req: AuthedRequest, res, next) =
 
 // Importação da planilha comercial. O XLSX é lido no navegador (mesma lógica do
 // HTML antigo) e chega aqui já como linhas — a API valida tudo antes de gravar.
-pricingRouter.post("/import", requireAdmin, async (req: AuthedRequest, res, next) => {
+pricingRouter.post("/import", blockJuridico, requireAdmin, async (req: AuthedRequest, res, next) => {
   try {
     const body = req.body ?? {};
     const patches: Record<string, PricingPatch> = {};

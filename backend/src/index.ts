@@ -12,7 +12,7 @@ import { proposalsRouter } from "./routes/proposals";
 import { followupsRouter } from "./routes/followups";
 import { pricingRouter } from "./routes/pricing";
 import { bitrixRouter } from "./routes/bitrix";
-import { requireAuth, requireAdmin } from "./auth";
+import { requireAuth, requireAdmin, blockJuridico } from "./auth";
 
 dotenv.config();
 
@@ -57,13 +57,13 @@ app.use("/api", (_req, res, next) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/metrics", requireAuth, metricsRouter);
-app.use("/api/metabase", requireAuth, metabaseRouter);
-app.use("/api/users", requireAuth, requireAdmin, usersRouter);
-app.use("/api/propostas", requireAuth, proposalsRouter);
-app.use("/api/followups", requireAuth, followupsRouter);
+app.use("/api/metrics", requireAuth, blockJuridico, metricsRouter);
+app.use("/api/metabase", requireAuth, blockJuridico, metabaseRouter);
+app.use("/api/users", requireAuth, blockJuridico, requireAdmin, usersRouter);
+app.use("/api/propostas", requireAuth, blockJuridico, proposalsRouter);
+app.use("/api/followups", requireAuth, blockJuridico, followupsRouter);
 app.use("/api/pricing", requireAuth, pricingRouter);
-app.use("/api/bitrix", requireAuth, bitrixRouter);
+app.use("/api/bitrix", requireAuth, blockJuridico, bitrixRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

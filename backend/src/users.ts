@@ -1,7 +1,8 @@
 import crypto from "crypto";
 import { query } from "./db";
 
-export type Role = "admin" | "padrao";
+// "juridico" só consulta a aba Precificação (ver blockJuridico em auth.ts).
+export type Role = "admin" | "padrao" | "juridico";
 
 export interface User {
   id: number;

@@ -45,6 +45,7 @@ export default function PrecificacaoPage() {
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isJuridico, setIsJuridico] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [importing, setImporting] = useState(false);
 
@@ -79,7 +80,9 @@ export default function PrecificacaoPage() {
     // Trimestre e ano só no cliente, para o render do servidor não divergir.
     setQuarter(currentQuarterIndex());
     setAnoAtual(new Date().getFullYear());
-    setIsAdmin(getUser()?.role === "admin");
+    const perfil = getUser()?.role;
+    setIsAdmin(perfil === "admin");
+    setIsJuridico(perfil === "juridico");
     api.pricing
       .list()
       .then(setEntities)
@@ -367,14 +370,18 @@ export default function PrecificacaoPage() {
                 warn={Math.abs(adjustment) > 0.005} />
             </div>
 
-            <Button className="w-full gap-2" onClick={sendToProposal} disabled={!face}>
-              <FileText className="h-4 w-4" />
-              Usar na proposta
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              Abre o gerador já com valor de face, valor líquido
-              {paymentYearOf(row.year) ? ` e ano de pagamento (${paymentYearOf(row.year)})` : ""}.
-            </p>
+            {isJuridico ? null : (
+              <>
+                <Button className="w-full gap-2" onClick={sendToProposal} disabled={!face}>
+                  <FileText className="h-4 w-4" />
+                  Usar na proposta
+                </Button>
+                <p className="text-center text-xs text-muted-foreground">
+                  Abre o gerador já com valor de face, valor líquido
+                  {paymentYearOf(row.year) ? ` e ano de pagamento (${paymentYearOf(row.year)})` : ""}.
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
