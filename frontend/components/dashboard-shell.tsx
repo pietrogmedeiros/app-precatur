@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList, Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,9 @@ const PROPOSAL_NAV = [
   // Tabela de preço + calculadora + simulador: une as duas ferramentas avulsas.
   { href: "/precificacao", label: "Precificação", icon: Calculator },
 ];
+
+// Captação — o que chega pelo formulário público (/enviar).
+const CAPTACAO_NAV = [{ href: "/captacao", label: "Envios de cedentes", icon: Inbox }];
 
 // Wiki Sales — base de conhecimento do time comercial. Por enquanto só Follow-up.
 const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSquareText }];
@@ -138,6 +141,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <>
               <NavGroup title="Dashboard" items={DASHBOARD_NAV} collapsed={collapsed} pathname={pathname} />
               <NavGroup title="Proposta" items={PROPOSAL_NAV} collapsed={collapsed} pathname={pathname} />
+              <NavGroup title="Captação" items={CAPTACAO_NAV} collapsed={collapsed} pathname={pathname} />
               <NavGroup title="Wiki - Sales" items={WIKI_NAV} collapsed={collapsed} pathname={pathname} />
             </>
           )}

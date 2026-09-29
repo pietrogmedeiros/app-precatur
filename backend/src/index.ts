@@ -11,12 +11,16 @@ import { usersRouter } from "./routes/users";
 import { proposalsRouter } from "./routes/proposals";
 import { followupsRouter } from "./routes/followups";
 import { pricingRouter } from "./routes/pricing";
+import { captacaoRouter } from "./routes/captacao";
 import { bitrixRouter } from "./routes/bitrix";
 import { requireAuth, requireAdmin, blockJuridico } from "./auth";
 
 dotenv.config();
 
 const app = express();
+// Atrás do proxy (EasyPanel + Next), sem isto req.ip seria sempre o do proxy e a
+// trava por IP do formulário público não valeria nada.
+app.set("trust proxy", 1);
 const PORT = Number(process.env.PORT ?? 8080);
 
 // CORS: allow a comma-separated list of origins, or * for any (dev).
@@ -63,6 +67,7 @@ app.use("/api/users", requireAuth, blockJuridico, requireAdmin, usersRouter);
 app.use("/api/propostas", requireAuth, blockJuridico, proposalsRouter);
 app.use("/api/followups", requireAuth, blockJuridico, followupsRouter);
 app.use("/api/pricing", requireAuth, pricingRouter);
+app.use("/api/captacao", captacaoRouter);
 app.use("/api/bitrix", requireAuth, blockJuridico, bitrixRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.

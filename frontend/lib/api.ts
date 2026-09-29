@@ -122,6 +122,42 @@ export interface PricingImport {
   municipal?: PricingRow[];
 }
 
+// Captação · envio feito por cedente/advogado no formulário público.
+export type SubmissionStatus = "novo" | "em_analise" | "aprovado" | "recusado";
+
+export interface SubmissionFileMeta {
+  id: number;
+  filename: string;
+  content_type: string;
+  size_bytes: number;
+}
+
+export interface Submission {
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string;
+  processo: string | null;
+  referente_a: string | null;
+  credor_advogado: string | null;
+  honorarios: string | null;
+  observacoes: string | null;
+  status: SubmissionStatus;
+  status_by: string | null;
+  status_at: string | null;
+  created_at: string;
+  files: SubmissionFileMeta[];
+}
+
+// Envio público: sem token e com FormData (o navegador precisa definir o
+// boundary do multipart, por isso não passa pelo helper `request`).
+export async function enviarCaptacao(form: FormData): Promise<{ id: number; arquivos: number }> {
+  const res = await fetch(`${API_URL}/api/captacao`, { method: "POST", body: form });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body?.message ?? `Não foi possível enviar (erro ${res.status}).`);
+  return body;
+}
+
 // Deal hydrated from the Bitrix CRM (GET /api/bitrix/deal?ref=<link|id>).
 // Only CRM-owned fields; every absent field is null (never omitted / "").
 export interface BitrixDeal {
@@ -227,6 +263,26 @@ export const api = {
     update: (id: number, payload: FollowupInput) =>
       request<Followup>(`/api/followups/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
     remove: (id: number) => request<void>(`/api/followups/${id}`, { method: "DELETE" }),
+  },
+  captacao: {
+    list: () => request<Submission[]>("/api/captacao"),
+    get: (id: number) => request<Submission>(`/api/captacao/${id}`),
+    updateStatus: (id: number, status: SubmissionStatus) =>
+      request<Submission>(`/api/captacao/${id}`, { method: "PATCH", body: JSON.stringify({ status }) }),
+    // O download exige token, então um <a href> puro não serve: busca com o
+    // cabeçalho de autorização e entrega o arquivo ao navegador.
+    baixarArquivo: async (id: number, fileId: number, filename: string) => {
+      const res = await fetch(`${API_URL}/api/captacao/${id}/arquivos/${fileId}`, {
+        headers: { ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
+      });
+      if (!res.ok) throw new Error("Não foi possível baixar o arquivo.");
+      const url = URL.createObjectURL(await res.blob());
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    },
   },
   pricing: {
     list: () => request<PricingEntity[]>("/api/pricing"),
