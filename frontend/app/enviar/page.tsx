@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { CheckCircle2, FileUp, Loader2, Paperclip, X } from "lucide-react";
 import { enviarCaptacao } from "@/lib/api";
+import { maskProcesso, maskTelefone } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
 
 // Página PÚBLICA: é o link que o cedente/advogado recebe. Não exige login e é a
@@ -24,6 +25,9 @@ function mb(bytes: number): string {
 export default function EnviarPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [arquivos, setArquivos] = useState<File[]>([]);
+  // Campos com máscara precisam ser controlados para reformatar a cada tecla.
+  const [telefone, setTelefone] = useState("");
+  const [processo, setProcesso] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [protocolo, setProtocolo] = useState<number | null>(null);
@@ -89,6 +93,8 @@ export default function EnviarPage() {
             onClick={() => {
               setProtocolo(null);
               setArquivos([]);
+              setTelefone("");
+              setProcesso("");
             }}
           >
             Enviar outro precatório
@@ -110,8 +116,9 @@ export default function EnviarPage() {
               <input id="email" name="email" type="email" className={inputClass} maxLength={160} required />
             </Campo>
             <Campo id="telefone" label="Telefone / WhatsApp" obrigatorio>
-              <input id="telefone" name="telefone" className={inputClass} maxLength={40} required
-                placeholder="(27) 99999-0000" />
+              <input id="telefone" name="telefone" className={inputClass} required
+                inputMode="tel" autoComplete="tel" placeholder="(27) 99999-0000"
+                value={telefone} onChange={(e) => setTelefone(maskTelefone(e.target.value))} />
             </Campo>
           </div>
         </Secao>
@@ -120,7 +127,8 @@ export default function EnviarPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Campo id="processo" label="Número do processo de execução">
               <input id="processo" name="processo" className={inputClass} maxLength={120}
-                placeholder="0000000-00.0000.0.00.0000" />
+                inputMode="numeric" placeholder="0000000-00.0000.0.00.0000"
+                value={processo} onChange={(e) => setProcesso(maskProcesso(e.target.value))} />
             </Campo>
             <Campo id="referente_a" label="A quem se refere o crédito">
               <input id="referente_a" name="referente_a" className={inputClass} maxLength={200} />
