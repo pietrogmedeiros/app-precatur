@@ -43,6 +43,7 @@ export function TableEditor({
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [deduction, setDeduction] = useState("");
   const [description, setDescription] = useState("");
+  const [oculta, setOculta] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -64,6 +65,7 @@ export function TableEditor({
     );
     setDeduction(criando ? "" : entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
     setDescription(criando ? "" : entity.description);
+    setOculta(criando ? false : Boolean(entity.hidden));
     setError(null);
   }, [open, entity, criando]);
 
@@ -104,6 +106,7 @@ export function TableEditor({
         rows: linhas,
         fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
         description,
+        hidden: oculta,
       });
       onSaved(entities);
       onClose();
@@ -250,6 +253,20 @@ export function TableEditor({
               onChange={(e) => setDescription(e.target.value)} />
           </label>
         </div>
+
+        {!criando ? (
+          <label className="mt-4 flex items-start gap-2 text-sm">
+            <input type="checkbox" className="mt-0.5 h-4 w-4" checked={oculta}
+              onChange={(e) => setOculta(e.target.checked)} />
+            <span>
+              Ocultar da barra de praças
+              <span className="block text-xs font-normal text-muted-foreground">
+                O time deixa de ver esta tabela na Precificação. Ela continua no sistema e segue
+                valendo na calculadora pública para quem não tem tabela própria.
+              </span>
+            </span>
+          </label>
+        ) : null}
 
         {error ? <p className="mt-4 rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{error}</p> : null}
 

@@ -55,6 +55,9 @@ pricingRouter.put("/:key", blockJuridico, requireAdmin, async (req: AuthedReques
       }
       patch.description = t;
     }
+    if (body.hidden !== undefined) {
+      patch.hidden = Boolean(body.hidden);
+    }
     if (!Object.keys(patch).length) {
       return res.status(400).json({ error: "bad_request", message: "Nada para atualizar." });
     }

@@ -21,6 +21,8 @@ export interface PricingEntity {
   position: number;
   fixed_deduction: number;
   municipal_reference: boolean;
+  /** Oculta na barra da Precificação; segue valendo para a calculadora pública. */
+  hidden: boolean;
   rows: PricingRow[];
   updated_by: string | null;
   updated_at: string;
@@ -30,6 +32,7 @@ export interface PricingPatch {
   rows?: PricingRow[];
   fixed_deduction?: number;
   description?: string;
+  hidden?: boolean;
 }
 
 const MUNICIPAL_KEY = "municipal";
@@ -49,7 +52,7 @@ function normalize(row: any): PricingEntity {
 export async function listPricing(): Promise<PricingEntity[]> {
   const entities = (await query<any>(
     `SELECT key, label, description, position, fixed_deduction, municipal_reference,
-            esfera, uf, municipio, rows, updated_by, updated_at
+            hidden, esfera, uf, municipio, rows, updated_by, updated_at
        FROM pricing_entities
       ORDER BY position, key`
   )).map(normalize);
@@ -191,6 +194,7 @@ export async function updatePricing(
             SET rows = COALESCE($2::jsonb, rows),
                 fixed_deduction = COALESCE($3, fixed_deduction),
                 description = COALESCE($4, description),
+                hidden = COALESCE($6, hidden),
                 updated_by = $5,
                 updated_at = now()
           WHERE key = $1`,
@@ -200,6 +204,7 @@ export async function updatePricing(
           patch.fixed_deduction ?? null,
           patch.description ?? null,
           changedBy,
+          patch.hidden ?? null,
         ]
       );
     }

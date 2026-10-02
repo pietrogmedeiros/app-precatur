@@ -66,7 +66,11 @@ export default function PrecificacaoPage() {
   const [pctText, setPctText] = useState("0,00");
   const [proposalText, setProposalText] = useState("0,00");
 
-  const entity = entities.find((e) => e.key === entityKey) ?? entities[0];
+  // Praça oculta continua no banco (é o fallback da calculadora pública), mas
+  // some da barra para o time não cotar por ela. O admin segue vendo, marcada,
+  // porque é por ali que ele reexibe.
+  const visiveis = entities.filter((e) => isAdmin || !e.hidden);
+  const entity = visiveis.find((e) => e.key === entityKey) ?? visiveis[0] ?? entities[0];
   const rows = entity ? availableRows(entity, asset) : [];
   const row = rows[rowIndex] ?? rows[0];
   const tablePct = row ? row.values[quarter] : 0;
@@ -104,7 +108,7 @@ export default function PrecificacaoPage() {
   }, [proposal]);
 
   function selectEntity(key: string) {
-    const next = entities.find((e) => e.key === key);
+    const next = visiveis.find((e) => e.key === key);
     setEntityKey(key);
     setRowIndex(0);
     if (next) setAsset(next.rows[0]?.asset ?? "Precatório");
@@ -249,13 +253,15 @@ export default function PrecificacaoPage() {
       {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700">{ok}</p> : null}
 
       <nav className="flex gap-2 overflow-x-auto pb-1" aria-label="Seleção de ente">
-        {entities.map((e) => (
+        {visiveis.map((e) => (
           <button key={e.key} onClick={() => selectEntity(e.key)}
             className={cn(
               "shrink-0 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
-              e.key === entity.key ? "border-primary bg-primary text-primary-foreground" : "hover:bg-accent"
+              e.key === entity.key ? "border-primary bg-primary text-primary-foreground" : "hover:bg-accent",
+              e.hidden && e.key !== entity.key && "border-dashed text-muted-foreground"
             )}>
             {e.label}
+            {e.hidden ? <span className="ml-1.5 text-xs font-normal opacity-70">oculta</span> : null}
           </button>
         ))}
       </nav>
@@ -268,6 +274,12 @@ export default function PrecificacaoPage() {
           {entity.updated_by ? ` por ${entity.updated_by}` : ""}
           {entity.municipal_reference ? " (tabela Municipal)" : ""}.
         </p>
+        {entity.hidden ? (
+          <p className="mt-1 text-xs text-muted-foreground">
+            Praça oculta: não aparece para o time, mas continua valendo na calculadora pública
+            para os estados sem tabela própria.
+          </p>
+        ) : null}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr] lg:items-start">

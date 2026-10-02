@@ -116,6 +116,8 @@ export interface PricingEntity {
   position: number;
   fixed_deduction: number;
   municipal_reference: boolean;
+  /** Oculta na barra de praças; segue valendo para a calculadora pública. */
+  hidden?: boolean;
   rows: PricingRow[];
   updated_by: string | null;
   updated_at: string;
@@ -434,7 +436,7 @@ export const api = {
     }) => request<PricingEntity[]>("/api/pricing", { method: "POST", body: JSON.stringify(payload) }),
     update: (
       key: string,
-      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string }
+      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string; hidden?: boolean }
     ) =>
       request<PricingEntity[]>(`/api/pricing/${key}`, { method: "PUT", body: JSON.stringify(payload) }),
     import: (payload: PricingImport) =>

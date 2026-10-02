@@ -27,7 +27,10 @@ export default function MuralPage() {
     setIsJuridico(getUser()?.role === "juridico");
     api.pricing
       .list()
-      .then(setEntities)
+      // Praça oculta não entra no mural: ela existe só como rede da calculadora
+      // pública, e o time não deve cotar por ela. Quem reexibe é o admin, na
+      // Precificação.
+      .then((list) => setEntities(list.filter((e) => !e.hidden)))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
