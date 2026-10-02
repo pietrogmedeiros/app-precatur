@@ -220,10 +220,10 @@ export function extractBlock(sheet: unknown[][], keyword: string): PricingRow[] 
       const values = [row[1], row[2], row[3], row[4]].map(parseSpreadsheetPercent);
       if (values.some((v) => Number.isNaN(v))) break;
 
-      const asset = stripAccents(String(row[5] ?? "")).toUpperCase().includes("DIREITO")
-        ? "Direito Creditório"
-        : "Precatório";
-      out.push({ year, values: values.map((v) => Math.round(v * 100) / 100), asset });
+      // A coluna de ativo da planilha é ignorada de propósito: compramos tudo
+      // como precatório. Se um dia voltarmos a separar direito creditório, é
+      // aqui (e no /import, que também força) que a distinção renasce.
+      out.push({ year, values: values.map((v) => Math.round(v * 100) / 100), asset: "Precatório" });
     }
     return out;
   }

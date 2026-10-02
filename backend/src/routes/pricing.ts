@@ -120,7 +120,9 @@ pricingRouter.post("/import", blockJuridico, requireAdmin, async (req: AuthedReq
       if ("error" in v) {
         return res.status(400).json({ error: "bad_request", message: `Tabela ${key}: ${v.error}` });
       }
-      patches[key] = { rows: v.rows };
+      // Planilha antiga ainda traz a coluna de ativo; gravamos tudo como
+      // precatório, que é o que a casa compra hoje.
+      patches[key] = { rows: v.rows.map((r) => ({ ...r, asset: "Precatório" })) };
     }
     if (!Object.keys(patches).length) {
       return res.status(400).json({
