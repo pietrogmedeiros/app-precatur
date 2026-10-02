@@ -12,6 +12,8 @@ import { proposalsRouter } from "./routes/proposals";
 import { followupsRouter } from "./routes/followups";
 import { pricingRouter } from "./routes/pricing";
 import { captacaoRouter } from "./routes/captacao";
+import { calculoRouter } from "./routes/calculo";
+import { simulacoesRouter } from "./routes/simulacoes";
 import { bitrixRouter } from "./routes/bitrix";
 import { requireAuth, requireAdmin, blockJuridico } from "./auth";
 
@@ -68,6 +70,9 @@ app.use("/api/propostas", requireAuth, blockJuridico, proposalsRouter);
 app.use("/api/followups", requireAuth, blockJuridico, followupsRouter);
 app.use("/api/pricing", requireAuth, pricingRouter);
 app.use("/api/captacao", captacaoRouter);
+// Público: calculadora que o cedente abre por link.
+app.use("/api/calculo", calculoRouter);
+app.use("/api/simulacoes", simulacoesRouter);
 app.use("/api/bitrix", requireAuth, blockJuridico, bitrixRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.

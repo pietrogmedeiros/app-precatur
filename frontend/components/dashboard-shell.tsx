@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList, Inbox } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList, Inbox, Calculator as CalcIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,10 @@ const PROPOSAL_NAV = [
 ];
 
 // Captação — o que chega pelo formulário público (/enviar).
-const CAPTACAO_NAV = [{ href: "/captacao", label: "Envios de cedentes", icon: Inbox }];
+const CAPTACAO_NAV = [
+  { href: "/captacao", label: "Envios de cedentes", icon: Inbox },
+  { href: "/simulacoes", label: "Simulações", icon: CalcIcon },
+];
 
 // Wiki Sales — base de conhecimento do time comercial. Por enquanto só Follow-up.
 const WIKI_NAV = [{ href: "/wiki/follow-up", label: "Follow-up", icon: MessageSquareText }];

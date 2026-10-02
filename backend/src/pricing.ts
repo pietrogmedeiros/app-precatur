@@ -4,11 +4,19 @@ export interface PricingRow {
   year: string;
   values: number[]; // 4 trimestres, em % (76 = 76%)
   asset: string;
+  // Opcionais: quando ausentes, a linha vale para qualquer natureza e qualquer
+  // valor. Permitem desdobrar uma praça por natureza e por faixa de valor, como
+  // fazem as tabelas de mercado, sem mexer nas tabelas que já existem.
+  natureza?: "alimentar" | "comum" | null;
+  faixa?: { min?: number | null; max?: number | null } | null;
 }
 
 export interface PricingEntity {
   key: string;
   label: string;
+  esfera?: "federal" | "estadual" | "municipal" | null;
+  uf?: string | null;
+  municipio?: string | null;
   description: string;
   position: number;
   fixed_deduction: number;
@@ -41,7 +49,7 @@ function normalize(row: any): PricingEntity {
 export async function listPricing(): Promise<PricingEntity[]> {
   const entities = (await query<any>(
     `SELECT key, label, description, position, fixed_deduction, municipal_reference,
-            rows, updated_by, updated_at
+            esfera, uf, municipio, rows, updated_by, updated_at
        FROM pricing_entities
       ORDER BY position, key`
   )).map(normalize);

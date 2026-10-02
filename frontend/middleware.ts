@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const isLogin = pathname === "/login";
   // Formulário de captação: aberto por link, sem login (é o cedente quem envia).
-  const isPublico = pathname === "/enviar";
+  const isPublico = pathname === "/enviar" || pathname === "/calcular";
 
   if (!token && !isLogin && !isPublico) {
     const url = req.nextUrl.clone();
@@ -26,7 +26,7 @@ export function middleware(req: NextRequest) {
   }
 
   // Jurídico só acessa o mural e a Precificação (a API aplica a mesma regra).
-  const juridicoOk = ["/mural", "/precificacao", "/enviar"];
+  const juridicoOk = ["/mural", "/precificacao", "/enviar", "/calcular"];
   if (token && role === "juridico" && !juridicoOk.some((p) => pathname.startsWith(p))) {
     const url = req.nextUrl.clone();
     url.pathname = "/mural";

@@ -158,6 +158,112 @@ export async function enviarCaptacao(form: FormData): Promise<{ id: number; arqu
   return body;
 }
 
+// Calculadora pública · quanto a Precatur pagaria por um precatório.
+export interface CalculoResposta {
+  id: number;
+  praca: { label: string; estimativa: boolean; observacao?: string };
+  safra: string;
+  ativo: string;
+  trimestre: number;
+  abatimento: number;
+  bruto: number;
+  honorarios: number;
+  honorarios_pct?: number;
+  ir: number;
+  pss: number;
+  preferencia: number;
+  outras_despesas: number;
+  liquido: number;
+  percentual: number;
+  proposta: number;
+}
+
+export interface CalculoEntrada {
+  nome: string;
+  email: string;
+  telefone: string;
+  processo?: string | null;
+  esfera: "federal" | "estadual" | "municipal";
+  uf?: string | null;
+  municipio?: string | null;
+  safra: string;
+  ativo?: string | null;
+  natureza?: "alimentar" | "comum";
+  principal: number;
+  juros: number;
+  selic: number;
+  honorarios_pct: number;
+  ir_pct: number;
+  ir_base: "principal" | "bruto";
+  pss: number;
+  preferencia: number;
+  outras_despesas: number;
+}
+
+// Sem token: a calculadora é aberta por link, como o formulário de captação.
+async function publico<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, { cache: "no-store", ...init });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body?.message ?? `Não foi possível calcular (erro ${res.status}).`);
+  return body as T;
+}
+
+export function safrasDaPraca(p: { esfera: string; uf?: string | null }) {
+  const qs = new URLSearchParams({ esfera: p.esfera, ...(p.uf ? { uf: p.uf } : {}) });
+  return publico<{ praca: { label: string; estimativa: boolean }; safras: string[]; ativos: string[] }>(
+    `/api/calculo/safras?${qs.toString()}`
+  );
+}
+
+// O cálculo NÃO devolve valores: manda um código por WhatsApp e devolve o id.
+export interface CalculoPendente {
+  id: number;
+  verificacao: { telefone: string; expira_em: string };
+}
+
+export function verificarCodigo(id: number, codigo: string) {
+  return publico<CalculoResposta>(`/api/calculo/${id}/verificar`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ codigo }),
+  });
+}
+
+export function reenviarCodigo(id: number) {
+  return publico<{ verificacao: { telefone: string; expira_em: string } }>(
+    `/api/calculo/${id}/reenviar`,
+    { method: "POST" }
+  );
+}
+
+export interface Simulacao {
+  id: number;
+  esfera: string; uf: string | null; municipio: string | null;
+  praca_label: string; estimativa: boolean; safra: string; ativo: string | null; natureza: string | null;
+  principal: number; juros: number; selic: number;
+  honorarios_pct: number; ir_pct: number; ir_base: string | null;
+  pss: number; preferencia: number; outras_despesas: number;
+  bruto: number; honorarios: number; ir: number; liquido: number;
+  percentual: number; abatimento: number; proposta: number;
+  nome: string | null; email: string | null; telefone: string | null; processo: string | null;
+  contato_em: string | null;
+  verificado_em: string | null;
+  created_at: string;
+}
+
+export interface ResumoPraca {
+  esfera: string; uf: string | null; praca_label: string;
+  simulacoes: number; leads: number; volume_liquido: number; volume_proposta: number;
+}
+
+export function calcularPrecatorio(entrada: CalculoEntrada) {
+  return publico<CalculoPendente>("/api/calculo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entrada),
+  });
+}
+
 // Deal hydrated from the Bitrix CRM (GET /api/bitrix/deal?ref=<link|id>).
 // Only CRM-owned fields; every absent field is null (never omitted / "").
 export interface BitrixDeal {
@@ -283,6 +389,9 @@ export const api = {
       a.click();
       URL.revokeObjectURL(url);
     },
+  },
+  simulacoes: {
+    list: () => request<{ itens: Simulacao[]; resumo: ResumoPraca[] }>("/api/simulacoes"),
   },
   pricing: {
     list: () => request<PricingEntity[]>("/api/pricing"),

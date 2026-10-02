@@ -29,3 +29,26 @@ export function maskProcesso(valor: string): string {
   if (d.length > 16) out += `.${d.slice(16, 20)}`;
   return out;
 }
+
+// Valor em reais, formatado ENQUANTO se digita. Os dígitos antes da vírgula são
+// reais (digitar 750000 vira 750.000), e a vírgula abre os centavos — mantém o
+// sentido de quem digita o valor cheio, em vez de preencher da direita.
+export function maskMoeda(valor: string): string {
+  const bruto = String(valor ?? "");
+  // Primeira vírgula (ou ponto digitado como decimal) separa os centavos.
+  const temVirgula = /[,]/.test(bruto);
+  const [inteiroRaw, decimalRaw = ""] = bruto.split(",");
+  const inteiro = inteiroRaw.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+  const decimal = decimalRaw.replace(/\D/g, "").slice(0, 2);
+  if (!inteiro && !temVirgula) return "";
+  const comMilhar = (inteiro || "0").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return temVirgula ? `${comMilhar},${decimal}` : comMilhar;
+}
+
+// Ao sair do campo, completa os centavos: "750.000" vira "750.000,00".
+export function fechaMoeda(valor: string): string {
+  const limpo = maskMoeda(valor);
+  if (!limpo) return "";
+  const [i, d = ""] = limpo.split(",");
+  return `${i},${d.padEnd(2, "0")}`;
+}
