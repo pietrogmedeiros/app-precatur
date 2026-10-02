@@ -90,8 +90,34 @@ export function validateRows(input: unknown): { rows: PricingRow[] } | { error: 
     const asset = typeof r?.asset === "string" && r.asset.trim() ? r.asset.trim() : "Precatório";
     if (asset.length > 40) return { error: `Linha ${n}: tipo de ativo com mais de 40 caracteres.` };
 
+    // Natureza e faixa são opcionais: sem elas a linha vale para as duas
+    // naturezas e qualquer valor. Precisam ser preservadas aqui — se caíssem,
+    // salvar a tabela pela tela desfaria o desdobramento (caso de Alagoas, que
+    // paga preços diferentes para alimentar e comum em 2027).
+    const natureza = r?.natureza === "alimentar" || r?.natureza === "comum" ? r.natureza : null;
+
+    let faixa: PricingRow["faixa"] = null;
+    if (r?.faixa && typeof r.faixa === "object") {
+      const lim = (v: unknown) => (v == null || v === "" ? null : Number(v));
+      const min = lim(r.faixa.min);
+      const max = lim(r.faixa.max);
+      if ((min != null && !Number.isFinite(min)) || (max != null && !Number.isFinite(max))) {
+        return { error: `Linha ${n} (${year}): faixa de valor inválida.` };
+      }
+      if (min != null && max != null && min >= max) {
+        return { error: `Linha ${n} (${year}): a faixa precisa ter mínimo menor que o máximo.` };
+      }
+      if (min != null || max != null) faixa = { min, max };
+    }
+
     // Arredonda a 2 casas: evita 76.00000000001 vindo de planilha.
-    rows.push({ year, values: values.map((v: number) => Math.round(v * 100) / 100), asset });
+    rows.push({
+      year,
+      values: values.map((v: number) => Math.round(v * 100) / 100),
+      asset,
+      ...(natureza ? { natureza } : {}),
+      ...(faixa ? { faixa } : {}),
+    });
   }
   return { rows };
 }

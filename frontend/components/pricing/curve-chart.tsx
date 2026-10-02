@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Download } from "lucide-react";
 import type { PricingRow } from "@/lib/api";
-import { QUARTERS, formatPct } from "@/lib/pricing";
+import { QUARTERS, formatPct, labelDaLinha } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
 
 // Curva de preço por trimestre. Desenho portado 1:1 do canvas da calculadora
@@ -38,7 +38,7 @@ export function CurveChart({
     ctx.textAlign = "left";
     ctx.fillStyle = "#073661";
     ctx.font = "bold 22px Arial";
-    ctx.fillText(`${entityLabel} — ${row.year}`, pad.left, 31);
+    ctx.fillText(`${entityLabel} — ${labelDaLinha(row)}`, pad.left, 31);
     ctx.fillStyle = "#65758b";
     ctx.font = "14px Arial";
     ctx.fillText("Preço máximo de compra por trimestre", pad.left, 51);
@@ -96,7 +96,7 @@ export function CurveChart({
   function download() {
     const canvas = ref.current;
     if (!canvas) return;
-    const slug = `${entityLabel}-${row.year}`
+    const slug = `${entityLabel}-${row.year}${row.natureza ? `-${row.natureza}` : ""}`
       .normalize("NFD")
       .replace(/[̀-ͯ]/g, "")
       .replace(/[^a-zA-Z0-9]+/g, "-")

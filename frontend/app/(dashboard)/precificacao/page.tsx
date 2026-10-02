@@ -17,6 +17,8 @@ import {
   formatDecimal,
   formatPct,
   hasAssetChoice,
+  labelDaLinha,
+  naturezaLabel,
   parseBRL,
   paymentYearOf,
   pctFromProposal,
@@ -285,8 +287,8 @@ export default function PrecificacaoPage() {
 
             <Choices label="Safra / ano de previsão de pagamento">
               {rows.map((r, i) => (
-                <Choice key={`${r.year}-${r.asset}`} active={i === rowIndex} onClick={() => setRowIndex(i)}
-                  sub={formatPct(r.values[quarter])}>{r.year}</Choice>
+                <Choice key={`${r.year}-${r.asset}-${r.natureza ?? ""}`} active={i === rowIndex} onClick={() => setRowIndex(i)}
+                  sub={formatPct(r.values[quarter])}>{labelDaLinha(r)}</Choice>
               ))}
             </Choices>
 
@@ -308,11 +310,13 @@ export default function PrecificacaoPage() {
                     <th className="px-3 py-2 font-medium">Safra / regra</th>
                     {QUARTERS.map((q) => <th key={q} className="px-3 py-2 text-right font-medium">{q}</th>)}
                     <th className="px-3 py-2 font-medium">Ativo</th>
+                    <th className="px-3 py-2 font-medium">Natureza</th>
                   </tr>
                 </thead>
                 <tbody>
                   {entity.rows.map((r, i) => {
-                    const sel = r.year === row.year && r.asset === row.asset;
+                    const sel =
+                      r.year === row.year && r.asset === row.asset && (r.natureza ?? null) === (row.natureza ?? null);
                     return (
                       <tr key={i} className={cn("border-t", sel && "bg-primary/10 font-medium")}>
                         <td className="px-3 py-2">{r.year}</td>
@@ -322,6 +326,7 @@ export default function PrecificacaoPage() {
                           </td>
                         ))}
                         <td className="px-3 py-2">{r.asset}</td>
+                        <td className="px-3 py-2">{naturezaLabel(r.natureza)}</td>
                       </tr>
                     );
                   })}
@@ -394,7 +399,7 @@ export default function PrecificacaoPage() {
       <Card>
         <CardHeader>
           <CardTitle>Curva de precificação por trimestre</CardTitle>
-          <CardDescription>Safra selecionada: {row.year} · ativo: {row.asset}</CardDescription>
+          <CardDescription>Safra selecionada: {labelDaLinha(row)} · ativo: {row.asset}</CardDescription>
         </CardHeader>
         <CardContent>
           <CurveChart entityLabel={entity.label} row={row} quarter={quarter} />

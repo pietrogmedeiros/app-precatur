@@ -59,11 +59,18 @@ function linhaServe(r: PricingRow, escolha: EscolhaLinha): boolean {
 }
 
 // Entre as linhas que servem, vence a mais específica (mais critérios casados).
+// Quando a natureza NÃO foi informada e a praça desdobra o preço por ela (caso de
+// Alagoas em 2027), não há como saber qual linha vale: ficamos com a mais barata,
+// para nunca prometer acima do teto da outra.
 export function escolheLinha(entity: PricingEntity, escolha: EscolhaLinha): PricingRow | null {
   const candidatas = entity.rows.filter((r) => linhaServe(r, escolha));
   if (!candidatas.length) return null;
   const peso = (r: PricingRow) => (r.natureza ? 2 : 0) + (r.faixa ? 1 : 0);
-  return candidatas.sort((a, b) => peso(b) - peso(a))[0];
+  const media = (r: PricingRow) => r.values.reduce((a, b) => a + b, 0) / (r.values.length || 1);
+  const ordenadas = candidatas.sort((a, b) => peso(b) - peso(a) || media(a) - media(b));
+  if (escolha.natureza) return ordenadas[0];
+  const semNatureza = ordenadas.find((r) => !r.natureza);
+  return semNatureza ?? ordenadas.filter((r) => r.natureza).sort((a, b) => media(a) - media(b))[0];
 }
 
 /* ------------------------------- Cálculo --------------------------------- */

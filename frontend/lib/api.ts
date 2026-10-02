@@ -105,6 +105,8 @@ export interface PricingRow {
   year: string;
   values: number[]; // 4 trimestres, em % (76 = 76%)
   asset: string;
+  // Quando nula, a linha vale para as duas naturezas (caso da maioria das praças).
+  natureza?: "alimentar" | "comum" | null;
 }
 
 export interface PricingEntity {

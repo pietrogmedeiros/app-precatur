@@ -17,8 +17,28 @@ export function currentQuarterIndex(date = new Date()): number {
 // Na Federal o ativo é consequência da safra, não escolha — o HTML antigo exibia
 // botões de ativo ali que não filtravam nada.
 export function hasAssetChoice(entity: PricingEntity): boolean {
-  const years = new Set(entity.rows.map((r) => r.year));
-  return years.size < entity.rows.length;
+  // Escolha de ativo existe quando a MESMA safra aparece com ativos diferentes.
+  // Contar só linhas por ano confundiria com o desdobramento por natureza
+  // (Alagoas tem duas linhas de 2027, ambas Precatório — ali não há escolha).
+  const porAno = new Map<string, Set<string>>();
+  for (const r of entity.rows) {
+    const atual = porAno.get(r.year) ?? new Set<string>();
+    atual.add(r.asset);
+    porAno.set(r.year, atual);
+  }
+  return Array.from(porAno.values()).some((assets) => assets.size > 1);
+}
+
+// Rótulos de natureza: "Ambas" fica implícito (linha sem natureza vale para as
+// duas), por isso devolvemos o travessão em vez de inventar uma palavra.
+export function naturezaLabel(n?: "alimentar" | "comum" | null): string {
+  return n === "alimentar" ? "Alimentar" : n === "comum" ? "Comum" : "—";
+}
+
+// Como a linha se apresenta nos botões de safra: o ano, e a natureza só quando
+// a praça desdobra o preço por ela.
+export function labelDaLinha(r: PricingRow): string {
+  return r.natureza ? `${r.year} · ${naturezaLabel(r.natureza)}` : r.year;
 }
 
 export function assetsOf(entity: PricingEntity): string[] {

@@ -13,6 +13,8 @@ interface DraftRow {
   year: string;
   values: string[];
   asset: string;
+  /** "" = a linha vale para as duas naturezas. */
+  natureza: "" | "alimentar" | "comum";
 }
 
 // Edição manual de uma tabela de preço (só admin). Serve sobretudo para as
@@ -57,6 +59,7 @@ export function TableEditor({
         year: r.year,
         values: r.values.map((v) => String(v).replace(".", ",")),
         asset: r.asset,
+        natureza: r.natureza ?? "",
       }))
     );
     setDeduction(criando ? "" : entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
@@ -80,10 +83,12 @@ export function TableEditor({
     setError(null);
     setSaving(true);
     try {
+      // A API valida faixa (0–100) e formato; vírgula decimal é aceita aqui.
       const linhas = rows.map((r) => ({
         year: r.year,
         values: r.values.map((v) => Number(v.replace(",", "."))),
         asset: r.asset,
+        natureza: r.natureza || null,
       }));
       if (criando) {
         const entities = await api.pricing.create({
@@ -96,12 +101,7 @@ export function TableEditor({
         return;
       }
       const entities = await api.pricing.update(entity.key, {
-        // A API valida faixa (0–100) e formato; vírgula decimal é aceita aqui.
-        rows: rows.map((r) => ({
-          year: r.year,
-          values: r.values.map((v) => Number(v.replace(",", "."))),
-          asset: r.asset,
-        })),
+        rows: linhas,
         fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
         description,
       });
@@ -171,7 +171,7 @@ export function TableEditor({
         ) : null}
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[620px] text-sm">
+          <table className="w-full min-w-[740px] text-sm">
             <thead>
               <tr className="text-left text-xs text-muted-foreground">
                 <th className="pb-2 pr-2 font-medium">Safra / regra</th>
@@ -179,6 +179,7 @@ export function TableEditor({
                   <th key={q} className="pb-2 pr-2 font-medium">{q} (%)</th>
                 ))}
                 <th className="pb-2 pr-2 font-medium">Ativo</th>
+                <th className="pb-2 pr-2 font-medium">Natureza</th>
                 <th />
               </tr>
             </thead>
@@ -206,6 +207,16 @@ export function TableEditor({
                       <option>Direito Creditório</option>
                     </select>
                   </td>
+                  <td className="py-1 pr-2">
+                    {/* Vazio = vale para alimentar e comum, como na maioria das praças.
+                        Só desdobramos quando o estado paga preços diferentes (Alagoas). */}
+                    <select className={cell} value={r.natureza}
+                      onChange={(e) => patch(i, (x) => ({ ...x, natureza: e.target.value as DraftRow["natureza"] }))}>
+                      <option value="">Ambas</option>
+                      <option value="alimentar">Alimentar</option>
+                      <option value="comum">Comum</option>
+                    </select>
+                  </td>
                   <td className="py-1">
                     <Button variant="ghost" size="icon" aria-label="Remover linha" disabled={rows.length <= 1}
                       onClick={() => setRows((cur) => cur.filter((_, idx) => idx !== i))}>
@@ -219,7 +230,7 @@ export function TableEditor({
         </div>
 
         <Button variant="outline" size="sm" className="mt-2 gap-2"
-          onClick={() => setRows((cur) => [...cur, { year: "", values: ["0", "0", "0", "0"], asset: "Precatório" }])}>
+          onClick={() => setRows((cur) => [...cur, { year: "", values: ["0", "0", "0", "0"], asset: "Precatório", natureza: "" }])}>
           <Plus className="h-4 w-4" />
           Adicionar linha
         </Button>
