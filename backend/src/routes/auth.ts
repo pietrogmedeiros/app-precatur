@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate, signToken, requireAuth, type AuthedRequest } from "../auth";
-import { findById, updatePassword, hashPassword, recordLogin, updateUserPhone } from "../users";
+import { findById, updatePassword, hashPassword, recordLogin, updateProfile } from "../users";
 
 export const authRouter = Router();
 
@@ -35,6 +35,9 @@ authRouter.get("/me", requireAuth, async (req: AuthedRequest, res, next) => {
     res.json({
       id: user.id,
       name: user.name,
+      avatar: user.avatar ?? null,
+      created_at: user.created_at,
+      last_login_at: user.last_login_at,
       email: user.email,
       role: user.role,
       phone: user.phone,
@@ -45,29 +48,64 @@ authRouter.get("/me", requireAuth, async (req: AuthedRequest, res, next) => {
 });
 
 // Atualiza o próprio perfil (por ora, apenas o telefone).
+// Perfil: o usuário muda nome, telefone e foto. E-mail e papel ficam de fora —
+// e-mail é a credencial de acesso e papel é decisão de administrador.
+const MAX_AVATAR_BYTES = 400 * 1024;
+const TIPOS_AVATAR = ["image/jpeg", "image/png", "image/webp"];
+
 authRouter.patch("/profile", requireAuth, async (req: AuthedRequest, res, next) => {
   try {
-    const { phone } = req.body ?? {};
-    if (typeof phone !== "string" || !phone.trim()) {
-      return res.status(400).json({ error: "bad_request", message: "Informe o telefone." });
+    const b = req.body ?? {};
+    const dados: { name?: string; phone?: string; avatar?: string; removerAvatar?: boolean } = {};
+
+    if (b.name !== undefined) {
+      const nome = String(b.name).trim();
+      if (nome.length < 2 || nome.length > 120) {
+        return res.status(400).json({ error: "bad_request", message: "Informe um nome entre 2 e 120 caracteres." });
+      }
+      dados.name = nome;
     }
-    const user = await updateUserPhone(req.user!.sub, phone.trim());
-    if (!user) {
-      return res.status(404).json({ error: "not_found", message: "Usuário não encontrado." });
+    if (b.phone !== undefined) {
+      const tel = String(b.phone).trim();
+      if (!tel) return res.status(400).json({ error: "bad_request", message: "Informe o telefone." });
+      dados.phone = tel.slice(0, 40);
     }
+    if (b.removerAvatar === true) {
+      dados.removerAvatar = true;
+    } else if (b.avatar !== undefined && b.avatar !== null) {
+      const avatar = String(b.avatar);
+      const m = /^data:([a-z/+-]+);base64,/.exec(avatar);
+      if (!m || !TIPOS_AVATAR.includes(m[1])) {
+        return res.status(400).json({ error: "bad_request", message: "A foto deve ser JPEG, PNG ou WebP." });
+      }
+      // base64 cresce ~33%: confere o tamanho real dos bytes.
+      if (Math.floor((avatar.length - m[0].length) * 0.75) > MAX_AVATAR_BYTES) {
+        return res.status(400).json({ error: "bad_request", message: "A foto é grande demais. Envie uma imagem menor." });
+      }
+      dados.avatar = avatar;
+    }
+
+    if (!Object.keys(dados).length) {
+      return res.status(400).json({ error: "bad_request", message: "Nada para atualizar." });
+    }
+
+    const user = await updateProfile(req.user!.sub, dados);
+    if (!user) return res.status(404).json({ error: "not_found", message: "Usuário não encontrado." });
     res.json({
       id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
       phone: user.phone,
+      avatar: user.avatar ?? null,
+      created_at: user.created_at,
+      last_login_at: user.last_login_at,
     });
   } catch (err) {
     next(err);
   }
 });
 
-// Troca da própria senha (usuário autenticado). Exige a senha atual.
 authRouter.post("/change-password", requireAuth, async (req: AuthedRequest, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body ?? {};

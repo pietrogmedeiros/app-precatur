@@ -30,6 +30,7 @@ export interface SessionUser {
   email: string;
   role: Role;
   phone: string | null;
+  avatar?: string | null;
 }
 
 function readCookie(name: string): string | null {

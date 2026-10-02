@@ -426,3 +426,32 @@
     print-color-adjust: exact !important;
   }
 }
+
+/* ==========================================================================
+   Fundo da área de conteúdo — marca d'água discreta
+   Escolhida pela rota em dashboard-shell.tsx: escudo nas telas que fecham
+   negócio, guilhoché nas de apoio.
+   O desenho fica atrás do conteúdo (z-index negativo dentro do <main>, que não
+   tem fundo próprio) e não captura clique.
+   ========================================================================== */
+main { position: relative; z-index: 0; }
+main[data-fundo]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 1 · Escudo da marca, grande, no canto */
+main[data-fundo="escudo"]::before {
+  background: url("/precatur-shield.png") no-repeat right -60px bottom -40px / 480px auto;
+  opacity: 0.045;
+}
+
+/* 2 · Balança da justiça em contorno */
+main[data-fundo="balanca"]::before {
+  background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%20%3Cpath%20d%3D%22M100%2024v132%22%2F%3E%3Cpath%20d%3D%22M62%20160h76%22%2F%3E%3Cpath%20d%3D%22M52%20172h96%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%2218%22%20r%3D%226%22%2F%3E%20%3Cpath%20d%3D%22M30%2056h140%22%2F%3E%3Cpath%20d%3D%22M30%2056%2012%20104h36z%22%2F%3E%3Cpath%20d%3D%22M170%2056l-18%2048h36z%22%2F%3E%20%3Cpath%20d%3D%22M12%20104a18%2018%200%200%200%2036%200%22%2F%3E%3Cpath%20d%3D%22M152%20104a18%2018%200%200%200%2036%200%22%2F%3E%20%3Cpath%20d%3D%22M30%2056v6%22%2F%3E%3Cpath%20d%3D%22M170%2056v6%22%2F%3E%3C%2Fsvg%3E") no-repeat right 40px bottom 24px / 420px auto;
+  opacity: 0.06;
+}
+

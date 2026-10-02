@@ -49,6 +49,9 @@ export interface Me {
   email: string;
   role: Role;
   phone: string | null;
+  avatar?: string | null;
+  created_at?: string | null;
+  last_login_at?: string | null;
 }
 
 export interface Proposal {
@@ -348,7 +351,7 @@ export const api = {
     remove: (id: number) => request<void>(`/api/users/${id}`, { method: "DELETE" }),
   },
   me: () => request<Me>("/api/auth/me"),
-  updateProfile: (payload: { phone: string }) =>
+  updateProfile: (payload: { name?: string; phone?: string; avatar?: string; removerAvatar?: boolean }) =>
     request<Me>("/api/auth/profile", { method: "PATCH", body: JSON.stringify(payload) }),
   bitrixDeal: (ref: string) =>
     request<BitrixDeal>("/api/bitrix/deal?ref=" + encodeURIComponent(ref)),

@@ -5,6 +5,7 @@ import { query } from "./db";
 export type Role = "admin" | "padrao" | "juridico";
 
 export interface User {
+  avatar?: string | null;
   id: number;
   name: string;
   email: string;
@@ -25,7 +26,7 @@ export function hashPassword(plain: string): string {
 
 export async function findByEmail(email: string): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, phone, created_at, last_login_at FROM users WHERE email = $1`,
+    `SELECT id, name, email, password, role, phone, avatar, created_at, last_login_at FROM users WHERE email = $1`,
     [email.toLowerCase()]
   );
   return rows[0] ?? null;
@@ -54,6 +55,24 @@ export async function createUser(input: {
 }
 
 // Atualiza o telefone de um usuário (edição pelo admin ou pelo próprio no perfil).
+// Atualiza o que o próprio usuário pode mudar no perfil. Campo ausente fica
+// como está — por isso o COALESCE em cada um.
+export async function updateProfile(
+  id: number,
+  dados: { name?: string | null; phone?: string | null; avatar?: string | null; removerAvatar?: boolean }
+): Promise<User | null> {
+  const rows = await query<User>(
+    `UPDATE users
+        SET name   = COALESCE($2, name),
+            phone  = COALESCE($3, phone),
+            avatar = CASE WHEN $5::boolean THEN NULL ELSE COALESCE($4, avatar) END
+      WHERE id = $1
+      RETURNING id, name, email, role, phone, avatar, created_at, last_login_at`,
+    [id, dados.name ?? null, dados.phone ?? null, dados.avatar ?? null, dados.removerAvatar ?? false]
+  );
+  return rows[0] ?? null;
+}
+
 export async function updateUserPhone(id: number, phone: string): Promise<User | null> {
   const rows = await query<User>(
     `UPDATE users SET phone = $2 WHERE id = $1
@@ -70,7 +89,7 @@ export async function recordLogin(id: number): Promise<void> {
 
 export async function findById(id: number): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, phone, created_at, last_login_at FROM users WHERE id = $1`,
+    `SELECT id, name, email, password, role, phone, avatar, created_at, last_login_at FROM users WHERE id = $1`,
     [id]
   );
   return rows[0] ?? null;

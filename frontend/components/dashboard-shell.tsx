@@ -7,8 +7,6 @@ import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, 
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { ChangePasswordModal } from "@/components/change-password-modal";
-import { ProfileModal } from "@/components/profile-modal";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
@@ -38,6 +36,16 @@ const JURIDICO_NAV = [
   { href: "/precificacao", label: "Precificação", icon: Calculator },
 ];
 
+// Marca d'água do fundo por tela: o escudo da casa nas telas que fecham negócio;
+// o guilhoché, mais discreto, nas de apoio.
+const TELAS_COM_ESCUDO = ["/sales", "/proposta", "/precificacao", "/mural"];
+
+function fundoDaRota(pathname: string): string {
+  return TELAS_COM_ESCUDO.some((r) => pathname === r || pathname.startsWith(r + "/"))
+    ? "escudo"
+    : "guilhoche";
+}
+
 function initials(name: string): string {
   return name
     .split(" ")
@@ -52,14 +60,16 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [pwOpen, setPwOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+
 
   // Restore collapse preference and session user (client only).
   useEffect(() => {
     setCollapsed(localStorage.getItem("sidebar:collapsed") === "1");
     setUser(getUser());
+    const recarrega = () => setUser(getUser());
+    window.addEventListener("perfil-atualizado", recarrega);
+    return () => window.removeEventListener("perfil-atualizado", recarrega);
   }, []);
 
   const isAdmin = user?.role === "admin";
@@ -167,30 +177,59 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             >
               Meu Acesso
             </p>
-            <NavAction
-              label="Meu perfil"
-              icon={UserRound}
+            <NavGroup
+              title=""
+              items={[
+                { href: "/perfil", label: "Meu perfil", icon: UserRound },
+                { href: "/perfil#senha", label: "Trocar senha", icon: KeyRound },
+              ]}
               collapsed={collapsed}
-              onClick={() => {
-                setProfileOpen(true);
-                setMobileOpen(false);
-              }}
-            />
-            <NavAction
-              label="Trocar senha"
-              icon={KeyRound}
-              collapsed={collapsed}
-              onClick={() => {
-                setPwOpen(true);
-                setMobileOpen(false);
-              }}
+              pathname={pathname}
             />
           </div>
         </nav>
 
-        {/* Sair — fixado no rodapé do menu (nav é flex-1 e empurra pra baixo) */}
-        <div className="border-t p-3">
-          <NavAction label="Sair" icon={LogOut} collapsed={collapsed} onClick={logout} />
+        {/* Rodapé do menu: quem está logado e a saída. Fica aqui, e não no topo
+            da página, para o nome e a foto acompanharem a navegação. */}
+        <div className="space-y-2 border-t p-3">
+          <Link
+            href="/perfil"
+            title={collapsed ? user?.name ?? "Meu perfil" : undefined}
+            className={cn(
+              "flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-accent",
+              collapsed && "md:justify-center md:p-1.5"
+            )}
+          >
+            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-xs font-semibold">
+              {user?.avatar ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={user.avatar} alt="" className="h-full w-full object-cover" />
+              ) : user ? (
+                initials(user.name)
+              ) : (
+                "…"
+              )}
+            </span>
+            <span className={cn("min-w-0 leading-tight", collapsed && "md:hidden")}>
+              <span className="block truncate text-sm font-medium">{user?.name ?? ""}</span>
+              <span className="block truncate text-[11px] text-muted-foreground">
+                {user ? roleLabel(user.role) : ""}
+              </span>
+            </span>
+          </Link>
+
+          <button
+            onClick={logout}
+            title={collapsed ? "Sair" : undefined}
+            className={cn(
+              "flex w-full items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors",
+              "hover:border-red-200 hover:bg-red-50 hover:text-red-600",
+              collapsed && "md:px-0"
+            )}
+          >
+            <LogOut className="h-4 w-4 flex-shrink-0" />
+            <span className={cn(collapsed && "md:hidden")}>Sair</span>
+          </button>
         </div>
 
         <div
@@ -206,37 +245,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <header className="no-print sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur md:px-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Abrir menu"
-          >
+        {/* Só no celular: abre o menu lateral. No desktop não sobra nada para
+            esta barra, então ela some em vez de virar uma faixa vazia. */}
+        <header className="no-print sticky top-0 z-20 flex h-14 items-center border-b bg-background/80 px-4 backdrop-blur md:hidden">
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label="Abrir menu">
             <Menu className="h-5 w-5" />
           </Button>
-
-          <div className="ml-auto flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-xs font-semibold">
-              {user ? initials(user.name) : "…"}
-            </div>
-            <div className="hidden leading-tight sm:block">
-              <div className="text-sm font-medium">{user?.name ?? ""}</div>
-              <div className="text-[11px] text-muted-foreground">{user ? roleLabel(user.role) : ""}</div>
-            </div>
-          </div>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1" data-fundo={fundoDaRota(pathname)}>{children}</main>
       </div>
 
-      <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
-      <ProfileModal
-        open={profileOpen}
-        onClose={() => setProfileOpen(false)}
-        onSaved={(phone) => setUser((u) => (u ? { ...u, phone } : u))}
-      />
     </div>
   );
 }
@@ -282,14 +301,16 @@ function NavGroup({
 }) {
   return (
     <div className="pb-1">
-      <p
-        className={cn(
-          "px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground",
-          collapsed && "md:sr-only"
-        )}
-      >
-        {title}
-      </p>
+      {title ? (
+        <p
+          className={cn(
+            "px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground",
+            collapsed && "md:sr-only"
+          )}
+        >
+          {title}
+        </p>
+      ) : null}
       {items.map(({ href, label, icon: Icon }) => {
         const active = pathname === href || pathname.startsWith(href + "/");
         return (
