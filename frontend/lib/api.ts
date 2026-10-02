@@ -256,6 +256,9 @@ export interface ResumoPraca {
   simulacoes: number; leads: number; volume_liquido: number; volume_proposta: number;
 }
 
+export interface SerieMensal { mes: string; simulacoes: number; leads: number; volume_proposta: number }
+export interface Fatia { rotulo: string; total: number }
+
 export function calcularPrecatorio(entrada: CalculoEntrada) {
   return publico<CalculoPendente>("/api/calculo", {
     method: "POST",
@@ -391,7 +394,11 @@ export const api = {
     },
   },
   simulacoes: {
-    list: () => request<{ itens: Simulacao[]; resumo: ResumoPraca[] }>("/api/simulacoes"),
+    list: () => request<{
+      itens: Simulacao[]; resumo: ResumoPraca[];
+      mensal: SerieMensal[]; natureza: Fatia[]; ativo: Fatia[];
+    }>("/api/simulacoes"),
+    remove: (id: number) => request<void>(`/api/simulacoes/${id}`, { method: "DELETE" }),
   },
   pricing: {
     list: () => request<PricingEntity[]>("/api/pricing"),

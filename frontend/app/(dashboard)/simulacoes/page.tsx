@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Calculator, Search, X, Link2, Check, MapPin, Download } from "lucide-react";
-import { api, type Simulacao, type ResumoPraca } from "@/lib/api";
+import { Calculator, Search, X, Link2, Check, MapPin, Download, AlertTriangle, Trash2 } from "lucide-react";
+import { api, type Simulacao, type ResumoPraca, type SerieMensal, type Fatia } from "@/lib/api";
+import { getUser } from "@/lib/auth";
+import { SimulacoesPorMes, Rosca, PracasBarras } from "@/components/charts/simulacoes-charts";
 import { cn } from "@/lib/utils";
 import { formatBRL } from "@/lib/pricing";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +21,10 @@ function fmtData(iso: string): string {
 export default function SimulacoesPage() {
   const [itens, setItens] = useState<Simulacao[]>([]);
   const [resumo, setResumo] = useState<ResumoPraca[]>([]);
+  const [mensal, setMensal] = useState<SerieMensal[]>([]);
+  const [natureza, setNatureza] = useState<Fatia[]>([]);
+  const [porAtivo, setPorAtivo] = useState<Fatia[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
   const [busca, setBusca] = useState("");
@@ -28,11 +34,15 @@ export default function SimulacoesPage() {
   const [exportando, setExportando] = useState(false);
 
   useEffect(() => {
+    setIsAdmin(getUser()?.role === "admin");
     api.simulacoes
       .list()
       .then((r) => {
         setItens(r.itens);
         setResumo(r.resumo);
+        setMensal(r.mensal);
+        setNatureza(r.natureza);
+        setPorAtivo(r.ativo);
       })
       .catch((e) => setErro(e.message))
       .finally(() => setLoading(false));
@@ -48,12 +58,17 @@ export default function SimulacoesPage() {
     });
   }, [itens, busca, soLeads]);
 
+  // Deduções que consumiram todo o bruto: o lead vale, mas os números vieram
+  // errados — o time precisa ver isso antes de ligar.
+  const inconsistente = (s: Simulacao) => s.bruto > 0 && s.liquido <= 0;
+
   const totais = useMemo(() => {
     const leads = itens.filter((s) => s.contato_em);
     return {
       simulacoes: itens.length,
       leads: leads.length,
       volume: leads.reduce((s, i) => s + i.proposta, 0),
+      inconsistentes: itens.filter(inconsistente).length,
     };
   }, [itens]);
 
@@ -165,6 +180,58 @@ export default function SimulacoesPage() {
         <Indicador titulo="Volume dos leads" valor={formatBRL(totais.volume)} nota="soma do que pagaríamos" />
       </div>
 
+      {totais.inconsistentes ? (
+        <p className="flex items-start gap-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+          <span>
+            {totais.inconsistentes} simulação(ões) com deduções maiores que o valor atualizado — o
+            resultado saiu zerado. Vale conferir antes de abordar.
+          </span>
+        </p>
+      ) : null}
+
+      {itens.length ? (
+        <>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Simulações nos últimos 6 meses</CardTitle>
+              <CardDescription>Quantas foram feitas e quantas confirmaram o WhatsApp.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SimulacoesPorMes dados={mensal} />
+            </CardContent>
+          </Card>
+
+          <div className="grid gap-4 lg:grid-cols-3">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Natureza do precatório</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Rosca dados={natureza} total={itens.length} />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Tipo de ativo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Rosca dados={porAtivo} total={itens.length} />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Praças mais simuladas</CardTitle>
+                <CardDescription>Simulações e quanto pagaríamos.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PracasBarras dados={resumo} />
+              </CardContent>
+            </Card>
+          </div>
+        </>
+      ) : null}
+
       {resumo.length ? (
         <Card>
           <CardHeader className="pb-3">
@@ -248,8 +315,17 @@ export default function SimulacoesPage() {
                   </CardDescription>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="font-semibold tabular-nums">{formatBRL(s.proposta)}</div>
-                  <div className="text-xs text-muted-foreground">{s.percentual}% do líquido</div>
+                  {inconsistente(s) ? (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-900">
+                      <AlertTriangle className="h-3 w-3" />
+                      Deduções acima do valor
+                    </span>
+                  ) : (
+                    <>
+                      <div className="font-semibold tabular-nums">{formatBRL(s.proposta)}</div>
+                      <div className="text-xs text-muted-foreground">{s.percentual}% do líquido</div>
+                    </>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0 text-xs text-muted-foreground">
@@ -262,7 +338,23 @@ export default function SimulacoesPage() {
         </div>
       )}
 
-      {aberta ? <Detalhe s={aberta} onClose={() => setAberta(null)} /> : null}
+      {aberta ? (
+        <Detalhe
+          s={aberta}
+          isAdmin={isAdmin}
+          onClose={() => setAberta(null)}
+          onApagar={async () => {
+            if (!confirm(`Apagar a simulação #${aberta.id}? Isso não pode ser desfeito.`)) return;
+            try {
+              await api.simulacoes.remove(aberta.id);
+              setItens((cur) => cur.filter((i) => i.id !== aberta.id));
+              setAberta(null);
+            } catch (e: any) {
+              setErro(e.message);
+            }
+          }}
+        />
+      ) : null}
     </div>
   );
 }
@@ -279,7 +371,7 @@ function Indicador({ titulo, valor, nota }: { titulo: string; valor: string; not
   );
 }
 
-function Detalhe({ s, onClose }: { s: Simulacao; onClose: () => void }) {
+function Detalhe({ s, onClose, isAdmin, onApagar }: { s: Simulacao; onClose: () => void; isAdmin: boolean; onApagar: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -338,6 +430,13 @@ function Detalhe({ s, onClose }: { s: Simulacao; onClose: () => void }) {
           </div>
         </div>
 
+        {s.bruto > 0 && s.liquido <= 0 ? (
+          <p className="mb-5 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+            As deduções informadas somam mais que o valor atualizado, então o líquido ficou zerado e nada
+            foi oferecido. O contato continua válido — provavelmente houve erro de digitação em algum campo.
+          </p>
+        ) : null}
+
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Contato</div>
           {s.contato_em ? (
@@ -354,6 +453,15 @@ function Detalhe({ s, onClose }: { s: Simulacao; onClose: () => void }) {
             </p>
           )}
         </div>
+
+        {isAdmin ? (
+          <div className="mt-6 flex justify-end border-t pt-4">
+            <Button variant="outline" size="sm" className="gap-2 text-red-600" onClick={onApagar}>
+              <Trash2 className="h-4 w-4" />
+              Apagar simulação
+            </Button>
+          </div>
+        ) : null}
       </div>
     </div>
   );

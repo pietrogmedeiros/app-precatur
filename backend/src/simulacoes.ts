@@ -103,3 +103,61 @@ export async function resumoPorPraca(): Promise<ResumoPraca[]> {
     volume_proposta: Number(r.volume_proposta),
   }));
 }
+
+export interface SerieMensal {
+  mes: string; // "2026-10"
+  simulacoes: number;
+  leads: number;
+  volume_proposta: number;
+}
+
+// Últimos 6 meses, incluindo os meses sem simulação — senão o gráfico "pula"
+// períodos vazios e dá impressão errada de continuidade.
+export async function serieMensal(): Promise<SerieMensal[]> {
+  const rows = await query<any>(
+    `WITH meses AS (
+       SELECT to_char(generate_series(
+                date_trunc('month', now()) - interval '5 months',
+                date_trunc('month', now()), interval '1 month'), 'YYYY-MM') AS mes
+     )
+     SELECT m.mes,
+            COUNT(s.id)                           AS simulacoes,
+            COUNT(s.contato_em)                   AS leads,
+            COALESCE(SUM(s.proposta), 0)          AS volume_proposta
+       FROM meses m
+       LEFT JOIN simulations s ON to_char(s.created_at, 'YYYY-MM') = m.mes
+      GROUP BY m.mes ORDER BY m.mes`
+  );
+  return rows.map((r) => ({
+    mes: r.mes,
+    simulacoes: Number(r.simulacoes),
+    leads: Number(r.leads),
+    volume_proposta: Number(r.volume_proposta),
+  }));
+}
+
+export interface Fatia {
+  rotulo: string;
+  total: number;
+}
+
+export async function porNatureza(): Promise<Fatia[]> {
+  const rows = await query<any>(
+    `SELECT COALESCE(natureza, 'não informada') AS rotulo, COUNT(*) AS total
+       FROM simulations GROUP BY 1 ORDER BY 2 DESC`
+  );
+  return rows.map((r) => ({ rotulo: r.rotulo, total: Number(r.total) }));
+}
+
+export async function porAtivo(): Promise<Fatia[]> {
+  const rows = await query<any>(
+    `SELECT COALESCE(ativo, 'não informado') AS rotulo, COUNT(*) AS total
+       FROM simulations GROUP BY 1 ORDER BY 2 DESC`
+  );
+  return rows.map((r) => ({ rotulo: r.rotulo, total: Number(r.total) }));
+}
+
+export async function apagaSimulacao(id: number): Promise<boolean> {
+  const rows = await query<any>(`DELETE FROM simulations WHERE id = $1 RETURNING id`, [id]);
+  return Boolean(rows[0]);
+}

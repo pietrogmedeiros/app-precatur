@@ -47,6 +47,15 @@ export default function CalcularPage() {
 
   const num = (s: string) => parseBRL(s);
   const bruto = num(v.principal) + num(v.juros) + num(v.selic);
+  // As deduções são conferidas aqui, antes de disparar o WhatsApp: não faz
+  // sentido gastar um código para entregar um resultado zerado.
+  const pctHon = Number(honorarios.replace(",", ".")) || 0;
+  const pctIr = Number(ir.replace(",", ".")) || 0;
+  const deducoes =
+    bruto * (pctHon / 100) +
+    (irBase === "bruto" ? bruto : num(v.principal)) * (pctIr / 100) +
+    num(v.pss) + num(v.preferencia) + num(v.outras);
+  const deducoesExcedem = bruto > 0 && deducoes >= bruto;
   const contatoOk = nome.trim().length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && telefone.replace(/\D/g, "").length >= 10;
 
   useEffect(() => {
@@ -70,6 +79,12 @@ export default function CalcularPage() {
     setErro(null);
     if (!contatoOk) return setErro("Preencha nome, e-mail e telefone para continuar.");
     if (bruto <= 0) return setErro("Informe ao menos o valor principal do precatório.");
+    if (deducoesExcedem) {
+      return setErro(
+        `As deduções somam ${formatBRL(deducoes)} e superam o valor atualizado de ${formatBRL(bruto)}. ` +
+          "Confira honorários, IR, PSS, parcela preferencial e outras despesas antes de continuar."
+      );
+    }
     setCarregando(true);
     try {
       const p = await calcularPrecatorio({
@@ -219,11 +234,19 @@ export default function CalcularPage() {
             {bruto > 0 ? (
               <p className="rounded-md bg-secondary px-3 py-2 text-sm">
                 Valor bruto atualizado: <strong>{formatBRL(bruto)}</strong>
+                {deducoes > 0 ? <> · deduções: <strong>{formatBRL(deducoes)}</strong></> : null}
               </p>
+            ) : null}
+            {deducoesExcedem ? (
+              <Aviso>
+                As deduções informadas <strong>superam o valor atualizado</strong>. Do jeito que está, o
+                líquido seria zero e não haveria o que comprar — confira honorários, IR, PSS, parcela
+                preferencial e outras despesas.
+              </Aviso>
             ) : null}
             {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
 
-            <Button className="w-full gap-2" onClick={calcular} disabled={carregando || !praca || !safra}>
+            <Button className="w-full gap-2" onClick={calcular} disabled={carregando || !praca || !safra || deducoesExcedem}>
               {carregando ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
               {carregando ? "Enviando código…" : "Calcular quanto receberia"}
             </Button>
@@ -355,14 +378,25 @@ function Resultado({ r }: { r: CalculoResposta }) {
         </div>
       </dl>
 
-      <div className="rounded-lg bg-primary p-5 text-primary-foreground">
-        <div className="text-xs font-medium uppercase tracking-wider opacity-80">A Precatur pagaria hoje</div>
-        <div className="mt-1 text-3xl font-bold tabular-nums sm:text-4xl">{formatBRL(r.proposta)}</div>
-        <div className="mt-1 text-xs opacity-80">
-          {r.percentual}% do valor líquido · safra {r.safra} · {r.ativo}
-          {r.abatimento ? ` · abatimento de ${formatBRL(r.abatimento)}` : ""}
+      {r.liquido <= 0 ? (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-5 text-amber-900">
+          <div className="text-sm font-semibold">As deduções consumiram todo o valor</div>
+          <p className="mt-1 text-sm">
+            Somadas, as deduções informadas alcançam o valor atualizado de {formatBRL(r.bruto)}, então não
+            resta valor líquido a comprar. Confira os campos de honorários, IR, PSS, parcela preferencial e
+            outras despesas — um deles costuma estar com uma casa decimal a mais.
+          </p>
         </div>
-      </div>
+      ) : (
+        <div className="rounded-lg bg-primary p-5 text-primary-foreground">
+          <div className="text-xs font-medium uppercase tracking-wider opacity-80">A Precatur pagaria hoje</div>
+          <div className="mt-1 text-3xl font-bold tabular-nums sm:text-4xl">{formatBRL(r.proposta)}</div>
+          <div className="mt-1 text-xs opacity-80">
+            {r.percentual}% do valor líquido · safra {r.safra} · {r.ativo}
+            {r.abatimento ? ` · abatimento de ${formatBRL(r.abatimento)}` : ""}
+          </div>
+        </div>
+      )}
 
       {r.praca.estimativa ? (
         <Aviso>
