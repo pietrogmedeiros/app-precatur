@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/api";
@@ -104,9 +106,14 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Senha
-                </label>
+                <div className="flex items-baseline justify-between gap-3">
+                  <label htmlFor="password" className="text-sm font-medium">
+                    Senha
+                  </label>
+                  <Link href="/recuperar" className="text-xs text-muted-foreground underline hover:text-foreground">
+                    Esqueci minha senha
+                  </Link>
+                </div>
                 <input
                   id="password"
                   name="password"

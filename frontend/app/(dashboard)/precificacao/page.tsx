@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calculator, FileText, Pencil, Upload } from "lucide-react";
+import { Calculator, FileText, Pencil, Plus, Upload } from "lucide-react";
 import { api, type PricingEntity, type PricingImport } from "@/lib/api";
 import { getUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -47,6 +47,7 @@ export default function PrecificacaoPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isJuridico, setIsJuridico] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [criarOpen, setCriarOpen] = useState(false);
   const [importing, setImporting] = useState(false);
 
   // Seleção (mesmo modelo da calculadora antiga).
@@ -228,6 +229,10 @@ export default function PrecificacaoPage() {
               <Upload className="h-4 w-4" />
               {importing ? "Importando…" : "Importar planilha"}
             </Button>
+            <Button variant="outline" className="gap-2" onClick={() => setCriarOpen(true)}>
+              <Plus className="h-4 w-4" />
+              Nova praça
+            </Button>
             <Button variant="outline" className="gap-2" disabled={entity.municipal_reference}
               title={entity.municipal_reference ? "Segue a tabela Municipal — edite a Municipal" : undefined}
               onClick={() => setEditorOpen(true)}>
@@ -400,6 +405,15 @@ export default function PrecificacaoPage() {
 
       <TableEditor entity={entity} open={editorOpen} onClose={() => setEditorOpen(false)}
         onSaved={(list) => { setEntities(list); setOk(`Tabela ${entity.label} atualizada para todo o time.`); }} />
+
+      <TableEditor entity={entity} open={criarOpen} modo="criar" onClose={() => setCriarOpen(false)}
+        onSaved={(list) => {
+          setEntities(list);
+          // Abre direto na praça recém-criada, que entra no fim da lista.
+          const nova = list[list.length - 1];
+          if (nova) selectEntity(nova.key);
+          setOk("Praça cadastrada e disponível para todo o time.");
+        }} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  criaPraca,
   listPricing,
   updatePricing,
   validateRows,
@@ -59,6 +60,45 @@ pricingRouter.put("/:key", blockJuridico, requireAdmin, async (req: AuthedReques
     }
 
     res.json(await updatePricing({ [req.params.key]: patch }, req.user?.email ?? null, "edit"));
+  } catch (err) {
+    sendError(res, err, next);
+  }
+});
+
+// Cadastro de praça nova — só admin, como toda escrita de preço.
+pricingRouter.post("/", blockJuridico, requireAdmin, async (req: AuthedRequest, res, next) => {
+  try {
+    const b = req.body ?? {};
+    const label = String(b.label ?? "").trim();
+    if (label.length < 2 || label.length > 120) {
+      return res.status(400).json({ error: "bad_request", message: "Informe o nome da praça." });
+    }
+    const esfera = ["federal", "estadual", "municipal"].includes(b.esfera) ? b.esfera : null;
+    if (!esfera) {
+      return res.status(400).json({ error: "bad_request", message: "Escolha a esfera (federal, estadual ou municipal)." });
+    }
+    const uf = String(b.uf ?? "").trim().toUpperCase().slice(0, 2) || null;
+    if (esfera !== "federal" && !/^[A-Z]{2}$/.test(uf ?? "")) {
+      return res.status(400).json({ error: "bad_request", message: "Informe a UF de duas letras." });
+    }
+    const v = validateRows(b.rows);
+    if ("error" in v) return res.status(400).json({ error: "bad_request", message: v.error });
+
+    // Identificador sem acento nem espaço, derivado do nome.
+    const key = label.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+    if (!key) return res.status(400).json({ error: "bad_request", message: "Nome inválido." });
+
+    const d = Number(b.fixed_deduction ?? 0);
+    const entities = await criaPraca({
+      key, label,
+      description: String(b.description ?? "").trim().slice(0, 300),
+      esfera, uf, municipio: String(b.municipio ?? "").trim().slice(0, 120) || null,
+      fixed_deduction: Number.isFinite(d) && d >= 0 ? Math.round(d * 100) / 100 : 0,
+      rows: v.rows,
+      criadoPor: req.user?.email ?? null,
+    });
+    res.status(201).json(entities);
   } catch (err) {
     sendError(res, err, next);
   }

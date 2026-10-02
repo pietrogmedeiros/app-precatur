@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { authenticate, signToken, requireAuth, type AuthedRequest } from "../auth";
-import { findById, updatePassword, hashPassword, recordLogin, updateProfile } from "../users";
+import { findById, findByEmail, updatePassword, hashPassword, recordLogin, updateProfile } from "../users";
+import { criaToken, consomeToken, tokenValido, VALIDADE_MIN, RecuperacaoError } from "../recuperacao";
+import { enviaEmail, emailRedefinicao, EmailError } from "../email";
 
 export const authRouter = Router();
 
@@ -126,6 +128,69 @@ authRouter.post("/change-password", requireAuth, async (req: AuthedRequest, res,
     await updatePassword(uid, newPassword);
     res.json({ ok: true });
   } catch (err) {
+    next(err);
+  }
+});
+
+/* ------------------------- Esqueci minha senha ---------------------------- */
+
+// PÚBLICA. A resposta é sempre a mesma, exista ou não a conta: a tela de login é
+// aberta, e dizer "e-mail não encontrado" entregaria a qualquer um a lista de
+// quem tem acesso ao sistema. O envio, esse sim, só acontece se a conta existir.
+authRouter.post("/forgot", async (req, res, next) => {
+  const resposta = {
+    ok: true,
+    message: "Se existir uma conta com esse e-mail, enviamos o link de redefinição.",
+  };
+  try {
+    const email = String(req.body?.email ?? "").trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "bad_request", message: "Informe um e-mail válido." });
+    }
+
+    const user = await findByEmail(email);
+    if (!user) return res.json(resposta);
+
+    const token = await criaToken(user.id, (req.ip ?? "").slice(0, 60) || null);
+    const base = (process.env.APP_URL ?? "").replace(/\/+$/, "");
+    const link = `${base}/redefinir?token=${token}`;
+    const { assunto, html, texto } = emailRedefinicao(user.name, link, VALIDADE_MIN);
+    await enviaEmail(user.email, assunto, html, texto);
+
+    res.json(resposta);
+  } catch (err) {
+    // Falha de limite também responde igual: diferenciar aqui voltaria a dizer
+    // se a conta existe.
+    if (err instanceof RecuperacaoError) return res.json(resposta);
+    if (err instanceof EmailError) {
+      return res.status(502).json({ error: "email", message: err.message });
+    }
+    next(err);
+  }
+});
+
+// Confere o link ao abrir a tela, sem consumir.
+authRouter.get("/reset/:token", async (req, res, next) => {
+  try {
+    res.json({ valido: await tokenValido(req.params.token) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+authRouter.post("/reset", async (req, res, next) => {
+  try {
+    const senha = String(req.body?.password ?? "");
+    if (senha.length < 4) {
+      return res.status(400).json({ error: "weak_password", message: "A nova senha deve ter ao menos 4 caracteres." });
+    }
+    const userId = await consomeToken(String(req.body?.token ?? ""));
+    await updatePassword(userId, senha);
+    res.json({ ok: true });
+  } catch (err) {
+    if (err instanceof RecuperacaoError) {
+      return res.status(err.status).json({ error: "recuperacao", message: err.message });
+    }
     next(err);
   }
 });

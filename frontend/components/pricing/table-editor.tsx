@@ -17,17 +17,27 @@ interface DraftRow {
 
 // Edição manual de uma tabela de preço (só admin). Serve sobretudo para as
 // regras especiais — Bahia, RJ, MG, Paraíba — que não vêm da planilha.
+const UFS = ["AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"];
+
 export function TableEditor({
   entity,
   open,
+  modo = "editar",
   onClose,
   onSaved,
 }: {
   entity: PricingEntity;
   open: boolean;
+  /** "criar" acrescenta os campos de identificação da praça nova. */
+  modo?: "editar" | "criar";
   onClose: () => void;
   onSaved: (entities: PricingEntity[]) => void;
 }) {
+  const criando = modo === "criar";
+  const [label, setLabel] = useState("");
+  const [esfera, setEsfera] = useState("estadual");
+  const [uf, setUf] = useState("");
+  const [municipio, setMunicipio] = useState("");
   const [rows, setRows] = useState<DraftRow[]>([]);
   const [deduction, setDeduction] = useState("");
   const [description, setDescription] = useState("");
@@ -36,17 +46,23 @@ export function TableEditor({
 
   useEffect(() => {
     if (!open) return;
+    if (criando) {
+      setLabel("");
+      setEsfera("estadual");
+      setUf("");
+      setMunicipio("");
+    }
     setRows(
-      entity.rows.map((r) => ({
+      (criando ? [] : entity.rows).map((r) => ({
         year: r.year,
         values: r.values.map((v) => String(v).replace(".", ",")),
         asset: r.asset,
       }))
     );
-    setDeduction(entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
-    setDescription(entity.description);
+    setDeduction(criando ? "" : entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
+    setDescription(criando ? "" : entity.description);
     setError(null);
-  }, [open, entity]);
+  }, [open, entity, criando]);
 
   useEffect(() => {
     if (!open) return;
@@ -64,6 +80,21 @@ export function TableEditor({
     setError(null);
     setSaving(true);
     try {
+      const linhas = rows.map((r) => ({
+        year: r.year,
+        values: r.values.map((v) => Number(v.replace(",", "."))),
+        asset: r.asset,
+      }));
+      if (criando) {
+        const entities = await api.pricing.create({
+          label, esfera, uf: uf || null, municipio: municipio || null,
+          description, fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
+          rows: linhas,
+        });
+        onSaved(entities);
+        onClose();
+        return;
+      }
       const entities = await api.pricing.update(entity.key, {
         // A API valida faixa (0–100) e formato; vírgula decimal é aceita aqui.
         rows: rows.map((r) => ({
@@ -92,7 +123,7 @@ export function TableEditor({
         <div className="mb-4 flex items-center justify-between">
           <h2 className="flex items-center gap-2 text-lg font-semibold">
             <Pencil className="h-5 w-5" />
-            Editar tabela · {entity.label}
+            {criando ? "Nova praça" : `Editar tabela · ${entity.label}`}
           </h2>
           <button onClick={onClose} className="rounded-md p-1 text-muted-foreground hover:bg-accent" aria-label="Fechar">
             <X className="h-4 w-4" />
@@ -100,8 +131,44 @@ export function TableEditor({
         </div>
 
         <p className="mb-4 rounded-md bg-secondary px-3 py-2 text-sm">
-          A alteração vale na hora para todo o time. A versão anterior fica guardada no histórico.
+          {criando
+            ? "A praça passa a valer na hora para todo o time e aparece na barra acima. Onde não houver regra própria, o regime geral da esfera continua valendo."
+            : "A alteração vale na hora para todo o time. A versão anterior fica guardada no histórico."}
         </p>
+
+        {criando ? (
+          <div className="mb-5 grid gap-4 sm:grid-cols-2">
+            <label className="space-y-1.5 text-sm font-medium">
+              <span>Nome da praça</span>
+              <input className={cell + " h-9"} value={label} maxLength={120} placeholder="Ex.: Alagoas"
+                onChange={(e) => setLabel(e.target.value)} />
+            </label>
+            <label className="space-y-1.5 text-sm font-medium">
+              <span>Esfera</span>
+              <select className={cell + " h-9"} value={esfera} onChange={(e) => setEsfera(e.target.value)}>
+                <option value="estadual">Estadual</option>
+                <option value="municipal">Municipal</option>
+                <option value="federal">Federal</option>
+              </select>
+            </label>
+            {esfera !== "federal" ? (
+              <label className="space-y-1.5 text-sm font-medium">
+                <span>UF</span>
+                <select className={cell + " h-9"} value={uf} onChange={(e) => setUf(e.target.value)}>
+                  <option value="">Selecione…</option>
+                  {UFS.map((u) => <option key={u} value={u}>{u}</option>)}
+                </select>
+              </label>
+            ) : null}
+            {esfera === "municipal" ? (
+              <label className="space-y-1.5 text-sm font-medium">
+                <span>Município</span>
+                <input className={cell + " h-9"} value={municipio} maxLength={120}
+                  onChange={(e) => setMunicipio(e.target.value)} />
+              </label>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[620px] text-sm">
@@ -177,7 +244,9 @@ export function TableEditor({
 
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={save} disabled={saving}>{saving ? "Salvando…" : "Salvar para o time"}</Button>
+          <Button onClick={save} disabled={saving || (criando && (!label.trim() || (esfera !== "federal" && !uf) || !rows.length))}>
+            {saving ? "Salvando…" : criando ? "Cadastrar praça" : "Salvar para o time"}
+          </Button>
         </div>
       </div>
     </div>

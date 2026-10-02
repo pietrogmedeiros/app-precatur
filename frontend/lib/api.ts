@@ -331,6 +331,27 @@ export async function login(email: string, password: string): Promise<LoginResul
   });
 }
 
+// Recuperação de senha: rotas públicas, sem token de sessão.
+export function esqueciSenha(email: string) {
+  return publico<{ ok: boolean; message: string }>("/api/auth/forgot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+}
+
+export function conferirTokenSenha(token: string) {
+  return publico<{ valido: boolean }>(`/api/auth/reset/${encodeURIComponent(token)}`);
+}
+
+export function redefinirSenha(token: string, password: string) {
+  return publico<{ ok: boolean }>("/api/auth/reset", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, password }),
+  });
+}
+
 export interface MetabaseToken {
   token: string;
   instanceUrl: string;
@@ -405,6 +426,10 @@ export const api = {
   },
   pricing: {
     list: () => request<PricingEntity[]>("/api/pricing"),
+    create: (payload: {
+      label: string; esfera: string; uf?: string | null; municipio?: string | null;
+      description?: string; fixed_deduction?: number; rows: PricingRow[];
+    }) => request<PricingEntity[]>("/api/pricing", { method: "POST", body: JSON.stringify(payload) }),
     update: (
       key: string,
       payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string }

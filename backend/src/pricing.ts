@@ -96,6 +96,33 @@ export function validateRows(input: unknown): { rows: PricingRow[] } | { error: 
   return { rows };
 }
 
+// Cadastro de praça nova. A chave é derivada do nome e serve de identificador
+// estável; o endereço (esfera/UF/município) é o que faz a calculadora achar a
+// regra certa.
+export async function criaPraca(dados: {
+  key: string; label: string; description: string; esfera: string | null;
+  uf: string | null; municipio: string | null; fixed_deduction: number; rows: PricingRow[];
+  criadoPor: string | null;
+}): Promise<PricingEntity[]> {
+  const existe = await query(`SELECT 1 FROM pricing_entities WHERE key = $1`, [dados.key]);
+  if (existe.length) throw new PricingError(409, "Já existe uma praça com esse identificador.");
+
+  // Entra depois das atuais na ordem da tela.
+  const pos = await query<{ max: number }>(`SELECT COALESCE(MAX(position), 0) + 1 AS max FROM pricing_entities`);
+
+  await query(
+    `INSERT INTO pricing_entities
+       (key, label, description, position, fixed_deduction, municipal_reference,
+        esfera, uf, municipio, rows, updated_by)
+     VALUES ($1,$2,$3,$4,$5,false,$6,$7,$8,$9,$10)`,
+    [
+      dados.key, dados.label, dados.description, Number(pos[0]?.max ?? 1), dados.fixed_deduction,
+      dados.esfera, dados.uf, dados.municipio, JSON.stringify(dados.rows), dados.criadoPor,
+    ]
+  );
+  return listPricing();
+}
+
 export class PricingError extends Error {
   constructor(public status: number, message: string) {
     super(message);
