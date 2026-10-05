@@ -209,9 +209,10 @@ export default function PrecificacaoPage() {
     ? { tone: "warn", title: `Regra ${entity.label}:`, text: `será descontado automaticamente ${formatBRL(entity.fixed_deduction)} do valor final calculado.` }
     : entity.municipal_reference
       ? { tone: "warn", title: "Referência Municipal:", text: "esta precificação usa a curva do Regime Geral Municipal. Ajuste manualmente caso exista orientação adicional de pagamento." }
-      : entity.key === "mg"
-        ? { tone: "warn", title: "Atenção:", text: "quando abrir o edital, o preço do precatório deverá ser igualado ao do direito creditório, conforme a orientação comercial." }
-        : { tone: "ok", title: "Preço máximo de compra:", text: "a proposta foi carregada com base na tabela selecionada. Você pode ajustar o percentual ou o valor diretamente." };
+      // O aviso de MG ("igualar o preço do precatório ao do direito creditório
+      // quando abrir o edital") saiu junto com o direito creditório: a casa
+      // compra tudo como precatório, então não havia mais o que igualar.
+      : { tone: "ok", title: "Preço máximo de compra:", text: "a proposta foi carregada com base na tabela selecionada. Você pode ajustar o percentual ou o valor diretamente." };
 
   const adjustment = pct - tablePct;
 
