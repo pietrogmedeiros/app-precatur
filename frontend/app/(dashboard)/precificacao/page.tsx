@@ -240,8 +240,10 @@ export default function PrecificacaoPage() {
               <Plus className="h-4 w-4" />
               Nova praça
             </Button>
-            <Button variant="outline" className="gap-2" disabled={entity.municipal_reference}
-              title={entity.municipal_reference ? "Segue a tabela Municipal — edite a Municipal" : undefined}
+            {/* Quem segue a curva Municipal também abre o editor: é lá que se
+                desmarca a caixa e se dá a ela uma tabela própria. */}
+            <Button variant="outline" className="gap-2"
+              title={entity.municipal_reference ? "Segue a tabela Municipal — abra para dar tabela própria" : undefined}
               onClick={() => setEditorOpen(true)}>
               <Pencil className="h-4 w-4" />
               Editar tabela

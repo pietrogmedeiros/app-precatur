@@ -436,7 +436,7 @@ export const api = {
     }) => request<PricingEntity[]>("/api/pricing", { method: "POST", body: JSON.stringify(payload) }),
     update: (
       key: string,
-      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string; hidden?: boolean }
+      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string; hidden?: boolean; municipal_reference?: boolean }
     ) =>
       request<PricingEntity[]>(`/api/pricing/${key}`, { method: "PUT", body: JSON.stringify(payload) }),
     import: (payload: PricingImport) =>

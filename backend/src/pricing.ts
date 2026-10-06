@@ -33,6 +33,8 @@ export interface PricingPatch {
   fixed_deduction?: number;
   description?: string;
   hidden?: boolean;
+  /** false solta a praça da curva Municipal e passa a valer a tabela própria. */
+  municipal_reference?: boolean;
 }
 
 const MUNICIPAL_KEY = "municipal";
@@ -176,10 +178,20 @@ export async function updatePricing(
       );
       const entity = cur.rows[0];
       if (!entity) throw new PricingError(404, `Ente "${key}" não encontrado.`);
-      if (entity.municipal_reference) {
+      // Quem segue a curva Municipal não tem tabela própria para editar. A
+      // exceção é justamente a edição que a solta da curva: aí as linhas que
+      // vêm no mesmo patch passam a ser as dela.
+      const seguiraMunicipal = patch.municipal_reference ?? entity.municipal_reference;
+      if (entity.municipal_reference && seguiraMunicipal) {
         throw new PricingError(
           400,
           `"${key}" segue a curva do Regime Geral Municipal — edite a tabela Municipal.`
+        );
+      }
+      if (entity.municipal_reference && !seguiraMunicipal && !patch.rows?.length) {
+        throw new PricingError(
+          400,
+          `"${key}" precisa de uma tabela própria para deixar de seguir a curva Municipal.`
         );
       }
 
@@ -195,6 +207,7 @@ export async function updatePricing(
                 fixed_deduction = COALESCE($3, fixed_deduction),
                 description = COALESCE($4, description),
                 hidden = COALESCE($6, hidden),
+                municipal_reference = COALESCE($7, municipal_reference),
                 updated_by = $5,
                 updated_at = now()
           WHERE key = $1`,
@@ -205,6 +218,7 @@ export async function updatePricing(
           patch.description ?? null,
           changedBy,
           patch.hidden ?? null,
+          patch.municipal_reference ?? null,
         ]
       );
     }

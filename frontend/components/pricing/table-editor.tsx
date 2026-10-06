@@ -44,6 +44,7 @@ export function TableEditor({
   const [deduction, setDeduction] = useState("");
   const [description, setDescription] = useState("");
   const [oculta, setOculta] = useState(false);
+  const [segueMunicipal, setSegueMunicipal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -66,6 +67,7 @@ export function TableEditor({
     setDeduction(criando ? "" : entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
     setDescription(criando ? "" : entity.description);
     setOculta(criando ? false : Boolean(entity.hidden));
+    setSegueMunicipal(criando ? false : Boolean(entity.municipal_reference));
     setError(null);
   }, [open, entity, criando]);
 
@@ -107,6 +109,7 @@ export function TableEditor({
         fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
         description,
         hidden: oculta,
+        municipal_reference: segueMunicipal,
       });
       onSaved(entities);
       onClose();
@@ -253,6 +256,20 @@ export function TableEditor({
               onChange={(e) => setDescription(e.target.value)} />
           </label>
         </div>
+
+        {!criando && entity.municipal_reference ? (
+          <label className="mt-4 flex items-start gap-2 text-sm">
+            <input type="checkbox" className="mt-0.5 h-4 w-4" checked={segueMunicipal}
+              onChange={(e) => setSegueMunicipal(e.target.checked)} />
+            <span>
+              Seguir a curva do Regime Geral Municipal
+              <span className="block text-xs font-normal text-muted-foreground">
+                Marcada, esta praça não tem tabela própria: mostra a do Municipal e acompanha as
+                mudanças dela. Desmarque para dar a ela a tabela acima.
+              </span>
+            </span>
+          </label>
+        ) : null}
 
         {!criando ? (
           <label className="mt-4 flex items-start gap-2 text-sm">
