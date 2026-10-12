@@ -99,6 +99,14 @@ export function Documentos({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {!estado.llm && (
+          <Aviso tom="atencao">
+            A leitura dos documentos está ligada, mas <strong>falta a chave do modelo</strong>
+            {" "}(<code>OPENROUTER_API_KEY</code>) neste ambiente. Os valores do formulário
+            continuam sendo digitados à mão; o cálculo e o memorial não dependem disto.
+          </Aviso>
+        )}
+
         <Opcoes<Modo>
           label="Como os documentos chegaram"
           valor={modo}
@@ -116,7 +124,7 @@ export function Documentos({
             <Arquivo label="Ofício requisitório (opcional)" arquivo={oficio} aoEscolher={setOficio} />
             <Arquivo label="Sentenças / acórdãos (opcional)" multiplos
               arquivos={sentencas} aoEscolherVarios={setSentencas} />
-            <Button type="button" disabled={!conta || !!ocupado}
+            <Button type="button" disabled={!conta || !!ocupado || !estado.llm}
               onClick={() => tentar("pecas", () => extrairPecas(conta!, oficio, sentencas))}>
               {ocupado === "pecas" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
               Extrair das peças
@@ -175,7 +183,7 @@ export function Documentos({
                     onClick={() => setCortes([...cortes, { tipo: "Conta homologada", pagina_inicio: 1, pagina_fim: 1 }])}>
                     + faixa
                   </Button>
-                  <Button type="button" disabled={!sessao || !!ocupado}
+                  <Button type="button" disabled={!sessao || !!ocupado || !estado.llm}
                     onClick={() => tentar("extrair", () => extrairCortes(sessao!, cortes.filter((c) => c.tipo !== "Outro / não usar")))}>
                     {ocupado === "extrair" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
                     Extrair dos cortes
@@ -193,7 +201,7 @@ export function Documentos({
               Neste modo o modelo escolhe sozinho qual é a conta homologada. Medido no corpus: ela fica em
               primeiro lugar em 54% das vezes — por isso confira a página de cada valor antes de calcular.
             </Aviso>
-            <Button type="button" disabled={!processo || !!ocupado}
+            <Button type="button" disabled={!processo || !!ocupado || !estado.llm}
               onClick={() => tentar("autonomo", () => preencherPorProcesso(processo!))}>
               {ocupado === "autonomo" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileUp className="h-4 w-4" />}
               Ler o processo
