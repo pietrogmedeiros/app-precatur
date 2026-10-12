@@ -1,0 +1,36 @@
+name: atualizar-indices
+
+# Atualiza as séries de índice (histórico BACEN SGS + projeção Focus até dez do
+# ano seguinte) e commita se mudou → o push dispara o redeploy no Render.
+on:
+  schedule:
+    # Dia 12, 12h UTC (~09h BRT): após o IPCA cheio (SGS 433) publicar (~dia 10).
+    - cron: '0 12 12 * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Gerar índices (SGS real + projeção Focus)
+        run: python scripts/baixar_indices.py
+
+      - name: Commit se mudou
+        run: |
+          if [ -n "$(git status --porcelain precaturia/data/indices)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add precaturia/data/indices
+            git commit -m "chore(indices): atualiza SGS + projeção Focus [skip ci]"
+            git push
+          else
+            echo "Sem mudanças nos índices."
+          fi

@@ -23,3 +23,9 @@ npm-debug.log*
 # misc
 .DS_Store
 .vercel
+
+# motor de cálculo (Python)
+calculadora/.venv
+__pycache__/
+*.pyc
+.pytest_cache/

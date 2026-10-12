@@ -1,0 +1,23 @@
+# /etc/systemd/system/calculadora.service
+#
+# ⚠ MUDANÇA vs. a versão em produção: o script de entrada foi renomeado de
+# `streamlit_app.py` para `Calculadora.py` (o rótulo da aba vem do nome do
+# arquivo). Sem editar este ExecStart o serviço NÃO SOBE depois do deploy.
+[Unit]
+Description=Calculadora Precatur (Streamlit)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/calculadora
+EnvironmentFile=/etc/calculadora/env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/ubuntu/calculadora/.venv/bin/streamlit run Calculadora.py \
+  --server.port 8501 --server.address 127.0.0.1 --server.headless true
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

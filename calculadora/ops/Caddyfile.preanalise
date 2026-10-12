@@ -1,0 +1,5 @@
+# Bloco a ACRESCENTAR ao /etc/caddy/Caddyfile.
+# O endereço da calculadora (204-216-151-25.sslip.io -> 8501) NÃO muda.
+pre.204-216-151-25.sslip.io {
+    reverse_proxy 127.0.0.1:8502
+}

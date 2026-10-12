@@ -1,0 +1,16 @@
+# Dependências do MOTOR como serviço dentro do app Precatur.
+#
+# Diferença para o `requirements.txt` do repositório de origem: aqui NÃO entra o
+# streamlit — a tela é o Next. O que sobra é o motor (stdlib puro), o servidor
+# HTTP e as bibliotecas do memorial e da leitura de PDF.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
+
+# memorial em PDF (Python puro)
+xhtml2pdf>=0.2.16
+
+# leitura de PDF (prefill) — só é exercitada com PREFILL_ENABLED=1
+pymupdf>=1.24
+numpy>=1.26
+httpx>=0.27

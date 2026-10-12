@@ -6,3 +6,10 @@
 .git
 .vercel
 *.log
+
+# motor de cálculo: o venv e os caches são refeitos na imagem; os testes e o
+# app Streamlit original não vão para produção.
+calculadora/.venv
+**/__pycache__
+**/*.pyc
+calculadora/.pytest_cache

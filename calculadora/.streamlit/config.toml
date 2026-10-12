@@ -1,0 +1,11 @@
+# Tema on-brand Precatur (manual de marca): petróleo #34474D + creme #FCEADC.
+[theme]
+base = "dark"
+primaryColor = "#fceadc"
+backgroundColor = "#16232a"
+secondaryBackgroundColor = "#213139"
+textColor = "#f2ece6"
+font = "sans serif"
+
+[server]
+headless = true

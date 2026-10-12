@@ -1,0 +1,150 @@
+{
+  "_leia_isto": "Fonte ÚNICA dos campos UF_CRM_* do Bitrix consumidos por mais de um sistema. Callix (bitrix_sync/ingest.py) lê este arquivo direto, local. Calculadora recebe uma CÓPIA sincronizada em build-time (GitHub Action) e lê o arquivo local dela — nunca busca este ao vivo. Editar SÓ aqui; nunca hardcode um UF_CRM_* de novo em outro repositório. Ver Precatur/INDICE.md.",
+  "_versao": 1,
+  "_atualizado_em": "2026-08-20",
+  "campos": {
+    "cpf": {
+      "id": "UF_CRM_1769029151931",
+      "rotulo": "CPF",
+      "tipo": "string",
+      "obs": "Seção SDR do layout do funil 9. Guarda duas grafias no CRM (formatada e dígitos puros) — ver bitrix.py:buscar_cards.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py", "Calculadora/bitrix.py"]
+    },
+    "valor_atualizado": {
+      "id": "UF_CRM_1769608301759",
+      "rotulo": "Cálculo Atualizado (Valor)",
+      "tipo": "string",
+      "obs": "NÃO usar sufixo '|BRL' — é sintaxe de campo MONEY e este campo é STRING; grafia da casa é 'R$ 999.999,99'. Existe um campo MONEY homônimo (outro UF_CRM_*) com só 1 card preenchido — não confundir.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py", "Calculadora/bitrix.py"]
+    },
+    "honorarios_contratuais_pct": {
+      "id": "UF_CRM_1769029890257",
+      "rotulo": "Honorários Contratuais (%)",
+      "tipo": "string",
+      "obs": "Percentual em texto livre; time escreve com '%', espaço, vírgula — normalizar antes de usar.",
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "numero_precatorio": {
+      "id": "UF_CRM_1769029222658",
+      "rotulo": "Nº Precatório",
+      "tipo": "string",
+      "obs": "Seção SDR do layout do funil 9.",
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "natureza": {
+      "id": "UF_CRM_1769029436243",
+      "rotulo": "Natureza",
+      "tipo": "string",
+      "obs": "Texto livre, mistura eixo tributário (remuneratória/indenizatória) com preferência constitucional (alimentar/comum) — só o tributário é escrito por código.",
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "numero_oficio": {
+      "id": "UF_CRM_1769029843593",
+      "rotulo": "Número Ofício",
+      "tipo": "string",
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "nome": {
+      "id": "UF_CRM_1769029110822",
+      "rotulo": "Nome",
+      "tipo": "string",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "advogado_analise": {
+      "id": "UF_CRM_ADVOGADO_ANALISE",
+      "rotulo": "Advogado da Análise",
+      "tipo": "string",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "valor_oficio": {
+      "id": "UF_CRM_1769029177954",
+      "rotulo": "Valor (Ofício)",
+      "tipo": "money",
+      "obs": "Cobertura ~84,8% no funil 0 (medido 18/08/2026).",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "proposta_inicial": {
+      "id": "UF_CRM_1769087212986",
+      "rotulo": "Proposta Inicial",
+      "tipo": "money",
+      "obs": "Cobertura ~34,8%.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "origem_lead": {
+      "id": "UF_CRM_1769029307235",
+      "rotulo": "Origem do Lead",
+      "tipo": "string",
+      "obs": "String livre, 97% preenchido; normalizado por seed_origem_canal.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "ente_devedor": {
+      "id": "UF_CRM_1769029263875",
+      "rotulo": "Ente Devedor",
+      "tipo": "string",
+      "obs": "String livre, 97,5% preenchido; há 3 gerações do mesmo rótulo no portal, este é o único usado no funil 0. Normalizado por seed_ente_uf.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "id_externo": {
+      "id": "UF_CRM_ID_EXTERNO",
+      "rotulo": "ID Externo",
+      "tipo": "string",
+      "obs": "Formato CALLIX-<id> ou WA-<id>; só preenchido no funil 9 hoje.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "contra_proposta": {
+      "id": "UF_CRM_1769087361113",
+      "rotulo": "Contra Proposta",
+      "tipo": "money",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "valor_cedente": {
+      "id": "UF_CRM_1769088743581",
+      "rotulo": "Valor Cedente",
+      "tipo": "money",
+      "obs": "Cobertura ~80% dos ganhos.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "valor_desembolso": {
+      "id": "UF_CRM_1769088776995",
+      "rotulo": "Valor Desembolso",
+      "tipo": "money",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "percentual_desembolso": {
+      "id": "UF_CRM_1769088927156",
+      "rotulo": "Percentual Desembolso",
+      "tipo": "string",
+      "obs": "Texto livre tipo '52%'.",
+      "usado_por": ["Callix/bitrix_sync/ingest.py"]
+    },
+    "anexo_memorial": {
+      "id": "UF_CRM_1770463886064",
+      "rotulo": "Anexo - Cálculo Atualizado",
+      "tipo": "arquivo",
+      "multiplo": true,
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "anexo_conta": {
+      "id": "UF_CRM_1769029938097",
+      "rotulo": "Anexo - Cálculos Homologados",
+      "tipo": "arquivo",
+      "multiplo": false,
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "anexo_oficio": {
+      "id": "UF_CRM_1771523008362",
+      "rotulo": "Anexo - Ofício",
+      "tipo": "arquivo",
+      "multiplo": true,
+      "obs": "Existem 4 gerações deste rótulo no portal; este é o do layout do funil 9.",
+      "usado_por": ["Calculadora/bitrix.py"]
+    },
+    "anexo_sentenca": {
+      "id": "UF_CRM_1773082937422",
+      "rotulo": "Anexo - Sentença / Acórdão",
+      "tipo": "arquivo",
+      "multiplo": true,
+      "usado_por": ["Calculadora/bitrix.py"]
+    }
+  }
+}

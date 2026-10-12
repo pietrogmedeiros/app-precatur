@@ -1,0 +1,31 @@
+# /etc/systemd/system/preanalise.service
+#
+# Processo SEPARADO da calculadora, mesmo código-fonte. Existe para que:
+#   - publicar melhoria na pré-análise não reinicie o que o time usa todo dia;
+#   - PDF de centenas de páginas (e OCR, adiante) não estoure a memória do
+#     processo que serve o cálculo.
+#
+# Env própria (/etc/preanalise/env): PREFILL_ENABLED=1, OPENROUTER_API_KEY,
+# BITRIX_WEBHOOK, BITRIX_CATEGORIA, HUB_URL/HUB_USER/HUB_PASS, CALCULADORA_URL,
+# APP_PASSWORD (a senha do time, legado) e APP_USERS (login individual — a
+# MESMA lista da calculadora; processos separados autenticam cada um por si).
+[Unit]
+Description=Pre-analise Precatur (Streamlit)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/calculadora
+EnvironmentFile=/etc/preanalise/env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/ubuntu/calculadora/.venv/bin/streamlit run PreAnalise.py \
+  --server.port 8502 --server.address 127.0.0.1 --server.headless true
+Restart=always
+RestartSec=5
+# guarda de memória: PDF grande derruba ESTE serviço, não o outro
+MemoryMax=3G
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+# Python bytecode
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Segredos locais (nunca versionar) — o app lê tudo de env var
+.streamlit/secrets.toml
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

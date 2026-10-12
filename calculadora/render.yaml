@@ -1,0 +1,17 @@
+# Render Blueprint — Calculadora de Precatórios (Streamlit).
+# Deploy: Render → New → Blueprint → selecione o repo Calculadora.
+# Ao aplicar, o Render pede APP_PASSWORD e APP_USERS (secrets; não versionados).
+# APP_USERS é o login individual (`usuario:hash`, ver ops/DEPLOY.md); em branco,
+# vale só a senha única do time — e o envio ao card sai sem autoria.
+services:
+  - type: web
+    name: calculadora-precatur
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "streamlit run Calculadora.py --server.port $PORT --server.address 0.0.0.0 --server.headless true"
+    envVars:
+      - key: APP_PASSWORD
+        sync: false   # definido no painel do Render (Secret), fora do repo
+      - key: APP_USERS
+        sync: false   # idem — só hashes, mas fora do repo por higiene

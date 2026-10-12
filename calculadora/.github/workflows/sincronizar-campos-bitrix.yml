@@ -1,0 +1,48 @@
+name: sincronizar-campos-bitrix
+
+# Copia bitrix_campos.json (fonte única, mantida em Callix/bitrix_sync/campos.json
+# na VM) para este repositório e commita se mudou -> o push é pego pelo cron de
+# deploy da VM (~/deploy-calculadora.sh, git fetch a cada 2 min), que reinicia
+# calculadora/preanalise (ops/deploy-calculadora.sh já sabe reiniciar quando
+# este arquivo muda). Mesma sintaxe do problema que atualizar-indices.yml já
+# resolve pra índice BACEN, aplicada aqui pro mapa de campos UF_CRM_* do Bitrix.
+#
+# Por que isso é seguro em produção: a busca acontece em BUILD TIME (aqui), não
+# em runtime. Se o endpoint da VM estiver fora do ar quando este job rodar, o
+# job só falha e nada muda — a Calculadora que já está no ar continua com a
+# última cópia sincronizada, sem sentir nada. Ver Precatur/INDICE.md.
+on:
+  schedule:
+    # Diário, 11h UTC (~08h BRT) — bem antes do expediente.
+    - cron: '0 11 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sincronizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Buscar campos.json canônico
+        run: |
+          curl -fsSL https://bitrix-campos.204-216-151-25.sslip.io/campos.json \
+            -o bitrix_campos.json.tmp
+          # Falha alto e visível se vier vazio ou não for JSON válido — nunca
+          # substituir o arquivo bom por um lixo de uma resposta quebrada.
+          python3 -c "import json; json.load(open('bitrix_campos.json.tmp', encoding='utf-8'))"
+          mv bitrix_campos.json.tmp bitrix_campos.json
+
+      - name: Commit se mudou
+        run: |
+          if [ -n "$(git status --porcelain bitrix_campos.json)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add bitrix_campos.json
+            git commit -m "chore(campos): sincroniza bitrix_campos.json [skip ci]"
+            git push
+          else
+            echo "Sem mudancas nos campos."
+          fi

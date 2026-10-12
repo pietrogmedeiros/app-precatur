@@ -1,0 +1,10 @@
+# Bundle standalone da Calculadora. O motor (precaturia.pipeline) é stdlib puro.
+# Streamlit para a UI; xhtml2pdf (Python puro) para o memorial em PDF.
+streamlit>=1.40
+xhtml2pdf>=0.2.16
+
+# Pré-preenchimento por PDF (BETA, atrás de PREFILL_ENABLED=1). Só carregadas
+# quando a flag está on — o app base (calculadora manual) não depende delas.
+pymupdf>=1.24
+numpy>=1.26
+httpx>=0.27
