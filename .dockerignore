@@ -13,3 +13,8 @@ calculadora/.venv
 **/__pycache__
 **/*.pyc
 calculadora/.pytest_cache
+# Alfred: o venv é refeito na imagem e o banco (308 MB) vai por volume — mandar
+# qualquer um dos dois para o contexto de build tornaria todo deploy lento.
+alfred/.venv
+alfred/data/
+alfred/output/dados_dashboard.json

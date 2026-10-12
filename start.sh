@@ -1,8 +1,27 @@
 #!/bin/sh
-# Sobe os três processos do contêiner: o motor de cálculo (Python, :8090), o
-# backend Express (:8080) e o Next.js (:3000, o único exposto).
-# Se qualquer um morrer, o contêiner sai e o EasyPanel reinicia.
+# Sobe os quatro processos do contêiner: o motor de cálculo (Python, :8090), o
+# Alfred (Python, :8610), o backend Express (:8080) e o Next.js (:3000, o único
+# exposto). Se qualquer um morrer, o contêiner sai e o EasyPanel reinicia.
 set -e
+
+# ── Alfred: semeia o volume de dados ──────────────────────────────────────
+# O volume (/app/alfred/data) guarda o banco de 308 MB, que não vem na imagem.
+# Os CSVs/JSONs pequenos que o núcleo lê vêm na imagem e são copiados para o
+# volume SÓ quando faltarem — nunca sobrescrevem, para não desfazer uma
+# atualização feita no volume.
+if [ -d /app/alfred/data-seed ]; then
+  mkdir -p /app/alfred/data
+  for f in /app/alfred/data-seed/*; do
+    [ -e "$f" ] || continue
+    destino="/app/alfred/data/$(basename "$f")"
+    [ -e "$destino" ] || cp -r "$f" "$destino"
+  done
+fi
+if [ ! -f /app/alfred/data/alfred.db ]; then
+  echo "[start] AVISO: /app/alfred/data/alfred.db não existe — a consulta de"
+  echo "[start]        precatórios vai responder erro até o banco ser enviado"
+  echo "[start]        para o volume. Ver alfred/LEIAME-EMBUTIDO.md."
+fi
 
 # UM worker, de propósito: a análise de PDF guarda o substrato em memória entre
 # o passo "analisar" e o passo "extrair dos cortes". Com dois processos, o
@@ -12,6 +31,13 @@ echo "[start] booting motor de cálculo on :8090"
 ( cd /app/calculadora && exec /opt/motor/bin/python -m uvicorn servico:app \
     --host 127.0.0.1 --port 8090 ) &
 MOTOR_PID=$!
+
+# UM worker aqui também: o SQLite é aberto por requisição e o cache de entes
+# vive em memória do processo.
+echo "[start] booting alfred on :8610"
+( cd /app/alfred && exec /opt/alfred/bin/python -m uvicorn servico:app \
+    --host 127.0.0.1 --port 8610 ) &
+ALFRED_PID=$!
 
 echo "[start] booting backend on :8080"
 ( cd /app/backend && PORT=8080 node dist/index.js ) &
@@ -25,5 +51,5 @@ FRONTEND_PID=$!
 wait -n 2>/dev/null || wait
 EXIT=$?
 echo "[start] a process exited (code $EXIT); shutting down"
-kill "$MOTOR_PID" "$BACKEND_PID" "$FRONTEND_PID" 2>/dev/null || true
+kill "$MOTOR_PID" "$ALFRED_PID" "$BACKEND_PID" "$FRONTEND_PID" 2>/dev/null || true
 exit "$EXIT"

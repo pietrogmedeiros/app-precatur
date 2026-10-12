@@ -29,3 +29,6 @@ calculadora/.venv
 __pycache__/
 *.pyc
 .pytest_cache/
+# Alfred: o banco (308 MB) mora em volume, não no git; os seeds ficam em data-seed/.
+alfred/.venv
+alfred/data/

@@ -1,0 +1,678 @@
+{
+ "3201605": {
+  "municipio": "Conceição da Barra",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000075-58.2021.4.02.9333",
+    "ano": 2022,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 13632549.3
+   }
+  ],
+  "total": 13632549.3,
+  "total_ate2026": 13632549.3
+ },
+ "3205309": {
+  "municipio": "Vitória",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000135-26.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 81272.51
+   },
+   {
+    "pos": 2,
+    "num": "5000153-47.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 63347.97
+   },
+   {
+    "pos": 3,
+    "num": "5000499-61.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 1389474.29
+   }
+  ],
+  "total": 1534094.77,
+  "total_ate2026": 144620.48
+ },
+ "3204054": {
+  "municipio": "Pedro Canário",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000075-24.2022.4.02.9333",
+    "ano": 2024,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 1305146.43
+   }
+  ],
+  "total": 1305146.43,
+  "total_ate2026": 1305146.43
+ },
+ "3205002": {
+  "municipio": "Serra",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000040-25.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 186064.49
+   }
+  ],
+  "total": 186064.49,
+  "total_ate2026": 0
+ },
+ "3200169": {
+  "municipio": "Água Doce do Norte",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000496-09.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 13638.62
+   }
+  ],
+  "total": 13638.62,
+  "total_ate2026": 0
+ },
+ "3200904": {
+  "municipio": "Barra de São Francisco",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000437-21.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 1741.87
+   }
+  ],
+  "total": 1741.87,
+  "total_ate2026": 0
+ },
+ "3201100": {
+  "municipio": "Bom Jesus do Norte",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000161-58.2023.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 329257.69
+   }
+  ],
+  "total": 329257.69,
+  "total_ate2026": 329257.69
+ },
+ "3201407": {
+  "municipio": "Castelo",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000504-83.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 9118.74
+   },
+   {
+    "pos": 2,
+    "num": "5000054-09.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 9987.27
+   },
+   {
+    "pos": 3,
+    "num": "5000054-09.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 4280.23
+   }
+  ],
+  "total": 23386.24,
+  "total_ate2026": 0
+ },
+ "3201209": {
+  "municipio": "Cachoeiro de Itapemirim",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000371-41.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 32216.99
+   },
+   {
+    "pos": 1,
+    "num": "5000422-52.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Sim",
+    "prio": false,
+    "val": 11456.86
+   },
+   {
+    "pos": 2,
+    "num": "5000501-31.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 30772.04
+   },
+   {
+    "pos": 2,
+    "num": "5000055-91.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Não",
+    "prio": false,
+    "val": 76670.92
+   }
+  ],
+  "total": 151116.81,
+  "total_ate2026": 0
+ },
+ "3201308": {
+  "municipio": "Cariacica",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000133-90.2023.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 23398.4
+   },
+   {
+    "pos": 2,
+    "num": "5000147-74.2023.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 1102211.91
+   },
+   {
+    "pos": 3,
+    "num": "5000165-61.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 41099.87
+   }
+  ],
+  "total": 1166710.18,
+  "total_ate2026": 1166710.18
+ },
+ "3203007": {
+  "municipio": "Iúna",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000429-44.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 28827.43
+   },
+   {
+    "pos": 2,
+    "num": "5000428-59.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 268871.42
+   }
+  ],
+  "total": 297698.85,
+  "total_ate2026": 0
+ },
+ "3205036": {
+  "municipio": "Vargem Alta",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000008-88.2024.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 0.0
+   }
+  ],
+  "total": 0.0,
+  "total_ate2026": 0.0
+ },
+ "3205176": {
+  "municipio": "Vila Valério",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000180-64.2023.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 16276.46
+   }
+  ],
+  "total": 16276.46,
+  "total_ate2026": 16276.46
+ },
+ "3203056": {
+  "municipio": "Jaguaré",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000104-06.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 28306.45
+   },
+   {
+    "pos": 2,
+    "num": "5000430-29.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 164272.81
+   },
+   {
+    "pos": 3,
+    "num": "5000431-14.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 164272.81
+   }
+  ],
+  "total": 356852.07,
+  "total_ate2026": 28306.45
+ },
+ "3203106": {
+  "municipio": "Jerônimo Monteiro",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000177-75.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 96107.67
+   },
+   {
+    "pos": 2,
+    "num": "5000231-41.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 99144.55
+   },
+   {
+    "pos": 3,
+    "num": "5000174-23.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 256287.24
+   },
+   {
+    "pos": 4,
+    "num": "5000174-23.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 64071.8
+   },
+   {
+    "pos": 5,
+    "num": "5000175-08.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 256287.24
+   },
+   {
+    "pos": 6,
+    "num": "5000175-08.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 64071.8
+   },
+   {
+    "pos": 7,
+    "num": "5000176-90.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 256287.24
+   },
+   {
+    "pos": 8,
+    "num": "5000176-90.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 64071.8
+   },
+   {
+    "pos": 9,
+    "num": "5000228-86.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 245316.43
+   },
+   {
+    "pos": 10,
+    "num": "5000228-86.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 61329.1
+   },
+   {
+    "pos": 11,
+    "num": "5000229-71.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 268770.37
+   },
+   {
+    "pos": 12,
+    "num": "5000229-71.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 67192.59
+   },
+   {
+    "pos": 13,
+    "num": "5000230-56.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 286447.15
+   },
+   {
+    "pos": 14,
+    "num": "5000230-56.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 71611.78
+   }
+  ],
+  "total": 2156996.76,
+  "total_ate2026": 2156996.76
+ },
+ "3204807": {
+  "municipio": "São José do Calçado",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000097-43.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 7246.23
+   },
+   {
+    "pos": 2,
+    "num": "5000097-43.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 3105.53
+   },
+   {
+    "pos": 3,
+    "num": "5000098-28.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 7246.23
+   },
+   {
+    "pos": 4,
+    "num": "5000098-28.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 3105.53
+   },
+   {
+    "pos": 5,
+    "num": "5000099-13.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 7246.23
+   },
+   {
+    "pos": 6,
+    "num": "5000099-13.2026.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 3105.53
+   }
+  ],
+  "total": 31055.28,
+  "total_ate2026": 0
+ },
+ "3204906": {
+  "municipio": "São Mateus",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000416-45.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 36041.49
+   }
+  ],
+  "total": 36041.49,
+  "total_ate2026": 0
+ },
+ "3204955": {
+  "municipio": "São Roque do Canaã",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000114-50.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 185.64
+   }
+  ],
+  "total": 185.64,
+  "total_ate2026": 185.64
+ },
+ "3205010": {
+  "municipio": "Sooretama",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000226-82.2025.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 61827.59
+   },
+   {
+    "pos": 2,
+    "num": "5000128-34.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 591678.68
+   }
+  ],
+  "total": 653506.27,
+  "total_ate2026": 653506.27
+ },
+ "3205200": {
+  "municipio": "Vila Velha",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000105-88.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 2860437.37
+   },
+   {
+    "pos": 2,
+    "num": "5000175-71.2025.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 413952.23
+   },
+   {
+    "pos": 3,
+    "num": "5000488-32.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 66014.72
+   },
+   {
+    "pos": 4,
+    "num": "5000565-41.2025.4.02.9333",
+    "ano": 2027,
+    "elig": false,
+    "nat": "Comum",
+    "prio": false,
+    "val": 1638736.8
+   }
+  ],
+  "total": 4979141.12,
+  "total_ate2026": 3274389.6
+ },
+ "3202405": {
+  "municipio": "Guarapari",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000077-57.2023.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 337957.33
+   },
+   {
+    "pos": 1,
+    "num": "5000088-52.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 113984.74
+   },
+   {
+    "pos": 3,
+    "num": "5000238-33.2024.4.02.9333",
+    "ano": 2026,
+    "elig": true,
+    "nat": "Alimentar",
+    "prio": false,
+    "val": 130105.65
+   }
+  ],
+  "total": 582047.72,
+  "total_ate2026": 582047.72
+ },
+ "3203809": {
+  "municipio": "Muqui",
+  "fila": [
+   {
+    "pos": 1,
+    "num": "5000068-61.2024.4.02.9333",
+    "ano": 2025,
+    "elig": true,
+    "nat": "Comum",
+    "prio": false,
+    "val": 8290.98
+   }
+  ],
+  "total": 8290.98,
+  "total_ate2026": 8290.98
+ }
+}

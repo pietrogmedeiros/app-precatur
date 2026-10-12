@@ -1,0 +1,14 @@
+# Dependências do ALFRED como serviço dentro do App Precatur.
+#
+# O núcleo de consulta (alfred_core, modelo_p23, db_mapa, db_nacp) é stdlib puro
+# + sqlite3. O que entra aqui é o servidor HTTP e o gerador do parecer em PDF.
+#
+# NÃO entram as dependências dos coletores (DJEN, DataJud, tribunais): a
+# ingestão não roda neste contêiner. Ver LEIAME-EMBUTIDO.md.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+python-dotenv>=1.0
+
+# parecer em PDF (scripts/parecer_pdf.py)
+reportlab>=4.1

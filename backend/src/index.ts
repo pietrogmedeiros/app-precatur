@@ -16,6 +16,7 @@ import { calculoRouter } from "./routes/calculo";
 import { simulacoesRouter } from "./routes/simulacoes";
 import { bitrixRouter } from "./routes/bitrix";
 import { calculadoraRouter } from "./routes/calculadora";
+import { alfredRouter } from "./routes/alfred";
 import { requireAuth, requireAdmin, blockJuridico } from "./auth";
 
 dotenv.config();
@@ -79,6 +80,9 @@ app.use("/api/bitrix", requireAuth, blockJuridico, bitrixRouter);
 // SEM blockJuridico de propósito — esta é a ferramenta do jurídico; barrá-lo aqui
 // barraria justamente quem a usa o dia inteiro.
 app.use("/api/calculadora", requireAuth, calculadoraRouter);
+// Alfred — consulta da base de precatórios. Sem blockJuridico: é ferramenta
+// de análise, e o papel do Alfred (quem vê CPF inteiro) é resolvido na rota.
+app.use("/api/alfred", requireAuth, alfredRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {

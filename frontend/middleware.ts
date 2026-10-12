@@ -28,8 +28,8 @@ export function middleware(req: NextRequest) {
   // Jurídico acessa o mural, a Precificação e a Pré-Análise (a API aplica a
   // mesma regra). A Pré-Análise entra porque é a ferramenta DELE: barrá-la aqui
   // barraria justamente quem a usa o dia inteiro.
-  const juridicoOk = ["/mural", "/precificacao", "/pre-analise", "/enviar", "/calcular",
-                      "/recuperar", "/redefinir"];
+  const juridicoOk = ["/mural", "/precificacao", "/pre-analise", "/alfred", "/enviar",
+                      "/calcular", "/recuperar", "/redefinir"];
   if (token && role === "juridico" && !juridicoOk.some((p) => pathname.startsWith(p))) {
     const url = req.nextUrl.clone();
     url.pathname = "/mural";

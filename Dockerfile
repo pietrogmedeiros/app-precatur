@@ -1,6 +1,7 @@
 # All-in-one image for EasyPanel (single App service).
 # Runs the Express backend (:8080, internal) + the Next.js frontend (:3000,
-# public) + o motor de cálculo em Python (:8090, interno). O frontend encaminha
+# public) + o motor de cálculo em Python (:8090) + o Alfred (:8610), ambos
+# internos. O frontend encaminha
 # /api/* para 127.0.0.1:8080 no mesmo contêiner, e o Express encaminha a
 # calculadora para 127.0.0.1:8090.
 # Only port 3000 is exposed; point your EasyPanel domain at it.
@@ -59,6 +60,15 @@ COPY calculadora/requisitos-servico.txt ./calculadora/requisitos-servico.txt
 RUN python3 -m venv /opt/motor \
  && /opt/motor/bin/pip install --no-cache-dir -r ./calculadora/requisitos-servico.txt
 COPY calculadora/ ./calculadora/
+
+# Alfred (consulta de precatórios) num venv próprio. O BANCO não vem na imagem:
+# são 308 MB que mudam sem o código mudar — ele mora no volume montado em
+# /app/alfred/data. Os CSVs pequenos que o núcleo lê vêm aqui em `data-seed/` e
+# o start.sh os copia para o volume quando faltarem.
+COPY alfred/requisitos-servico.txt ./alfred/requisitos-servico.txt
+RUN python3 -m venv /opt/alfred \
+ && /opt/alfred/bin/pip install --no-cache-dir -r ./alfred/requisitos-servico.txt
+COPY alfred/ ./alfred/
 
 COPY start.sh ./start.sh
 RUN chmod +x ./start.sh

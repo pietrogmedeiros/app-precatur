@@ -1,0 +1,169 @@
+{
+ "municipio": "Paraguaçu Paulista",
+ "uf": "SP",
+ "ibge": "3535507",
+ "regime": "Especial",
+ "rcl": 269783901.13,
+ "ano_rcl": "2025",
+ "pago_cnj_2025": 16650691.87,
+ "estoque": 64603398.39,
+ "n_fila": 504,
+ "mora": 44470369.39,
+ "n_mora": 215,
+ "prop_mora": 16.48,
+ "pct_p23": 1.5,
+ "teto_p23": 4046758.52,
+ "orc_fonte": "observado",
+ "banda": {
+  "conservador": 4046758.52,
+  "central": 16650691.87,
+  "otimista": 19148295.65
+ },
+ "perfil": {
+  "alimentar": 466,
+  "comum": 38,
+  "superpref": 57,
+  "suspenso": 4
+ },
+ "n_sp": 1,
+ "valor_sp": 17151751.96,
+ "superpref_ate": 57,
+ "alvos": [
+  {
+   "pos": 178,
+   "num": "0062450-65.2022.8.26.0500",
+   "ano": 2023,
+   "nat": "Comum",
+   "val": 2357313.09,
+   "cred": null,
+   "prio": false,
+   "ente": "MUNICÍPIO DE PARAGUAÇU PAULISTA",
+   "adv": "Carlo Rodrigo Crepaldi Lopes",
+   "autos": "0002014-69.2020.8.26.0417",
+   "superpreferencia": null,
+   "suspenso": false,
+   "sp": false,
+   "ano_previsto": 2026,
+   "p20": false,
+   "acum": 16563202.96,
+   "acum_bruto": 33714954.92,
+   "ano_prev": {
+    "conservador": 2034,
+    "central": 2027,
+    "otimista": 2026
+   },
+   "anos": {
+    "conservador": 4.1,
+    "central": 1.0,
+    "otimista": 0.9
+   }
+  },
+  {
+   "pos": 179,
+   "num": "0062452-35.2022.8.26.0500",
+   "ano": 2023,
+   "nat": "Comum",
+   "val": 2357313.06,
+   "cred": null,
+   "prio": false,
+   "ente": "MUNICÍPIO DE PARAGUAÇU PAULISTA",
+   "adv": "Carlo Rodrigo Crepaldi Lopes",
+   "autos": "0002014-69.2020.8.26.0417",
+   "superpreferencia": null,
+   "suspenso": false,
+   "sp": false,
+   "ano_previsto": 2027,
+   "p20": false,
+   "acum": 18920516.02,
+   "acum_bruto": 36072267.98,
+   "ano_prev": {
+    "conservador": 2034,
+    "central": 2027,
+    "otimista": 2027
+   },
+   "anos": {
+    "conservador": 4.7,
+    "central": 1.1,
+    "otimista": 1.0
+   }
+  },
+  {
+   "pos": 180,
+   "num": "0062455-87.2022.8.26.0500",
+   "ano": 2023,
+   "nat": "Comum",
+   "val": 2357313.05,
+   "cred": null,
+   "prio": false,
+   "ente": "MUNICÍPIO DE PARAGUAÇU PAULISTA",
+   "adv": "Carlo Rodrigo Crepaldi Lopes",
+   "autos": "0002014-69.2020.8.26.0417",
+   "superpreferencia": null,
+   "suspenso": false,
+   "sp": false,
+   "ano_previsto": 2027,
+   "p20": false,
+   "acum": 21277829.07,
+   "acum_bruto": 38429581.03,
+   "ano_prev": {
+    "conservador": 2035,
+    "central": 2027,
+    "otimista": 2027
+   },
+   "anos": {
+    "conservador": 5.3,
+    "central": 1.3,
+    "otimista": 1.1
+   }
+  },
+  {
+   "pos": 181,
+   "num": "0062459-27.2022.8.26.0500",
+   "ano": 2023,
+   "nat": "Comum",
+   "val": 2357313.04,
+   "cred": null,
+   "prio": false,
+   "ente": "MUNICÍPIO DE PARAGUAÇU PAULISTA",
+   "adv": "Carlo Rodrigo Crepaldi Lopes",
+   "autos": "0002014-69.2020.8.26.0417",
+   "superpreferencia": null,
+   "suspenso": false,
+   "sp": false,
+   "ano_previsto": 2027,
+   "p20": false,
+   "acum": 23635142.11,
+   "acum_bruto": 40786894.07,
+   "ano_prev": {
+    "conservador": 2036,
+    "central": 2027,
+    "otimista": 2027
+   },
+   "anos": {
+    "conservador": 5.8,
+    "central": 1.4,
+    "otimista": 1.2
+   }
+  }
+ ],
+ "val_alvo": 2357313.09,
+ "fator_atualizacao": 1.5663,
+ "data_base_lista": "07/08/2026",
+ "exercicio": 2026,
+ "oficio": {
+  "credor": "Maira Cristina Alcalde Monteiro",
+  "requisitorio": "0002014-69.2020.8.26.0417/04",
+  "conhecimento": "0003969-53.2011.8.26.0417",
+  "advogado": "Carlo Rodrigo Crepaldi Lopes",
+  "oab": "191.343/SP",
+  "valor_requisitado": 1505015.95,
+  "data_oficio": "09/03/2022",
+  "natureza_oficio": "Outras espécies — Demais desapropriações",
+  "natureza_credito": "Indenizatório",
+  "transito_conhecimento": "15/06/2021",
+  "ajuizamento": "20/07/2011",
+  "qtd_credores": 1,
+  "incontroverso": true,
+  "juizo": "3ª Vara do Foro de Paraguaçu Paulista"
+ }
+}

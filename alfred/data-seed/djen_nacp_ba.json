@@ -1,0 +1,7316 @@
+{
+ "uf": "BA",
+ "tribunal": "TJBA",
+ "orgao_id": 94109,
+ "janela": {
+  "de": "2026-01-01",
+  "ate": "2026-10-12"
+ },
+ "coletado_em": "2026-10-12",
+ "tabela_p23": {
+  "2026": {
+   "ano": 2026,
+   "fonte": {
+    "tipo": "tabela_p23",
+    "data": "2026-01-26",
+    "pa": "8023804-11.2021.8.05.0000",
+    "id_djen": 510705100
+   },
+   "entes": [
+    {
+     "devedor": "ABARÉ",
+     "mora_1jan": 4590601.32,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1014714.06,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2900207"
+    },
+    {
+     "devedor": "ACAJUTIBA",
+     "mora_1jan": 24100.95,
+     "pct_aplicado": 1.0,
+     "valor_anual": 24100.95,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2900306"
+    },
+    {
+     "devedor": "ADUSTINA",
+     "mora_1jan": 11121.9,
+     "pct_aplicado": 1.0,
+     "valor_anual": 11121.9,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2900355"
+    },
+    {
+     "devedor": "AMÉRICA DOURADA",
+     "mora_1jan": 2929307.02,
+     "pct_aplicado": 1.0,
+     "valor_anual": 975420.28,
+     "rateio": {
+      "TJ": 87.61,
+      "TRT": 12.39,
+      "TRF": 0.0
+     },
+     "ibge": "2901155"
+    },
+    {
+     "devedor": "ANDORINHA",
+     "mora_1jan": 21211.2,
+     "pct_aplicado": 1.0,
+     "valor_anual": 21211.2,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2901353"
+    },
+    {
+     "devedor": "ANGUERA",
+     "mora_1jan": 1738802.24,
+     "pct_aplicado": 1.0,
+     "valor_anual": 852004.5,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2901502"
+    },
+    {
+     "devedor": "ANTAS",
+     "mora_1jan": 91048.17,
+     "pct_aplicado": 1.0,
+     "valor_anual": 91048.17,
+     "rateio": {
+      "TJ": 48.96,
+      "TRT": 51.04,
+      "TRF": 0.0
+     },
+     "ibge": "2901601"
+    },
+    {
+     "devedor": "ANTÔNIO CARDOSO",
+     "mora_1jan": 151372.31,
+     "pct_aplicado": 1.0,
+     "valor_anual": 151372.31,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2901700"
+    },
+    {
+     "devedor": "APORÁ",
+     "mora_1jan": 3110895.96,
+     "pct_aplicado": 1.0,
+     "valor_anual": 940051.97,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2901908"
+    },
+    {
+     "devedor": "APUAREMA",
+     "mora_1jan": 2990656.74,
+     "pct_aplicado": 1.0,
+     "valor_anual": 417094.5,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2901957"
+    },
+    {
+     "devedor": "ARACATU",
+     "mora_1jan": 17621.34,
+     "pct_aplicado": 1.0,
+     "valor_anual": 17621.34,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2902005"
+    },
+    {
+     "devedor": "ARACI",
+     "mora_1jan": 270340.22,
+     "pct_aplicado": 1.0,
+     "valor_anual": 270340.22,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2902104"
+    },
+    {
+     "devedor": "ARATACA",
+     "mora_1jan": 372003.51,
+     "pct_aplicado": 1.0,
+     "valor_anual": 372003.51,
+     "rateio": {
+      "TJ": 91.35,
+      "TRT": 0.0,
+      "TRF": 8.65
+     },
+     "ibge": "2902252"
+    },
+    {
+     "devedor": "ARATUÍPE",
+     "mora_1jan": 327758.57,
+     "pct_aplicado": 1.0,
+     "valor_anual": 327758.57,
+     "rateio": {
+      "TJ": 43.57,
+      "TRT": 56.43,
+      "TRF": 0.0
+     },
+     "ibge": "2902302"
+    },
+    {
+     "devedor": "BAIANÓPOLIS",
+     "mora_1jan": 804061.01,
+     "pct_aplicado": 1.0,
+     "valor_anual": 804061.01,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2902500"
+    },
+    {
+     "devedor": "BARRA",
+     "mora_1jan": 1023778.21,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1023778.21,
+     "rateio": {
+      "TJ": 17.83,
+      "TRT": 82.17,
+      "TRF": 0.0
+     },
+     "ibge": "2902708"
+    },
+    {
+     "devedor": "BARRA DO ROCHA",
+     "mora_1jan": 1387410.48,
+     "pct_aplicado": 1.0,
+     "valor_anual": 375706.65,
+     "rateio": {
+      "TJ": 76.77,
+      "TRT": 0.0,
+      "TRF": 23.23
+     },
+     "ibge": "2903102"
+    },
+    {
+     "devedor": "BOM JESUS DA LAPA",
+     "mora_1jan": 4704546.77,
+     "pct_aplicado": 1.0,
+     "valor_anual": 3711555.42,
+     "rateio": {
+      "TJ": 16.95,
+      "TRT": 0.0,
+      "TRF": 83.05
+     },
+     "ibge": "2903904"
+    },
+    {
+     "devedor": "BOTUPORÃ",
+     "mora_1jan": 75569.0,
+     "pct_aplicado": 1.0,
+     "valor_anual": 75569.0,
+     "rateio": {
+      "TJ": 85.38,
+      "TRT": 14.62,
+      "TRF": 0.0
+     },
+     "ibge": "2904209"
+    },
+    {
+     "devedor": "BRUMADO",
+     "mora_1jan": 97685.44,
+     "pct_aplicado": 1.0,
+     "valor_anual": 97685.44,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2904605"
+    },
+    {
+     "devedor": "BURITIRAMA",
+     "mora_1jan": 235502.45,
+     "pct_aplicado": 1.0,
+     "valor_anual": 235502.45,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2904753"
+    },
+    {
+     "devedor": "CAÉM",
+     "mora_1jan": 789295.04,
+     "pct_aplicado": 1.0,
+     "valor_anual": 774328.25,
+     "rateio": {
+      "TJ": 11.11,
+      "TRT": 34.12,
+      "TRF": 54.77
+     },
+     "ibge": "2905107"
+    },
+    {
+     "devedor": "CAETANOS",
+     "mora_1jan": 627228.7,
+     "pct_aplicado": 1.0,
+     "valor_anual": 627228.7,
+     "rateio": {
+      "TJ": 33.23,
+      "TRT": 12.04,
+      "TRF": 54.73
+     },
+     "ibge": "2905156"
+    },
+    {
+     "devedor": "CAETITÉ",
+     "mora_1jan": 19048.49,
+     "pct_aplicado": 1.0,
+     "valor_anual": 19048.49,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2905206"
+    },
+    {
+     "devedor": "CAMPO ALEGRE DE LOURDES",
+     "mora_1jan": 697863.31,
+     "pct_aplicado": 1.0,
+     "valor_anual": 697863.31,
+     "rateio": {
+      "TJ": 77.37,
+      "TRT": 22.63,
+      "TRF": 0.0
+     },
+     "ibge": "2905909"
+    },
+    {
+     "devedor": "CAMPO FORMOSO",
+     "mora_1jan": 554637.61,
+     "pct_aplicado": 1.0,
+     "valor_anual": 554637.61,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2906006"
+    },
+    {
+     "devedor": "CANÁPOLIS",
+     "mora_1jan": 706940.31,
+     "pct_aplicado": 1.0,
+     "valor_anual": 543856.42,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2906105"
+    },
+    {
+     "devedor": "CANSANÇÃO",
+     "mora_1jan": 191540.87,
+     "pct_aplicado": 1.0,
+     "valor_anual": 191540.87,
+     "rateio": {
+      "TJ": 68.2,
+      "TRT": 31.8,
+      "TRF": 0.0
+     },
+     "ibge": "2906808"
+    },
+    {
+     "devedor": "CAPIM GROSSO",
+     "mora_1jan": 2451799.45,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1857797.54,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2906873"
+    },
+    {
+     "devedor": "CARDEAL DA SILVA",
+     "mora_1jan": 280953.46,
+     "pct_aplicado": 1.0,
+     "valor_anual": 280953.46,
+     "rateio": {
+      "TJ": 81.54,
+      "TRT": 0.0,
+      "TRF": 18.46
+     },
+     "ibge": "2907004"
+    },
+    {
+     "devedor": "CATU",
+     "mora_1jan": 845473.2,
+     "pct_aplicado": 1.0,
+     "valor_anual": 845473.2,
+     "rateio": {
+      "TJ": 91.03,
+      "TRT": 0.0,
+      "TRF": 8.97
+     },
+     "ibge": "2907509"
+    },
+    {
+     "devedor": "CENTRAL",
+     "mora_1jan": 52581.48,
+     "pct_aplicado": 1.0,
+     "valor_anual": 52581.48,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2907608"
+    },
+    {
+     "devedor": "CÍCERO DANTAS",
+     "mora_1jan": 1647291.39,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1617404.78,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2907806"
+    },
+    {
+     "devedor": "CIPÓ",
+     "mora_1jan": 2002273.79,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1740960.94,
+     "rateio": {
+      "TJ": 96.05,
+      "TRT": 3.95,
+      "TRF": 0.0
+     },
+     "ibge": "2907905"
+    },
+    {
+     "devedor": "CONCEIÇÃO DO JACUÍPE",
+     "mora_1jan": 2500763.02,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2500763.02,
+     "rateio": {
+      "TJ": 48.46,
+      "TRT": 51.54,
+      "TRF": 0.0
+     },
+     "ibge": "2908507"
+    },
+    {
+     "devedor": "CONSORCIO PUBLICO INTERFEDERATIVO DE SAUDE RECONV",
+     "mora_1jan": 108311.21,
+     "pct_aplicado": 1.0,
+     "valor_anual": 108311.21,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": null
+    },
+    {
+     "devedor": "CORAÇÃO DE MARIA",
+     "mora_1jan": 1123627.66,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1123627.66,
+     "rateio": {
+      "TJ": 18.19,
+      "TRT": 81.81,
+      "TRF": 0.0
+     },
+     "ibge": "2908903"
+    },
+    {
+     "devedor": "CRISTÓPOLIS",
+     "mora_1jan": 16803.54,
+     "pct_aplicado": 1.0,
+     "valor_anual": 16803.54,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2909703"
+    },
+    {
+     "devedor": "CRUZ DAS ALMAS",
+     "mora_1jan": 910570.35,
+     "pct_aplicado": 1.0,
+     "valor_anual": 910570.35,
+     "rateio": {
+      "TJ": 84.77,
+      "TRT": 15.23,
+      "TRF": 0.0
+     },
+     "ibge": "2909802"
+    },
+    {
+     "devedor": "DÁRIO MEIRA",
+     "mora_1jan": 38180.58,
+     "pct_aplicado": 1.0,
+     "valor_anual": 38180.58,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910008"
+    },
+    {
+     "devedor": "EMPRESA BAIANA DE AGUAS E SANEAMENTO S/A - EMBASA",
+     "mora_1jan": 4045731.81,
+     "pct_aplicado": 1.0,
+     "valor_anual": 4045731.81,
+     "rateio": {
+      "TJ": 50.65,
+      "TRT": 49.35,
+      "TRF": 0.0
+     },
+     "ibge": null
+    },
+    {
+     "devedor": "ENCRUZILHADA",
+     "mora_1jan": 544678.16,
+     "pct_aplicado": 1.0,
+     "valor_anual": 544678.16,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910404"
+    },
+    {
+     "devedor": "ENTRE RIOS",
+     "mora_1jan": 7607526.54,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2032225.17,
+     "rateio": {
+      "TJ": 93.91,
+      "TRT": 6.09,
+      "TRF": 0.0
+     },
+     "ibge": "2910503"
+    },
+    {
+     "devedor": "EUCLIDES DA CUNHA",
+     "mora_1jan": 11828020.67,
+     "pct_aplicado": 1.0,
+     "valor_anual": 3398258.65,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910701"
+    },
+    {
+     "devedor": "FÁTIMA",
+     "mora_1jan": 246965.61,
+     "pct_aplicado": 1.0,
+     "valor_anual": 246965.61,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910750"
+    },
+    {
+     "devedor": "FEIRA DA MATA",
+     "mora_1jan": 38182.03,
+     "pct_aplicado": 1.0,
+     "valor_anual": 38182.03,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910776"
+    },
+    {
+     "devedor": "FEIRA DE SANTANA",
+     "mora_1jan": 16151915.68,
+     "pct_aplicado": 1.0,
+     "valor_anual": 16151915.68,
+     "rateio": {
+      "TJ": 3.85,
+      "TRT": 96.15,
+      "TRF": 0.0
+     },
+     "ibge": "2910800"
+    },
+    {
+     "devedor": "FORMOSA DO RIO PRETO",
+     "mora_1jan": 921.4,
+     "pct_aplicado": 1.0,
+     "valor_anual": 921.4,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2911105"
+    },
+    {
+     "devedor": "GANDU",
+     "mora_1jan": 345503.53,
+     "pct_aplicado": 1.0,
+     "valor_anual": 345503.53,
+     "rateio": {
+      "TJ": 25.67,
+      "TRT": 74.33,
+      "TRF": 0.0
+     },
+     "ibge": "2911204"
+    },
+    {
+     "devedor": "GENTIO DO OURO",
+     "mora_1jan": 10011.38,
+     "pct_aplicado": 1.0,
+     "valor_anual": 10011.38,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2911303"
+    },
+    {
+     "devedor": "GLÓRIA",
+     "mora_1jan": 514071.32,
+     "pct_aplicado": 1.0,
+     "valor_anual": 514071.32,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2911402"
+    },
+    {
+     "devedor": "GUANAMBI",
+     "mora_1jan": 304782.83,
+     "pct_aplicado": 1.0,
+     "valor_anual": 304782.83,
+     "rateio": {
+      "TJ": 71.29,
+      "TRT": 28.71,
+      "TRF": 0.0
+     },
+     "ibge": "2911709"
+    },
+    {
+     "devedor": "HELIÓPOLIS",
+     "mora_1jan": 725142.42,
+     "pct_aplicado": 1.0,
+     "valor_anual": 725142.42,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2911857"
+    },
+    {
+     "devedor": "IBICOARA",
+     "mora_1jan": 3410958.98,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1407972.59,
+     "rateio": {
+      "TJ": 98.61,
+      "TRT": 1.39,
+      "TRF": 0.0
+     },
+     "ibge": "2912202"
+    },
+    {
+     "devedor": "IBICUÍ",
+     "mora_1jan": 1061770.02,
+     "pct_aplicado": 1.0,
+     "valor_anual": 643209.12,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2912301"
+    },
+    {
+     "devedor": "IBIPITANGA",
+     "mora_1jan": 560743.44,
+     "pct_aplicado": 1.0,
+     "valor_anual": 560743.44,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2912509"
+    },
+    {
+     "devedor": "IBIRATAIA",
+     "mora_1jan": 24649.32,
+     "pct_aplicado": 1.0,
+     "valor_anual": 24649.32,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2912905"
+    },
+    {
+     "devedor": "IBITITÁ",
+     "mora_1jan": 343548.65,
+     "pct_aplicado": 1.0,
+     "valor_anual": 343548.65,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2913101"
+    },
+    {
+     "devedor": "ICHU",
+     "mora_1jan": 98504.89,
+     "pct_aplicado": 1.0,
+     "valor_anual": 98504.89,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2913309"
+    },
+    {
+     "devedor": "IGUAÍ",
+     "mora_1jan": 188050.83,
+     "pct_aplicado": 1.0,
+     "valor_anual": 188050.83,
+     "rateio": {
+      "TJ": 89.57,
+      "TRT": 10.43,
+      "TRF": 0.0
+     },
+     "ibge": "2913507"
+    },
+    {
+     "devedor": "INHAMBUPE",
+     "mora_1jan": 613089.56,
+     "pct_aplicado": 1.0,
+     "valor_anual": 613089.56,
+     "rateio": {
+      "TJ": 78.76,
+      "TRT": 21.24,
+      "TRF": 0.0
+     },
+     "ibge": "2913705"
+    },
+    {
+     "devedor": "IPIAÚ",
+     "mora_1jan": 3124308.92,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1813956.63,
+     "rateio": {
+      "TJ": 80.55,
+      "TRT": 19.45,
+      "TRF": 0.0
+     },
+     "ibge": "2913903"
+    },
+    {
+     "devedor": "IRAJUBA",
+     "mora_1jan": 83977.72,
+     "pct_aplicado": 1.0,
+     "valor_anual": 83977.72,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2914208"
+    },
+    {
+     "devedor": "IRECÊ",
+     "mora_1jan": 2241879.36,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2241879.36,
+     "rateio": {
+      "TJ": 25.37,
+      "TRT": 74.63,
+      "TRF": 0.0
+     },
+     "ibge": "2914604"
+    },
+    {
+     "devedor": "ITABERABA",
+     "mora_1jan": 3023512.73,
+     "pct_aplicado": 1.0,
+     "valor_anual": 3023512.73,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2914703"
+    },
+    {
+     "devedor": "ITACARÉ",
+     "mora_1jan": 647094.11,
+     "pct_aplicado": 1.0,
+     "valor_anual": 647094.11,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2914901"
+    },
+    {
+     "devedor": "ITAGIBÁ",
+     "mora_1jan": 1153361.75,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1153361.75,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915205"
+    },
+    {
+     "devedor": "ITAGUAÇU DA BAHIA",
+     "mora_1jan": 56728.35,
+     "pct_aplicado": 1.0,
+     "valor_anual": 56728.35,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915353"
+    },
+    {
+     "devedor": "ITAMARI",
+     "mora_1jan": 783237.3,
+     "pct_aplicado": 1.0,
+     "valor_anual": 431226.97,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915700"
+    },
+    {
+     "devedor": "ITANAGRA",
+     "mora_1jan": 61379.81,
+     "pct_aplicado": 1.0,
+     "valor_anual": 61379.81,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915908"
+    },
+    {
+     "devedor": "ITANHÉM",
+     "mora_1jan": 323553.28,
+     "pct_aplicado": 1.0,
+     "valor_anual": 323553.28,
+     "rateio": {
+      "TJ": 37.45,
+      "TRT": 62.55,
+      "TRF": 0.0
+     },
+     "ibge": "2916005"
+    },
+    {
+     "devedor": "ITAPARICA",
+     "mora_1jan": 377438.02,
+     "pct_aplicado": 1.0,
+     "valor_anual": 377438.02,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2916104"
+    },
+    {
+     "devedor": "ITAPEBI",
+     "mora_1jan": 2519297.82,
+     "pct_aplicado": 1.0,
+     "valor_anual": 661900.27,
+     "rateio": {
+      "TJ": 0.05,
+      "TRT": 99.95,
+      "TRF": 0.0
+     },
+     "ibge": "2916302"
+    },
+    {
+     "devedor": "ITAPETINGA",
+     "mora_1jan": 17926754.86,
+     "pct_aplicado": 1.0,
+     "valor_anual": 3156547.9,
+     "rateio": {
+      "TJ": 92.46,
+      "TRT": 7.09,
+      "TRF": 0.44
+     },
+     "ibge": "2916401"
+    },
+    {
+     "devedor": "ITAQUARA",
+     "mora_1jan": 1330450.7,
+     "pct_aplicado": 1.0,
+     "valor_anual": 425468.39,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2916708"
+    },
+    {
+     "devedor": "ITARANTIM",
+     "mora_1jan": 3246074.15,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1064915.89,
+     "rateio": {
+      "TJ": 89.42,
+      "TRT": 10.58,
+      "TRF": 0.0
+     },
+     "ibge": "2916807"
+    },
+    {
+     "devedor": "ITIÚBA",
+     "mora_1jan": 308707.6,
+     "pct_aplicado": 1.0,
+     "valor_anual": 308707.6,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2917003"
+    },
+    {
+     "devedor": "ITUAÇU",
+     "mora_1jan": 1630004.55,
+     "pct_aplicado": 1.0,
+     "valor_anual": 996397.6,
+     "rateio": {
+      "TJ": 84.17,
+      "TRT": 15.83,
+      "TRF": 0.0
+     },
+     "ibge": "2917201"
+    },
+    {
+     "devedor": "ITUBERÁ",
+     "mora_1jan": 1898151.89,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1297154.34,
+     "rateio": {
+      "TJ": 39.16,
+      "TRT": 4.52,
+      "TRF": 56.33
+     },
+     "ibge": "2917300"
+    },
+    {
+     "devedor": "JAGUAQUARA",
+     "mora_1jan": 6797976.26,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2105982.35,
+     "rateio": {
+      "TJ": 99.86,
+      "TRT": 0.14,
+      "TRF": 0.0
+     },
+     "ibge": "2917607"
+    },
+    {
+     "devedor": "JAGUARIPE",
+     "mora_1jan": 39326.0,
+     "pct_aplicado": 1.0,
+     "valor_anual": 39326.0,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2917805"
+    },
+    {
+     "devedor": "JEQUIÉ",
+     "mora_1jan": 248657392.78,
+     "pct_aplicado": 2.5,
+     "valor_anual": 17286095.79,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2918001"
+    },
+    {
+     "devedor": "JEREMOABO",
+     "mora_1jan": 61818.46,
+     "pct_aplicado": 1.0,
+     "valor_anual": 61818.46,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2918100"
+    },
+    {
+     "devedor": "JUSSARA",
+     "mora_1jan": 32506.52,
+     "pct_aplicado": 1.0,
+     "valor_anual": 32506.52,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2918506"
+    },
+    {
+     "devedor": "JUSSIAPE",
+     "mora_1jan": 811278.6,
+     "pct_aplicado": 1.0,
+     "valor_anual": 358008.2,
+     "rateio": {
+      "TJ": 97.21,
+      "TRT": 2.79,
+      "TRF": 0.0
+     },
+     "ibge": "2918605"
+    },
+    {
+     "devedor": "LAJEDO DO TABOCAL",
+     "mora_1jan": 201309.23,
+     "pct_aplicado": 1.0,
+     "valor_anual": 201309.23,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919058"
+    },
+    {
+     "devedor": "LAMARÃO",
+     "mora_1jan": 12212620.26,
+     "pct_aplicado": 1.5,
+     "valor_anual": 743058.34,
+     "rateio": {
+      "TJ": 10.59,
+      "TRT": 89.41,
+      "TRF": 0.0
+     },
+     "ibge": "2919108"
+    },
+    {
+     "devedor": "LAURO DE FREITAS",
+     "mora_1jan": 53756.15,
+     "pct_aplicado": 1.0,
+     "valor_anual": 53756.15,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919207"
+    },
+    {
+     "devedor": "LICÍNIO DE ALMEIDA",
+     "mora_1jan": 164586.47,
+     "pct_aplicado": 1.0,
+     "valor_anual": 164586.47,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919405"
+    },
+    {
+     "devedor": "LIVRAMENTO DE NOSSA SENHORA",
+     "mora_1jan": 433804.68,
+     "pct_aplicado": 1.0,
+     "valor_anual": 433804.68,
+     "rateio": {
+      "TJ": 90.83,
+      "TRT": 9.17,
+      "TRF": 0.0
+     },
+     "ibge": "2919504"
+    },
+    {
+     "devedor": "LUÍS EDUARDO MAGALHÃES",
+     "mora_1jan": 847622.76,
+     "pct_aplicado": 1.0,
+     "valor_anual": 847622.76,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919553"
+    },
+    {
+     "devedor": "MACAÚBAS",
+     "mora_1jan": 23462.61,
+     "pct_aplicado": 1.0,
+     "valor_anual": 23462.61,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919801"
+    },
+    {
+     "devedor": "MACURURÉ",
+     "mora_1jan": 2548866.67,
+     "pct_aplicado": 1.0,
+     "valor_anual": 492300.95,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919900"
+    },
+    {
+     "devedor": "MAETINGA",
+     "mora_1jan": 93921.7,
+     "pct_aplicado": 1.0,
+     "valor_anual": 93921.7,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2919959"
+    },
+    {
+     "devedor": "MAIQUINIQUE",
+     "mora_1jan": 153632.43,
+     "pct_aplicado": 1.0,
+     "valor_anual": 153632.43,
+     "rateio": {
+      "TJ": 44.89,
+      "TRT": 55.11,
+      "TRF": 0.0
+     },
+     "ibge": "2920007"
+    },
+    {
+     "devedor": "MARAGOJIPE",
+     "mora_1jan": 68305.26,
+     "pct_aplicado": 1.0,
+     "valor_anual": 68305.26,
+     "rateio": {
+      "TJ": 37.64,
+      "TRT": 62.36,
+      "TRF": 0.0
+     },
+     "ibge": null
+    },
+    {
+     "devedor": "MARCIONÍLIO SOUZA",
+     "mora_1jan": 321726.74,
+     "pct_aplicado": 1.0,
+     "valor_anual": 321726.74,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2920809"
+    },
+    {
+     "devedor": "MASCOTE",
+     "mora_1jan": 40959.01,
+     "pct_aplicado": 1.0,
+     "valor_anual": 40959.01,
+     "rateio": {
+      "TJ": 40.19,
+      "TRT": 59.81,
+      "TRF": 0.0
+     },
+     "ibge": "2920908"
+    },
+    {
+     "devedor": "MEDEIROS NETO",
+     "mora_1jan": 676339.1,
+     "pct_aplicado": 1.0,
+     "valor_anual": 676339.1,
+     "rateio": {
+      "TJ": 20.69,
+      "TRT": 79.31,
+      "TRF": 0.0
+     },
+     "ibge": "2921104"
+    },
+    {
+     "devedor": "MIRANGABA",
+     "mora_1jan": 142996.48,
+     "pct_aplicado": 1.0,
+     "valor_anual": 142996.48,
+     "rateio": {
+      "TJ": 41.35,
+      "TRT": 12.86,
+      "TRF": 45.78
+     },
+     "ibge": "2921401"
+    },
+    {
+     "devedor": "MIRANTE",
+     "mora_1jan": 73678.76,
+     "pct_aplicado": 1.0,
+     "valor_anual": 73678.76,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2921450"
+    },
+    {
+     "devedor": "MONTE SANTO",
+     "mora_1jan": 526376.26,
+     "pct_aplicado": 1.0,
+     "valor_anual": 526376.26,
+     "rateio": {
+      "TJ": 52.58,
+      "TRT": 0.0,
+      "TRF": 47.42
+     },
+     "ibge": "2921500"
+    },
+    {
+     "devedor": "MUCURI",
+     "mora_1jan": 5278640.37,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2494146.18,
+     "rateio": {
+      "TJ": 88.39,
+      "TRT": 11.61,
+      "TRF": 0.0
+     },
+     "ibge": "2922003"
+    },
+    {
+     "devedor": "NOVA IBIÁ",
+     "mora_1jan": 132340.85,
+     "pct_aplicado": 1.0,
+     "valor_anual": 132340.85,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2922755"
+    },
+    {
+     "devedor": "NOVO HORIZONTE",
+     "mora_1jan": 138814.49,
+     "pct_aplicado": 1.0,
+     "valor_anual": 138814.49,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2923035"
+    },
+    {
+     "devedor": "OUROLÂNDIA",
+     "mora_1jan": 30967.31,
+     "pct_aplicado": 1.0,
+     "valor_anual": 30967.31,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2923357"
+    },
+    {
+     "devedor": "PARAMIRIM",
+     "mora_1jan": 10049524.61,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1204699.78,
+     "rateio": {
+      "TJ": 2.46,
+      "TRT": 97.54,
+      "TRF": 0.0
+     },
+     "ibge": "2923605"
+    },
+    {
+     "devedor": "PARATINGA",
+     "mora_1jan": 1457469.24,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1457469.24,
+     "rateio": {
+      "TJ": 16.56,
+      "TRT": 0.0,
+      "TRF": 83.44
+     },
+     "ibge": "2923704"
+    },
+    {
+     "devedor": "PAULO AFONSO",
+     "mora_1jan": 506979.08,
+     "pct_aplicado": 1.0,
+     "valor_anual": 506979.08,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2924009"
+    },
+    {
+     "devedor": "PIATÃ",
+     "mora_1jan": 167226.68,
+     "pct_aplicado": 1.0,
+     "valor_anual": 167226.68,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2924306"
+    },
+    {
+     "devedor": "PILÃO ARCADO",
+     "mora_1jan": 2891874.51,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1713516.71,
+     "rateio": {
+      "TJ": 17.1,
+      "TRT": 0.0,
+      "TRF": 82.9
+     },
+     "ibge": "2924405"
+    },
+    {
+     "devedor": "PINDAÍ",
+     "mora_1jan": 2097688.24,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1213153.52,
+     "rateio": {
+      "TJ": 29.35,
+      "TRT": 70.65,
+      "TRF": 0.0
+     },
+     "ibge": "2924504"
+    },
+    {
+     "devedor": "PINDOBAÇU",
+     "mora_1jan": 2075241.59,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1562361.7,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2924603"
+    },
+    {
+     "devedor": "PINTADAS",
+     "mora_1jan": 83824.21,
+     "pct_aplicado": 1.0,
+     "valor_anual": 83824.21,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2924652"
+    },
+    {
+     "devedor": "PLANALTINO",
+     "mora_1jan": 39851.0,
+     "pct_aplicado": 1.0,
+     "valor_anual": 39851.0,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2924900"
+    },
+    {
+     "devedor": "PRESIDENTE TANCREDO NEVES",
+     "mora_1jan": 309996.18,
+     "pct_aplicado": 1.0,
+     "valor_anual": 309996.18,
+     "rateio": {
+      "TJ": 72.97,
+      "TRT": 27.03,
+      "TRF": 0.0
+     },
+     "ibge": "2925758"
+    },
+    {
+     "devedor": "RAFAEL JAMBEIRO",
+     "mora_1jan": 3309714.14,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1017386.39,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2925956"
+    },
+    {
+     "devedor": "RETIROLÂNDIA",
+     "mora_1jan": 198095.88,
+     "pct_aplicado": 1.0,
+     "valor_anual": 198095.88,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2926103"
+    },
+    {
+     "devedor": "RIACHÃO DO JACUÍPE",
+     "mora_1jan": 10382446.65,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1435336.47,
+     "rateio": {
+      "TJ": 0.31,
+      "TRT": 99.69,
+      "TRF": 0.0
+     },
+     "ibge": "2926301"
+    },
+    {
+     "devedor": "RIACHO DE SANTANA",
+     "mora_1jan": 2329901.83,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1384127.87,
+     "rateio": {
+      "TJ": 95.2,
+      "TRT": 4.8,
+      "TRF": 0.0
+     },
+     "ibge": "2926400"
+    },
+    {
+     "devedor": "RIBEIRA DO AMPARO",
+     "mora_1jan": 2197421.92,
+     "pct_aplicado": 1.0,
+     "valor_anual": 991671.45,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2926509"
+    },
+    {
+     "devedor": "RIBEIRA DO POMBAL",
+     "mora_1jan": 95387.19,
+     "pct_aplicado": 1.0,
+     "valor_anual": 95387.19,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2926608"
+    },
+    {
+     "devedor": "RIO DE CONTAS",
+     "mora_1jan": 77678.68,
+     "pct_aplicado": 1.0,
+     "valor_anual": 77678.68,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2926707"
+    },
+    {
+     "devedor": "RUY BARBOSA",
+     "mora_1jan": 260873.21,
+     "pct_aplicado": 1.0,
+     "valor_anual": 260873.21,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2927200"
+    },
+    {
+     "devedor": "SANTA CRUZ CABRÁLIA",
+     "mora_1jan": 1211047.49,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1211047.49,
+     "rateio": {
+      "TJ": 86.76,
+      "TRT": 13.24,
+      "TRF": 0.0
+     },
+     "ibge": "2927705"
+    },
+    {
+     "devedor": "SANTA LUZIA",
+     "mora_1jan": 106962.12,
+     "pct_aplicado": 1.0,
+     "valor_anual": 106962.12,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2928059"
+    },
+    {
+     "devedor": "SANTA RITA DE CÁSSIA",
+     "mora_1jan": 7591321.09,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1411549.36,
+     "rateio": {
+      "TJ": 96.44,
+      "TRT": 3.56,
+      "TRF": 0.0
+     },
+     "ibge": "2928406"
+    },
+    {
+     "devedor": "SANTO ANTÔNIO DE JESUS",
+     "mora_1jan": 3067524.7,
+     "pct_aplicado": 1.0,
+     "valor_anual": 3067524.7,
+     "rateio": {
+      "TJ": 17.03,
+      "TRT": 82.97,
+      "TRF": 0.0
+     },
+     "ibge": "2928703"
+    },
+    {
+     "devedor": "SÃO DESIDÉRIO",
+     "mora_1jan": 466424.66,
+     "pct_aplicado": 1.0,
+     "valor_anual": 466424.66,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2928901"
+    },
+    {
+     "devedor": "SÃO JOSÉ DO JACUÍPE",
+     "mora_1jan": 266682.47,
+     "pct_aplicado": 1.0,
+     "valor_anual": 266682.47,
+     "rateio": {
+      "TJ": 93.82,
+      "TRT": 6.18,
+      "TRF": 0.0
+     },
+     "ibge": "2929370"
+    },
+    {
+     "devedor": "SÃO SEBASTIÃO DO PASSÉ",
+     "mora_1jan": 131254.92,
+     "pct_aplicado": 1.0,
+     "valor_anual": 131254.92,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2929503"
+    },
+    {
+     "devedor": "SAPEAÇU",
+     "mora_1jan": 76410.12,
+     "pct_aplicado": 1.0,
+     "valor_anual": 76410.12,
+     "rateio": {
+      "TJ": 55.42,
+      "TRT": 44.58,
+      "TRF": 0.0
+     },
+     "ibge": "2929602"
+    },
+    {
+     "devedor": "SENHOR DO BONFIM",
+     "mora_1jan": 248073.75,
+     "pct_aplicado": 1.0,
+     "valor_anual": 248073.75,
+     "rateio": {
+      "TJ": 84.02,
+      "TRT": 0.0,
+      "TRF": 15.98
+     },
+     "ibge": "2930105"
+    },
+    {
+     "devedor": "SERRA PRETA",
+     "mora_1jan": 1221375.61,
+     "pct_aplicado": 1.0,
+     "valor_anual": 988766.25,
+     "rateio": {
+      "TJ": 1.79,
+      "TRT": 98.21,
+      "TRF": 0.0
+     },
+     "ibge": "2930402"
+    },
+    {
+     "devedor": "SERRINHA",
+     "mora_1jan": 2826909.18,
+     "pct_aplicado": 1.0,
+     "valor_anual": 2826909.18,
+     "rateio": {
+      "TJ": 75.07,
+      "TRT": 0.0,
+      "TRF": 24.93
+     },
+     "ibge": "2930501"
+    },
+    {
+     "devedor": "SÍTIO DO QUINTO",
+     "mora_1jan": 445487.56,
+     "pct_aplicado": 1.0,
+     "valor_anual": 445487.56,
+     "rateio": {
+      "TJ": 90.4,
+      "TRT": 9.6,
+      "TRF": 0.0
+     },
+     "ibge": "2930766"
+    },
+    {
+     "devedor": "TANHAÇU",
+     "mora_1jan": 598125.91,
+     "pct_aplicado": 1.0,
+     "valor_anual": 598125.91,
+     "rateio": {
+      "TJ": 44.98,
+      "TRT": 55.02,
+      "TRF": 0.0
+     },
+     "ibge": "2931004"
+    },
+    {
+     "devedor": "TEOLÂNDIA",
+     "mora_1jan": 12345027.13,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1132961.77,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2931608"
+    },
+    {
+     "devedor": "TUCANO",
+     "mora_1jan": 1060812.65,
+     "pct_aplicado": 1.0,
+     "valor_anual": 1060812.65,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2931905"
+    },
+    {
+     "devedor": "UAUÁ",
+     "mora_1jan": 357735.48,
+     "pct_aplicado": 1.0,
+     "valor_anual": 357735.48,
+     "rateio": {
+      "TJ": 46.89,
+      "TRT": 10.34,
+      "TRF": 42.77
+     },
+     "ibge": "2932002"
+    },
+    {
+     "devedor": "UIBAÍ",
+     "mora_1jan": 2406915.83,
+     "pct_aplicado": 1.0,
+     "valor_anual": 828724.89,
+     "rateio": {
+      "TJ": 93.24,
+      "TRT": 6.76,
+      "TRF": 0.0
+     },
+     "ibge": "2932408"
+    },
+    {
+     "devedor": "UMBURANAS",
+     "mora_1jan": 137767.82,
+     "pct_aplicado": 1.0,
+     "valor_anual": 137767.82,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2932457"
+    },
+    {
+     "devedor": "VÁRZEA DA ROÇA",
+     "mora_1jan": 1222337.88,
+     "pct_aplicado": 1.0,
+     "valor_anual": 949973.68,
+     "rateio": {
+      "TJ": 89.13,
+      "TRT": 10.87,
+      "TRF": 0.0
+     },
+     "ibge": "2933059"
+    },
+    {
+     "devedor": "VÁRZEA NOVA",
+     "mora_1jan": 7080510.94,
+     "pct_aplicado": 1.0,
+     "valor_anual": 971609.78,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2933158"
+    },
+    {
+     "devedor": "VARZEDO",
+     "mora_1jan": 580126.17,
+     "pct_aplicado": 1.0,
+     "valor_anual": 580126.17,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2933174"
+    },
+    {
+     "devedor": "VERA CRUZ",
+     "mora_1jan": 832559.2,
+     "pct_aplicado": 1.0,
+     "valor_anual": 832559.2,
+     "rateio": {
+      "TJ": 99.9,
+      "TRT": 0.1,
+      "TRF": 0.0
+     },
+     "ibge": "2933208"
+    },
+    {
+     "devedor": "WENCESLAU GUIMARÃES",
+     "mora_1jan": 62763.49,
+     "pct_aplicado": 1.0,
+     "valor_anual": 62763.49,
+     "rateio": {
+      "TJ": 17.34,
+      "TRT": 82.66,
+      "TRF": 0.0
+     },
+     "ibge": "2933505"
+    },
+    {
+     "devedor": "XIQUE-XIQUE",
+     "mora_1jan": 597522.29,
+     "pct_aplicado": 1.0,
+     "valor_anual": 597522.29,
+     "rateio": {
+      "TJ": 2.27,
+      "TRT": 97.73,
+      "TRF": 0.0
+     },
+     "ibge": "2933604"
+    }
+   ]
+  }
+ },
+ "atos": [
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027683-60.2020.8.05.0000",
+   "id_djen": 500876503,
+   "ente": "MUNICIPIO DE CAATIBA",
+   "ibge": "2904803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027749-40.2020.8.05.0000",
+   "id_djen": 501057875,
+   "ente": "MUNICIPIO DE CANDEAL",
+   "ibge": "2906402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027751-10.2020.8.05.0000",
+   "id_djen": 501059011,
+   "ente": "MUNICIPIO DE CANUDOS",
+   "ibge": "2906824"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8026671-74.2021.8.05.0000",
+   "id_djen": 501060072,
+   "ente": "MUNICIPIO DE CARAIBAS",
+   "ibge": "2906899"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8026714-11.2021.8.05.0000",
+   "id_djen": 501062507,
+   "ente": "MUNICIPIO DE COTEGIPE",
+   "ibge": "2909406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 501063158,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8023687-20.2021.8.05.0000",
+   "id_djen": 501064488,
+   "ente": "MUNICIPIO DE FLORESTA AZUL",
+   "ibge": "2911006"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 501069188,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8007021-41.2021.8.05.0000",
+   "id_djen": 501069705,
+   "ente": "MUNICIPIO DE PE DE SERRA",
+   "ibge": "2924058"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8032053-82.2020.8.05.0000",
+   "id_djen": 501070577,
+   "ente": "MUNICIPIO DE PONTO NOVO",
+   "ibge": "2925253"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8026709-86.2021.8.05.0000",
+   "id_djen": 501071580,
+   "ente": "MUNICIPIO DE SAO FELIX",
+   "ibge": "2929008"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8028142-62.2020.8.05.0000",
+   "id_djen": 501072100,
+   "ente": "MUNICIPIO DE SAO JOSE DA VITORIA",
+   "ibge": "2929354"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027809-13.2020.8.05.0000",
+   "id_djen": 501072507,
+   "ente": "MUNICIPIO DE SATIRO DIAS",
+   "ibge": "2929701"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8023662-07.2021.8.05.0000",
+   "id_djen": 501073529,
+   "ente": "MUNICIPIO DE SIMOES FILHO",
+   "ibge": "2930709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 501074391,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027817-87.2020.8.05.0000",
+   "id_djen": 501075212,
+   "ente": "MUNICIPIO DE URANDI",
+   "ibge": "2932606"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-13",
+   "pa": "8027818-72.2020.8.05.0000",
+   "id_djen": 501075864,
+   "ente": "MUNICIPIO DE VARZEA DO POCO",
+   "ibge": "2933109"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-16",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 503526481,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-28",
+   "pa": "8031995-79.2020.8.05.0000",
+   "id_djen": 513510694,
+   "ente": "MUNICIPIO DE EUNAPOLIS",
+   "ibge": "2910727"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-01-28",
+   "pa": "8032069-36.2020.8.05.0000",
+   "id_djen": 513511155,
+   "ente": "MUNICIPIO DE VALENCA",
+   "ibge": "2932903"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8075309-02.2025.8.05.0000",
+   "id_djen": 556649916,
+   "ente": "MUNICIPIO DE NOVA CANAA",
+   "ibge": "2922706",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8023690-72.2021.8.05.0000",
+   "id_djen": 556649953,
+   "ente": "MUNICIPIO DE ITAMARAJU",
+   "ibge": "2915601",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038697-07.2021.8.05.0000",
+   "id_djen": 556649989,
+   "ente": "MUNICIPIO DE BANZAE",
+   "ibge": "2902658",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027788-37.2020.8.05.0000",
+   "id_djen": 556650061,
+   "ente": "MUNICIPIO DE IBIRAPUA",
+   "ibge": "2912806",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8020697-56.2021.8.05.0000",
+   "id_djen": 556650092,
+   "ente": "MUNICIPIO DE CANDIBA",
+   "ibge": "2906600",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8064315-80.2023.8.05.0000",
+   "id_djen": 556650128,
+   "ente": "SERVICO AUTONOMO DE AGUA E ESGOTO",
+   "ibge": null,
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8047017-12.2022.8.05.0000",
+   "id_djen": 556650157,
+   "ente": "MUNICIPIO DE MUQUEM DO SAO FRANCISCO",
+   "ibge": "2922250",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-12",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 556743214,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027820-42.2020.8.05.0000",
+   "id_djen": 556794869,
+   "ente": "MUNICIPIO DE VITORIA DA CONQUISTA",
+   "ibge": "2933307",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8039781-43.2021.8.05.0000",
+   "id_djen": 556794893,
+   "ente": "MUNICIPIO DE RIO DO PIRES",
+   "ibge": "2926905",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038916-20.2021.8.05.0000",
+   "id_djen": 556794907,
+   "ente": "MUNICIPIO DE PEDRO ALEXANDRE",
+   "ibge": "2924207",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8015121-48.2022.8.05.0000",
+   "id_djen": 556794927,
+   "ente": "MUNICIPIO DE CARINHANHA",
+   "ibge": "2907103",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8024831-58.2023.8.05.0000",
+   "id_djen": 556794943,
+   "ente": "MUNICIPIO DE WANDERLEY",
+   "ibge": "2933455",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027497-03.2021.8.05.0000",
+   "id_djen": 556795013,
+   "ente": "MUNICIPIO DE TAPEROA",
+   "ibge": "2931202",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8010658-63.2022.8.05.0000",
+   "id_djen": 556795023,
+   "ente": "MUNICIPIO DE SAO FELIPE",
+   "ibge": "2929107",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027812-65.2020.8.05.0000",
+   "id_djen": 556795045,
+   "ente": "MUNICIPIO DE TABOCAS DO BREJO VELHO",
+   "ibge": "2930907",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8020693-19.2021.8.05.0000",
+   "id_djen": 556795059,
+   "ente": "MUNICIPIO DE OLINDINA",
+   "ibge": "2923100",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8013686-39.2022.8.05.0000",
+   "id_djen": 556795069,
+   "ente": "MUNICIPIO DE NAZARE",
+   "ibge": "2922508",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8004871-53.2022.8.05.0000",
+   "id_djen": 556795080,
+   "ente": "MUNICÍPIO DE LAJEDINHO",
+   "ibge": "2919009",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038842-63.2021.8.05.0000",
+   "id_djen": 556795094,
+   "ente": "MUNICIPIO DE ITAETE",
+   "ibge": "2915007",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027754-62.2020.8.05.0000",
+   "id_djen": 556795115,
+   "ente": "MUNICIPIO DE CORONEL JOAO SA",
+   "ibge": "2909208",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8032051-73.2024.8.05.0000",
+   "id_djen": 556821060,
+   "ente": "MUNICIPIO DE JABORANDI",
+   "ibge": "2917359",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038729-12.2021.8.05.0000",
+   "id_djen": 556821072,
+   "ente": "MUNICIPIO DE CORRENTINA",
+   "ibge": "2909307",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038678-98.2021.8.05.0000",
+   "id_djen": 556821088,
+   "ente": "MUNICIPIO DE CORDEIROS",
+   "ibge": "2909000",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038753-40.2021.8.05.0000",
+   "id_djen": 556821117,
+   "ente": "MUNICIPIO DE BARRA DO CHOCA",
+   "ibge": "2902906",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8027753-77.2020.8.05.0000",
+   "id_djen": 556821130,
+   "ente": "MUNICIPIO DE CATURAMA",
+   "ibge": "2907558",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8032206-76.2024.8.05.0000",
+   "id_djen": 556821145,
+   "ente": "MUNICIPIO DE CRISOPOLIS",
+   "ibge": "2909604",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-03-12",
+   "pa": "8038770-76.2021.8.05.0000",
+   "id_djen": 556821183,
+   "ente": "MUNICIPIO DE AIQUARA",
+   "ibge": "2900603",
+   "situacao": "REGULAR",
+   "ano_plano": null
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 557305745,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 557306033,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8031931-30.2024.8.05.0000",
+   "id_djen": 557306278,
+   "ente": "MUNICIPIO DE ITARANTIM",
+   "ibge": "2916807"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 557306518,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8003772-48.2022.8.05.0000",
+   "id_djen": 557306817,
+   "ente": "MUNICIPIO DE MASCOTE",
+   "ibge": "2920908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 557307108,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-13",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 557307456,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-26",
+   "pa": "8032069-36.2020.8.05.0000",
+   "id_djen": 569676495,
+   "ente": "MUNICIPIO DE VALENCA",
+   "ibge": "2932903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-26",
+   "pa": "8027791-89.2020.8.05.0000",
+   "id_djen": 569695284,
+   "ente": "MUNICIPIO DE ITIRUCU",
+   "ibge": "2916906"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-26",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 569703433,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-26",
+   "pa": "8038663-32.2021.8.05.0000",
+   "id_djen": 569704876,
+   "ente": "MUNICIPIO DE CIPO",
+   "ibge": "2907905"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-03-26",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 569711779,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-07",
+   "pa": "8027791-89.2020.8.05.0000",
+   "id_djen": 577747886,
+   "ente": "MUNICIPIO DE ITIRUCU",
+   "ibge": "2916906"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-07",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 577749971,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023653-45.2021.8.05.0000",
+   "id_djen": 583937093,
+   "ente": "MUNICIPIO DE BELMONTE",
+   "ibge": "2903409"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023468-07.2021.8.05.0000",
+   "id_djen": 584000506,
+   "ente": "MUNICIPIO DE CAMAMU",
+   "ibge": "2905800"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027466-80.2021.8.05.0000",
+   "id_djen": 584000543,
+   "ente": "MUNICIPIO DE BUERAREMA",
+   "ibge": "2904704"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8026688-13.2021.8.05.0000",
+   "id_djen": 584000582,
+   "ente": "MUNICIPIO DE PAU BRASIL",
+   "ibge": "2923902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023899-41.2021.8.05.0000",
+   "id_djen": 584000620,
+   "ente": "MUNICIPIO DE CANAVIEIRAS",
+   "ibge": "2906303"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8026714-11.2021.8.05.0000",
+   "id_djen": 584027512,
+   "ente": "MUNICIPIO DE COTEGIPE",
+   "ibge": "2909406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 584028093,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8032015-70.2020.8.05.0000",
+   "id_djen": 584029141,
+   "ente": "MUNICIPIO DE IBICARAI",
+   "ibge": "2912103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023931-75.2023.8.05.0000",
+   "id_djen": 584034897,
+   "ente": "MUNICíPIO DE ANDORINHA",
+   "ibge": "2901353"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 584035167,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 584036363,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8031776-27.2024.8.05.0000",
+   "id_djen": 584037317,
+   "ente": "MUNICIPIO DE ARACATU",
+   "ibge": "2902005"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8038660-77.2021.8.05.0000",
+   "id_djen": 584037940,
+   "ente": "MUNICIPIO DE CORACAO DE MARIA",
+   "ibge": "2908903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 584038495,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 584039525,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 584093239,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 584093246,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027500-55.2021.8.05.0000",
+   "id_djen": 584093251,
+   "ente": "MUNICIPIO DE IBIRAPITANGA",
+   "ibge": "2912707"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8031986-20.2020.8.05.0000",
+   "id_djen": 584093258,
+   "ente": "MUNICIPIO DE CACHOEIRA",
+   "ibge": "2904902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023756-52.2021.8.05.0000",
+   "id_djen": 584093271,
+   "ente": "MUNICIPIO DE CASA NOVA",
+   "ibge": "2907202"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8028139-10.2020.8.05.0000",
+   "id_djen": 584216391,
+   "ente": "MUNICIPIO DE FIRMINO ALVES",
+   "ibge": "2910909"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 584292888,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8032022-62.2020.8.05.0000",
+   "id_djen": 584293567,
+   "ente": "MUNICIPIO DE ITAPE",
+   "ibge": "2916203"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8031931-30.2024.8.05.0000",
+   "id_djen": 584294978,
+   "ente": "MUNICIPIO DE ITARANTIM",
+   "ibge": "2916807"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023946-15.2021.8.05.0000",
+   "id_djen": 584295486,
+   "ente": "MUNICIPIO DE JUAZEIRO",
+   "ibge": "2918407"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8003772-48.2022.8.05.0000",
+   "id_djen": 584296093,
+   "ente": "MUNICIPIO DE MASCOTE",
+   "ibge": "2920908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027796-14.2020.8.05.0000",
+   "id_djen": 584296734,
+   "ente": "MUNICIPIO DE NOVA ITARANA",
+   "ibge": "2922805"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 584297233,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8026688-13.2021.8.05.0000",
+   "id_djen": 584297788,
+   "ente": "MUNICIPIO DE PAU BRASIL",
+   "ibge": "2923902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027804-88.2020.8.05.0000",
+   "id_djen": 584298245,
+   "ente": "MUNICIPIO DE QUEIMADAS",
+   "ibge": "2925808"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 584298661,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023951-37.2021.8.05.0000",
+   "id_djen": 584299143,
+   "ente": "MUNICIPIO DE REMANSO",
+   "ibge": "2926004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 584299620,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023797-19.2021.8.05.0000",
+   "id_djen": 584300019,
+   "ente": "MUNICIPIO DE SANTO AMARO",
+   "ibge": "2928604"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 584300531,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8023980-87.2021.8.05.0000",
+   "id_djen": 584301441,
+   "ente": "MUNICIPIO DE SENTO SE",
+   "ibge": "2930204"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 584301731,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 584302426,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8032069-36.2020.8.05.0000",
+   "id_djen": 584303217,
+   "ente": "MUNICIPIO DE VALENCA",
+   "ibge": "2932903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 584303865,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-14",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 584304964,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-23",
+   "pa": "8038663-32.2021.8.05.0000",
+   "id_djen": 591018251,
+   "ente": "MUNICIPIO DE CIPO",
+   "ibge": "2907905"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-24",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 592272437,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-04-24",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 592361300,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-05",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 601110082,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-05",
+   "pa": "8027791-89.2020.8.05.0000",
+   "id_djen": 601110807,
+   "ente": "MUNICIPIO DE ITIRUCU",
+   "ibge": "2916906"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-05",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 601111097,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-05",
+   "pa": "8032065-96.2020.8.05.0000",
+   "id_djen": 601111679,
+   "ente": "MUNICIPIO DE UBAITABA",
+   "ibge": "2932200"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-05",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 601113144,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 607700397,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 607701124,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 607701965,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8031776-27.2024.8.05.0000",
+   "id_djen": 607702550,
+   "ente": "MUNICIPIO DE ARACATU",
+   "ibge": "2902005"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038660-77.2021.8.05.0000",
+   "id_djen": 607703219,
+   "ente": "MUNICIPIO DE CORACAO DE MARIA",
+   "ibge": "2908903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 607703843,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 607704351,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 607704854,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 607705339,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8003772-48.2022.8.05.0000",
+   "id_djen": 607706000,
+   "ente": "MUNICIPIO DE MASCOTE",
+   "ibge": "2920908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 607706564,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 607707052,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 607708373,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-12",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 607709137,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-13",
+   "pa": "8031931-30.2024.8.05.0000",
+   "id_djen": 608516472,
+   "ente": "MUNICIPIO DE ITARANTIM",
+   "ibge": "2916807"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-05-14",
+   "pa": "8027749-40.2020.8.05.0000",
+   "id_djen": 610148853,
+   "ente": "MUNICIPIO DE CANDEAL",
+   "ibge": "2906402",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038963-91.2021.8.05.0000",
+   "id_djen": 618032046,
+   "ente": "MUNICIPIO DE MONTE SANTO",
+   "ibge": "2921500",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038934-41.2021.8.05.0000",
+   "id_djen": 618033620,
+   "ente": "MUNICIPIO DE PINDAI",
+   "ibge": "2924504",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8027757-17.2020.8.05.0000",
+   "id_djen": 618035854,
+   "ente": "MUNICIPIO DE DARIO MEIRA",
+   "ibge": "2910008",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038932-71.2021.8.05.0000",
+   "id_djen": 618042921,
+   "ente": "MUNICIPIO DE ITAPARICA",
+   "ibge": "2916104",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8044104-91.2021.8.05.0000",
+   "id_djen": 618046540,
+   "ente": "MUNICIPIO DE FATIMA",
+   "ibge": "2910750",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8003918-89.2022.8.05.0000",
+   "id_djen": 618048491,
+   "ente": "MUNICIPIO DE CANDEIAS",
+   "ibge": "2906501",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8020690-64.2021.8.05.0000",
+   "id_djen": 618050251,
+   "ente": "MUNICIPIO DE NOVA VICOSA",
+   "ibge": "2923001",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8032056-95.2024.8.05.0000",
+   "id_djen": 618053867,
+   "ente": "MUNICIPIO DE MORTUGABA",
+   "ibge": "2921807",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039776-21.2021.8.05.0000",
+   "id_djen": 618055150,
+   "ente": "MUNICIPIO DE SAO GABRIEL",
+   "ibge": "2929255",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039213-27.2021.8.05.0000",
+   "id_djen": 618055924,
+   "ente": "MUNICIPIO DE SANTALUZ",
+   "ibge": "2928000",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038717-95.2021.8.05.0000",
+   "id_djen": 618057575,
+   "ente": "MUNICIPIO DE BOQUIRA",
+   "ibge": "2904100",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023936-97.2023.8.05.0000",
+   "id_djen": 618059886,
+   "ente": "MUNICIPIO DE IBIPITANGA",
+   "ibge": "2912509",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8015236-30.2026.8.05.0000",
+   "id_djen": 618062497,
+   "ente": "MUNICIPIO DE BARRA DA ESTIVA",
+   "ibge": "2902807",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8028185-23.2025.8.05.0000",
+   "id_djen": 618064620,
+   "ente": "MUNICIPIO DE CAPELA DO ALTO ALEGRE",
+   "ibge": "2906857",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8063331-62.2024.8.05.0000",
+   "id_djen": 618066454,
+   "ente": "MUNICIPIO DE CAIRU",
+   "ibge": "2905404",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039209-87.2021.8.05.0000",
+   "id_djen": 618069207,
+   "ente": "MUNICIPIO DE RUY BARBOSA",
+   "ibge": "2927200",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8013680-32.2022.8.05.0000",
+   "id_djen": 618071144,
+   "ente": "MUNICIPIO DE MUCUGE",
+   "ibge": "2921906",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038941-33.2021.8.05.0000",
+   "id_djen": 618072387,
+   "ente": "MUNICIPIO DE PIRITIBA",
+   "ibge": "2924801",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038659-92.2021.8.05.0000",
+   "id_djen": 618073071,
+   "ente": "MUNICIPIO DE AMARGOSA",
+   "ibge": "2901007",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023675-06.2021.8.05.0000",
+   "id_djen": 618074085,
+   "ente": "MUNICIPIO DE AGUA FRIA",
+   "ibge": "2900405",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023778-13.2021.8.05.0000",
+   "id_djen": 618074872,
+   "ente": "MUNICIPIO DE UBATA",
+   "ibge": "2932309",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038747-33.2021.8.05.0000",
+   "id_djen": 618075446,
+   "ente": "MUNICIPIO DE BOM JESUS DA SERRA",
+   "ibge": "2903953",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038939-63.2021.8.05.0000",
+   "id_djen": 618076768,
+   "ente": "MUNICIPIO DE MARAU",
+   "ibge": "2920700",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038921-42.2021.8.05.0000",
+   "id_djen": 618079408,
+   "ente": "MUNICIPIO DE ITAMARI",
+   "ibge": "2915700",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8026832-16.2023.8.05.0000",
+   "id_djen": 618080050,
+   "ente": "MUNICIPIO DE FORMOSA DO RIO PRETO",
+   "ibge": "2911105",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8028135-70.2020.8.05.0000",
+   "id_djen": 618082366,
+   "ente": "MUNICIPIO DE CAPIM GROSSO",
+   "ibge": "2906873",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038811-43.2021.8.05.0000",
+   "id_djen": 618084455,
+   "ente": "MUNICIPIO DE CRUZ DAS ALMAS",
+   "ibge": "2909802",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038914-50.2021.8.05.0000",
+   "id_djen": 618085043,
+   "ente": "MUNICIPIO DE ITANHEM",
+   "ibge": "2916005",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023789-42.2021.8.05.0000",
+   "id_djen": 618107482,
+   "ente": "MUNICIPIO DE CAMPO ALEGRE DE LOURDES",
+   "ibge": "2905909",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038913-65.2021.8.05.0000",
+   "id_djen": 618113351,
+   "ente": "MUNICIPIO DE ITAPETINGA",
+   "ibge": "2916401",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8024839-35.2023.8.05.0000",
+   "id_djen": 618121449,
+   "ente": "MUNICIPIO DE VARZEA DA ROCA",
+   "ibge": "2933059",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8020657-74.2021.8.05.0000",
+   "id_djen": 618126576,
+   "ente": "MUNICIPIO DE BRUMADO",
+   "ibge": "2904605",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8020692-34.2021.8.05.0000",
+   "id_djen": 618128684,
+   "ente": "MUNICIPIO DE CAEM",
+   "ibge": "2905107",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038683-23.2021.8.05.0000",
+   "id_djen": 618129852,
+   "ente": "MUNICIPIO DE APUAREMA",
+   "ibge": "2901957",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039058-24.2021.8.05.0000",
+   "id_djen": 618131113,
+   "ente": "MUNICIPIO DE MACURURE",
+   "ibge": "2919900",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038922-27.2021.8.05.0000",
+   "id_djen": 618132137,
+   "ente": "MUNICIPIO DE MAIQUINIQUE",
+   "ibge": "2920007",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8040856-20.2021.8.05.0000",
+   "id_djen": 618171325,
+   "ente": "MUNICIPIO DE TREMEDAL",
+   "ibge": "2931806",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8047022-34.2022.8.05.0000",
+   "id_djen": 618172611,
+   "ente": "MUNICIPIO DE PIATA",
+   "ibge": "2924306",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8003769-93.2022.8.05.0000",
+   "id_djen": 618198451,
+   "ente": "MUNICIPIO DE MUNIZ FERREIRA",
+   "ibge": "2922201",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8027676-68.2020.8.05.0000",
+   "id_djen": 618199518,
+   "ente": "MUNICIPIO DE ADUSTINA",
+   "ibge": "2900355",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8031776-27.2024.8.05.0000",
+   "id_djen": 618200022,
+   "ente": "MUNICIPIO DE ARACATU",
+   "ibge": "2902005",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038918-87.2021.8.05.0000",
+   "id_djen": 618205810,
+   "ente": "MUNICIPIO DE LIVRAMENTO DE NOSSA SENHORA",
+   "ibge": "2919504",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8031478-98.2025.8.05.0000",
+   "id_djen": 618210636,
+   "ente": "MUNICIPIO DE JAGUARIPE",
+   "ibge": "2917805",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 618213148,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 618220891,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 618225117,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 618227512,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 618229812,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 618232395,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 618235472,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038751-70.2021.8.05.0000",
+   "id_djen": 618237940,
+   "ente": "MUNICIPIO DE BOM JESUS DA LAPA",
+   "ibge": "2903904",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 618240082,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8031931-30.2024.8.05.0000",
+   "id_djen": 618241520,
+   "ente": "MUNICIPIO DE ITARANTIM",
+   "ibge": "2916807",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 618242212,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038668-54.2021.8.05.0000",
+   "id_djen": 618242981,
+   "ente": "MUNICIPIO DE CAETANOS",
+   "ibge": "2905156",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8038725-72.2021.8.05.0000",
+   "id_djen": 618243612,
+   "ente": "MUNICIPIO DE CARDEAL DA SILVA",
+   "ibge": "2907004",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023751-30.2021.8.05.0000",
+   "id_djen": 618277632,
+   "ente": "MUNICIPIO DE TEOFILANDIA",
+   "ibge": "2931509",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023657-82.2021.8.05.0000",
+   "id_djen": 618278587,
+   "ente": "MUNICIPIO DE POCOES",
+   "ibge": "2925105",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8031986-20.2020.8.05.0000",
+   "id_djen": 618279609,
+   "ente": "MUNICIPIO DE CACHOEIRA",
+   "ibge": "2904902",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023653-45.2021.8.05.0000",
+   "id_djen": 618280539,
+   "ente": "MUNICIPIO DE BELMONTE",
+   "ibge": "2903409",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8026803-34.2021.8.05.0000",
+   "id_djen": 618282891,
+   "ente": "MUNICIPIO DE MUTUIPE",
+   "ibge": "2922409",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8026712-41.2021.8.05.0000",
+   "id_djen": 618284374,
+   "ente": "MUNICIPIO DE URUCUCA",
+   "ibge": "2932705",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8032039-98.2020.8.05.0000",
+   "id_djen": 618286073,
+   "ente": "MUNICIPIO DE ITORORO",
+   "ibge": "2917102",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023951-37.2021.8.05.0000",
+   "id_djen": 618287628,
+   "ente": "MUNICIPIO DE REMANSO",
+   "ibge": "2926004",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8027796-14.2020.8.05.0000",
+   "id_djen": 618289457,
+   "ente": "MUNICIPIO DE NOVA ITARANA",
+   "ibge": "2922805",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8026673-44.2021.8.05.0000",
+   "id_djen": 618292357,
+   "ente": "MUNICIPIO DE CANDIDO SALES",
+   "ibge": "2906709",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023662-07.2021.8.05.0000",
+   "id_djen": 618294843,
+   "ente": "MUNICIPIO DE SIMOES FILHO",
+   "ibge": "2930709",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8027791-89.2020.8.05.0000",
+   "id_djen": 618300958,
+   "ente": "MUNICIPIO DE ITIRUCU",
+   "ibge": "2916906",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8028139-10.2020.8.05.0000",
+   "id_djen": 618302956,
+   "ente": "MUNICIPIO DE FIRMINO ALVES",
+   "ibge": "2910909",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 618304807,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8028145-17.2020.8.05.0000",
+   "id_djen": 618306004,
+   "ente": "MUNICIPIO DE SERROLANDIA",
+   "ibge": "2930600",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8023487-13.2021.8.05.0000",
+   "id_djen": 618307361,
+   "ente": "MUNICIPIO DE JAGUARARI",
+   "ibge": "2917706",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-22",
+   "pa": "8032022-62.2020.8.05.0000",
+   "id_djen": 618308763,
+   "ente": "MUNICIPIO DE ITAPE",
+   "ibge": "2916203",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-25",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 618775223,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507"
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8028191-30.2025.8.05.0000",
+   "id_djen": 618837467,
+   "ente": "MUNICIPIO DE DIAS DAVILA",
+   "ibge": null,
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 618837473,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038908-43.2021.8.05.0000",
+   "id_djen": 618837476,
+   "ente": "MUNICIPIO DE ITUBERA",
+   "ibge": "2917300",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 618837485,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038713-58.2021.8.05.0000",
+   "id_djen": 618840373,
+   "ente": "MUNICIPIO DE BARRA DO ROCHA",
+   "ibge": "2903102",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 618840410,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8028149-54.2020.8.05.0000",
+   "id_djen": 618840440,
+   "ente": "MUNICIPIO DE TEOLANDIA",
+   "ibge": "2931608",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038771-61.2021.8.05.0000",
+   "id_djen": 618840462,
+   "ente": "MUNICIPIO DE ARACI",
+   "ibge": "2902104",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8032001-86.2020.8.05.0000",
+   "id_djen": 618840493,
+   "ente": "MUNICIPIO DE GENTIO DO OURO",
+   "ibge": "2911303",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038938-78.2021.8.05.0000",
+   "id_djen": 618840516,
+   "ente": "MUNICIPIO DE LUIS EDUARDO MAGALHAES",
+   "ibge": "2919553",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038949-10.2021.8.05.0000",
+   "id_djen": 618840547,
+   "ente": "MUNICIPIO DE MIRANGABA",
+   "ibge": "2921401",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038776-83.2021.8.05.0000",
+   "id_djen": 618840591,
+   "ente": "MUNICIPIO DE ABARE",
+   "ibge": "2900207",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038961-24.2021.8.05.0000",
+   "id_djen": 618840637,
+   "ente": "MUNICIPIO DE NOVA IBIA",
+   "ibge": "2922755",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8044102-24.2021.8.05.0000",
+   "id_djen": 618840679,
+   "ente": "MUNICIPIO DE TEIXEIRA DE FREITAS",
+   "ibge": "2931350",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8027820-42.2020.8.05.0000",
+   "id_djen": 618840719,
+   "ente": "MUNICIPIO DE VITORIA DA CONQUISTA",
+   "ibge": "2933307",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8039210-72.2021.8.05.0000",
+   "id_djen": 618840746,
+   "ente": "MUNICIPIO DE RIACHAO DAS NEVES",
+   "ibge": "2926202",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8032065-96.2020.8.05.0000",
+   "id_djen": 618936049,
+   "ente": "MUNICIPIO DE UBAITABA",
+   "ibge": "2932200",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8027500-55.2021.8.05.0000",
+   "id_djen": 618937743,
+   "ente": "MUNICIPIO DE IBIRAPITANGA",
+   "ibge": "2912707",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8023980-87.2021.8.05.0000",
+   "id_djen": 618942760,
+   "ente": "MUNICIPIO DE SENTO SE",
+   "ibge": "2930204",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8027749-40.2020.8.05.0000",
+   "id_djen": 618943896,
+   "ente": "MUNICIPIO DE CANDEAL",
+   "ibge": "2906402",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8023468-07.2021.8.05.0000",
+   "id_djen": 618945063,
+   "ente": "MUNICIPIO DE CAMAMU",
+   "ibge": "2905800",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8027804-88.2020.8.05.0000",
+   "id_djen": 618948612,
+   "ente": "MUNICIPIO DE QUEIMADAS",
+   "ibge": "2925808",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8026809-41.2021.8.05.0000",
+   "id_djen": 618951022,
+   "ente": "MUNICIPIO DE BARRO PRETO",
+   "ibge": "2903300",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8026671-74.2021.8.05.0000",
+   "id_djen": 618952178,
+   "ente": "MUNICIPIO DE CARAIBAS",
+   "ibge": "2906899",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8026709-86.2021.8.05.0000",
+   "id_djen": 618953981,
+   "ente": "MUNICIPIO DE SAO FELIX",
+   "ibge": "2929008",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8023746-08.2021.8.05.0000",
+   "id_djen": 618954890,
+   "ente": "MUNICIPIO DE ITAGIMIRIM",
+   "ibge": "2915304",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8032015-70.2020.8.05.0000",
+   "id_djen": 618956122,
+   "ente": "MUNICIPIO DE IBICARAI",
+   "ibge": "2912103",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 618962043,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8023500-12.2021.8.05.0000",
+   "id_djen": 618962071,
+   "ente": "MUNICIPIO DE RIO DO ANTONIO",
+   "ibge": "2926806",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8031982-80.2020.8.05.0000",
+   "id_djen": 618965281,
+   "ente": "MUNICIPIO DE AURELINO LEAL",
+   "ibge": "2902401",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038675-46.2021.8.05.0000",
+   "id_djen": 619292007,
+   "ente": "MUNICIPIO DE ANGICAL",
+   "ibge": "2901403",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 619297854,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038710-06.2021.8.05.0000",
+   "id_djen": 619306070,
+   "ente": "MUNICíPIO DE ARAMARI",
+   "ibge": "2902203",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8024867-66.2024.8.05.0000",
+   "id_djen": 619331505,
+   "ente": "MUNICIPIO DE AMELIA RODRIGUES",
+   "ibge": "2901106",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038792-37.2021.8.05.0000",
+   "id_djen": 619343644,
+   "ente": "MUNICIPIO DE CACULE",
+   "ibge": "2905008",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038697-07.2021.8.05.0000",
+   "id_djen": 619344626,
+   "ente": "MUNICIPIO DE BANZAE",
+   "ibge": "2902658",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-25",
+   "pa": "8038670-24.2021.8.05.0000",
+   "id_djen": 619346141,
+   "ente": "MUNICIPIO DE ARATACA",
+   "ibge": "2902252",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8037953-36.2026.8.05.0000",
+   "id_djen": 620171406,
+   "ente": "MUNICIPIO DE ALMADINA",
+   "ibge": "2900900",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8037975-94.2026.8.05.0000",
+   "id_djen": 620171825,
+   "ente": "MUNICIPIO DE ARACAS",
+   "ibge": "2902054",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8037971-57.2026.8.05.0000",
+   "id_djen": 620172813,
+   "ente": "MUNICíPIO DE BONITO",
+   "ibge": "2904050",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039783-13.2021.8.05.0000",
+   "id_djen": 620200135,
+   "ente": "MUNICIPIO DE RIBEIRA DO POMBAL",
+   "ibge": "2926608",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039780-58.2021.8.05.0000",
+   "id_djen": 620212641,
+   "ente": "MUNICIPIO DE RIO DE CONTAS",
+   "ibge": "2926707",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 620213600,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 620215128,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8044084-03.2021.8.05.0000",
+   "id_djen": 620215856,
+   "ente": "MUNICIPIO DE PINDOBACU",
+   "ibge": "2924603",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038909-28.2021.8.05.0000",
+   "id_djen": 620216756,
+   "ente": "MUNICIPIO DE JAGUAQUARA",
+   "ibge": "2917607",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039215-94.2021.8.05.0000",
+   "id_djen": 620217806,
+   "ente": "MUNICIPIO DE TUCANO",
+   "ibge": "2931905",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8015121-48.2022.8.05.0000",
+   "id_djen": 620220197,
+   "ente": "MUNICIPIO DE CARINHANHA",
+   "ibge": "2907103",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8020697-56.2021.8.05.0000",
+   "id_djen": 620231002,
+   "ente": "MUNICIPIO DE CANDIBA",
+   "ibge": "2906600",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038070-03.2021.8.05.0000",
+   "id_djen": 620231677,
+   "ente": "MUNICIPIO DE CAETITE",
+   "ibge": "2905206",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023690-72.2021.8.05.0000",
+   "id_djen": 620232216,
+   "ente": "MUNICIPIO DE ITAMARAJU",
+   "ibge": "2915601",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8034957-36.2024.8.05.0000",
+   "id_djen": 620233128,
+   "ente": "MUNICIPIO DE JEREMOABO",
+   "ibge": "2918100",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038927-49.2021.8.05.0000",
+   "id_djen": 620238385,
+   "ente": "MUNICIPIO DE ITAQUARA",
+   "ibge": "2916708",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039212-42.2021.8.05.0000",
+   "id_djen": 620241283,
+   "ente": "MUNICIPIO DE SERRA DO RAMALHO",
+   "ibge": "2930154",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038836-56.2021.8.05.0000",
+   "id_djen": 620244120,
+   "ente": "MUNICIPIO DE MACAUBAS",
+   "ibge": "2919801",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8020659-44.2021.8.05.0000",
+   "id_djen": 620248024,
+   "ente": "MUNICIPIO DE BURITIRAMA",
+   "ibge": "2904753",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038916-20.2021.8.05.0000",
+   "id_djen": 620269137,
+   "ente": "MUNICIPIO DE PEDRO ALEXANDRE",
+   "ibge": "2924207",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023946-15.2021.8.05.0000",
+   "id_djen": 620270968,
+   "ente": "MUNICIPIO DE JUAZEIRO",
+   "ibge": "2918407",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8037975-94.2026.8.05.0000",
+   "id_djen": 620347758,
+   "ente": "MUNICIPIO DE ARACAS",
+   "ibge": "2902054",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038664-17.2021.8.05.0000",
+   "id_djen": 620348363,
+   "ente": "MUNICIPIO DE CICERO DANTAS",
+   "ibge": "2907806",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8026438-43.2022.8.05.0000",
+   "id_djen": 620349723,
+   "ente": "MUNICIPIO DE POJUCA",
+   "ibge": "2925204",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8026815-48.2021.8.05.0000",
+   "id_djen": 620381461,
+   "ente": "MUNICIPIO DE CAMACAN",
+   "ibge": "2905602",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038790-67.2021.8.05.0000",
+   "id_djen": 620384839,
+   "ente": "MUNICIPIO DE CANAPOLIS",
+   "ibge": "2906105",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023899-41.2021.8.05.0000",
+   "id_djen": 620386584,
+   "ente": "MUNICIPIO DE CANAVIEIRAS",
+   "ibge": "2906303",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027687-97.2020.8.05.0000",
+   "id_djen": 620398696,
+   "ente": "MUNICIPIO DE CANARANA",
+   "ibge": "2906204",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038828-79.2021.8.05.0000",
+   "id_djen": 620398900,
+   "ente": "MUNICIPIO DE CENTRAL",
+   "ibge": "2907608",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8031993-12.2020.8.05.0000",
+   "id_djen": 620409532,
+   "ente": "MUNICIPIO DE COARACI",
+   "ibge": "2908002",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038660-77.2021.8.05.0000",
+   "id_djen": 620414873,
+   "ente": "MUNICIPIO DE CORACAO DE MARIA",
+   "ibge": "2908903",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038827-94.2021.8.05.0000",
+   "id_djen": 620416808,
+   "ente": "MUNICIPIO DE CONCEICAO DO COITE",
+   "ibge": "2908408",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038730-94.2021.8.05.0000",
+   "id_djen": 620417238,
+   "ente": "MUNICIPIO DE CONCEICAO DO JACUIPE",
+   "ibge": "2908507",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027469-35.2021.8.05.0000",
+   "id_djen": 620418062,
+   "ente": "MUNICIPIO DE CONTENDAS DO SINCORA",
+   "ibge": "2908804",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038818-35.2021.8.05.0000",
+   "id_djen": 620418207,
+   "ente": "MUNICIPIO DE CURACA",
+   "ibge": "2909901",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-05-26",
+   "pa": "8023946-15.2021.8.05.0000",
+   "id_djen": 620421712,
+   "ente": "MUNICIPIO DE JUAZEIRO",
+   "ibge": "2918407"
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027764-09.2020.8.05.0000",
+   "id_djen": 620422320,
+   "ente": "FEIRA DE SANTANA PREFEITURA",
+   "ibge": null,
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038677-16.2021.8.05.0000",
+   "id_djen": 620424132,
+   "ente": "MUNICIPIO DE CRAVOLANDIA",
+   "ibge": "2909505",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023687-20.2021.8.05.0000",
+   "id_djen": 620429682,
+   "ente": "MUNICIPIO DE FLORESTA AZUL",
+   "ibge": "2911006",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8015192-50.2022.8.05.0000",
+   "id_djen": 620435936,
+   "ente": "MUNICIPIO DE IGAPORA",
+   "ibge": "2913408",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038787-15.2021.8.05.0000",
+   "id_djen": 620436770,
+   "ente": "MUNICIPIO DE GANDU",
+   "ibge": "2911204",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8028193-97.2025.8.05.0000",
+   "id_djen": 620437601,
+   "ente": "MUNICIPIO DE FILADELFIA",
+   "ibge": "2910859",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027473-72.2021.8.05.0000",
+   "id_djen": 620438452,
+   "ente": "MUNICIPIO DE ILHEUS",
+   "ibge": "2913606",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038928-34.2021.8.05.0000",
+   "id_djen": 620440623,
+   "ente": "MUNICIPIO DE IPIAU",
+   "ibge": "2913903",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038840-93.2021.8.05.0000",
+   "id_djen": 620441414,
+   "ente": "MUNICIPIO DE IRARA",
+   "ibge": "2914505",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039202-95.2021.8.05.0000",
+   "id_djen": 620442710,
+   "ente": "MUNICIPIO DE ITABELA",
+   "ibge": "2914653",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8031930-45.2024.8.05.0000",
+   "id_djen": 620449027,
+   "ente": "MUNICIPIO DE INHAMBUPE",
+   "ibge": "2913705",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023935-15.2023.8.05.0000",
+   "id_djen": 620449626,
+   "ente": "MUNICIPIO DE IRECE",
+   "ibge": "2914604",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 620450108,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8032016-55.2020.8.05.0000",
+   "id_djen": 620460836,
+   "ente": "MUNICIPIO DE ITAJUIPE",
+   "ibge": "2915502",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8015194-20.2022.8.05.0000",
+   "id_djen": 620463448,
+   "ente": "MUNICIPIO DE ITAPEBI",
+   "ibge": "2916302",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039050-47.2021.8.05.0000",
+   "id_djen": 620468198,
+   "ente": "MUNICIPIO DE JACOBINA",
+   "ibge": "2917508",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8032040-83.2020.8.05.0000",
+   "id_djen": 620469259,
+   "ente": "MUNICIPIO DE JANDAIRA",
+   "ibge": "2917904",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039052-17.2021.8.05.0000",
+   "id_djen": 620470362,
+   "ente": "MUNICIPIO DE ITACARE",
+   "ibge": "2914901",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8044094-47.2021.8.05.0000",
+   "id_djen": 620472060,
+   "ente": "MUNICIPIO DE LAURO DE FREITAS",
+   "ibge": "2919207",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038936-11.2021.8.05.0000",
+   "id_djen": 620481679,
+   "ente": "MUNICIPIO DE MADRE DE DEUS",
+   "ibge": "2919926",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038845-18.2021.8.05.0000",
+   "id_djen": 620482665,
+   "ente": "MUNICIPIO DE MACARANI",
+   "ibge": "2919702",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8044097-02.2021.8.05.0000",
+   "id_djen": 620483382,
+   "ente": "MUNICIPIO DE JUSSARA",
+   "ibge": "2918506",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038846-03.2021.8.05.0000",
+   "id_djen": 620484623,
+   "ente": "MUNICIPIO DE JOAO DOURADO",
+   "ibge": "2918357",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027800-51.2020.8.05.0000",
+   "id_djen": 620486976,
+   "ente": "MUNICIPIO DE OUROLANDIA",
+   "ibge": "2923357",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039054-84.2021.8.05.0000",
+   "id_djen": 620487787,
+   "ente": "MUNICIPIO DE PARATINGA",
+   "ibge": "2923704",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039053-02.2021.8.05.0000",
+   "id_djen": 620604699,
+   "ente": "MUNICIPIO DE NOVO TRIUNFO",
+   "ibge": "2923050",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023890-16.2020.8.05.0000",
+   "id_djen": 620612958,
+   "ente": "MUNICIPIO DE PRESIDENTE TANCREDO NEVES",
+   "ibge": "2925758",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039784-95.2021.8.05.0000",
+   "id_djen": 620613655,
+   "ente": "MUNICIPIO DE RIACHAO DO JACUIPE",
+   "ibge": "2926301",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038930-04.2021.8.05.0000",
+   "id_djen": 620615321,
+   "ente": "MUNICIPIO DE PORTO SEGURO",
+   "ibge": "2925303",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039056-54.2021.8.05.0000",
+   "id_djen": 620616298,
+   "ente": "MUNICIPIO DE MIRANTE",
+   "ibge": "2921450",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8043978-41.2021.8.05.0000",
+   "id_djen": 620617204,
+   "ente": "MUNICIPIO DE PAULO AFONSO",
+   "ibge": "2924009",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8032058-65.2024.8.05.0000",
+   "id_djen": 620618000,
+   "ente": "MUNICIPIO DE PLANALTINO",
+   "ibge": "2924900",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038682-38.2021.8.05.0000",
+   "id_djen": 620952269,
+   "ente": "MUNICIPIO DE ACAJUTIBA",
+   "ibge": "2900306",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023756-52.2021.8.05.0000",
+   "id_djen": 620954725,
+   "ente": "MUNICIPIO DE CASA NOVA",
+   "ibge": "2907202",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8026968-13.2023.8.05.0000",
+   "id_djen": 620981703,
+   "ente": "MUNICíPIO DE LICíNIO DE ALMEIDA",
+   "ibge": "2919405",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038418-45.2026.8.05.0000",
+   "id_djen": 620984310,
+   "ente": "MUNICIPIO DE POTIRAGUA",
+   "ibge": "2925402",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038422-82.2026.8.05.0000",
+   "id_djen": 620990105,
+   "ente": "MUNICIPIO DE PRESIDENTE DUTRA",
+   "ibge": "2925600",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8024143-96.2023.8.05.0000",
+   "id_djen": 620992476,
+   "ente": "MUNICIPIO DE OLIVEIRA DOS BREJINHOS",
+   "ibge": "2923209",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038414-08.2026.8.05.0000",
+   "id_djen": 620993226,
+   "ente": "MUNICIPIO DE CONCEICAO DA FEIRA",
+   "ibge": "2908200",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8026714-11.2021.8.05.0000",
+   "id_djen": 621002252,
+   "ente": "MUNICIPIO DE COTEGIPE",
+   "ibge": "2909406",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8031995-79.2020.8.05.0000",
+   "id_djen": 621002364,
+   "ente": "MUNICIPIO DE EUNAPOLIS",
+   "ibge": "2910727",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8047025-86.2022.8.05.0000",
+   "id_djen": 621002479,
+   "ente": "MUNICIPIO DE RODELAS",
+   "ibge": "2927101",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8032058-07.2020.8.05.0000",
+   "id_djen": 621002575,
+   "ente": "MUNICIPIO DE RIO REAL",
+   "ibge": "2927002",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8007021-41.2021.8.05.0000",
+   "id_djen": 621005954,
+   "ente": "MUNICIPIO DE PE DE SERRA",
+   "ibge": "2924058",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8075309-02.2025.8.05.0000",
+   "id_djen": 621010660,
+   "ente": "MUNICIPIO DE NOVA CANAA",
+   "ibge": "2922706",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 621013118,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038415-90.2026.8.05.0000",
+   "id_djen": 621018246,
+   "ente": "MUNICIPIO DE GUAJERU",
+   "ibge": "2911659",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8038910-13.2021.8.05.0000",
+   "id_djen": 621030024,
+   "ente": "MUNICIPIO DE IBICUI",
+   "ibge": "2912301",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027479-79.2021.8.05.0000",
+   "id_djen": 621030088,
+   "ente": "MUNICIPIO DE ITABUNA",
+   "ibge": "2914802",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8024842-87.2023.8.05.0000",
+   "id_djen": 621031671,
+   "ente": "MUNICIPIO DE ITAPICURU",
+   "ibge": "2916500",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023952-22.2021.8.05.0000",
+   "id_djen": 621034947,
+   "ente": "MUNICIPIO DE SANTA BRIGIDA",
+   "ibge": "2927606",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039777-06.2021.8.05.0000",
+   "id_djen": 621040992,
+   "ente": "MUNICIPIO DE SANTA CRUZ CABRALIA",
+   "ibge": "2927705",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8002788-98.2021.8.05.0000",
+   "id_djen": 621051699,
+   "ente": "MUNICIPIO DE SAO FRANCISCO DO CONDE",
+   "ibge": "2929206",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039211-57.2021.8.05.0000",
+   "id_djen": 621055144,
+   "ente": "MUNICIPIO DE SANTA LUZIA",
+   "ibge": "2928059",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023959-14.2021.8.05.0000",
+   "id_djen": 621056459,
+   "ente": "MUNICIPIO DE SANTA RITA DE CASSIA",
+   "ibge": "2928406",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039778-88.2021.8.05.0000",
+   "id_djen": 621057573,
+   "ente": "MUNICIPIO DE SANTO ESTEVAO",
+   "ibge": "2928802",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039773-66.2021.8.05.0000",
+   "id_djen": 621066073,
+   "ente": "MUNICIPIO DE SERRINHA",
+   "ibge": "2930501",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8043917-83.2021.8.05.0000",
+   "id_djen": 621073709,
+   "ente": "MUNICIPIO DE SEABRA",
+   "ibge": "2929909",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039219-34.2021.8.05.0000",
+   "id_djen": 621073872,
+   "ente": "MUNICIPIO DE SAO SEBASTIAO DO PASSE",
+   "ibge": "2929503",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8027595-85.2021.8.05.0000",
+   "id_djen": 621075840,
+   "ente": "MUNICIPIO DE SOBRADINHO",
+   "ibge": "2930774",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8044086-70.2021.8.05.0000",
+   "id_djen": 621078195,
+   "ente": "MUNICIPIO DE UAUA",
+   "ibge": "2932002",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8032069-36.2020.8.05.0000",
+   "id_djen": 621089717,
+   "ente": "MUNICIPIO DE VALENCA",
+   "ibge": "2932903",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039207-20.2021.8.05.0000",
+   "id_djen": 621103714,
+   "ente": "MUNICIPIO DE UNA",
+   "ibge": "2932507",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039206-35.2021.8.05.0000",
+   "id_djen": 621104117,
+   "ente": "MUNICIPIO DE XIQUE-XIQUE",
+   "ibge": "2933604",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8039220-19.2021.8.05.0000",
+   "id_djen": 621107032,
+   "ente": "MUNICIPIO DE WENCESLAU GUIMARAES",
+   "ibge": "2933505",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-26",
+   "pa": "8023983-42.2021.8.05.0000",
+   "id_djen": 621109390,
+   "ente": "MUNICIPIO DE BARREIRAS",
+   "ibge": "2903201",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8038768-33.2026.8.05.0000",
+   "id_djen": 624259526,
+   "ente": "MUNICIPIO DE UTINGA",
+   "ibge": "2932804",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8058056-35.2024.8.05.0000",
+   "id_djen": 624263699,
+   "ente": "MUNICIPIO DE UMBURANAS",
+   "ibge": "2932457",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8032330-59.2024.8.05.0000",
+   "id_djen": 624265846,
+   "ente": "MUNICIPIO DE SAPEACU",
+   "ibge": "2929602",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8038766-63.2026.8.05.0000",
+   "id_djen": 624267517,
+   "ente": "MUNICIPIO DE SAO MIGUEL DAS MATAS",
+   "ibge": "2929404",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8030285-82.2024.8.05.0000",
+   "id_djen": 624320642,
+   "ente": "MUNICIPIO DE SAO JOSE DO JACUIPE",
+   "ibge": "2929370",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8038765-78.2026.8.05.0000",
+   "id_djen": 624321688,
+   "ente": "MUNICIPIO DE SAO DOMINGOS",
+   "ibge": "2928950",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8038762-26.2026.8.05.0000",
+   "id_djen": 624341961,
+   "ente": "MUNICIPIO DE SANTA INES",
+   "ibge": "2927903",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8038761-41.2026.8.05.0000",
+   "id_djen": 624610501,
+   "ente": "MUNICIPIO DE MALHADA DE PEDRAS",
+   "ibge": "2920304",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8031988-87.2020.8.05.0000",
+   "id_djen": 624883938,
+   "ente": "MUNICIPIO DE CAMACARI",
+   "ibge": "2905701",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8026676-96.2021.8.05.0000",
+   "id_djen": 624887694,
+   "ente": "MUNICIPIO DE EUCLIDES DA CUNHA",
+   "ibge": "2910701",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8032062-44.2020.8.05.0000",
+   "id_djen": 624894812,
+   "ente": "MUNICIPIO DE SALVADOR",
+   "ibge": "2927408",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8020191-12.2023.8.05.0000",
+   "id_djen": 624898757,
+   "ente": "EMPRESA BAIANA DE ÁGUAS E SANEAMENTO S/A - EMBASA",
+   "ibge": null,
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 624899689,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-05-29",
+   "pa": "8036311-04.2021.8.05.0000",
+   "id_djen": 624906051,
+   "ente": "ESTADO DA BAHIA",
+   "ibge": null,
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8023896-86.2021.8.05.0000",
+   "id_djen": 626970236,
+   "ente": "MUNICIPIO DE IPIRA",
+   "ibge": "2914000",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 626970625,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 626971003,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8038935-26.2021.8.05.0000",
+   "id_djen": 626971324,
+   "ente": "MUNICIPIO DE PILAO ARCADO",
+   "ibge": "2924405",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 626972115,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "relacao_orcamento",
+   "data": "2026-06-01",
+   "pa": "8032005-26.2020.8.05.0000",
+   "id_djen": 626972811,
+   "ente": "MUNICIPIO DE IACU",
+   "ibge": "2911907",
+   "ano_orcamento": 2027
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8027791-89.2020.8.05.0000",
+   "id_djen": 627246616,
+   "ente": "MUNICIPIO DE ITIRUCU",
+   "ibge": "2916906"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8027590-63.2021.8.05.0000",
+   "id_djen": 627247658,
+   "ente": "MUNICIPIO DE LAMARAO",
+   "ibge": "2919108"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 627248359,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 627249156,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8038668-54.2021.8.05.0000",
+   "id_djen": 627249797,
+   "ente": "MUNICIPIO DE CAETANOS",
+   "ibge": "2905156"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8015193-35.2022.8.05.0000",
+   "id_djen": 627250235,
+   "ente": "MUNICIPIO DE ITAGIBA",
+   "ibge": "2915205"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8032001-86.2020.8.05.0000",
+   "id_djen": 627250610,
+   "ente": "MUNICIPIO DE GENTIO DO OURO",
+   "ibge": "2911303"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 627251321,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 627251935,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 627252501,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8038913-65.2021.8.05.0000",
+   "id_djen": 627252784,
+   "ente": "MUNICIPIO DE ITAPETINGA",
+   "ibge": "2916401"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-02",
+   "pa": "8038730-94.2021.8.05.0000",
+   "id_djen": 627253165,
+   "ente": "MUNICIPIO DE CONCEICAO DO JACUIPE",
+   "ibge": "2908507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8026688-13.2021.8.05.0000",
+   "id_djen": 637895531,
+   "ente": "MUNICIPIO DE PAU BRASIL",
+   "ibge": "2923902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023657-82.2021.8.05.0000",
+   "id_djen": 637895539,
+   "ente": "MUNICIPIO DE POCOES",
+   "ibge": "2925105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023951-37.2021.8.05.0000",
+   "id_djen": 637895546,
+   "ente": "MUNICIPIO DE REMANSO",
+   "ibge": "2926004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8032053-82.2020.8.05.0000",
+   "id_djen": 637895554,
+   "ente": "MUNICIPIO DE PONTO NOVO",
+   "ibge": "2925253"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 637895562,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8026709-86.2021.8.05.0000",
+   "id_djen": 637895569,
+   "ente": "MUNICIPIO DE SAO FELIX",
+   "ibge": "2929008"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023980-87.2021.8.05.0000",
+   "id_djen": 637895574,
+   "ente": "MUNICIPIO DE SENTO SE",
+   "ibge": "2930204"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027804-88.2020.8.05.0000",
+   "id_djen": 637895585,
+   "ente": "MUNICIPIO DE QUEIMADAS",
+   "ibge": "2925808"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 637895592,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 637900102,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027796-14.2020.8.05.0000",
+   "id_djen": 637900163,
+   "ente": "MUNICIPIO DE NOVA ITARANA",
+   "ibge": "2922805"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027500-55.2021.8.05.0000",
+   "id_djen": 637900225,
+   "ente": "MUNICIPIO DE IBIRAPITANGA",
+   "ibge": "2912707"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8028139-10.2020.8.05.0000",
+   "id_djen": 637900278,
+   "ente": "MUNICIPIO DE FIRMINO ALVES",
+   "ibge": "2910909"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8032015-70.2020.8.05.0000",
+   "id_djen": 637900338,
+   "ente": "MUNICIPIO DE IBICARAI",
+   "ibge": "2912103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023687-20.2021.8.05.0000",
+   "id_djen": 637900382,
+   "ente": "MUNICIPIO DE FLORESTA AZUL",
+   "ibge": "2911006"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 637900432,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8031986-20.2020.8.05.0000",
+   "id_djen": 637900478,
+   "ente": "MUNICIPIO DE CACHOEIRA",
+   "ibge": "2904902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023797-19.2021.8.05.0000",
+   "id_djen": 637900545,
+   "ente": "MUNICIPIO DE SANTO AMARO",
+   "ibge": "2928604"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023468-07.2021.8.05.0000",
+   "id_djen": 637900591,
+   "ente": "MUNICIPIO DE CAMAMU",
+   "ibge": "2905800"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023756-52.2021.8.05.0000",
+   "id_djen": 637900634,
+   "ente": "MUNICIPIO DE CASA NOVA",
+   "ibge": "2907202"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8023653-45.2021.8.05.0000",
+   "id_djen": 637900680,
+   "ente": "MUNICIPIO DE BELMONTE",
+   "ibge": "2903409"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-12",
+   "pa": "8026714-11.2021.8.05.0000",
+   "id_djen": 637900717,
+   "ente": "MUNICIPIO DE COTEGIPE",
+   "ibge": "2909406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8032022-62.2020.8.05.0000",
+   "id_djen": 639127985,
+   "ente": "MUNICIPIO DE ITAPE",
+   "ibge": "2916203"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 639137073,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 639137083,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 639137091,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 639137100,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038960-39.2021.8.05.0000",
+   "id_djen": 639137105,
+   "ente": "MUNICIPIO DE JUSSIAPE",
+   "ibge": "2918605"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8034932-23.2024.8.05.0000",
+   "id_djen": 639137112,
+   "ente": "MUNICIPIO DE SAO DESIDERIO",
+   "ibge": "2928901"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8015193-35.2022.8.05.0000",
+   "id_djen": 639137117,
+   "ente": "MUNICIPIO DE ITAGIBA",
+   "ibge": "2915205"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038928-34.2021.8.05.0000",
+   "id_djen": 639137127,
+   "ente": "MUNICIPIO DE IPIAU",
+   "ibge": "2913903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 639137135,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 639137144,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 639137153,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 639137160,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038660-77.2021.8.05.0000",
+   "id_djen": 639137168,
+   "ente": "MUNICIPIO DE CORACAO DE MARIA",
+   "ibge": "2908903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 639137174,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8020692-34.2021.8.05.0000",
+   "id_djen": 639137184,
+   "ente": "MUNICIPIO DE CAEM",
+   "ibge": "2905107"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038670-24.2021.8.05.0000",
+   "id_djen": 639137194,
+   "ente": "MUNICIPIO DE ARATACA",
+   "ibge": "2902252"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 639137201,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8023931-75.2023.8.05.0000",
+   "id_djen": 639137208,
+   "ente": "MUNICíPIO DE ANDORINHA",
+   "ibge": "2901353"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 639137217,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 639137230,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 639137240,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 639137248,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 639258893,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8023959-14.2021.8.05.0000",
+   "id_djen": 639258916,
+   "ente": "MUNICIPIO DE SANTA RITA DE CASSIA",
+   "ibge": "2928406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 639258941,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 639258962,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-15",
+   "pa": "8003772-48.2022.8.05.0000",
+   "id_djen": 639258983,
+   "ente": "MUNICIPIO DE MASCOTE",
+   "ibge": "2920908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-29",
+   "pa": "8038663-32.2021.8.05.0000",
+   "id_djen": 653162462,
+   "ente": "MUNICIPIO DE CIPO",
+   "ibge": "2907905"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-06-29",
+   "pa": "8038932-71.2021.8.05.0000",
+   "id_djen": 653162600,
+   "ente": "MUNICIPIO DE ITAPARICA",
+   "ibge": "2916104"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-07",
+   "pa": "8038913-65.2021.8.05.0000",
+   "id_djen": 661203184,
+   "ente": "MUNICIPIO DE ITAPETINGA",
+   "ibge": "2916401"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-07",
+   "pa": "8032001-86.2020.8.05.0000",
+   "id_djen": 661203189,
+   "ente": "MUNICIPIO DE GENTIO DO OURO",
+   "ibge": "2911303"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-07",
+   "pa": "8038668-54.2021.8.05.0000",
+   "id_djen": 661203198,
+   "ente": "MUNICIPIO DE CAETANOS",
+   "ibge": "2905156"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 666861664,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023983-42.2021.8.05.0000",
+   "id_djen": 666864342,
+   "ente": "MUNICIPIO DE BARREIRAS",
+   "ibge": "2903201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023653-45.2021.8.05.0000",
+   "id_djen": 666865301,
+   "ente": "MUNICIPIO DE BELMONTE",
+   "ibge": "2903409"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8031986-20.2020.8.05.0000",
+   "id_djen": 666865819,
+   "ente": "MUNICIPIO DE CACHOEIRA",
+   "ibge": "2904902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023468-07.2021.8.05.0000",
+   "id_djen": 666867933,
+   "ente": "MUNICIPIO DE CAMAMU",
+   "ibge": "2905800"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 666868793,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8028139-10.2020.8.05.0000",
+   "id_djen": 666869493,
+   "ente": "MUNICIPIO DE FIRMINO ALVES",
+   "ibge": "2910909"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023946-15.2021.8.05.0000",
+   "id_djen": 666870640,
+   "ente": "MUNICIPIO DE JUAZEIRO",
+   "ibge": "2918407"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8027796-14.2020.8.05.0000",
+   "id_djen": 666871074,
+   "ente": "MUNICIPIO DE NOVA ITARANA",
+   "ibge": "2922805"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 666871387,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8026688-13.2021.8.05.0000",
+   "id_djen": 666871792,
+   "ente": "MUNICIPIO DE PAU BRASIL",
+   "ibge": "2923902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023657-82.2021.8.05.0000",
+   "id_djen": 666872454,
+   "ente": "MUNICIPIO DE POCOES",
+   "ibge": "2925105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8027804-88.2020.8.05.0000",
+   "id_djen": 666874794,
+   "ente": "MUNICIPIO DE QUEIMADAS",
+   "ibge": "2925808"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 666876134,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023951-37.2021.8.05.0000",
+   "id_djen": 666876674,
+   "ente": "MUNICIPIO DE REMANSO",
+   "ibge": "2926004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023952-22.2021.8.05.0000",
+   "id_djen": 666877089,
+   "ente": "MUNICIPIO DE SANTA BRIGIDA",
+   "ibge": "2927606"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023797-19.2021.8.05.0000",
+   "id_djen": 666877487,
+   "ente": "MUNICIPIO DE SANTO AMARO",
+   "ibge": "2928604"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8026709-86.2021.8.05.0000",
+   "id_djen": 666877978,
+   "ente": "MUNICIPIO DE SAO FELIX",
+   "ibge": "2929008"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8002788-98.2021.8.05.0000",
+   "id_djen": 666878249,
+   "ente": "MUNICIPIO DE SAO FRANCISCO DO CONDE",
+   "ibge": "2929206"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023980-87.2021.8.05.0000",
+   "id_djen": 666878460,
+   "ente": "MUNICIPIO DE SENTO SE",
+   "ibge": "2930204"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023662-07.2021.8.05.0000",
+   "id_djen": 666878860,
+   "ente": "MUNICIPIO DE SIMOES FILHO",
+   "ibge": "2930709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 666879193,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023899-41.2021.8.05.0000",
+   "id_djen": 666879975,
+   "ente": "MUNICIPIO DE CANAVIEIRAS",
+   "ibge": "2906303"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 666880164,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 666902839,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 666903590,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038670-24.2021.8.05.0000",
+   "id_djen": 666904501,
+   "ente": "MUNICIPIO DE ARATACA",
+   "ibge": "2902252"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8020692-34.2021.8.05.0000",
+   "id_djen": 666904874,
+   "ente": "MUNICIPIO DE CAEM",
+   "ibge": "2905107"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 666909868,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8026676-96.2021.8.05.0000",
+   "id_djen": 666911544,
+   "ente": "MUNICIPIO DE EUCLIDES DA CUNHA",
+   "ibge": "2910701"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 666912986,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 666917285,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 666917541,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038928-34.2021.8.05.0000",
+   "id_djen": 666917942,
+   "ente": "MUNICIPIO DE IPIAU",
+   "ibge": "2913903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8015193-35.2022.8.05.0000",
+   "id_djen": 666918559,
+   "ente": "MUNICIPIO DE ITAGIBA",
+   "ibge": "2915205"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038921-42.2021.8.05.0000",
+   "id_djen": 666921256,
+   "ente": "MUNICIPIO DE ITAMARI",
+   "ibge": "2915700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038932-71.2021.8.05.0000",
+   "id_djen": 666923064,
+   "ente": "MUNICIPIO DE ITAPARICA",
+   "ibge": "2916104"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8032022-62.2020.8.05.0000",
+   "id_djen": 666923291,
+   "ente": "MUNICIPIO DE ITAPE",
+   "ibge": "2916203"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038927-49.2021.8.05.0000",
+   "id_djen": 666923991,
+   "ente": "MUNICIPIO DE ITAQUARA",
+   "ibge": "2916708"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 667250726,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038960-39.2021.8.05.0000",
+   "id_djen": 667251310,
+   "ente": "MUNICIPIO DE JUSSIAPE",
+   "ibge": "2918605"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8026968-13.2023.8.05.0000",
+   "id_djen": 667252733,
+   "ente": "MUNICíPIO DE LICíNIO DE ALMEIDA",
+   "ibge": "2919405"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038938-78.2021.8.05.0000",
+   "id_djen": 667253347,
+   "ente": "MUNICIPIO DE LUIS EDUARDO MAGALHAES",
+   "ibge": "2919553"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039058-24.2021.8.05.0000",
+   "id_djen": 667254329,
+   "ente": "MUNICIPIO DE MACURURE",
+   "ibge": "2919900"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8013671-70.2022.8.05.0000",
+   "id_djen": 667255301,
+   "ente": "MUNICIPIO DE MAETINGA",
+   "ibge": "2919959"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039056-54.2021.8.05.0000",
+   "id_djen": 667256914,
+   "ente": "MUNICIPIO DE MIRANTE",
+   "ibge": "2921450"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 667258071,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8038961-24.2021.8.05.0000",
+   "id_djen": 667258735,
+   "ente": "MUNICIPIO DE NOVA IBIA",
+   "ibge": "2922755"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8047022-34.2022.8.05.0000",
+   "id_djen": 667259806,
+   "ente": "MUNICIPIO DE PIATA",
+   "ibge": "2924306"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039203-80.2021.8.05.0000",
+   "id_djen": 667260369,
+   "ente": "MUNICIPIO DE PINTADAS",
+   "ibge": "2924652"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8032058-65.2024.8.05.0000",
+   "id_djen": 667260722,
+   "ente": "MUNICIPIO DE PLANALTINO",
+   "ibge": "2924900"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039205-50.2021.8.05.0000",
+   "id_djen": 667261149,
+   "ente": "MUNICIPIO DE RIACHO DE SANTANA",
+   "ibge": "2926400"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 667261585,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039780-58.2021.8.05.0000",
+   "id_djen": 667262123,
+   "ente": "MUNICIPIO DE RIO DE CONTAS",
+   "ibge": "2926707"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023959-14.2021.8.05.0000",
+   "id_djen": 667262608,
+   "ente": "MUNICIPIO DE SANTA RITA DE CASSIA",
+   "ibge": "2928406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 667263398,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8034932-23.2024.8.05.0000",
+   "id_djen": 667264299,
+   "ente": "MUNICIPIO DE SAO DESIDERIO",
+   "ibge": "2928901"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039219-34.2021.8.05.0000",
+   "id_djen": 667264894,
+   "ente": "MUNICIPIO DE SAO SEBASTIAO DO PASSE",
+   "ibge": "2929503"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 667265320,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 667265917,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8028149-54.2020.8.05.0000",
+   "id_djen": 667266970,
+   "ente": "MUNICIPIO DE TEOLANDIA",
+   "ibge": "2931608"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039215-94.2021.8.05.0000",
+   "id_djen": 667268050,
+   "ente": "MUNICIPIO DE TUCANO",
+   "ibge": "2931905"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 667269192,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 667270337,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8007021-41.2021.8.05.0000",
+   "id_djen": 667287757,
+   "ente": "MUNICIPIO DE PE DE SERRA",
+   "ibge": "2924058"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8032053-82.2020.8.05.0000",
+   "id_djen": 667288359,
+   "ente": "MUNICIPIO DE PONTO NOVO",
+   "ibge": "2925253"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039773-66.2021.8.05.0000",
+   "id_djen": 667289105,
+   "ente": "MUNICIPIO DE SERRINHA",
+   "ibge": "2930501"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8039026-19.2021.8.05.0000",
+   "id_djen": 667289790,
+   "ente": "MUNICIPIO DE TANHACU",
+   "ibge": "2931004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8028149-54.2020.8.05.0000",
+   "id_djen": 667291491,
+   "ente": "MUNICIPIO DE TEOLANDIA",
+   "ibge": "2931608"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-14",
+   "pa": "8023936-97.2023.8.05.0000",
+   "id_djen": 667292851,
+   "ente": "MUNICIPIO DE IBIPITANGA",
+   "ibge": "2912509"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039780-58.2021.8.05.0000",
+   "id_djen": 670680500,
+   "ente": "MUNICIPIO DE RIO DE CONTAS",
+   "ibge": "2926707",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 671524055,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 671524057,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 671524060,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039215-94.2021.8.05.0000",
+   "id_djen": 671524062,
+   "ente": "MUNICIPIO DE TUCANO",
+   "ibge": "2931905",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8028149-54.2020.8.05.0000",
+   "id_djen": 671524065,
+   "ente": "MUNICIPIO DE TEOLANDIA",
+   "ibge": "2931608",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039026-19.2021.8.05.0000",
+   "id_djen": 671524067,
+   "ente": "MUNICIPIO DE TANHACU",
+   "ibge": "2931004",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039773-66.2021.8.05.0000",
+   "id_djen": 671524069,
+   "ente": "MUNICIPIO DE SERRINHA",
+   "ibge": "2930501",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 671524071,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039219-34.2021.8.05.0000",
+   "id_djen": 671524074,
+   "ente": "MUNICIPIO DE SAO SEBASTIAO DO PASSE",
+   "ibge": "2929503",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8034932-23.2024.8.05.0000",
+   "id_djen": 671524078,
+   "ente": "MUNICIPIO DE SAO DESIDERIO",
+   "ibge": "2928901",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 671524081,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039205-50.2021.8.05.0000",
+   "id_djen": 671524083,
+   "ente": "MUNICIPIO DE RIACHO DE SANTANA",
+   "ibge": "2926400",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 671524089,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8032058-65.2024.8.05.0000",
+   "id_djen": 671524092,
+   "ente": "MUNICIPIO DE PLANALTINO",
+   "ibge": "2924900",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039203-80.2021.8.05.0000",
+   "id_djen": 671524095,
+   "ente": "MUNICIPIO DE PINTADAS",
+   "ibge": "2924652",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038961-24.2021.8.05.0000",
+   "id_djen": 671524097,
+   "ente": "MUNICIPIO DE NOVA IBIA",
+   "ibge": "2922755",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039056-54.2021.8.05.0000",
+   "id_djen": 671524099,
+   "ente": "MUNICIPIO DE MIRANTE",
+   "ibge": "2921450",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 671524101,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8013671-70.2022.8.05.0000",
+   "id_djen": 671524105,
+   "ente": "MUNICIPIO DE MAETINGA",
+   "ibge": "2919959",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8047022-34.2022.8.05.0000",
+   "id_djen": 671524107,
+   "ente": "MUNICIPIO DE PIATA",
+   "ibge": "2924306",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8039058-24.2021.8.05.0000",
+   "id_djen": 671524110,
+   "ente": "MUNICIPIO DE MACURURE",
+   "ibge": "2919900",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038960-39.2021.8.05.0000",
+   "id_djen": 671524113,
+   "ente": "MUNICIPIO DE JUSSIAPE",
+   "ibge": "2918605",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 671524116,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038927-49.2021.8.05.0000",
+   "id_djen": 671524119,
+   "ente": "MUNICIPIO DE ITAQUARA",
+   "ibge": "2916708",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038932-71.2021.8.05.0000",
+   "id_djen": 671524122,
+   "ente": "MUNICIPIO DE ITAPARICA",
+   "ibge": "2916104",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038921-42.2021.8.05.0000",
+   "id_djen": 671524125,
+   "ente": "MUNICIPIO DE ITAMARI",
+   "ibge": "2915700",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8015193-35.2022.8.05.0000",
+   "id_djen": 671524132,
+   "ente": "MUNICIPIO DE ITAGIBA",
+   "ibge": "2915205",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038928-34.2021.8.05.0000",
+   "id_djen": 671524136,
+   "ente": "MUNICIPIO DE IPIAU",
+   "ibge": "2913903",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8044100-54.2021.8.05.0000",
+   "id_djen": 671524141,
+   "ente": "MUNICIPIO DE IGUAI",
+   "ibge": "2913507",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8023936-97.2023.8.05.0000",
+   "id_djen": 671524146,
+   "ente": "MUNICIPIO DE IBIPITANGA",
+   "ibge": "2912509",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 671524149,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 671524151,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8026676-96.2021.8.05.0000",
+   "id_djen": 671524154,
+   "ente": "MUNICIPIO DE EUCLIDES DA CUNHA",
+   "ibge": "2910701",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 671524156,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8020692-34.2021.8.05.0000",
+   "id_djen": 671524160,
+   "ente": "MUNICIPIO DE CAEM",
+   "ibge": "2905107",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038670-24.2021.8.05.0000",
+   "id_djen": 671527126,
+   "ente": "MUNICIPIO DE ARATACA",
+   "ibge": "2902252",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 671527129,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 671527130,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 671527132,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-17",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 671527136,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-07-22",
+   "pa": "8038663-32.2021.8.05.0000",
+   "id_djen": 674694502,
+   "ente": "MUNICIPIO DE CIPO",
+   "ibge": "2907905"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8038663-32.2021.8.05.0000",
+   "id_djen": 684001915,
+   "ente": "MUNICIPIO DE CIPO",
+   "ibge": "2907905",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8026832-16.2023.8.05.0000",
+   "id_djen": 684001936,
+   "ente": "MUNICIPIO DE FORMOSA DO RIO PRETO",
+   "ibge": "2911105",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8020654-22.2021.8.05.0000",
+   "id_djen": 684001955,
+   "ente": "MUNICIPIO DE BAIANOPOLIS",
+   "ibge": "2902500",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8038961-24.2021.8.05.0000",
+   "id_djen": 684001991,
+   "ente": "MUNICIPIO DE NOVA IBIA",
+   "ibge": "2922755",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8039203-80.2021.8.05.0000",
+   "id_djen": 684002031,
+   "ente": "MUNICIPIO DE PINTADAS",
+   "ibge": "2924652",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8039056-54.2021.8.05.0000",
+   "id_djen": 684002063,
+   "ente": "MUNICIPIO DE MIRANTE",
+   "ibge": "2921450",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8038932-71.2021.8.05.0000",
+   "id_djen": 684002095,
+   "ente": "MUNICIPIO DE ITAPARICA",
+   "ibge": "2916104",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-07-31",
+   "pa": "8013671-70.2022.8.05.0000",
+   "id_djen": 684002121,
+   "ente": "MUNICIPIO DE MAETINGA",
+   "ibge": "2919959",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8038668-54.2021.8.05.0000",
+   "id_djen": 686527637,
+   "ente": "MUNICIPIO DE CAETANOS",
+   "ibge": "2905156"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8038730-94.2021.8.05.0000",
+   "id_djen": 686528719,
+   "ente": "MUNICIPIO DE CONCEICAO DO JACUIPE",
+   "ibge": "2908507"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8044098-84.2021.8.05.0000",
+   "id_djen": 686529579,
+   "ente": "MUNICIPIO DE IBITITA",
+   "ibge": "2913101"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 686530195,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8038913-65.2021.8.05.0000",
+   "id_djen": 686531056,
+   "ente": "MUNICIPIO DE ITAPETINGA",
+   "ibge": "2916401"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 686531888,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8044094-47.2021.8.05.0000",
+   "id_djen": 686532664,
+   "ente": "MUNICIPIO DE LAURO DE FREITAS",
+   "ibge": "2919207"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 686533206,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-04",
+   "pa": "8039209-87.2021.8.05.0000",
+   "id_djen": 686545318,
+   "ente": "MUNICIPIO DE RUY BARBOSA",
+   "ibge": "2927200"
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8039209-87.2021.8.05.0000",
+   "id_djen": 686545992,
+   "ente": "MUNICIPIO DE RUY BARBOSA",
+   "ibge": "2927200",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 686555167,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8044098-84.2021.8.05.0000",
+   "id_djen": 686555171,
+   "ente": "MUNICIPIO DE IBITITA",
+   "ibge": "2913101",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8038730-94.2021.8.05.0000",
+   "id_djen": 686555173,
+   "ente": "MUNICIPIO DE CONCEICAO DO JACUIPE",
+   "ibge": "2908507",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8038668-54.2021.8.05.0000",
+   "id_djen": 686555174,
+   "ente": "MUNICIPIO DE CAETANOS",
+   "ibge": "2905156",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8038913-65.2021.8.05.0000",
+   "id_djen": 686555177,
+   "ente": "MUNICIPIO DE ITAPETINGA",
+   "ibge": "2916401",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8038919-72.2021.8.05.0000",
+   "id_djen": 686561736,
+   "ente": "MUNICIPIO DE ITABERABA",
+   "ibge": "2914703",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8038821-87.2021.8.05.0000",
+   "id_djen": 686561769,
+   "ente": "MUNICIPIO DE CATU",
+   "ibge": "2907509",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "certidao_regular",
+   "data": "2026-08-04",
+   "pa": "8044094-47.2021.8.05.0000",
+   "id_djen": 686561808,
+   "ente": "MUNICIPIO DE LAURO DE FREITAS",
+   "ibge": "2919207",
+   "situacao": "REGULAR",
+   "ano_plano": 2026
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023653-45.2021.8.05.0000",
+   "id_djen": 695608346,
+   "ente": "MUNICIPIO DE BELMONTE",
+   "ibge": "2903409"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8031986-20.2020.8.05.0000",
+   "id_djen": 695608833,
+   "ente": "MUNICIPIO DE CACHOEIRA",
+   "ibge": "2904902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023468-07.2021.8.05.0000",
+   "id_djen": 695609486,
+   "ente": "MUNICIPIO DE CAMAMU",
+   "ibge": "2905800"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023899-41.2021.8.05.0000",
+   "id_djen": 695610173,
+   "ente": "MUNICIPIO DE CANAVIEIRAS",
+   "ibge": "2906303"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8026714-11.2021.8.05.0000",
+   "id_djen": 695610863,
+   "ente": "MUNICIPIO DE COTEGIPE",
+   "ibge": "2909406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8027761-54.2020.8.05.0000",
+   "id_djen": 695611615,
+   "ente": "MUNICIPIO DE ESPLANADA",
+   "ibge": "2910602"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8028139-10.2020.8.05.0000",
+   "id_djen": 695612133,
+   "ente": "MUNICIPIO DE FIRMINO ALVES",
+   "ibge": "2910909"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8032022-62.2020.8.05.0000",
+   "id_djen": 695612558,
+   "ente": "MUNICIPIO DE ITAPE",
+   "ibge": "2916203"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023946-15.2021.8.05.0000",
+   "id_djen": 695613079,
+   "ente": "MUNICIPIO DE JUAZEIRO",
+   "ibge": "2918407"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8027796-14.2020.8.05.0000",
+   "id_djen": 695613462,
+   "ente": "MUNICIPIO DE NOVA ITARANA",
+   "ibge": "2922805"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8027592-33.2021.8.05.0000",
+   "id_djen": 695614408,
+   "ente": "MUNICIPIO DE PARIPIRANGA",
+   "ibge": "2923803"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8026688-13.2021.8.05.0000",
+   "id_djen": 695615380,
+   "ente": "MUNICIPIO DE PAU BRASIL",
+   "ibge": "2923902"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8007021-41.2021.8.05.0000",
+   "id_djen": 695616183,
+   "ente": "MUNICIPIO DE PE DE SERRA",
+   "ibge": "2924058"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023657-82.2021.8.05.0000",
+   "id_djen": 695616995,
+   "ente": "MUNICIPIO DE POCOES",
+   "ibge": "2925105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8032053-82.2020.8.05.0000",
+   "id_djen": 695617657,
+   "ente": "MUNICIPIO DE PONTO NOVO",
+   "ibge": "2925253"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8027804-88.2020.8.05.0000",
+   "id_djen": 695619493,
+   "ente": "MUNICIPIO DE QUEIMADAS",
+   "ibge": "2925808"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8026698-57.2021.8.05.0000",
+   "id_djen": 695620125,
+   "ente": "MUNICIPIO DE QUIJINGUE",
+   "ibge": "2925907"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023951-37.2021.8.05.0000",
+   "id_djen": 695620801,
+   "ente": "MUNICIPIO DE REMANSO",
+   "ibge": "2926004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023952-22.2021.8.05.0000",
+   "id_djen": 695621273,
+   "ente": "MUNICIPIO DE SANTA BRIGIDA",
+   "ibge": "2927606"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023980-87.2021.8.05.0000",
+   "id_djen": 695621747,
+   "ente": "MUNICIPIO DE SENTO SE",
+   "ibge": "2930204"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8023662-07.2021.8.05.0000",
+   "id_djen": 695622332,
+   "ente": "MUNICIPIO DE SIMOES FILHO",
+   "ibge": "2930709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-13",
+   "pa": "8027814-35.2020.8.05.0000",
+   "id_djen": 695623408,
+   "ente": "MUNICIPIO DE TANQUE NOVO",
+   "ibge": "2931053"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8003565-49.2022.8.05.0000",
+   "id_djen": 696609378,
+   "ente": "MUNICIPIO DE JEQUIE",
+   "ibge": "2918001"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8028149-54.2020.8.05.0000",
+   "id_djen": 696609451,
+   "ente": "MUNICIPIO DE TEOLANDIA",
+   "ibge": "2931608"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8003947-42.2022.8.05.0000",
+   "id_djen": 696609509,
+   "ente": "MUNICIPIO DE VERA CRUZ",
+   "ibge": "2933208"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8015207-19.2022.8.05.0000",
+   "id_djen": 696609588,
+   "ente": "MUNICIPIO DE VARZEA NOVA",
+   "ibge": "2933158"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039215-94.2021.8.05.0000",
+   "id_djen": 696609644,
+   "ente": "MUNICIPIO DE TUCANO",
+   "ibge": "2931905"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039208-05.2021.8.05.0000",
+   "id_djen": 696609709,
+   "ente": "MUNICIPIO DE SITIO DO QUINTO",
+   "ibge": "2930766"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039773-66.2021.8.05.0000",
+   "id_djen": 696609759,
+   "ente": "MUNICIPIO DE SERRINHA",
+   "ibge": "2930501"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039026-19.2021.8.05.0000",
+   "id_djen": 696609811,
+   "ente": "MUNICIPIO DE TANHACU",
+   "ibge": "2931004"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8044085-85.2021.8.05.0000",
+   "id_djen": 696609877,
+   "ente": "MUNICIPIO DE SANTO ANTONIO DE JESUS",
+   "ibge": "2928703"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039221-04.2021.8.05.0000",
+   "id_djen": 696609972,
+   "ente": "MUNICIPIO DE SENHOR DO BONFIM",
+   "ibge": "2930105"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8034932-23.2024.8.05.0000",
+   "id_djen": 696610039,
+   "ente": "MUNICIPIO DE SAO DESIDERIO",
+   "ibge": "2928901"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8023959-14.2021.8.05.0000",
+   "id_djen": 696610164,
+   "ente": "MUNICIPIO DE SANTA RITA DE CASSIA",
+   "ibge": "2928406"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039211-57.2021.8.05.0000",
+   "id_djen": 696610255,
+   "ente": "MUNICIPIO DE SANTA LUZIA",
+   "ibge": "2928059"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8044083-18.2021.8.05.0000",
+   "id_djen": 696610328,
+   "ente": "MUNICIPIO DE RIBEIRA DO AMPARO",
+   "ibge": "2926509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039780-58.2021.8.05.0000",
+   "id_djen": 696610415,
+   "ente": "MUNICIPIO DE RIO DE CONTAS",
+   "ibge": "2926707"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039205-50.2021.8.05.0000",
+   "id_djen": 696610486,
+   "ente": "MUNICIPIO DE RIACHO DE SANTANA",
+   "ibge": "2926400"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8040858-87.2021.8.05.0000",
+   "id_djen": 696610549,
+   "ente": "MUNICIPIO DE RETIROLANDIA",
+   "ibge": "2926103"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039060-91.2021.8.05.0000",
+   "id_djen": 696610628,
+   "ente": "MUNICIPIO DE MUCURI",
+   "ibge": "2922003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038961-24.2021.8.05.0000",
+   "id_djen": 696610696,
+   "ente": "MUNICIPIO DE NOVA IBIA",
+   "ibge": "2922755"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8027800-51.2020.8.05.0000",
+   "id_djen": 696610753,
+   "ente": "MUNICIPIO DE OUROLANDIA",
+   "ibge": "2923357"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039056-54.2021.8.05.0000",
+   "id_djen": 696610804,
+   "ente": "MUNICIPIO DE MIRANTE",
+   "ibge": "2921450"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8047022-34.2022.8.05.0000",
+   "id_djen": 696610880,
+   "ente": "MUNICIPIO DE PIATA",
+   "ibge": "2924306"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8032058-65.2024.8.05.0000",
+   "id_djen": 696610941,
+   "ente": "MUNICIPIO DE PLANALTINO",
+   "ibge": "2924900"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8003772-48.2022.8.05.0000",
+   "id_djen": 696611125,
+   "ente": "MUNICIPIO DE MASCOTE",
+   "ibge": "2920908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039058-24.2021.8.05.0000",
+   "id_djen": 696611172,
+   "ente": "MUNICIPIO DE MACURURE",
+   "ibge": "2919900"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8013671-70.2022.8.05.0000",
+   "id_djen": 696611238,
+   "ente": "MUNICIPIO DE MAETINGA",
+   "ibge": "2919959"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038938-78.2021.8.05.0000",
+   "id_djen": 696611290,
+   "ente": "MUNICIPIO DE LUIS EDUARDO MAGALHAES",
+   "ibge": "2919553"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038960-39.2021.8.05.0000",
+   "id_djen": 696611334,
+   "ente": "MUNICIPIO DE JUSSIAPE",
+   "ibge": "2918605"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8032050-88.2024.8.05.0000",
+   "id_djen": 696611380,
+   "ente": "MUNICIPIO DE ITUACU",
+   "ibge": "2917201"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8023916-77.2021.8.05.0000",
+   "id_djen": 696611429,
+   "ente": "MUNICIPIO DE ITIUBA",
+   "ibge": "2917003"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038927-49.2021.8.05.0000",
+   "id_djen": 696611473,
+   "ente": "MUNICIPIO DE ITAQUARA",
+   "ibge": "2916708"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038921-42.2021.8.05.0000",
+   "id_djen": 696611514,
+   "ente": "MUNICIPIO DE ITAMARI",
+   "ibge": "2915700"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8015193-35.2022.8.05.0000",
+   "id_djen": 696611566,
+   "ente": "MUNICIPIO DE ITAGIBA",
+   "ibge": "2915205"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8023935-15.2023.8.05.0000",
+   "id_djen": 696611606,
+   "ente": "MUNICIPIO DE IRECE",
+   "ibge": "2914604"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038928-34.2021.8.05.0000",
+   "id_djen": 696611676,
+   "ente": "MUNICIPIO DE IPIAU",
+   "ibge": "2913903"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038784-60.2021.8.05.0000",
+   "id_djen": 696611717,
+   "ente": "MUNICIPIO DE HELIOPOLIS",
+   "ibge": "2911857"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8023936-97.2023.8.05.0000",
+   "id_djen": 696611767,
+   "ente": "MUNICIPIO DE IBIPITANGA",
+   "ibge": "2912509"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038726-57.2021.8.05.0000",
+   "id_djen": 696611809,
+   "ente": "MUNICIPIO DE GLORIA",
+   "ibge": "2911402"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038720-50.2021.8.05.0000",
+   "id_djen": 696611870,
+   "ente": "MUNICIPIO DE GUANAMBI",
+   "ibge": "2911709"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8044104-91.2021.8.05.0000",
+   "id_djen": 696611907,
+   "ente": "MUNICIPIO DE FATIMA",
+   "ibge": "2910750"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8026676-96.2021.8.05.0000",
+   "id_djen": 696612029,
+   "ente": "MUNICIPIO DE EUCLIDES DA CUNHA",
+   "ibge": "2910701"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8020654-22.2021.8.05.0000",
+   "id_djen": 696612066,
+   "ente": "MUNICIPIO DE BAIANOPOLIS",
+   "ibge": "2902500"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8023804-11.2021.8.05.0000",
+   "id_djen": 696612117,
+   "ente": "MUNICIPIO DE CAMPO FORMOSO",
+   "ibge": "2906006"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8020692-34.2021.8.05.0000",
+   "id_djen": 696612157,
+   "ente": "MUNICIPIO DE CAEM",
+   "ibge": "2905107"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038670-24.2021.8.05.0000",
+   "id_djen": 696612188,
+   "ente": "MUNICIPIO DE ARATACA",
+   "ibge": "2902252"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038771-61.2021.8.05.0000",
+   "id_djen": 696612231,
+   "ente": "MUNICIPIO DE ARACI",
+   "ibge": "2902104"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8020659-44.2021.8.05.0000",
+   "id_djen": 696612272,
+   "ente": "MUNICIPIO DE BURITIRAMA",
+   "ibge": "2904753"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038815-80.2021.8.05.0000",
+   "id_djen": 696612306,
+   "ente": "MUNICIPIO DE ANTAS",
+   "ibge": "2901601"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8039203-80.2021.8.05.0000",
+   "id_djen": 696612342,
+   "ente": "MUNICIPIO DE PINTADAS",
+   "ibge": "2924652"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8031755-51.2024.8.05.0000",
+   "id_djen": 696612376,
+   "ente": "MUNICIPIO DE AMERICA DOURADA",
+   "ibge": "2901155"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8038830-49.2021.8.05.0000",
+   "id_djen": 696612423,
+   "ente": "MUNICIPIO DE APORA",
+   "ibge": "2901908"
+  },
+  {
+   "tipo": "bloqueio_sisbajud",
+   "data": "2026-08-14",
+   "pa": "8040855-35.2021.8.05.0000",
+   "id_djen": 696612482,
+   "ente": "MUNICIPIO DE ANTONIO CARDOSO",
+   "ibge": "2901700"
+  }
+ ]
+}

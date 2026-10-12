@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList, Inbox, Scale, Calculator as CalcIcon } from "lucide-react";
+import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, FileText, KeyRound, UserRound, MessageSquareText, Calculator, ClipboardList, Inbox, Scale, Database, Calculator as CalcIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ const PROPOSAL_NAV = [
   { href: "/precificacao", label: "Precificação", icon: Calculator },
   // Pré-Análise: motor determinístico de precatórios (cálculo + leitura dos PDFs).
   { href: "/pre-analise", label: "Pré-Análise", icon: Scale },
+  // Alfred: a base de consulta — fila, devedor e projeção de pagamento.
+  { href: "/alfred", label: "Alfred", icon: Database },
 ];
 
 // Captação — o que chega pelo formulário público (/enviar).
@@ -37,11 +39,12 @@ const JURIDICO_NAV = [
   { href: "/mural", label: "Mural", icon: ClipboardList },
   { href: "/precificacao", label: "Precificação", icon: Calculator },
   { href: "/pre-analise", label: "Pré-Análise", icon: Scale },
+  { href: "/alfred", label: "Alfred", icon: Database },
 ];
 
 // Marca d'água do fundo por tela: o escudo da casa nas telas que fecham negócio;
 // o guilhoché, mais discreto, nas de apoio.
-const TELAS_COM_ESCUDO = ["/sales", "/proposta", "/precificacao", "/mural", "/pre-analise"];
+const TELAS_COM_ESCUDO = ["/sales", "/proposta", "/precificacao", "/mural", "/pre-analise", "/alfred"];
 
 function fundoDaRota(pathname: string): string {
   return TELAS_COM_ESCUDO.some((r) => pathname === r || pathname.startsWith(r + "/"))

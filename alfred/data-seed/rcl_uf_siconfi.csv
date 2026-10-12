@@ -1,0 +1,25 @@
+﻿codigo_ibge,nome,uf,regime,rcl,ano_rcl
+12,Estado do Acre,AC,Comum,11290138605.03,2025
+13,Estado do Amazonas,AM,Comum,28566006549.35,2025
+14,Estado de Roraima,RR,Especial,8612853167.57,2025
+15,Estado do Pará,PA,Comum,44705086000.08,2025
+16,Estado do Amapá,AP,Especial,9704126943.38,2025
+17,Estado do Tocantins,TO,Especial,15568042573.26,2025
+21,Estado do Maranhão,MA,Especial,32451618353.68,2025
+22,Estado do Piauí,PI,Especial,18732289115.60,2025
+23,Estado do Ceará,CE,Especial,39618216873.59,2025
+24,Estado do Rio Grande do Norte,RN,Especial,19513846659.98,2025
+25,Estado da Paraíba,PB,Especial,21120659776.55,2025
+26,Estado de Pernambuco,PE,Especial,47205580146.41,2025
+27,Estado de Alagoas,AL,Comum,18967280537.43,2025
+29,Estado da Bahia,BA,Especial,68995621759.51,2025
+31,Estado de Minas Gerais,MG,Especial,111739462561.63,2025
+32,Estado do Espírito Santo,ES,Comum,28084840124.16,2025
+33,Estado do Rio de Janeiro,RJ,Especial,100556162133.43,2025
+35,Estado de São Paulo,SP,Especial,266221395322.55,2025
+41,Estado do Paraná,PR,Especial,71133950007.50,2025
+42,Estado de Santa Catarina,SC,Especial,51032081150.54,2025
+43,Estado do Rio Grande do Sul,RS,Especial,65232845641.12,2025
+50,Estado de Mato Grosso do Sul,MS,Comum,22199300373.82,2025
+51,Estado de Mato Grosso,MT,Especial,37257271565.12,2025
+52,Estado de Goiás,GO,Especial,45370896917.06,2025

@@ -1,0 +1,1559 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Precatur — Consulta de precatórios</title>
+<style>
+  /* Paleta do manual de marca Precatur: petroleo #34474D + creme #FCEADC */
+  :root{
+    --petro:#34474D; --petro-2:#2a3a3f; --creme:#FCEADC;
+    --bg:#f4f7f7; --card:#fff; --linha:#dde4e6; --txt:#22303a; --mudo:#5b6b78;
+    --verde:#2d6a4f; --ambar:#9a5b00; --vermelho:#9b2c2c;
+    --r:10px; --sombra:0 1px 2px rgba(20,40,45,.06),0 4px 16px rgba(20,40,45,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  header{background:var(--petro);color:#fff;padding:14px 20px;display:flex;
+         align-items:center;gap:14px;flex-wrap:wrap}
+  header .marca{font-weight:700;letter-spacing:.14em;font-size:15px}
+  header .sub{color:#b9c9ce;font-size:12.5px}
+  header .dir{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:12.5px;color:#b9c9ce}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid transparent}
+  .b-prim{background:var(--petro);color:#fff;padding:11px 20px;font-weight:600}
+  .b-prim:hover{background:var(--petro-2)}
+  .b-fant{background:transparent;color:#b9c9ce;border-color:#5d7076;padding:5px 11px;font-size:12.5px}
+  .b-fant:hover{color:#fff;border-color:#b9c9ce}
+  main{max-width:1080px;margin:0 auto;padding:24px 20px 60px}
+  .painel{background:var(--card);border:1px solid var(--linha);border-radius:var(--r);
+          padding:20px;box-shadow:var(--sombra)}
+
+  /* ---------- login ---------- */
+  #login{max-width:400px;margin:12vh auto}
+  #login h1{font-size:19px;margin:0 0 6px}
+  #login p{color:var(--mudo);font-size:13.5px;margin:0 0 18px}
+  input[type=password],input[type=search]{width:100%;padding:12px 14px;font:inherit;
+    border:1px solid var(--linha);border-radius:8px;background:#fff;color:var(--txt)}
+  input:focus{outline:2px solid var(--petro);outline-offset:-1px;border-color:transparent}
+  #login button{width:100%;margin-top:12px}
+  .erro{color:var(--vermelho);font-size:13px;margin-top:10px;min-height:18px}
+
+  /* ---------- busca ---------- */
+  .barra{display:flex;gap:10px;margin-bottom:6px}
+  .barra input{flex:1}
+  .dica{color:var(--mudo);font-size:12.5px;margin:0 0 12px}
+  .status{color:var(--mudo);font-size:13.5px;padding:10px 0}
+  /* controle de ordenacao (segmentado), junto dos resultados */
+  #ordena{display:flex;align-items:center;gap:8px;margin:2px 0 14px;flex-wrap:wrap}
+  #ordena:empty{display:none}
+  .ord-lab{font-size:12.5px;color:var(--mudo);margin-right:2px}
+  .seg{background:var(--card);border:1px solid var(--linha);color:var(--mudo);
+       padding:6px 13px;font-size:12.5px;font-weight:600;border-radius:999px;cursor:pointer}
+  .seg:hover{border-color:var(--petro);color:var(--petro)}
+  .seg.on{background:var(--petro);border-color:var(--petro);color:#fff}
+  #paginacao,#paginacao-topo{display:flex;align-items:center;justify-content:center;gap:16px}
+  #paginacao{margin:16px 0 4px}
+  #paginacao-topo{margin:4px 0 12px}
+  #paginacao:empty,#paginacao-topo:empty{display:none}
+  .b-pag{background:var(--card);color:var(--petro);border:1px solid var(--linha);
+         padding:8px 16px;font-size:13px;font-weight:600;border-radius:8px;cursor:pointer}
+  .b-pag:hover:not(:disabled){border-color:var(--petro)}
+  .b-pag:disabled{color:var(--mudo);opacity:.5;cursor:default}
+  .pag-info{font-size:13px;color:var(--mudo);font-variant-numeric:tabular-nums}
+  /* abas de busca: Precatorio | Ente devedor */
+  .abas{display:flex;gap:4px;border-bottom:1px solid var(--linha);margin-bottom:14px}
+  .aba{background:none;border:0;border-bottom:3px solid transparent;border-radius:0;color:var(--mudo);
+       font-weight:600;font-size:14px;padding:9px 16px;margin-bottom:-1px}
+  .aba:hover{color:var(--petro)}
+  .aba[aria-selected="true"]{color:var(--petro);border-bottom-color:var(--petro)}
+  .aba:focus-visible{outline:2px solid var(--petro);outline-offset:2px}
+  /* busca de ente devedor (autocomplete sobre /devedores) */
+  .ente-box{position:relative;margin-bottom:6px}
+  .ente-drop{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 4px);
+    background:var(--card);border:1px solid var(--linha);border-radius:10px;
+    box-shadow:var(--sombra);max-height:380px;overflow-y:auto}
+  .ente-op{display:flex;align-items:center;gap:12px;justify-content:space-between;
+    padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--linha)}
+  .ente-op:last-child{border-bottom:0}
+  .ente-op:hover,.ente-op.sel{background:var(--bg)}
+  .ente-nome{font-size:13.5px;font-weight:600}
+  .ente-tag{font-size:11.5px;color:var(--mudo);text-align:right;font-variant-numeric:tabular-nums}
+  .ente-mais{padding:9px 14px;font-size:12px;color:var(--mudo);text-align:center}
+  details.ajuda{border:1px solid var(--linha);border-radius:var(--r);background:var(--card);
+    padding:0 16px;margin-bottom:12px}
+  details.ajuda summary{cursor:pointer;font-weight:600;color:var(--petro);padding:12px 0;
+    font-size:13.5px;list-style:none}
+  details.ajuda summary::before{content:"▸ ";color:var(--mudo)}
+  details.ajuda[open] summary::before{content:"▾ "}
+  .ajuda-corpo{padding:2px 0 14px;border-top:1px solid var(--linha);font-size:13.5px;color:var(--txt)}
+  .ajuda-corpo p{margin:10px 0;line-height:1.55}
+  .ajuda-nota{color:var(--mudo);font-size:12.5px}
+  .confid{background:#fbeae8;border:1px solid #eec7c1;border-radius:8px;color:#7a3a34;
+    font-size:12.5px;padding:9px 13px;margin-bottom:18px;line-height:1.5}
+
+  /* ---------- resultados ---------- */
+  .item{background:var(--card);border:1px solid var(--linha);border-radius:var(--r);
+        padding:14px 16px;margin-bottom:10px;cursor:pointer;box-shadow:var(--sombra);
+        display:flex;gap:16px;align-items:center;transition:border-color .12s}
+  .item:hover{border-color:var(--petro)}
+  .item .nome{font-weight:600}
+  .item .meta{color:var(--mudo);font-size:12.5px;margin-top:2px}
+  .item .val{margin-left:auto;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .item .val b{display:block}
+  .item .val .acum{display:block;color:var(--mudo);font-size:12.5px;margin-top:2px}
+  .tag{display:inline-block;background:var(--creme);color:#6b4a1f;border-radius:999px;
+       padding:1px 9px;font-size:11.5px;font-weight:600;margin-left:6px;vertical-align:1px}
+
+  /* ---------- detalhe ---------- */
+  .voltar{background:none;border:none;color:var(--petro);font-weight:600;padding:0;cursor:pointer}
+  .barra-detalhe{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .b-pdf{background:var(--petro);color:#fff;border:1px solid var(--petro-2);
+         padding:8px 16px;font-size:13px;font-weight:600;border-radius:8px}
+  .b-pdf:hover{background:var(--petro-2)}
+  .print-only,.print-runner{display:none}
+  /* wrapper de impressao: <table> real (thead/tfoot repetem por pagina no Chrome);
+     na tela e' invisivel — 1 coluna, sem borda, celulas sem padding */
+  .print-doc{width:100%;border-collapse:collapse}
+  .print-doc>thead>tr>td,.print-doc>tfoot>tr>td,.print-doc>tbody>tr>td{
+    padding:0;border:0;width:auto;color:inherit}
+  /* ---- impressao / salvar como PDF: vira DOCUMENTO, nao pagina congelada ---- */
+  @media print{
+    @page{margin:14mm}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{background:#fff;font-size:13px}
+    header,#barra-user,#tela-busca,#login,.no-print,.revelar,
+    details.bloco>summary .seta,details.bloco>summary .cont{display:none !important}
+    main{max-width:none;margin:0;padding:0}
+    #tela-detalhe{display:block !important}
+    /* documento, nao card: sem moldura/sombra de tela (a borda serrava nas quebras) */
+    .painel{border:0;box-shadow:none;border-radius:0;padding:0}
+    /* cabecalho + rodape em TODAS as paginas: o Chrome NAO repete position:fixed nem
+       display:table-*-group de div no print — so' thead/tfoot de <table> REAL. O
+       detalhe() embrulha o parecer em <table class="print-doc"> com os runners
+       no thead/tfoot; aqui basta exibi-los. */
+    .print-runner{display:block}
+    .print-runner .ri{font-size:8.5px;line-height:1.35;color:var(--mudo);letter-spacing:.03em}
+    .print-runner.topo .ri{padding-bottom:5px;border-bottom:1px solid var(--linha);margin-bottom:12px}
+    .print-runner.pe-pag .ri{padding-top:5px;border-top:1px solid var(--linha);margin-top:12px}
+    /* NAO por break-inside no .painel: ele envolve o parecer INTEIRO -> empurraria tudo
+       p/ a 2a pagina e deixaria a 1a em branco. So nos blocos pequenos. */
+    .kpi,.veredito,.passo,.conta,table:not(.print-doc){break-inside:avoid}
+    /* titulo nunca orfao do proprio conteudo */
+    h3,details.bloco>summary{break-after:avoid}
+    details.bloco{display:block !important}
+    a{color:inherit;text-decoration:none}
+    /* link util no papel: revela o endereco (ex. "ver edital") */
+    a[href^="http"]::after{content:" (" attr(href) ")";font-size:.85em;color:var(--mudo)}
+    /* papel nao tem scroll: o que estoura seria CLIPADO — deixa quebrar linha */
+    .conta{overflow:visible}
+    .conta table{white-space:normal}
+    /* compactar levemente p/ caber mais por folha e reduzir vazios de quebra */
+    .kpi{padding:12px 14px}
+    .kpi .num{font-size:22px}
+    .kpi .rot,.kpi .pe{color:#e3ecee}
+    .kpi.claro .rot,.kpi.claro .pe{color:#7c6647}
+    .passo{padding:9px 14px}
+    h2{font-size:22px}
+  }
+  h2{font-size:18px;margin:0 0 2px}
+  .subtit{color:var(--mudo);font-size:13px;margin-bottom:18px}
+  .destaque{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px}
+  .kpi{background:var(--petro);color:#fff;border-radius:var(--r);padding:16px 18px}
+  .kpi .rot{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:#b9c9ce}
+  .kpi .num{font-size:27px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi .pe{font-size:12px;color:#b9c9ce;margin-top:3px}
+  .kpi.claro{background:var(--creme);color:#4a3a25}
+  .kpi.claro .rot,.kpi.claro .pe{color:#7c6647}
+  h3{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--petro);
+     margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--linha)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  td{padding:7px 0;border-bottom:1px solid var(--linha);vertical-align:top}
+  td:first-child{color:var(--mudo);width:210px;padding-right:14px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  /* tabelas em GRADE (serie anual, por tribunal): varias colunas de dado, ao
+     contrario das tabelas rotulo/valor. Precisa anular o td:first-child de 210px. */
+  .grade td:first-child{width:auto;color:inherit;padding-right:8px}
+  .grade th{text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+            color:var(--mudo);font-weight:600;padding:6px 8px 6px 0;
+            border-bottom:1px solid var(--linha);white-space:nowrap}
+  .grade th.num{text-align:right}
+  .grade td{padding:6px 8px 6px 0}
+  .grade{margin-top:4px}
+  /* ---- decisao: veredito, cenarios, passos, conta (layout de 21/08/2026) ---- */
+  .veredito{border-radius:var(--r);border:1px solid;border-left-width:5px;
+    padding:16px 20px;display:flex;gap:16px;align-items:flex-start;margin-bottom:16px}
+  .veredito .marca{font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    white-space:nowrap;padding-top:2px}
+  .veredito p{margin:0;font-size:14.5px;line-height:1.5}
+  .veredito p+p{margin-top:6px;font-size:13.5px;opacity:.85}
+  .v-pare{background:#fbeae8;border-color:#eec7c1;border-left-color:var(--vermelho)}
+  .v-pare .marca{color:var(--vermelho)}
+  .v-ressalva{background:#fcf1de;border-color:#e7cfa8;border-left-color:var(--ambar)}
+  .v-ressalva .marca{color:var(--ambar)}
+  .v-segue{background:#e7f2ec;border-color:#bcd9c9;border-left-color:var(--verde)}
+  .v-segue .marca{color:var(--verde)}
+
+  .passos{border:1px solid var(--linha);border-radius:var(--r);overflow:hidden;background:var(--card)}
+  .passo{display:grid;grid-template-columns:34px 120px 1fr;gap:0 14px;padding:13px 18px;align-items:start}
+  .passo+.passo{border-top:1px solid var(--linha)}
+  .passo .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+    border:1px solid var(--linha);background:#f5f7f9;color:var(--petro);font-size:11.5px;font-weight:700}
+  .passo .rot{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mudo);padding-top:4px}
+  .passo .resp{font-size:14.5px;font-weight:600;line-height:1.4}
+  .passo .porque{color:var(--mudo);font-size:12.8px;line-height:1.5;margin-top:3px}
+  .passo .fonte{font-size:11px;color:var(--mudo);margin-top:5px;line-height:1.45;opacity:.85}
+  .passo.corta{background:#fbeae8}
+  .passo.corta .n{color:var(--vermelho);border-color:#eec7c1;background:transparent}
+  .passo.corta .resp{color:var(--vermelho)}
+
+  .conta{background:#fbfaf7;border:1px solid #e4e0d6;border-radius:8px;
+    padding:14px 16px;margin-top:10px;overflow-x:auto}
+  .conta table{border-collapse:collapse;width:100%;font-size:12.8px;
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+  .conta td{padding:3px 0;border:0}
+  .conta td.op{width:20px;color:var(--mudo);text-align:center}
+  .conta td.v{text-align:right;padding-right:14px;font-weight:600;width:1%}
+  .conta td.d{color:var(--mudo);white-space:normal;font-size:12.3px;line-height:1.45}
+  .conta tr.regra td{border-top:1px solid var(--linha);padding-top:7px}
+  .conta tr.fim td{font-weight:700;font-size:14px;padding-top:5px}
+  .conta tr.fim td.v{color:var(--petro)}
+  .conta tr.mas td.d{color:var(--ambar)}
+  .conta .nb{margin-top:10px;padding-top:9px;border-top:1px dashed #e4e0d6;
+    font-size:12.5px;color:var(--mudo);line-height:1.5}
+
+  details.bloco{border:1px solid var(--linha);border-radius:var(--r);background:var(--card);
+    overflow:hidden;margin-top:10px}
+  details.bloco>summary{cursor:pointer;padding:12px 18px;font-size:13.5px;font-weight:600;
+    list-style:none;display:flex;align-items:center;gap:8px;color:var(--petro)}
+  details.bloco>summary::-webkit-details-marker{display:none}
+  details.bloco>summary .seta{font-size:10px;color:var(--mudo)}
+  details.bloco[open]>summary .seta{transform:rotate(90deg);display:inline-block}
+  details.bloco>summary .cont{margin-left:auto;font-weight:400;color:var(--mudo);font-size:12px}
+  details.bloco .interno{padding:0 18px 16px;border-top:1px solid var(--linha)}
+  details.bloco .interno h3:first-child{margin-top:14px}
+  @media(max-width:620px){ .passo{grid-template-columns:28px 1fr;gap:0 10px}
+    .passo .rot{grid-column:2;padding-top:0} .passo .conteudo{grid-column:2} }
+
+  .avisos{background:#fff9f0;border:1px solid #f0dcc0;border-radius:var(--r);
+          padding:12px 16px;margin-top:20px}
+  .avisos li{font-size:13px;color:#6b4a1f;margin:5px 0}
+  .avisos ul{margin:0;padding-left:18px}
+  .explica{background:#fff9f0;border:1px solid #f0dcc0;border-radius:var(--r);
+           padding:12px 16px;margin-top:10px;color:#6b4a1f;font-size:13.5px;max-width:720px}
+  /* Rastreio no DataJud: aparece quando a busca por numero nao acha nada. Tom
+     diferente do .explica porque nao e' um aviso — e' uma RESPOSTA sobre onde o
+     credito esta. */
+  .rastreio{background:#f2f7f7;border:1px solid #cfe0e0;border-radius:var(--r);
+            padding:14px 16px;margin-top:12px;max-width:720px}
+  .rastreio h4{margin:0 0 8px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;
+               color:var(--petro)}
+  /* reset explicito: sem isto o veredito herda a caixa com borda de uma regra
+     generica de div dentro de #status e vira caixa-dentro-de-caixa */
+  .rastreio .veredito{font-size:14px;line-height:1.5;color:#23383c;
+                      background:none;border:0;padding:0;margin:0;max-width:none}
+  .rastreio .meta{font-size:12.5px;color:#5b6b78;margin-top:8px}
+  .rastreio .marcos{margin:10px 0 0;padding:0;list-style:none;font-size:12.5px;color:#41565b}
+  .rastreio .marcos li{display:flex;gap:10px;padding:2px 0}
+  .rastreio .marcos time{color:#7b8b95;min-width:74px;font-variant-numeric:tabular-nums}
+  .rastreio .selo{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.04em;
+                  border-radius:999px;padding:3px 10px;margin-bottom:8px;text-transform:uppercase}
+  .selo-verde{background:#e3f1ea;color:#1f5c43}
+  .selo-ambar{background:#fdf1dc;color:#84551a}
+  .selo-verm{background:#fbe9e7;color:#8d2f26}
+  .revelar{background:none;border:none;color:var(--petro);font-weight:600;
+           font-size:12.5px;text-decoration:underline;padding:0 0 0 4px}
+  /* ---------- saude do ente ---------- */
+  :root{--bar-devido:#b9cdd2;--bar-pago:#34474D;--vencido:#c0573c;--avencer:#8fb3bc}
+  .sd-h{margin-top:6px;display:grid;gap:6px}
+  .sd-h h1{margin:0;font-size:24px;line-height:1.2}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:12px;border:1px solid var(--linha);border-radius:999px;padding:2px 10px;color:var(--mudo);background:var(--card)}
+  .chip.forte{background:var(--petro);color:#fff;border-color:var(--petro)}
+  .sd-cor{margin-top:12px;border:1px dashed var(--linha);border-radius:8px;padding:10px 14px;color:var(--mudo);
+          font-size:13.5px;display:flex;gap:10px;align-items:center}
+  .sd-cor .bola{width:14px;height:14px;border-radius:50%;background:var(--linha);flex:none}
+  .sd-kpis{margin-top:14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .sd-kpi{background:var(--card);border:1px solid var(--linha);border-radius:var(--r);padding:12px 14px;
+       display:grid;gap:2px;align-content:start;box-shadow:var(--sombra)}
+  .sd-kpi .r{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--mudo);font-weight:600}
+  .sd-kpi .v{font-size:25px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+  .sd-kpi .s{font-size:12.5px;color:var(--mudo)}
+  .sd-bloco{margin-top:16px;background:var(--card);border:1px solid var(--linha);border-radius:var(--r);
+            padding:16px;display:grid;gap:10px;box-shadow:var(--sombra);min-width:0}
+  .sd-bloco>h2{margin:0;font-size:16.5px}
+  .sd-sub{margin:0;color:var(--mudo);font-size:13.5px;max-width:80ch}
+  .sd-nota{margin:0;color:var(--mudo);font-size:12.5px}
+  .duas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+  .lv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;font-size:14px;margin:0}
+  .lv dt{color:var(--mudo)} .lv dd{margin:0}
+  .tw{overflow-x:auto}
+  .sd-tab{border-collapse:collapse;width:100%;font-size:13.5px}
+  .sd-tab th,.sd-tab td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--linha);vertical-align:top;width:auto}
+  .sd-tab th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--mudo);font-weight:600}
+  .sd-tab .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .sd-tab tr:last-child td{border-bottom:0}
+  .tag-bad{color:var(--vermelho);font-weight:600} .tag-ok{color:var(--verde);font-weight:600}
+  .legenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mudo)}
+  .legenda i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .sd-bloco svg{display:block;width:100%;max-width:780px;height:auto}
+  .sd-bloco svg text{fill:var(--mudo);font-family:inherit}
+  .sd-bloco svg .lbl{fill:var(--txt);font-weight:600}
+  .curva{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+  .ponto{border:1px solid var(--linha);border-radius:8px;padding:10px;display:grid;gap:2px;text-align:center}
+  .ponto .q{font-size:12px;color:var(--mudo)} .ponto .a{font-size:21px;font-weight:700}
+  .ponto .rr{font-size:12.5px;color:var(--mudo)}
+  .sd-avisos{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+  .b-sec{background:var(--bg);color:var(--petro);border:1px solid var(--linha);padding:5px 11px;
+         font-size:12.5px;font-weight:600;border-radius:8px;white-space:nowrap}
+  .b-sec:hover{border-color:var(--petro)}
+  .b-sec.on{background:var(--petro);border-color:var(--petro);color:#fff}
+  .trib-sel{display:flex;gap:6px;flex-wrap:wrap}
+  .sd-tab .b-sec{margin-top:5px}
+  .sd-filas{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .sd-filas-r{font-size:13px;color:var(--mudo);font-weight:600}
+  .b-fila{background:var(--petro);color:#fff;border:1px solid var(--petro-2);padding:7px 14px;
+          font-size:13px;font-weight:600;border-radius:8px;text-align:left;line-height:1.3}
+  .b-fila:hover{background:var(--petro-2)}
+  .b-fila span{display:block;font-size:11.5px;font-weight:500;color:#cfdde1}
+  .sd-filas-mais{background:none;border:0;padding:0;font-size:13px;color:var(--petro);font-weight:600;text-decoration:underline}
+  @media(max-width:720px){
+    .sd-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .duas{grid-template-columns:minmax(0,1fr);gap:0}
+    .curva{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .sd-h h1{font-size:21px} .sd-kpi .v{font-size:21px}
+    .lv{grid-template-columns:minmax(0,1fr);gap:0} .lv dd{margin-bottom:8px}
+    .aba{padding:9px 12px}
+  }
+  .oculto{display:none}
+  @media(max-width:620px){ td:first-child{width:130px} .item{flex-wrap:wrap} .item .val{margin-left:0} }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="marca">PRECATUR</span>
+  <span class="sub">consulta de precatórios</span>
+  <span class="dir oculto" id="barra-user">
+    <span id="quem"></span>
+    <button class="b-fant" id="sair">sair</button>
+  </span>
+</header>
+
+<main>
+  <!-- ---------------- login ---------------- -->
+  <section id="login" class="painel">
+    <h1>Acesso</h1>
+    <p>Informe a senha de acesso fornecida pela Precatur.</p>
+    <form id="f-login">
+      <input type="password" id="senha" placeholder="senha de acesso" autocomplete="current-password" required>
+      <button class="b-prim" type="submit">Entrar</button>
+    </form>
+    <div class="erro" id="erro-login"></div>
+  </section>
+
+  <!-- ---------------- app ---------------- -->
+  <section id="app" class="oculto">
+    <div id="tela-busca">
+      <div class="abas" role="tablist" aria-label="Tipo de busca">
+        <button class="aba" role="tab" id="aba-prec" type="button" aria-selected="true">Precatório</button>
+        <button class="aba" role="tab" id="aba-ente" type="button" aria-selected="false">Ente devedor</button>
+      </div>
+      <div id="p-prec">
+        <form class="barra" id="f-busca">
+          <input type="search" id="termo" placeholder="Número do processo, CPF ou nome do credor" autofocus>
+          <button class="b-prim" type="submit">Buscar</button>
+        </form>
+        <p class="dica">Aceita o número do precatório, o número do processo de origem, CPF do credor ou parte do nome.</p>
+      </div>
+      <div id="p-ente" class="oculto">
+        <div class="ente-box">
+          <input type="search" id="dev-busca" autocomplete="off"
+                 placeholder="Município ou Estado (ex.: Minas Gerais, Ceará, Itabuna)">
+          <div id="dev-drop" class="ente-drop oculto" role="listbox"></div>
+        </div>
+        <p class="dica">Mostra o devedor inteiro: o governo e todos os órgãos dele (previdência, autarquias,
+          fundações) em todos os tribunais.</p>
+      </div>
+
+      <details class="ajuda">
+        <summary>Como usar</summary>
+        <div class="ajuda-corpo">
+          <p><b>Buscar um precatório:</b> digite o <b>número do precatório</b>, o <b>processo de origem</b>,
+             o <b>CPF</b> ou <b>parte do nome</b> do credor. Clique num resultado para ver o parecer.</p>
+          <p><b>Saúde do ente devedor:</b> na aba <b>Ente devedor</b>, digite o município ou o Estado e escolha na lista.
+             Mostra a dívida, quanto pagou nos últimos anos, a capacidade pelo §23 e em que ano a fila zera.
+             A fila completa de cada órgão abre pelo botão <b>ver fila</b>, na lista de órgãos.</p>
+          <p><b>No parecer, os dois cards de previsão:</b>
+            <br>• <b>Pelo teto legal do §23</b> — o ano <i>se</i> o ente gastar todo o limite legal (cenário otimista).
+            <br>• <b>No ritmo que vem pagando</b> — o ano pelo que o ente <i>de fato</i> pagou (o realista).
+            <br>Quando os dois divergem, a recomendação (“trabalhe com…”) aponta o realista.</p>
+          <p class="ajuda-nota">As previsões são <b>estimativas</b> a partir da fila e da RCL — não são promessa de data
+             de pagamento. Cobertura varia por tribunal (veja no seletor de entes).</p>
+        </div>
+      </details>
+
+      <div id="res-prec">
+        <div id="status" class="status"></div>
+        <div id="ordena"></div>
+        <div id="paginacao-topo"></div>
+        <div id="lista"></div>
+        <div id="paginacao"></div>
+      </div>
+      <div id="res-ente" class="oculto"></div>
+    </div>
+
+    <div id="tela-detalhe" class="oculto"></div>
+  </section>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+let TOKEN = sessionStorage.getItem("alfred_token") || "";
+let PAPEL = "";
+let ULTIMO = "";   // numero aberto no detalhe, p/ recarregar revelando o CPF
+
+const brl = v => v == null ? "—"
+  : v.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
+// percentual em pt-BR (vírgula decimal), até 2 casas: 0.1 -> "0,1%"
+const pct = v => v == null ? "—"
+  : v.toLocaleString("pt-BR", {maximumFractionDigits:2}) + "%";
+// "2026-07-30T00:00:00+00:00" -> "30/07/2026"
+const dataBR = s => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s ?? "");
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : (s ?? "");
+};
+const esc = s => (s ?? "").toString()
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+async function api(rota, opts = {}) {
+  const r = await fetch(rota, {
+    ...opts,
+    headers: {"Authorization": "Bearer " + TOKEN, "Content-Type": "application/json", ...(opts.headers||{})}
+  });
+  if (r.status === 401) { sair(); throw new Error("sessão expirada"); }
+  if (!r.ok) throw new Error((await r.json().catch(()=>({}))).detail || ("erro " + r.status));
+  return r.json();
+}
+
+/* ---------------- sessão ---------------- */
+function entrar(papel) {
+  $("#login").classList.add("oculto");
+  $("#app").classList.remove("oculto");
+  $("#barra-user").classList.remove("oculto");
+  PAPEL = papel;
+  $("#quem").textContent = papel === "completo" ? "acesso completo" : "acesso leitura";
+  abreDoHash();
+}
+function sair() {
+  TOKEN = ""; sessionStorage.removeItem("alfred_token");
+  $("#app").classList.add("oculto");
+  $("#barra-user").classList.add("oculto");
+  $("#login").classList.remove("oculto");
+  $("#senha").value = "";
+}
+$("#sair").onclick = sair;
+
+$("#f-login").onsubmit = async e => {
+  e.preventDefault();
+  TOKEN = $("#senha").value.trim();
+  $("#erro-login").textContent = "";
+  try {
+    const eu = await api("/eu");
+    sessionStorage.setItem("alfred_token", TOKEN);
+    entrar(eu.papel);
+  } catch (err) {
+    TOKEN = "";
+    $("#erro-login").textContent = "Senha inválida.";
+  }
+};
+
+/* ---------------- busca (paginada) ---------------- */
+const POR_PAGINA = 50;
+let BUSCA_TERMO = "";
+let ORDEM = "valor";
+
+$("#f-busca").onsubmit = e => {
+  e.preventDefault();
+  const termo = $("#termo").value.trim();
+  if (termo.length < 3) return;
+  BUSCA_TERMO = termo;
+  FILA_DA_SAUDE = false;
+  fazerBusca(1);
+};
+
+// Precatorio que nao esta na fila do Alfred nao quer dizer "nao existe". O
+// /busca traz `rastreio` (DataJud) separando as tres situacoes possiveis; aqui so'
+// se pinta o veredito. Silencioso quando o DataJud nao respondeu — meia resposta
+// util e' melhor que um erro tecnico na cara de quem so' queria achar o credito.
+// Texto do edital de acordo. Monta so' com o que a fonte daquele tribunal publica:
+// MG traz faixa de desagio + valor do certame + validade; PA traz percentual unico;
+// na BA so' a EXISTENCIA do canal esta verificada (desagio_confirmado=false), e ai o
+// numero NAO pode ser apresentado como preco de referencia.
+function textoEdital(ed) {
+  const p = [];
+  if (ed.desagio_confirmado) {
+    const a = ed.desagio_min_pct, b = ed.desagio_max_pct;
+    p.push("Deságio de " + (a && b && a !== b ? a + "% a " + b + "%" : (a || b) + "%") + ".");
+  } else {
+    p.push("<b>Deságio não confirmado</b> — a existência do canal está verificada, "
+         + "o percentual não. Conferir no edital antes de usar como preço de referência.");
+  }
+  if (ed.valor_certame) p.push(brl(ed.valor_certame) + " na conta de acordos.");
+  if (ed.inscricao_abre || ed.inscricao_fecha)
+    p.push("Inscrição de " + dataBR(ed.inscricao_abre) + " a " + dataBR(ed.inscricao_fecha) + ".");
+  if (ed.validade_pagamento) p.push("Pagamentos válidos até " + dataBR(ed.validade_pagamento) + ".");
+  if (ed.observacao) p.push(esc(ed.observacao));
+  return p.join(" ");
+}
+
+const SELO = {
+  precatorio_fora_da_base: ["selo-ambar", "existe, fora da nossa base"],
+  requisitado_nao_autuado: ["selo-ambar", "requisitado, ainda não autuado"],
+  em_cumprimento:          ["selo-ambar", "em cumprimento de sentença"],
+  transitado:              ["selo-ambar", "transitado, sem cumprimento"],
+  em_conhecimento:         ["selo-verm",  "ainda em conhecimento"],
+  sem_registro:            ["selo-verm",  "sem registro no DataJud"],
+  indefinido:              ["selo-ambar", "estágio indefinido"]
+};
+function renderRastreio(r) {
+  if (!r || r.erro) return "";
+  const d = r.diagnostico;
+  if (!d) return "";
+  const [cls, rot] = SELO[d] || ["selo-ambar", d];
+  let h = '<div class="rastreio"><h4>Onde este crédito está</h4>'
+        + '<span class="selo ' + cls + '">' + esc(rot) + "</span>"
+        + '<div class="veredito">' + esc(r.explicacao || "") + "</div>";
+  if (r.achou) {
+    const meta = [r.classe, r.orgao, r.tribunal, r.grau].filter(Boolean).map(esc).join(" · ");
+    h += '<div class="meta">' + meta
+       + (r.ultimo_movimento ? " · último andamento em " + esc(dataBR(r.ultimo_movimento.data))
+                               + " (" + esc(r.ultimo_movimento.nome) + ")" : "")
+       + "</div>";
+    if (r.marcos && r.marcos.length) {
+      h += '<ul class="marcos">' + r.marcos.map(m =>
+        "<li><time>" + esc(dataBR(m.data)) + "</time><span>" + esc(m.nome) + "</span></li>"
+      ).join("") + "</ul>";
+    }
+  }
+  h += '<div class="meta">Fonte: ' + esc(r.fonte || "DataJud/CNJ") + "</div></div>";
+  return h;
+}
+async function fazerBusca(pagina) {
+  $("#lista").innerHTML = ""; $("#paginacao").innerHTML = ""; $("#paginacao-topo").innerHTML = "";
+  $("#ordena").innerHTML = ""; $("#status").textContent = "buscando…";
+  try {
+    const d = await api("/busca", {method:"POST", body: JSON.stringify(
+      {termo: BUSCA_TERMO, limite: POR_PAGINA, pagina, ordem: ORDEM})});
+    if (!d.total_encontrado) {
+      $("#status").innerHTML = "<b>Nada encontrado.</b>"
+        + (d.explicacao ? '<div class="explica">' + esc(d.explicacao) + "</div>" : "")
+        + renderRastreio(d.rastreio);
+      return;
+    }
+    const rot = {numero_processo:"número de processo", cpf_cnpj:"CPF/CNPJ", credor:"nome do credor"}[d.criterio];
+    const ini = (d.pagina - 1) * d.limite + 1, fim = (d.pagina - 1) * d.limite + d.total;
+    $("#status").innerHTML = d.total_encontrado > d.limite
+      ? `<b>${d.total_encontrado}</b> encontrado(s) por ${rot} — mostrando ${ini}–${fim}.`
+        + (d.criterio === "credor" ? ` Nome comum? <b>refine com o sobrenome</b>.` : "")
+      : `${d.total_encontrado} resultado(s) — busca por ${rot}.`;
+    renderOrdena(d.total_encontrado > 1);
+    mostrarItens(d.itens);
+    renderPaginacao(d.pagina, d.paginas);
+  } catch (err) { $("#status").textContent = "Erro: " + err.message; }
+}
+
+/* controle de ordenacao — aparece junto dos resultados (abaixo do "N encontrados") */
+function renderOrdena(mostrar) {
+  const el = $("#ordena");
+  if (!mostrar) { el.innerHTML = ""; return; }
+  el.innerHTML = `<span class="ord-lab">Ordenar por</span>`
+    + [["valor", "Maior valor"], ["nome", "Nome (A–Z)"]].map(([v, t]) =>
+        `<button class="seg${ORDEM === v ? " on" : ""}" data-ord="${v}">${t}</button>`).join("");
+  el.querySelectorAll(".seg").forEach(b => b.onclick = () => {
+    if (b.dataset.ord === ORDEM) return;
+    ORDEM = b.dataset.ord;
+    fazerBusca(1);
+  });
+}
+
+function renderPaginacao(pagina, paginas) {
+  // mesmos controles no TOPO e na BASE da lista (classes, nao ids, p/ nao duplicar id)
+  const html = paginas <= 1 ? "" :
+    `<button class="b-pag pag-ant"${pagina <= 1 ? " disabled" : ""}>← anterior</button>`
+    + `<span class="pag-info">página ${pagina} de ${paginas}</span>`
+    + `<button class="b-pag pag-prox"${pagina >= paginas ? " disabled" : ""}>próxima →</button>`;
+  $("#paginacao-topo").innerHTML = html;
+  $("#paginacao").innerHTML = html;
+  document.querySelectorAll(".pag-ant").forEach(b => {
+    if (!b.disabled) b.onclick = () => { fazerBusca(pagina - 1); window.scrollTo(0, 0); }; });
+  document.querySelectorAll(".pag-prox").forEach(b => {
+    if (!b.disabled) b.onclick = () => { fazerBusca(pagina + 1); window.scrollTo(0, 0); }; });
+}
+
+/* render de uma lista de precatorios (usado pela busca E pelo dropdown de entes) */
+function mostrarItens(itens, anexar = false) {
+  const html = itens.map(x => `
+      <div class="item" data-id="${esc(x.id)}">
+        <div>
+          <div class="nome">${esc(x.credor || "— credor não publicado")}</div>
+          <div class="meta">${esc(x.numero)} · ${esc(x.tribunal)} ·
+            ${esc(x.municipio || "?")}/${esc(x.uf || "?")}${x.ordem ? " · ordem " + x.ordem + "ª" : ""}</div>
+        </div>
+        <div class="val"><b>${brl(x.valor)}</b>${x.acumulado != null
+          ? `<span class="acum">acumulado ${brl(x.acumulado)}</span>` : ""}</div>
+      </div>`).join("");
+  const lista = $("#lista");
+  if (anexar) lista.insertAdjacentHTML("beforeend", html); else lista.innerHTML = html;
+  // delegacao: 1 handler na lista (ente com milhares de itens nao cria milhares de onclick)
+  lista.onclick = ev => {
+    const el = ev.target.closest(".item");
+    if (el) detalhe(el.dataset.id);
+  };
+}
+
+/* ---------------- fila de um orgao (botao "ver fila" da saude do ente) ---------------- */
+const LOTE_ENTE = 10000;  // itens por requisicao; ente maior (ex.: SP) ganha "carregar mais"
+async function abrirEnte(id, offset = 0) {
+  if (!id) return;
+  BUSCA_TERMO = "";  // saiu da busca por credor -> nao reabrir ordenacao dela
+  if (!offset) {
+    $("#lista").innerHTML = ""; $("#paginacao").innerHTML = ""; $("#paginacao-topo").innerHTML = "";
+    $("#ordena").innerHTML = "";
+  }
+  $("#status").textContent = "carregando fila do ente…";
+  try {
+    const d = await api(`/entes/${encodeURIComponent(id)}/fila?limite=${LOTE_ENTE}&offset=${offset}`);
+    const ate = offset + d.itens.length;
+    $("#status").innerHTML = (FILA_DA_SAUDE && SAUDE
+        ? `<button class="voltar" id="volta-saude" type="button">← voltar à saúde do ente</button><br>` : "")
+      + esc(`${d.ente} — ${d.total} precatório(s) na fila`
+      + (ate < d.total ? ` (mostrando os ${ate} primeiros)` : "") + ".");
+    const vs = $("#volta-saude");
+    if (vs) vs.onclick = () => { FILA_DA_SAUDE = false; trocaAba("ente"); };
+    mostrarItens(d.itens, offset > 0);
+    $("#paginacao").innerHTML = ate < d.total
+      ? `<button id="ente-mais-btn">carregar mais (${d.total - ate} restantes)</button>` : "";
+    const bt = $("#ente-mais-btn");
+    if (bt) bt.onclick = () => abrirEnte(id, ate);
+  } catch (err) { $("#status").textContent = "Erro: " + err.message; }
+}
+
+/* ---------------- abas: Precatório | Ente devedor ---------------- */
+// A aba "Ente devedor" abre a SAUDE DO ENTE: o devedor inteiro (governo + todos os
+// orgaos, todos os tribunais) so' com agregados — nenhum dado de credor nesta tela.
+// Link direto: #ente (abre a aba) e #ente/<chave> (abre o ente; chave = ibge, ou
+// e<id> para orgao sem municipio, como a Uniao no TRF2).
+let SAUDE = null;          // ultimo /ente/{chave} carregado
+let SERIE_TRIB = null;     // tribunal escolhido no grafico "pagou x tinha a pagar"
+let FILA_DA_SAUDE = false; // a fila na aba Precatorio foi aberta pelo botao "ver fila"
+
+function trocaAba(a, mexeHash = true) {
+  $("#tela-detalhe").classList.add("oculto"); $("#tela-busca").classList.remove("oculto");
+  $("#aba-prec").setAttribute("aria-selected", a === "prec");
+  $("#aba-ente").setAttribute("aria-selected", a === "ente");
+  ["p-prec", "res-prec"].forEach(x => $("#" + x).classList.toggle("oculto", a !== "prec"));
+  ["p-ente", "res-ente"].forEach(x => $("#" + x).classList.toggle("oculto", a !== "ente"));
+  if (mexeHash) history.replaceState(null, "", a === "ente"
+    ? "#ente" + (SAUDE ? "/" + SAUDE.chave : "") : location.pathname + location.search);
+  if (a === "ente" && !SAUDE) $("#dev-busca").focus();
+  if (a === "prec" && !FILA_DA_SAUDE) $("#termo").focus();
+}
+$("#aba-prec").onclick = () => { FILA_DA_SAUDE = false; trocaAba("prec"); };
+$("#aba-ente").onclick = () => trocaAba("ente");
+
+function abreDoHash() {
+  if (!TOKEN) return;
+  const m = /^#ente(?:\/(e?\d{1,9}))?$/.exec(location.hash);
+  if (!m) { trocaAba("prec", false); return; }
+  trocaAba("ente", false);
+  if (m[1] && (!SAUDE || SAUDE.chave !== m[1])) abrirSaude(m[1]);
+}
+window.addEventListener("hashchange", abreDoHash);
+
+/* ---------------- busca do ente devedor (autocomplete sobre /devedores) ---------------- */
+const TIPO_DEV = {estado: "Estado", municipio: "Município", orgao: "Órgão sem município"};
+let DEV_T = null, DEV_SEQ = 0;
+
+$("#dev-busca").oninput = () => { clearTimeout(DEV_T); DEV_T = setTimeout(buscaDev, 180); };
+// ao voltar ao campo, so' reabre as sugestoes se o texto nao e' o do ente ja aberto
+$("#dev-busca").onfocus = () => {
+  if ($("#dev-drop").innerHTML && !(SAUDE && $("#dev-busca").value === SAUDE.nome))
+    $("#dev-drop").classList.remove("oculto");
+};
+$("#dev-busca").onkeydown = ev => {
+  const drop = $("#dev-drop"), ops = [...drop.querySelectorAll(".ente-op")];
+  if (ev.key === "Escape") { drop.classList.add("oculto"); return; }
+  if (!ops.length) return;
+  let i = ops.findIndex(o => o.classList.contains("sel"));
+  if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+    ev.preventDefault();
+    if (i >= 0) ops[i].classList.remove("sel");
+    i = ev.key === "ArrowDown" ? Math.min(ops.length - 1, i + 1) : Math.max(0, i - 1);
+    ops[i].classList.add("sel"); ops[i].scrollIntoView({block: "nearest"});
+  } else if (ev.key === "Enter") {
+    ev.preventDefault();
+    abrirSaude((ops[i] || ops[0]).dataset.chave);
+  }
+};
+$("#dev-drop").onclick = ev => {
+  const el = ev.target.closest(".ente-op");
+  if (el) abrirSaude(el.dataset.chave);
+};
+document.addEventListener("click", e => {
+  if (!e.target.closest(".ente-box")) $("#dev-drop").classList.add("oculto");
+});
+
+async function buscaDev() {
+  const q = $("#dev-busca").value.trim(), drop = $("#dev-drop");
+  if (q.length < 2) { drop.classList.add("oculto"); drop.innerHTML = ""; return; }
+  const seq = ++DEV_SEQ;
+  try {
+    const d = await api("/devedores?q=" + encodeURIComponent(q));
+    // resposta atrasada (de uma digitacao anterior ou de antes de abrir um ente)
+    if (seq !== DEV_SEQ || $("#dev-busca").value.trim() !== q) return;
+    drop.innerHTML = d.itens.length ? d.itens.map(x => `<div class="ente-op" role="option" data-chave="${esc(x.chave)}">
+        <span class="ente-nome">${esc(x.nome)}</span>
+        <span class="ente-tag">${esc(TIPO_DEV[x.tipo] || x.tipo)}${x.uf ? " · " + esc(x.uf) : ""} · ${esc(x.tribunais.join(", "))}
+          <br>${int(x.n)} precatório(s) · ${brlK(x.valor)}${x.n_orgaos > 1 ? " · " + x.n_orgaos + " órgãos" : ""}</span>
+      </div>`).join("")
+      : `<div class="ente-mais">nenhum devedor com fila no Alfred para “${esc(q)}”</div>`;
+  } catch (err) {
+    if (seq !== DEV_SEQ) return;
+    drop.innerHTML = `<div class="ente-mais">Erro: ${esc(err.message)}</div>`;
+  }
+  drop.classList.remove("oculto");
+}
+
+async function abrirSaude(chave) {
+  // cancela busca pendente: a resposta que chegasse depois do clique reabria a lista de
+  // sugestoes POR CIMA da pagina e ela engolia o clique nos botoes ("ver fila")
+  clearTimeout(DEV_T); DEV_SEQ++;
+  $("#dev-drop").classList.add("oculto");
+  const alvo = $("#res-ente");
+  alvo.innerHTML = `<div class="status">carregando a saúde do ente…</div>`;
+  try {
+    const e = await api("/ente/" + encodeURIComponent(chave));
+    SAUDE = e; SERIE_TRIB = null;
+    $("#dev-busca").value = e.nome;
+    history.replaceState(null, "", "#ente/" + e.chave);
+    renderSaude();
+  } catch (err) { alvo.innerHTML = `<div class="status">Erro: ${esc(err.message)}</div>`; }
+}
+
+/* fila de um orgao: reaproveita a lista da aba Precatorio, com volta para a saude */
+function verFila(id) {
+  FILA_DA_SAUDE = true;
+  trocaAba("prec", false);
+  abrirEnte(id);
+  window.scrollTo(0, 0);
+}
+
+/* ---------------- formatos da saude (valores grandes, compactos) ---------------- */
+const brlK = v => {
+  if (v == null) return "—";
+  const a = Math.abs(v), f = (x, d) => x.toLocaleString("pt-BR", {maximumFractionDigits: d});
+  return "R$ " + (a >= 1e9 ? f(v / 1e9, 2) + " bi" : a >= 1e6 ? f(v / 1e6, 1) + " mi"
+    : a >= 1e3 ? f(v / 1e3, 0) + " mil" : f(v, 0));
+};
+// a/b como percentual: abaixo de 1% leva 2 casas (0,03%), abaixo de 10% leva 1 (7,3%),
+// acima arredonda (34%)
+const fr = (a, b) => {
+  if (a == null || !b) return "—";
+  const r = Math.abs(a / b);
+  return (a / b * 100).toLocaleString("pt-BR", {maximumFractionDigits: r < 0.01 ? 2 : r < 0.1 ? 1 : 0}) + "%";
+};
+const int = v => v == null ? "—" : v.toLocaleString("pt-BR");
+const eixo = v => brlK(v).replace("R$ ", "");
+
+/* ---------- grafico: o que tinha a pagar x o que pagou (Mapa Anual, um tribunal) ---------- */
+// Pontos do tribunal escolhido; ano sem dado daquele tribunal fica de fora (ex.: TJSP,
+// cujo Mapa so' existe no CNJ 2025 — os anos anteriores nao sao zero, sao ausentes).
+function pontosSerie(e, trib) {
+  return (e.serie_anual || []).map(s => {
+    const t = (s.por_tribunal || []).find(x => x.tribunal === trib);
+    return t && t.anterior > 0 ? {ano: s.ano_ref, devido: t.anterior, pago: t.pago || 0,
+                                  exped: t.expedidos, saldo: t.saldo} : null;
+  }).filter(Boolean);
+}
+function graficoPago(pts) {
+  const W = 640, H = 250, L = 58, R = 10, T = 22, B = 30;
+  const max = Math.max(...pts.map(p => Math.max(p.devido, p.pago))) * 1.1;
+  const step = (W - L - R) / pts.length, bw = Math.min(46, step * 0.32);
+  const y = v => T + (H - T - B) * (1 - v / max);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Montante a pagar e valor pago por ano">`;
+  for (let i = 0; i <= 4; i++) {
+    const v = max * i / 4;
+    s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--linha)"/>`
+       + `<text x="${L - 6}" y="${y(v) + 4}" font-size="11" text-anchor="end">${eixo(v)}</text>`;
+  }
+  pts.forEach((p, i) => {
+    const cx = L + step * i + step / 2;
+    s += `<rect x="${cx - bw - 2}" y="${y(p.devido)}" width="${bw}" height="${y(0) - y(p.devido)}" rx="2" style="fill:var(--bar-devido)"/>`
+       + `<rect x="${cx + 2}" y="${y(p.pago)}" width="${bw}" height="${y(0) - y(p.pago)}" rx="2" style="fill:var(--bar-pago)"/>`
+       + `<text class="lbl" x="${cx + 2 + bw / 2}" y="${y(p.pago) - 6}" font-size="12" text-anchor="middle">${fr(p.pago, p.devido)}</text>`
+       + `<text x="${cx}" y="${H - 10}" font-size="12" text-anchor="middle">${p.ano}</text>`;
+  });
+  return s + `</svg>`;
+}
+
+/* ---------- grafico: divida na fila por ano de orcamento (vencida x a vencer) ---------- */
+function graficoDivida(e) {
+  const corte = e.exercicio - 5;  // ate 5 anos atras, ano a ano; antes disso, agrupado
+  const pts = (e.por_ano || []).filter(p => p.valor > 0);
+  const antigo = pts.filter(p => p.ano < corte).reduce((a, p) => a + p.valor, 0);
+  const lst = (antigo ? [{ano: "até " + (corte - 1), v: antigo, venc: true}] : [])
+    .concat(pts.filter(p => p.ano >= corte).map(p => ({ano: p.ano, v: p.valor, venc: p.ano < e.exercicio})));
+  if (!lst.length) return "";
+  const W = 640, H = 210, L = 58, R = 10, T = 18, B = 30;
+  const max = Math.max(...lst.map(p => p.v)) * 1.12;
+  const step = (W - L - R) / lst.length, bw = Math.min(54, step * 0.62);
+  const y = v => T + (H - T - B) * (1 - v / max);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Dívida na fila por ano de orçamento">`;
+  [0, 0.5, 1].forEach(f => {
+    s += `<line x1="${L}" x2="${W - R}" y1="${y(max * f)}" y2="${y(max * f)}" style="stroke:var(--linha)"/>`
+       + `<text x="${L - 6}" y="${y(max * f) + 4}" font-size="11" text-anchor="end">${eixo(max * f)}</text>`;
+  });
+  lst.forEach((p, i) => {
+    const cx = L + step * i + step / 2;
+    s += `<rect x="${cx - bw / 2}" y="${y(p.v)}" width="${bw}" height="${y(0) - y(p.v)}" rx="2" style="fill:var(${p.venc ? "--vencido" : "--avencer"})"/>`
+       + `<text class="lbl" x="${cx}" y="${y(p.v) - 5}" font-size="11" text-anchor="middle">${eixo(p.v)}</text>`
+       + `<text x="${cx}" y="${H - 10}" font-size="11.5" text-anchor="middle">${p.ano}</text>`;
+  });
+  return s + `</svg>`;
+}
+
+/* ---------------- pagina "Saude do ente" ---------------- */
+function renderSaude() {
+  const e = SAUDE, ex = e.exercicio;
+  const pjs = e.projecoes || [];
+  // tribunal principal = primeiro (maior fila) que tem projecao; se nenhum tem, o primeiro
+  const pj = pjs.find(x => x.fila_zera_lei) || pjs[0] || {};
+  const tj = pj.tribunal || ((e.por_tribunal[0] || {}).tribunal);
+  const exerc = pj.fonte_orcamento === "pago_no_exercicio";
+  const total = e.por_tribunal.reduce((a, t) => a + t.valor, 0);
+  const venc = e.por_tribunal.reduce((a, t) => a + t.vencido, 0);
+  const nTot = e.por_tribunal.reduce((a, t) => a + t.n, 0);
+  const pg = e.pagamento || {};
+  const mapa = pg.por_tribunal || [];
+  const pgTj = mapa.find(x => x.tribunal === tj);
+  const linhaDl = (r, v) => `<dt>${r}</dt><dd>${v}</dd>`;
+
+  // tribunais com serie no Mapa Anual: o principal primeiro, depois por estoque
+  const tribsSerie = [...new Set((e.serie_anual || []).flatMap(s => (s.por_tribunal || []).map(t => t.tribunal)))]
+    .map(t => ({t, pts: pontosSerie(e, t)}))
+    // so' tribunal com historico (2+ anos) ou com fila no Alfred: os residuais do CNJ
+    // (R$ 30 mil num TRT de outro Estado) ja aparecem na tabela "Como paga em cada tribunal"
+    .filter(x => x.pts.length > 1 || (x.pts.length && e.por_tribunal.some(t => t.tribunal === x.t)))
+    .sort((a, b) => (b.t === tj) - (a.t === tj) || b.pts.length - a.pts.length
+                    || b.pts[b.pts.length - 1].devido - a.pts[a.pts.length - 1].devido);
+  if (!SERIE_TRIB || !tribsSerie.some(x => x.t === SERIE_TRIB)) SERIE_TRIB = tribsSerie.length ? tribsSerie[0].t : null;
+  const serie = tribsSerie.find(x => x.t === SERIE_TRIB);
+
+  /* -- cabecalho + cor (fase 2) + numeros-chave -- */
+  let h = `<div class="sd-h"><h1>${esc(e.nome)}</h1><div class="chips">
+      ${e.regime ? `<span class="chip forte">Regime ${esc(e.regime)}</span>` : ""}
+      <span class="chip">${esc(TIPO_DEV[e.tipo] || e.tipo)}${e.uf ? " · " + esc(e.uf) : ""}</span>
+      ${e.orgaos.length > 1 ? `<span class="chip">${e.orgaos.length} órgãos juntos</span>` : ""}
+      <span class="chip">${int(nTot)} precatórios na fila</span>
+      <span class="chip">${e.por_tribunal.map(t => esc(t.tribunal)).join(", ")}</span></div></div>`;
+  // atalho para a fila logo no topo: o maior orgao de cada tribunal (a lista inteira de
+  // orgaos, cada um com o seu botao, fica no fim da pagina)
+  const principais = [], vistos = new Set();
+  e.orgaos.forEach(o => { if (!vistos.has(o.tribunal)) { vistos.add(o.tribunal); principais.push(o); } });
+  h += `<div class="sd-filas"><span class="sd-filas-r">Ver a fila de precatórios:</span>
+      ${principais.slice(0, 4).map(o => `<button type="button" class="b-fila" data-fila="${o.id}">${esc(o.nome)}
+        <span>${esc(o.tribunal)} · ${int(o.n)}</span></button>`).join("")}
+      ${e.orgaos.length > principais.slice(0, 4).length ? `<button type="button" class="sd-filas-mais" data-rola>todos os ${e.orgaos.length} órgãos ↓</button>` : ""}
+    </div>
+    <div class="sd-cor"><span class="bola"></span><span><b>Cor da saúde:</b> entra na fase 2, quando os
+      critérios de cada cor estiverem definidos.</span></div>`;
+
+  const kPago = pgTj
+    ? `<span class="v">${fr(pgTj.pago, pgTj.anterior)}</span><span class="s">do que tinha a pagar no
+       ${esc(tj)} (${brlK(pgTj.pago)} de ${brlK(pgTj.anterior)})</span>`
+    : pg.estoque_abertura
+      ? `<span class="v">${fr(pg.pago_no_ano, pg.estoque_abertura)}</span><span class="s">do que tinha a pagar,
+         somando os tribunais (${brlK(pg.pago_no_ano)} de ${brlK(pg.estoque_abertura)})</span>`
+      : `<span class="v">—</span><span class="s">sem Mapa Anual para este devedor</span>`;
+  const kLei = exerc
+    ? `<span class="r">Previsão</span><span class="v">${pj.fila_zera_lei ?? "—"}</span>
+       <span class="s">paga no exercício do orçamento — sem teto do §23</span>`
+    : `<span class="r">Fila zera, pela lei</span><span class="v">${pj.fila_zera_lei ?? "—"}</span>
+       <span class="s">${pj.orcamento_anual ? `se pagar a parte do §23 que cabe ao ${esc(tj)}
+         (${brlK(pj.orcamento_anual)}/ano)` : "sem projeção: falta RCL ou valor na fila"}</span>`;
+  const kRitmo = exerc
+    ? `<span class="r">Vencido na fila</span><span class="v">${brlK(venc)}</span>
+       <span class="s">orçamento anterior a ${ex}</span>`
+    : `<span class="r">Fila zera, no ritmo real</span><span class="v">${pj.fila_zera_ritmo ?? "—"}</span>
+       <span class="s">${pj.pago_no_ano ? `pagando ${brlK(pj.pago_no_ano)}/ano${pj.pct_do_teto != null
+         ? `, ${pct(pj.pct_do_teto)} do teto` : ""}` : "sem pagamento medido no último ano"}</span>`;
+  h += `<div class="sd-kpis">
+    <div class="sd-kpi"><span class="r">Dívida na fila</span><span class="v">${brlK(total)}</span>
+      <span class="s">${e.rcl ? fr(total, e.rcl) + " da RCL · " : ""}${brlK(venc)} já vencidos</span></div>
+    <div class="sd-kpi"><span class="r">Pagou em ${pg.ano_ref ?? "—"}</span>${kPago}</div>
+    <div class="sd-kpi">${kLei}</div>
+    <div class="sd-kpi">${kRitmo}</div></div>`;
+
+  if (pjs.length > 1) {
+    h += `<section class="sd-bloco"><h2>Em que ano a fila zera, por tribunal</h2>
+      <p class="sd-sub">O mesmo motor do parecer, uma fila por tribunal. O teto do §23 é dividido entre os
+        tribunais pelo tamanho de cada fila.</p>
+      <div class="tw"><table class="sd-tab"><thead><tr><th>Tribunal</th><th class="n">Precatórios</th>
+        <th class="n">Na fila</th><th class="n">Pela lei</th><th class="n">No ritmo real</th>
+        <th class="n">Pago no ano</th></tr></thead><tbody>${pjs.map(p => {
+          const t = e.por_tribunal.find(x => x.tribunal === p.tribunal) || {};
+          return `<tr><td>${esc(p.tribunal)}</td><td class="n">${int(p.n_fila)}</td><td class="n">${brlK(t.valor)}</td>
+            <td class="n">${p.fonte_orcamento === "pago_no_exercicio" ? "no exercício" : (p.fila_zera_lei ?? "—")}</td>
+            <td class="n">${p.fila_zera_ritmo ?? "—"}</td><td class="n">${brlK(p.pago_no_ano)}</td></tr>`;
+        }).join("")}</tbody></table></div>
+      <p class="sd-nota">“—” = sem projeção (tribunal sem valor publicado na fila ou sem pagamento medido).</p></section>`;
+  }
+
+  /* -- pagou x tinha a pagar (Mapa Anual) -- */
+  if (serie) {
+    const pts = serie.pts;
+    h += `<section class="sd-bloco"><h2>Quanto pagou do que tinha a pagar</h2>
+      <p class="sd-sub">Mapa Anual de precatórios, ${esc(serie.t)}. “Tinha a pagar” é o estoque no início do ano;
+        “pagou” é o que saiu no ano.${pts.length === 1 ? ` <b>Só há um ano disponível</b> para este tribunal
+        (o CNJ publica o ano corrente; a série do tribunal não foi coletada).` : ""}</p>
+      ${tribsSerie.length > 1 ? `<div class="trib-sel">${tribsSerie.map(x =>
+        `<button type="button" class="b-sec${x.t === serie.t ? " on" : ""}" data-serie="${esc(x.t)}">${esc(x.t)}</button>`).join("")}</div>` : ""}
+      <div class="legenda"><span><i style="background:var(--bar-devido)"></i>Tinha a pagar</span>
+        <span><i style="background:var(--bar-pago)"></i>Pagou (com o % pago)</span></div>
+      ${graficoPago(pts)}
+      <div class="tw"><table class="sd-tab"><thead><tr><th>Ano</th><th class="n">Tinha a pagar</th><th class="n">Pagou</th>
+        <th class="n">% pago</th><th class="n">Novos expedidos</th><th class="n">Saldo no fim do ano</th></tr></thead>
+        <tbody>${pts.map(p => `<tr><td>${p.ano}</td><td class="n">${brlK(p.devido)}</td><td class="n">${brlK(p.pago)}</td>
+          <td class="n">${fr(p.pago, p.devido)}</td><td class="n">${brlK(p.exped)}</td><td class="n">${brlK(p.saldo)}</td></tr>`).join("")}
+        </tbody></table></div></section>`;
+  } else {
+    h += `<section class="sd-bloco"><h2>Quanto pagou do que tinha a pagar</h2>
+      <p class="sd-sub">Sem Mapa Anual para este devedor${e.tipo === "orgao" ? " — o Mapa é publicado por ente (município ou Estado), não por órgão." : "."}</p></section>`;
+  }
+
+  /* -- capacidade + edital -- */
+  const ed = e.edital_acordo, pl = e.plano_exercicio;
+  const rat = (pj.rateio && pj.rateio.por_tribunal) || [];
+  let cap = "";
+  if (exerc) {
+    cap = `<p class="sd-sub">Este devedor paga os precatórios <b>no exercício do orçamento</b>: a proposta do ano
+      sai inteira dentro do ano. Não há teto do §23 nem fila de mora.</p>`;
+  } else {
+    cap = `<dl class="lv">
+      ${linhaDl("RCL" + (e.ano_rcl ? " " + e.ano_rcl : ""), e.rcl ? `${brlK(e.rcl)} <span class="sd-nota">(${esc(e.fonte_rcl || "")})</span>`
+        : "não mapeada — sem RCL o Alfred não calcula o teto do §23")}
+      ${pj.pct_p23 != null ? linhaDl("Faixa do §23", pct(pj.pct_p23) + " da RCL") : ""}
+      ${pj.teto_p23 ? linhaDl("Teto anual do §23", brlK(pj.teto_p23) + " — o máximo que a lei manda pagar, somando os tribunais") : ""}
+      ${pj.orcamento_anual && pj.rateio ? linhaDl("Parte do " + esc(tj), `${brlK(pj.orcamento_anual)}/ano (${fr(pj.rateio.fracao, 1)} do teto)`) : ""}
+      ${linhaDl("Estoque em mora", `${brlK(pj.mora_oficial ?? pj.mora_fila)} <span class="sd-nota">(${pj.mora_oficial
+        ? "oficial, " + esc(pj.mora_oficial_fonte || "") : "calculada da fila publicada"})</span>`)}
+      ${linhaDl("Plano do tribunal", pl && pl.valor_do_plano_no_ano ? `${brlK(pl.valor_do_plano_no_ano)} em ${pl.ano}`
+        : `não publicado para ${ex} — o Alfred usa o teto da lei`)}</dl>
+      ${rat.length > 1 ? `<p class="sd-nota">Rateio do teto entre tribunais (${pj.rateio.fonte === "mapa"
+        ? "pelo saldo do Mapa do CNJ" : "pelas filas coletadas"}): ${rat.map(r => esc(r.tribunal) + " " + pct(r.pct)).join(" · ")}</p>` : ""}`;
+  }
+  const edit = ed && ed.tem
+    ? `<dl class="lv">${linhaDl("Último edital", `${esc(ed.edital || "")} — <b>${ed.aberto ? "aberto" : esc(ed.situacao || "encerrado")}</b>`)}</dl>
+       <p class="sd-sub">${textoEdital(ed)}</p>
+       <p class="sd-nota">É a régua de preço que o credor já viu o ente pagar.</p>`
+    : `<p class="sd-sub">Nenhum edital de acordo cadastrado para este ente.</p>`;
+  h += `<div class="duas"><section class="sd-bloco"><h2>Capacidade de pagamento</h2>${cap}</section>
+    <section class="sd-bloco"><h2>Edital de acordo</h2>${edit}</section></div>`;
+
+  /* -- divida por ano + por tribunal -- */
+  const spN = pjs.reduce((a, p) => a + (p.n_superprecatorios || 0), 0);
+  const spV = pjs.reduce((a, p) => a + (p.valor_superprecatorios || 0), 0);
+  const prov = pjs.reduce((a, p) => a + (p.provisionado || 0), 0);
+  h += `<section class="sd-bloco"><h2>Dívida na fila, por ano de orçamento</h2>
+    <p class="sd-sub">${e.orgaos.length > 1 ? "Todos os órgãos juntos. " : ""}Vermelho = já venceu (orçamento até ${ex - 1});
+      azul = vence de ${ex} em diante.</p>
+    <div class="legenda"><span><i style="background:var(--vencido)"></i>Vencido</span>
+      <span><i style="background:var(--avencer)"></i>A vencer</span></div>
+    ${graficoDivida(e)}
+    <div class="tw"><table class="sd-tab"><thead><tr><th>Tribunal</th><th class="n">Precatórios</th><th class="n">Na fila</th>
+      <th class="n">Vencido</th></tr></thead><tbody>${e.por_tribunal.map(t => `<tr><td>${esc(t.tribunal)}</td>
+      <td class="n">${int(t.n)}</td><td class="n">${brlK(t.valor)}</td><td class="n">${brlK(t.vencido)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <p class="sd-nota">Superprecatórios (§20): ${spN}${spV ? ", " + brlK(spV) : ""} · Já com caixa reservado (provisionado): ${brlK(prov)}</p>
+  </section>`;
+
+  /* -- comportamento por tribunal (Mapa CNJ do ano) -- */
+  if (mapa.length) {
+    h += `<section class="sd-bloco"><h2>Como paga em cada tribunal (Mapa do CNJ ${pg.ano_ref})</h2>
+      <p class="sd-sub">${esc(pg.resumo || "")}${pg.escopo ? ` <span class="sd-nota">(${esc(pg.escopo)})</span>` : ""}</p>
+      <div class="tw"><table class="sd-tab"><thead><tr><th>Tribunal</th><th class="n">Tinha a pagar</th><th class="n">Pagou</th>
+        <th class="n">% pago</th><th class="n">Saldo</th><th></th></tr></thead><tbody>${mapa.slice()
+        .sort((a, b) => b.anterior - a.anterior).map(t => `<tr><td>${esc(t.tribunal)}</td><td class="n">${brlK(t.anterior)}</td>
+          <td class="n">${brlK(t.pago)}</td><td class="n">${fr(t.pago, t.anterior)}</td><td class="n">${brlK(t.saldo)}</td>
+          <td>${t.codigo === "nao_pagou" ? '<span class="tag-bad">não pagou</span>'
+              : (t.saldo || 0) <= 0.01 ? '<span class="tag-ok">em dia</span>' : ""}</td></tr>`).join("")}
+      </tbody></table></div>
+      ${(e.tribunais_sem_fila || []).length ? `<p class="sd-nota">Sem fila no Alfred (só no CNJ):
+        ${e.tribunais_sem_fila.map(t => esc(t.tribunal)).join(", ")}.</p>` : ""}</section>`;
+  }
+
+  /* -- confiabilidade -- */
+  h += `<section class="sd-bloco"><h2>Confiabilidade do dado</h2>
+    <div class="tw"><table class="sd-tab"><thead><tr><th>Tribunal</th><th>Fila coletada em</th><th class="n">Itens sem valor</th></tr></thead>
+      <tbody>${e.por_tribunal.map(t => `<tr><td>${esc(t.tribunal)}</td><td>${esc(dataBR(t.coleta))}</td>
+        <td class="n">${fr(t.sem_valor, t.n)}</td></tr>`).join("")}</tbody></table></div>
+    ${e.por_tribunal.some(t => t.tribunal === "TJMG") ? `<p class="sd-nota"><b>TJMG:</b> a lista do tribunal traz
+      valor de face (sem correção). O valor à frente na fila sai menor que o real e a projeção fica otimista.</p>` : ""}
+    ${(e.avisos || []).length ? `<ul class="sd-avisos">${e.avisos.map(a => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
+  </section>`;
+
+  /* -- orgaos (com a fila completa de cada um) -- */
+  const TIPO_ORG = {prefeitura: "adm. direta"};
+  // sempre aberta e com o botao na 1a coluna: fechada (ou com o botao na ultima coluna,
+  // fora da tela no celular) o "ver fila" ficava escondido
+  h += `<section class="sd-bloco" id="sd-orgaos"><h2>Órgãos incluídos neste devedor (${e.orgaos.length})</h2>
+    <p class="sd-nota">“Ver a fila” abre a fila completa daquele órgão, em ordem, na aba Precatório.</p>
+    <div class="tw"><table class="sd-tab"><thead><tr><th>Órgão</th><th>Tribunal</th><th class="n">Precatórios</th>
+      <th class="n">Valor</th></tr></thead><tbody>${e.orgaos.map(o => `<tr>
+      <td>${esc(o.nome)}${o.tipo ? ` <span class="sd-nota">· ${esc(TIPO_ORG[o.tipo] || o.tipo)}</span>` : ""}
+        <br><button type="button" class="b-sec" data-fila="${o.id}">Ver a fila</button></td>
+      <td>${esc(o.tribunal)}</td><td class="n">${int(o.n)}</td><td class="n">${brlK(o.valor)}</td></tr>`).join("")}
+    </tbody></table></div>
+  </section>`;
+
+  const alvo = $("#res-ente");
+  alvo.innerHTML = h;
+  alvo.querySelectorAll("[data-serie]").forEach(b => b.onclick = () => { SERIE_TRIB = b.dataset.serie; renderSaude(); });
+  alvo.querySelectorAll("[data-fila]").forEach(b => b.onclick = () => verFila(b.dataset.fila));
+  // rolar sem mexer no hash (um #ancora dispararia o hashchange e trocaria de aba)
+  alvo.querySelectorAll("[data-rola]").forEach(b => b.onclick = () => $("#sd-orgaos").scrollIntoView({behavior: "smooth"}));
+}
+
+/* ---------------- detalhe ---------------- */
+async function detalhe(id, completo = false) {
+  ULTIMO = id;
+  // fila aberta pela saude do ente: o status guarda o botao de volta, nao limpar
+  if (!FILA_DA_SAUDE) $("#status").textContent = "";
+  const alvo = $("#tela-detalhe");
+  alvo.classList.remove("oculto"); $("#tela-busca").classList.add("oculto");
+  alvo.innerHTML = `<div class="status">carregando…</div>`;
+  let p0 = null;
+  try {
+    const d = await api("/parecer_id/" + encodeURIComponent(id) + (completo ? "?completo=1" : ""));
+    p0 = (d.pareceres || [])[0] || null;
+    // cabecalho + rodape que repetem em TODA pagina impressa: thead/tfoot de <table>
+    // REAL sao a unica coisa que o Chrome repete por pagina no print (position:fixed
+    // e display:table-*-group em div NAO repetem). Na tela o wrapper e' invisivel.
+    const runTopo = [esc((p0 && p0.credor && p0.credor.nome) || "credor não publicado"),
+        esc((p0 && p0.precatorio && (p0.precatorio.numero_eproc_fmt || p0.precatorio.numero)) || ""),
+        esc((p0 && p0.devedor && p0.devedor.ente) || "")].filter(Boolean).join(" · ");
+    const runColeta = p0 && p0.precatorio && p0.precatorio.coletado_em
+      ? `fila do ${esc(p0.precatorio.tribunal || "")} coletada em ${esc(dataBR(p0.precatorio.coletado_em))} · ` : "";
+    alvo.innerHTML = `<table class="print-doc">
+      <thead><tr><td><div class="print-runner topo"><div class="ri"><b>PRECATUR</b> —
+        parecer de precatório · ${runTopo}</div></div></td></tr></thead>
+      <tfoot><tr><td><div class="print-runner pe-pag"><div class="ri">Estimativas a partir da fila
+        publicada e das premissas declaradas — não constituem promessa de data de pagamento ·
+        documento de uso interno; contém dado pessoal (LGPD) · ${runColeta}gerado em
+        ${new Date().toLocaleDateString("pt-BR")}</div></div></td></tr></tfoot>
+      <tbody><tr><td>${d.pareceres.map(cartao).join("")}</td></tr></tbody></table>`;
+  } catch (err) { alvo.innerHTML = `<div class="status">Erro: ${esc(err.message)}</div>`; }
+  // nome sugerido do PDF: "<requerente> - <nº do precatório>"
+  const nomePdf = p0 ? [(p0.credor && p0.credor.nome) || "",
+      (p0.precatorio && (p0.precatorio.numero_eproc_fmt || p0.precatorio.numero)) || ""]
+      .filter(Boolean).join(" - ").replace(/[\/\\:*?"<>|]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120)
+    : "";
+  alvo.insertAdjacentHTML("afterbegin",
+    `<div class="barra-detalhe no-print">
+       <button class="voltar" id="volta">← voltar aos resultados</button>
+       <span><button class="revelar" id="imprimir" type="button">imprimir a página</button>
+       <button class="b-pdf" id="pdf">Baixar PDF</button></span>
+     </div>`);
+  const bt = $("#revelar");
+  if (bt) bt.onclick = () => detalhe(ULTIMO, true);
+  $("#volta").onclick = () => {
+    alvo.classList.add("oculto"); $("#tela-busca").classList.remove("oculto");
+  };
+  const imprimir = () => {
+    // fallback: impressao da propria tela, com TODAS as secoes abertas + nome sugerido
+    // = requerente + nº (o navegador usa document.title no "Salvar como PDF").
+    const blocos = [...alvo.querySelectorAll("details.bloco")];
+    const estado = blocos.map(x => x.open);
+    blocos.forEach(x => { x.open = true; });
+    const tituloOrig = document.title;
+    if (nomePdf) document.title = nomePdf;
+    const restaura = () => {
+      blocos.forEach((x, i) => { x.open = estado[i]; });
+      document.title = tituloOrig;
+      window.removeEventListener("afterprint", restaura);
+    };
+    window.addEventListener("afterprint", restaura);
+    window.print();
+  };
+  $("#imprimir").onclick = imprimir;
+  $("#pdf").onclick = async () => {
+    // caminho primario: PDF gerado NO SERVIDOR (/parecer_id/{id}/pdf) — rodape com
+    // disclaimer + numeracao em toda pagina, sem cabecalho de navegador, nome de
+    // arquivo garantido. Se a rota falhar (API antiga etc.), cai na impressao.
+    const b = $("#pdf");
+    b.disabled = true; b.textContent = "gerando…";
+    try {
+      const r = await fetch("/parecer_id/" + encodeURIComponent(id) + "/pdf"
+                            + (completo ? "?completo=1" : ""),
+                            {headers: {"Authorization": "Bearer " + TOKEN}});
+      if (!r.ok) throw new Error("erro " + r.status);
+      const blob = await r.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = (nomePdf || "parecer") + ".pdf";
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    } catch (e) { imprimir(); }
+    finally { b.disabled = false; b.textContent = "Baixar PDF"; }
+  };
+}
+
+function filaTabela(f) {
+  // Tabela item a item da fila (janela em torno do buscado quando o ente e muito
+  // grande — ver contexto()/JANELA no backend); marca a linha do proprio credito e
+  // mostra o acumulado corrido + o ano previsto de CADA item, nao so do buscado.
+  if (!f || !f.itens || !f.itens.length) return "";
+  const jan = f.itens_janela || {};
+  const nota = jan.truncada
+    ? `Mostrando as posições <b>${jan.inicio}ª a ${jan.fim}ª</b> de ${jan.total} — janela em torno
+       do precatório buscado (fila grande demais para listar por inteiro).`
+    : `${jan.total} precatório(s) nesta fila.`;
+  const linhas = f.itens.map(it => {
+    const sp = it.superprecatorio;
+    return `<tr${it.e_buscado ? ' style="background:var(--creme);font-weight:600"' : ""}>
+      <td class="num">${it.posicao}ª</td>
+      <td>${esc(it.numero || "—")}${it.e_buscado ? ' <span class="tag">buscado</span>' : ""}</td>
+      <td>${esc(it.natureza || "—")}</td>
+      <td class="num">${it.ano_orcamento ?? "—"}</td>
+      <td class="num">${brl(it.valor)}</td>
+      <td class="num">${sp ? '<span class="pe">fora da FIFO — §20</span>'
+                          : (it.provisionado ? '<span class="pe">provisionado</span>' : brl(it.acumulado))}</td>
+      <td class="num">${it.ano_previsto ?? "—"}</td></tr>`;
+  }).join("");
+  return `<h3>Fila de precatórios</h3>
+    <div class="pe" style="margin-bottom:6px">${nota} <b>Acumulado até aqui</b> é a soma dos itens
+      da fila até aquela posição (cenário central do §23); <b>ano previsto</b> é a projeção do
+      mesmo cenário para cada item — não só para o buscado.</div>
+    <table class="grade">
+      <thead><tr><th>Posição</th><th>Nº</th><th>Natureza</th><th>Ano orç.</th>
+        <th class="num">Valor</th><th class="num">Acumulado até aqui</th><th class="num">Ano previsto</th></tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>`;
+}
+
+function cartao(p) {
+  /* A ORDEM DAS SECOES E' A ORDEM EM QUE O ADVOGADO DECIDE — nao a ordem em que
+     o banco tem os dados. Antes o parecer despejava tudo junto e o leitor tinha
+     de garimpar; agora responde nesta sequencia:
+       1. QUANDO sai o dinheiro (e o quanto essa data e' confiavel)
+       2. O CREDITO e' bom (natureza, posicao, quanto ha na frente)
+       3. O DEVEDOR paga mesmo (por tribunal — o consolidado engana)
+       4. O QUE muda essa resposta
+     Todo numero leva ESCOPO e DATA-BASE no rotulo: "ja venceu" (1 tribunal, so
+     vencido) e "ficou devendo" (3 tribunais, 31/12) sao grandezas diferentes com
+     nomes parecidos, e soma-las e' o erro natural de quem le rapido. */
+  const pr = p.precatorio, cr = p.credor, dv = p.devedor;
+  const f = p.fila || {}, j = p.projecao, pl = p.plano_exercicio, g = p.pagamento;
+  const linha = (r, v) => `<tr><td>${r}</td><td>${v}</td></tr>`;
+  const trib = pr.tribunal;
+  const ritmo = j && j.ritmo_observado;
+  // o ritmo agora e' MEDIA de varios anos (nao 1 so) -- rotulo muda conforme quantos
+  const ritmoN = (ritmo && ritmo.anos_media) || 0;
+  const ritmoDesc = ritmoN > 1 ? `média dos últimos ${ritmoN} anos` : "último ano medido";
+  // rateio §23 entre justicas: null quando o ente so deve num tribunal (fracao=1).
+  // orcamento_anual JA vem rateado (a parcela desta justica); teto_p23 e' o teto CHEIO.
+  const rat = j && j.rateio;
+  const ratPct = rat ? Math.round(rat.fracao * 100) : 100;
+  const ratLista = rat ? rat.por_tribunal.map(t => esc(t.tribunal) + " " + t.pct + "%").join(", ") : "";
+  // rateio "provisorio" so quando vem do Mapa CNJ (agregado). fonte==="filas" = fila real das justicas.
+  const ratProv = rat && rat.fonte === "mapa";
+  // acumulado_sem_p20 INCLUI o proprio credito; o que interessa ao vendedor e o
+  // que esta na frente dele. Declarado aqui porque o bloco do credito ja usa.
+  const aFrente = (f.acumulado_sem_p20 != null && pr.valor != null)
+    ? Math.max(f.acumulado_sem_p20 - pr.valor, 0) : null;
+
+
+  /* ---------- 1. A RESPOSTA ---------- */
+  const temRitmo = ritmo && ritmo.ano_previsto;
+  let veredito = "", cor = "var(--verde)";
+  if (j && temRitmo && ritmo.ano_previsto > j.ano_previsto) {
+    cor = "var(--ambar)";
+    veredito = `<b>Trabalhe com ${ritmo.ano_previsto}.</b> A projeção de ${j.ano_previsto} supõe que o
+      município gaste ${rat ? `na fila do ${esc(trib)} a parcela do §23 que lhe cabe` : "todo o teto legal"}
+      (${brl(j.orcamento_anual)}/ano). Ele paga <b>${brl(ritmo.pago_no_ano)}</b>/ano ao ${esc(trib)}
+      (${ritmoDesc}). Nesse ritmo são ${ritmo.anos} anos.`;
+  } else if (j && ritmo && !ritmo.ano_previsto) {
+    cor = "var(--vermelho)";
+    veredito = `<b>Sem ritmo observável.</b> O município não pagou <b>nada</b> ao ${esc(trib)} no
+      último ano medido, então ${j.ano_previsto} é só o cenário legal — não há comportamento
+      que o sustente. Trate como data de referência, não como previsão.`;
+  } else if (j && temRitmo && ritmo.ano_previsto < j.ano_previsto) {
+    /* Ente que pagou ACIMA do limite. NAO promover a data otimista: esse historico e
+       de exercicios anteriores a 2026, quando o % da RCL ainda nao era TETO (EC
+       136/2025) e o regime especial ainda corria atras do prazo de 2029 do art. 101
+       do ADCT, que a mesma emenda revogou. 2026 e o primeiro exercicio no formato
+       novo — nao ha comportamento observado sob a regra atual. */
+    cor = "var(--ambar)";
+    veredito = `<b>Trabalhe com ${j.ano_previsto}.</b> O ente pagou
+      <b>${brl(ritmo.pago_no_ano)}</b>/ano ao ${esc(trib)} — ${ritmo.pct_do_teto}% do limite —,
+      o que daria ${ritmo.ano_previsto}. Mas esse histórico é de exercícios anteriores a
+      ${j.exercicio_base}, quando o percentual da RCL ainda não funcionava como teto. Sob a regra
+      atual nada o obriga a pagar acima do limite, e pagar menos lhe é mais vantajoso:
+      <b>${ritmo.ano_previsto} é o melhor caso, não a previsão</b>.`;
+  } else if (j && temRitmo) {
+    veredito = `O ritmo observado (${brl(ritmo.pago_no_ano)}/ano ao ${esc(trib)})
+      <b>sustenta</b> a projeção de ${j.ano_previsto}.`;
+  }
+  // devedor que paga a fila inteira no exercicio (Uniao no TRF2, INSS nos TJs, EMBASA):
+  // sem §23, sem RCL, sem ritmo -- os blocos da conta e dos passos nao se aplicam
+  const exerc = !!(j && j.fonte_orcamento === "pago_no_exercicio");
+  const resposta = !j ? "" : `
+    <div class="destaque">
+      <div class="kpi">
+        <div class="rot">${exerc ? "Previsão de pagamento" : "Se pagar o limite da lei"}</div>
+        <div class="num">${j.ano_previsto ?? "—"}</div>
+        <div class="pe">${exerc
+          ? "paga a fila inteira no exercício do orçamento — sem teto do art. 100 §23"
+          : rat
+          ? `gastando ${brl(j.orcamento_anual)}/ano nesta justiça — parcela do §23 do ente (${ratPct}% do teto de ${brl(j.teto_p23)}, rateio ${ratProv ? "provisório pelo Mapa CNJ" : "pelas filas das justiças"})`
+          : `gastando ${brl(j.orcamento_anual)}/ano — ${pct(j.pct_p23)} da RCL, ${j.fonte_orcamento === "oficial_valor" ? "valor do plano publicado pelo tribunal" : j.fonte_orcamento === "oficial" ? "percentual homologado pelo tribunal" : "teto do art. 100 §23"}`}</div>
+      </div>
+      <div class="kpi ${temRitmo && ritmo.ano_previsto >= j.ano_previsto ? "claro" : ""}">
+        <div class="rot">No ritmo real${ritmoN > 1 ? ` (${ritmoN} anos)` : ""}</div>
+        <div class="num">${temRitmo ? ritmo.ano_previsto : "—"}</div>
+        <div class="pe">${exerc ? "não se aplica — não há teto anual a medir" : ritmo ? (ritmo.pago_no_ano > 0
+            ? (ritmoN > 1 ? "média " + brl(ritmo.pago_no_ano) + "/ano ao " + esc(trib)
+                          : "pagou " + brl(ritmo.pago_no_ano) + " ao " + esc(trib) + " no último ano")
+              + (ritmo.pct_do_teto > 100 ? " — acima do limite, sob as regras anteriores" : "")
+            : "não pagou nada ao " + esc(trib) + " no último ano")
+          : (f.e_superprecatorio
+             ? "não se aplica — superprecatório (art. 100 §20): paga 15% à vista + 5 parcelas anuais quando a fila chegar nele"
+             : "sem dado de pagamento para este tribunal")}</div>
+      </div>
+    </div>
+    ${veredito ? `<div class="explica" style="border-color:${cor};max-width:none">${veredito}</div>` : ""}`;
+
+  /* ---------- 2. O CREDITO ---------- */
+  const credito = `
+    <h3>O crédito</h3>
+    <table>
+      ${linha("Valor", `<b>${brl(pr.valor)}</b> <span class="pe">(fila do ${esc(trib)} em ${esc((pr.coletado_em||"").slice(0,10))})</span>`)}
+      ${linha("Natureza", esc(pr.natureza || "—") + (pr.natureza === "Alimentar"
+          ? ' <span class="tag">preferência sobre os comuns</span>' : ""))}
+      ${linha("Ano orçamentário", esc(pr.ano_orcamento || "—") + (pr.ano_orcamento && pr.ano_orcamento < 2026
+          ? ' <span class="tag">já vencido</span>' : ""))}
+      ${linha("Posição na fila", f.e_superprecatorio
+          ? `${f.ordem ? `<b>${f.ordem}ª de ${f.n_total ?? "—"}</b> — ` : ""}superprecatório (art. 100 §20): disputa a ordem cronológica até chegar a vez dele, aí paga 15% à vista + 5 parcelas anuais`
+          : `<b>${f.ordem ?? "—"}ª de ${f.n_total ?? "—"}</b> — <b>${brl(aFrente)}</b> à frente
+             ${f.n_superprecatorios ? `<span class="pe">(não soma ${f.n_superprecatorios} superprecatório(s) do §20: disputam a fila até a vez de cada um, e aí pagam 15% à vista + 5 parcelas anuais)</span>` : ""}`)}
+      ${linha("Credor", esc(cr.nome || "não publicado pelo tribunal")
+          + (cr.fonte_nome === "Callix" ? ' <span class="tag" title="nome completo reposto da lista do Callix; a lista do tribunal traz só as iniciais (LGPD)">via Callix</span>' : "")
+          + (cr.cpf_cnpj ? ` · ${esc(cr.cpf_cnpj)}` : "")
+          + (cr.cpf_cnpj && cr.cpf_mascarado
+              ? (PAPEL === "completo" ? ' <button class="revelar" id="revelar">mostrar CPF</button>' : ' <span class="tag">CPF mascarado</span>')
+              : ""))}
+      ${cr.advogado ? linha("Advogado", esc(cr.advogado)) : ""}
+      ${pr.numero_origem ? linha("Processo de origem", esc(pr.numero_origem)) : ""}
+    </table>`;
+
+  /* ---------- 3. O DEVEDOR PAGA? ---------- */
+  const hist = (g && g.historico_anual) || [];
+  const uniforme = hist.length ? hist.every(a => a.cobertura_uniforme !== false) : true;
+  const serie = !hist.length ? "" : `
+      <div class="pe" style="margin:12px 0 2px"><b>Ano a ano</b> — Mapa Anual, fecha em 31/12 de cada exercício</div>
+      <table class="grade">
+        <thead><tr><th>Ano</th><th class="num">Expedido no ano</th><th class="num">Pago no ano</th>
+            <th class="num">Saldo no fim</th><th>Tribunais somados</th></tr></thead>
+        ${hist.map(a => `<tr><td>${a.ano_ref}</td>
+            <td class="num">${brl(a.expedidos)}</td>
+            <td class="num">${brl(a.pago)}</td>
+            <td class="num">${brl(a.saldo)}</td>
+            <td class="pe">${esc((a.tribunais||[]).join(" · "))}</td></tr>`).join("")}
+      </table>
+      ${uniforme ? "" : `<div class="pe" style="color:var(--vermelho);margin-top:4px">
+        <b>Não compare os anos entre si:</b> a cobertura muda. Os exercícios com menos tribunais vêm do
+        Mapa publicado pelo tribunal estadual e não incluem Justiça Federal/Trabalhista.</div>`}`;
+
+  const pagamento = !g ? "" : `
+    <h3>O devedor paga?</h3>
+    <div class="pe" style="margin-bottom:6px"><b>Por tribunal em ${g.ano_ref}</b> — posição em 31/12/${g.ano_ref}, fonte CNJ.
+      <b>Leia esta tabela, não a média</b>: o mesmo caixa atende todos, e o ente escolhe quem paga.</div>
+    <table class="grade">
+      <thead><tr><th>Tribunal</th><th class="num">Devia na abertura</th><th class="num">Pagou no ano</th>
+          <th class="num">Ficou devendo</th><th>Leitura</th></tr></thead>
+      ${(g.por_tribunal||[]).map(x => {
+        const zero = (x.pago || 0) === 0 && (x.saldo || 0) > 0;
+        const meu = x.tribunal === trib;
+        return `<tr${meu ? ' style="background:var(--creme)"' : ""}>
+          <td><b>${esc(x.tribunal)}</b>${meu ? ' <span class="tag">o seu</span>' : ""}</td>
+          <td class="num">${brl(x.anterior)}</td>
+          <td class="num"${zero ? ' style="color:var(--vermelho);font-weight:600"' : ""}>${brl(x.pago)}</td>
+          <td class="num">${brl(x.saldo)}</td>
+          <td class="pe">${esc(x.texto||"")}</td></tr>`;}).join("")}
+    </table>
+    ${serie}`;
+
+  /* ---------- 4. PLANO HOMOLOGADO (quando existe) ---------- */
+  const plano = !pl ? "" : `
+    <h3>Plano do exercício ${pl.ano ?? ""} <span class="tag">homologado pelo tribunal</span></h3>
+    <table>
+      ${linha("Mora oficial em 1º/jan", brl(pl.mora_oficial_1jan))}
+      ${linha("Faixa aplicada", pl.pct_aplicado != null ? pl.pct_aplicado.toLocaleString("pt-BR") + "% da RCL" : "—")}
+      ${linha("A pagar neste exercício", brl(pl.valor_do_plano_no_ano)
+          + ' <span class="pe">— desembolso do ano para zerar a mora, <b>não</b> o teto do §23</span>')}
+      ${pl.conformidade ? linha("Está em dia?", esc(pl.conformidade.resumo)
+          + (pl.conformidade.bloqueios_sisbajud_na_janela
+             ? ` <span class="tag" style="background:#f6d7d2;color:#7a2e21">${pl.conformidade.bloqueios_sisbajud_na_janela} bloqueio(s) SISBAJUD</span>` : "")) : ""}
+      ${pl.pa_fiscalizacao ? linha("Fonte", "PA " + esc(pl.pa_fiscalizacao)) : ""}
+    </table>`;
+
+  /* ---------- 5. CAPACIDADE DO DEVEDOR ---------- */
+  const devedor = `
+    <h3>Capacidade do devedor</h3>
+    <table>
+      ${linha("Ente", esc(dv.ente || "—") + " · regime " + esc(dv.regime || "—"))}
+      ${linha("Receita Corrente Líquida", brl(dv.rcl) + ' <span class="pe">(SICONFI/Tesouro)</span>')}
+      ${linha(`Fila deste tribunal (${esc(trib)})`, brl(f.estoque_municipio)
+          + ` <span class="pe">— ${f.n_total ?? "?"} precatórios na ordem cronológica, todos os exercícios`
+          + (f.fora_da_fila ? `. <b>Não inclui</b> os ${f.fora_da_fila.n} da linha seguinte` : "")
+          + `</span>`)}
+      ${f.fora_da_fila ? linha("Fora da fila", brl(f.fora_da_fila.valor)
+          + ` <span class="pe">— ${f.fora_da_fila.n} precatório(s) ${esc(f.fora_da_fila.motivos.join(", "))}.
+             Não disputa o orçamento e não entra na conta de mora abaixo`
+          + (f.fora_da_fila.n_vencidos
+             ? `; <b>${f.fora_da_fila.n_vencidos} já venceram (${brl(f.fora_da_fila.valor_vencido)})</b>` : "")
+          + `.</span>`) : ""}
+      ${linha("Já venceu — cálculo próprio", brl(f.estoque_em_mora)
+          + ` <span class="pe">— ${f.n_em_mora ?? 0} precatório(s), ${pct(f.mora_sobre_rcl_pct)} da RCL.<br>
+             <b>Fonte:</b> a própria lista cronológica do ${esc(trib)} exibida acima`
+          + (p.precatorio && p.precatorio.coletado_em
+             ? `, coletada em ${esc(dataBR(p.precatorio.coletado_em))}` : "")
+          + `. Somamos quem tem ano de vencimento anterior a ${(j && j.exercicio_base) || "o exercício corrente"}.
+             Vencido não é o mesmo que não pago: o que saiu da lista some desta conta.</span>`)}
+      ${f.estoque_em_mora_oficial != null ? linha("Já venceu — número oficial", brl(f.estoque_em_mora_oficial)
+          + ` <span class="pe">— ${pct(f.mora_oficial_sobre_rcl_pct)} da RCL.<br>
+             <b>Fonte:</b> ${esc(f.mora_oficial_fonte || "—")}`
+          + (f.mora_oficial_documento ? `, documento “${esc(f.mora_oficial_documento)}”` : "")
+          + `, posição em ${esc(f.mora_oficial_ref || "?")}.<br>
+             <b>É este número que define a faixa do §23</b> — não a fila inteira, nem o saldo dos
+             outros tribunais — e é ele que a projeção usa.`
+          + (Math.abs((f.estoque_em_mora_oficial || 0) - (f.estoque_em_mora || 0)) > 1
+             ? `<br><b>Por que difere da linha acima:</b> parte do que já venceu saiu da lista sem ter
+                 sido paga (suspensão, cancelamento ou acordo), ou venceu depois da data da tabela.` : "")
+          + `</span>`) : ""}
+      ${f.estoque_em_mora_mapa_cnj ? linha("Já venceu — Mapa Anual/CNJ", brl(f.estoque_em_mora_mapa_cnj.saldo)
+          + ` <span class="pe">— ${pct(f.estoque_em_mora_mapa_cnj.sobre_rcl_pct)} da RCL, saldo em 31/12/`
+          + esc(f.estoque_em_mora_mapa_cnj.ano_ref) + `.<br>
+             <b>Fonte:</b> Mapa Anual de Precatórios do CNJ, declarado pelo próprio ${esc(trib)} —
+             um segundo observador medindo a mesma dívida do número oficial acima, não o mesmo cálculo.
+             Costuma ficar próximo dele; o Mapa Anual tem lacunas de qualidade conhecidas em alguns
+             tribunais, então uma divergência grande vale conferir antes de decidir por ela.`
+          + (f.estoque_em_mora_oficial != null && Math.abs((f.estoque_em_mora_mapa_cnj.saldo || 0)
+                - (f.estoque_em_mora_oficial || 0)) > 1
+             ? `<br><b>Por que difere do número oficial:</b> datas-base diferentes (o oficial pode
+                 não ser 31/12), ou o Mapa Anual não capturou corretamente o saldo deste tribunal
+                 no ano.` : "")
+          + `</span>`) : ""}
+      ${j && !exerc ? linha("Teto anual do §23", brl(j.teto_p23) + ` <span class="pe">— ${j.pct_p23}% da RCL: o máximo
+             que a lei permite pagar, não o que ele paga</span>`) : ""}
+    </table>`;
+
+  /* ---------- 5b. VEREDITO + PASSOS (a ordem em que o comercial decide) ----------
+     O time verifica, nesta ordem: regime -> edital de acordo -> fila -> orcamento.
+     Onde ha edital ABERTO o credor tem alternativa oficial e a negociacao muda de
+     figura; um edital ENCERRADO nao e a mesma coisa e nao pode virar o mesmo alerta,
+     senao descartamos credor que hoje nao tem para onde ir. */
+  const ed = p.edital_acordo;
+  const especial = (dv.regime || "").toLowerCase().indexOf("espec") === 0;
+  let vClasse = "v-segue", vMarca = "Siga", vTexto = "", vExtra = "";
+
+  if (exerc) {
+    vTexto = "Devedor que <b>paga a fila inteira no exercício do orçamento</b> (regime comum, sem "
+      + "teto do §23 nem edital de acordo). O ano do orçamento do precatório é a previsão.";
+  } else if (ed && ed.aberto) {
+    vClasse = "v-pare"; vMarca = "Pare e confira";
+    vTexto = "Regime especial <b>com edital de acordo aberto</b>. O município paga à vista mediante "
+      + "deságio de <b>" + ed.desagio_min_pct + "% a " + ed.desagio_max_pct + "%</b> — é essa a "
+      + "régua de preço que o credor conhece, e ela concorre com a sua proposta.";
+    vExtra = "Inscrição até " + dataBR(ed.inscricao_fecha) + ".";
+  } else if (ed && ed.prejudicado) {
+    vTexto = "Regime especial, mas o edital de acordo <b>não produz efeito</b> — "
+      + esc(ed.observacao || "procedimento encerrado sem acordos") + ". O caminho é a fila cronológica.";
+  } else if (ed) {
+    vClasse = "v-ressalva"; vMarca = "Siga, mas saiba";
+    vTexto = "Regime especial com edital <b>" + esc(ed.edital) + " já encerrado</b> (inscrição fechou "
+      + "em " + dataBR(ed.inscricao_fecha) + "). Quem não se inscreveu voltou para a fila — "
+      + "<b>confirme em qual dos dois este credor está</b> antes de precificar.";
+    vExtra = "O deságio praticado foi de " + ed.desagio_min_pct + "% a " + ed.desagio_max_pct
+      + "%: é o preço que ele já viu o ente pagar.";
+  } else if (especial) {
+    vClasse = "v-ressalva"; vMarca = "Siga, mas saiba";
+    vTexto = "Regime especial <b>sem edital de acordo publicado</b>. Paga pela fila cronológica, "
+      + "mas é o tipo de ente que pode abrir edital — vale acompanhar.";
+  } else if (!dv.regime) {
+    vClasse = "v-ressalva"; vMarca = "Confirme o regime";
+    vTexto = "Regime do ente <b>não identificado</b>: não dá para afirmar se há edital de acordo "
+      + "concorrendo com a sua proposta. Confirme o regime antes de precificar.";
+  } else {
+    vTexto = "Regime geral e <b>sem edital de acordo</b>: o caminho é a fila cronológica, e o "
+      + "credor não tem alternativa oficial concorrendo com a sua proposta.";
+  }
+  if (g && g.pago_no_ano === 0) {
+    if (vClasse === "v-segue") { vClasse = "v-ressalva"; vMarca = "Siga com ressalva"; }
+    vExtra = "Mas o ente <b>não pagou nada</b> ao " + esc(trib) + " no último exercício medido ("
+      + g.ano_ref + "). A data abaixo é o que a lei permite, não o que o comportamento sustenta.";
+  }
+  const faixaDecisao = '<div class="veredito ' + vClasse + '"><span class="marca">' + vMarca
+    + '</span><div><p>' + vTexto + '</p>' + (vExtra ? '<p>' + vExtra + '</p>' : '') + '</div></div>';
+
+  /* A conta que o vendedor faz no papel — com as duas regras que ela não tem:
+     a reserva do §20 e o piso do §5º. */
+  const orc = j && j.orcamento_anual;
+  const anosFila = (aFrente != null && orc) ? aFrente / orc : null;
+  // floor, nao ceil: 0,35 ano de fila significa que o credito e alcancado DENTRO
+  // de 2026. Com ceil o piso do art. 100 §5º ficava invisivel justamente nos casos
+  // em que ele e quem decide a data.
+  const anoSimples = anosFila != null ? j.exercicio_base + Math.floor(anosFila) : null;
+  const res20 = f.reserva_p20 || {};
+  const anosRes = Object.keys(res20).sort();
+  const sufoca = anosRes.some(function (a) { return res20[a] > (orc || 0); });
+  const pisoP5 = (!sufoca && pr.ano_orcamento && anoSimples && anoSimples < pr.ano_orcamento);
+
+  let linhasConta =
+      '<tr><td class="op"></td><td class="v">' + brl(aFrente) + '</td>'
+    + '<td class="d">que está à sua frente na fila</td></tr>'
+    + '<tr><td class="op">÷</td><td class="v">' + brl(orc) + '</td>'
+    + '<td class="d">de orçamento por ano — ' + (rat
+        ? "parcela do §23 desta justiça (" + ratPct + "% do teto, rateado por estoque entre " + rat.por_tribunal.length + " justiças)"
+        : (j && j.fonte_orcamento === "oficial_valor" ? "valor anual publicado pelo tribunal" : j && j.fonte_orcamento === "oficial" ? "percentual homologado do §23" : "teto do art. 100 §23")) + '</td></tr>'
+    + '<tr class="regra"><td class="op">=</td><td class="v">'
+    + (anosFila != null ? anosFila.toFixed(2).replace(".", ",") + " ano" : "—") + '</td>'
+    + '<td class="d">a conta simples daria ' + (anoSimples || "—") + '</td></tr>';
+  if (sufoca) {
+    linhasConta += '<tr class="mas"><td class="op"></td><td class="v">−' + brl(res20[anosRes[0]])
+      + '</td><td class="d">mas ' + f.n_superprecatorios + ' superprecatório(s) de '
+      + brl(f.valor_superprecatorios) + ' reservam isso já em ' + anosRes[0] + ', pelo art. 100 §20 '
+      + '(15% à vista e 5 parcelas anuais) — mais que o orçamento anual inteiro</td></tr>'
+      + '<tr class="mas"><td class="op"></td><td class="v">até ' + anosRes[anosRes.length - 1]
+      + '</td><td class="d">enquanto durar a reserva, não sobra nada para a fila cronológica</td></tr>';
+  }
+  if (pisoP5) {
+    linhasConta += '<tr class="mas"><td class="op"></td><td class="v">' + pr.ano_orcamento + '</td>'
+      + '<td class="d">mas o ano orçamentário do seu precatório é ' + pr.ano_orcamento
+      + ', e o art. 100 §5º proíbe pagar antes disso</td></tr>';
+  }
+  linhasConta += '<tr class="fim"><td class="op">→</td><td class="v">' + (j ? (j.ano_previsto ?? "—") : "—")
+    + '</td><td class="d">ano projetado pelo orçamento legal</td></tr>';
+
+  const conta = !j ? "" : '<div class="conta"><table>' + linhasConta + '</table>'
+    + '<div class="nb"><b>No ritmo real:</b> ' + (ritmo && ritmo.pago_no_ano > 0
+        ? "pagando " + brl(ritmo.pago_no_ano) + " por ano, o ano cai para <b>" + ritmo.ano_previsto + "</b>."
+        : "o ente pagou <b>R$ 0,00</b> no último exercício — a fila não anda, e não há ano de "
+          + "pagamento que se sustente.") + '</div></div>';
+
+  const passo = function (n, rot, resp, porque, fonte, corta) {
+    return '<div class="passo' + (corta ? " corta" : "") + '"><span class="n">' + n + '</span>'
+      + '<span class="rot">' + rot + '</span><div class="conteudo">'
+      + '<div class="resp">' + resp + '</div>'
+      + (porque ? '<div class="porque">' + porque + '</div>' : '')
+      + (fonte ? '<div class="fonte">' + fonte + '</div>' : '') + '</div></div>';
+  };
+
+  const passos = (!j || exerc) ? "" : '<h3>Como chegamos nesses dois anos</h3><div class="passos">'
+    + passo(1, "Regime", esc(dv.regime || "—"), especial
+        ? "Ente que estava em mora em 2015 e aderiu ao parcelamento do art. 101 do ADCT. É o único "
+          + "tipo que pode abrir edital de acordo — por isso o passo 2 é obrigatório."
+        : "Não estava em mora em 2015. Paga só pela ordem cronológica; não existe acordo direto "
+          + "com deságio por edital.",
+        "Enquadramento do art. 100 §23 · " + esc(trib))
+    + passo(2, "Edital de acordo",
+        ed ? esc(ed.edital) + " — " + (ed.aberto ? "<b>aberto</b>" : esc(ed.situacao)) : "Não tem",
+        // Os editais deixaram de ser so de MG (PA e BA entraram em 28/08/2026) e nem
+        // todo tribunal publica os mesmos campos: faixa de desagio, valor do certame
+        // e validade do pagamento sao de MG. Cada pedaco so aparece se existir —
+        // antes saia "Deságio de 40% a 40%, com  na conta" e "válidos até .".
+        ed ? textoEdital(ed)
+           : "Este ente não consta na lista de editais de acordo direto — o credor não tem como "
+             + "receber à vista do município mediante deságio.",
+        ed ? esc(ed.fonte) + " · consultado em " + dataBR(ed.consultado_em)
+             + (ed.url ? ' · <a href="' + esc(ed.url) + '" target="_blank" rel="noopener">ver edital</a>' : "")
+           : "editais de acordo direto (MG, PA, BA)",
+        !!(ed && ed.aberto))
+    + passo(3, "Fila", f.e_superprecatorio
+        ? "Superprecatório (art. 100 §20) — disputa a ordem cronológica até chegar a vez dele"
+        : (f.ordem ?? "—") + "ª de " + (f.n_total ?? "—") + " · <b>" + brl(aFrente) + "</b> à frente",
+        f.n_superprecatorios
+          ? "Há <b>" + f.n_superprecatorios + " superprecatório(s)</b> no ente, somando "
+            + brl(f.valor_superprecatorios) + ". Disputam a ordem cronológica normalmente; ao "
+            + "chegar a vez de cada um, o pagamento muda para 15% à vista + 5 parcelas anuais."
+          : "Fila consolidada do município (prefeitura e autarquias), por ordem de apresentação.",
+        "Lista cronológica do " + esc(trib) + " · coletada em " + dataBR(pr.coletado_em)
+        + (f.fora_da_fila ? "<br>Fora da fila: " + f.fora_da_fila.n + " suspenso(s)/parcelado(s), "
+            + brl(f.fora_da_fila.valor) : ""))
+    + passo(4, "Orçamento",
+        // pagou = o que foi pago AO TRIBUNAL DESTA FILA (ritmo.pago_no_ano), nao o total
+        // do ente em todos os tribunais. E, quando o ente deve em mais de uma justica,
+        // o teto (1% da RCL) e' RATEADO por estoque: a fila anda so com a parcela desta
+        // justica (orc = orcamento_anual ja vem rateado). Sem rateio, orc == teto.
+        (rat
+          ? "<b>" + brl(j.teto_p23) + "</b>/ano é o teto do §23 do ente · a parcela do " + esc(trib) + " é <b>" + brl(orc) + "</b> (" + ratPct + "%)"
+          : "<b>" + brl(orc) + "</b> por ano é o limite")
+        + " · pagou <b>" + brl(ritmo && ritmo.pago_no_ano != null ? ritmo.pago_no_ano : (g ? g.pago_no_ano : null))
+        + "</b>" + (ritmo && ritmo.pago_no_ano != null ? " ao " + esc(trib) : ""),
+        "O teto é " + (j ? pct(j.pct_p23) : "?") + " da RCL de " + brl(dv.rcl)
+        + " — o máximo que a lei permite pagar em precatórios, somando TODAS as justiças."
+        + (rat ? " Como o ente também deve em outra(s) justiça(s), esse teto é rateado ("
+            + ratLista + "): a fila do " + esc(trib) + " anda só com a parcela dela. "
+            + (ratProv
+               ? "<b>Rateio provisório</b>: vem da foto anual do Mapa do CNJ (agregado) — a fila itemizada do TRT/TRF ainda não está no banco, então essa divisão pode mudar quando ela entrar."
+               : "Rateio pela <b>fila real</b> de cada justiça (valor vencido).") : "")
+        + (ritmo && ritmo.pct_do_teto ? " Pagou ao " + esc(trib) + ", em " + ritmoDesc + ", "
+            + brl(ritmo.pago_no_ano) + "/ano (" + ritmo.pct_do_teto + "% do teto cheio)." : ""),
+        "Teto: enquadramento §23 · Rateio: " + (rat && !ratProv ? "filas das justiças" : "Mapa Anual do CNJ (provisório)")
+        + " · Pagamento: Mapa CNJ, ref. " + (g ? g.ano_ref : "—"))
+    + passo(5, "A conta",
+        (j ? (j.ano_previsto ?? "—") : "—") + " pelo orçamento legal · "
+        + (ritmo && ritmo.ano_previsto ? ritmo.ano_previsto : "sem data") + " no ritmo real", "", "")
+    + '</div>' + conta;
+
+  const dobra = function (titulo, cont, corpo) {
+    return corpo ? '<details class="bloco"><summary><span class="seta">▸</span>' + titulo
+      + (cont ? '<span class="cont">' + cont + '</span>' : '')
+      + '</summary><div class="interno">' + corpo + '</div></details>' : "";
+  };
+
+  /* ---------- 6. O QUE MUDA ISSO ---------- */
+  const avisos = (p.avisos && p.avisos.length) ? `
+    <h3>O que pode mudar essa resposta</h3>
+    <div class="avisos"><ul>${p.avisos.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></div>` : "";
+
+  return `
+  <div class="painel">
+    <h2>${esc(cr.nome || "Credor não publicado pelo tribunal")}</h2>
+    <div class="subtit">${esc(pr.numero_eproc_fmt || pr.numero)} · ${esc(trib)} ·
+      ${esc(dv.municipio || "?")}/${esc(dv.uf || "?")} · ${esc(dv.ente || "")}</div>
+    ${faixaDecisao}
+    ${!j && (p.avisos || []).length
+      ? `<div class="avisos" style="margin:0 0 16px"><b>Sem projeção de pagamento para este
+          precatório.</b><ul>${p.avisos.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>`
+      : ""}
+    ${resposta}
+    ${passos}
+    ${dobra("O crédito", "natureza, posição, credor", credito.replace("<h3>O crédito</h3>", ""))}
+    ${dobra("Fila de precatórios", (f.itens_janela && f.itens_janela.total) + " item(ns)",
+        filaTabela(f).replace(/<h3>[^<]*<\/h3>/, ""))}
+    ${dobra("O devedor paga?", "Mapa Anual do CNJ", pagamento.replace(/<h3>[^<]*<\/h3>/, ""))}
+    ${plano ? dobra("Plano do exercício", "", plano.replace(/<h3>[^<]*<\/h3>/, "")) : ""}
+    ${dobra("Capacidade do devedor", "RCL, mora e teto", devedor.replace(/<h3>[^<]*<\/h3>/, ""))}
+    ${avisos && j ? dobra("O que pode mudar essa resposta", (p.avisos || []).length + " ponto(s)",
+        avisos.replace(/<h3>[^<]*<\/h3>/, "")) : ""}
+  </div>`;
+}
+
+/* sessão já autenticada nesta aba? valida antes de mostrar o app */
+if (TOKEN) api("/eu").then(eu => entrar(eu.papel)).catch(() => sair());
+</script>
+</body>
+</html>
