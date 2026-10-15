@@ -17,6 +17,7 @@ import { simulacoesRouter } from "./routes/simulacoes";
 import { bitrixRouter } from "./routes/bitrix";
 import { calculadoraRouter } from "./routes/calculadora";
 import { alfredRouter } from "./routes/alfred";
+import { muralRouter } from "./routes/mural";
 import { requireAuth, requireAdmin, blockJuridico } from "./auth";
 
 dotenv.config();
@@ -71,6 +72,8 @@ app.use("/api/users", requireAuth, blockJuridico, requireAdmin, usersRouter);
 app.use("/api/propostas", requireAuth, blockJuridico, proposalsRouter);
 app.use("/api/followups", requireAuth, blockJuridico, followupsRouter);
 app.use("/api/pricing", requireAuth, pricingRouter);
+// Mural: leitura para todo mundo (o Jurídico inclusive), escrita só do admin.
+app.use("/api/mural", requireAuth, muralRouter);
 app.use("/api/captacao", captacaoRouter);
 // Público: calculadora que o cedente abre por link.
 app.use("/api/calculo", calculoRouter);

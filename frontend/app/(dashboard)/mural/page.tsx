@@ -8,6 +8,7 @@ import { getUser } from "@/lib/auth";
 import { cutRules, paymentHorizon } from "@/lib/pricing";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { DiretrizesDeCompra } from "@/components/mural/diretrizes";
 
 function fmtDateTime(iso: string): string {
   const d = new Date(iso);
@@ -22,9 +23,12 @@ export default function MuralPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isJuridico, setIsJuridico] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    setIsJuridico(getUser()?.role === "juridico");
+    const papel = getUser()?.role;
+    setIsJuridico(papel === "juridico");
+    setIsAdmin(papel === "admin");
     api.pricing
       .list()
       // Praça oculta não entra no mural: ela existe só como rede da calculadora
@@ -61,6 +65,8 @@ export default function MuralPage() {
           </Link>
         )}
       </header>
+
+      <DiretrizesDeCompra podeEditar={isAdmin} />
 
       {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{error}</p> : null}
 

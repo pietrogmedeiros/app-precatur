@@ -8,6 +8,16 @@ import { getToken, clearSession, type Role, type SessionUser } from "./auth";
 // single-domain all-in-one deploy. Override only for a split front/back setup.
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
+/** Diretrizes de compra exibidas no topo do Mural. */
+export interface Diretrizes {
+  texto: string;
+  autor: string | null;
+  atualizado_em: string | null;
+}
+export interface VersaoDiretrizes extends Diretrizes {
+  id: number;
+}
+
 export interface SummaryMetrics {
   total_leads: number;
   qualificados: number;
@@ -427,6 +437,12 @@ export const api = {
       mensal: SerieMensal[]; natureza: Fatia[]; ativo: Fatia[];
     }>("/api/simulacoes"),
     remove: (id: number) => request<void>(`/api/simulacoes/${id}`, { method: "DELETE" }),
+  },
+  mural: {
+    diretrizes: () => request<Diretrizes>("/api/mural/diretrizes"),
+    salvarDiretrizes: (texto: string) =>
+      request<Diretrizes>("/api/mural/diretrizes", { method: "PUT", body: JSON.stringify({ texto }) }),
+    historico: () => request<VersaoDiretrizes[]>("/api/mural/diretrizes/historico"),
   },
   pricing: {
     list: () => request<PricingEntity[]>("/api/pricing"),
