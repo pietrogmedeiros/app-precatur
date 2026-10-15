@@ -3,9 +3,15 @@
 // O parecer de um precatório: quem é o crédito, quem deve, como esse devedor
 // vem pagando, onde o crédito está na fila e em que ano a projeção o alcança.
 //
-// Nada aqui calcula. Todos os números — inclusive a projeção por cenário e a
-// mora sobre a RCL — vêm prontos do Alfred; a tela escolhe o que mostrar e em
-// que ordem.
+// Nada aqui calcula. Todos os números — inclusive as duas projeções e a mora
+// sobre a RCL — vêm prontos do Alfred; a tela escolhe o que mostrar e em que
+// ordem.
+//
+// São DOIS cenários, e só dois: o limite da lei (o que o ente pode gastar pelo
+// art. 100 §23 — é o número principal da tela) e o ritmo real (o que ele pagou
+// de fato ao tribunal da fila). O leque conservador/central/otimista que ficava
+// aqui saiu em 15/10/2026: três datas próximas não ajudam a decidir, e o Alfred
+// segue mandando a banda para quem precisar dela.
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -37,17 +43,7 @@ export function ParecerView({
               <p className="mt-2 text-2xl font-bold tracking-tight">{brl(p.valor)}</p>
             </div>
             <div className="flex flex-col items-end gap-2">
-              {projecao?.ano_previsto && (
-                <div className="rounded-md border border-border bg-background px-3 py-2 text-right">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Previsão de pagamento</p>
-                  <p className="text-lg font-bold">{projecao.ano_previsto}</p>
-                  {projecao.ano_por_cenario && (
-                    <p className="text-[11px] text-muted-foreground">
-                      {projecao.ano_por_cenario.otimista}–{projecao.ano_por_cenario.conservador} conforme o cenário
-                    </p>
-                  )}
-                </div>
-              )}
+              {projecao?.ano_previsto && <SeloPrevisao projecao={projecao} />}
               {parecer.id !== undefined && (
                 <Button size="sm" variant="outline" onClick={aoBaixarPdf} disabled={baixando}>
                   {baixando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
@@ -110,7 +106,13 @@ export function ParecerView({
 
       {fila && <FilaBloco fila={fila} />}
       {pagamento && <PagamentoBloco pagamento={pagamento} />}
-      {projecao && <ProjecaoBloco projecao={projecao} />}
+      {projecao && (
+        <ProjecaoBloco
+          projecao={projecao}
+          tribunal={p.tribunal}
+          superprecatorio={!!fila?.e_superprecatorio}
+        />
+      )}
       {edital?.tem && <EditalBloco edital={edital} />}
     </div>
   );
@@ -168,7 +170,7 @@ function JanelaDaFila({ itens, janela }: { itens: any[]; janela?: Record<string,
               <th className="px-2 py-1 font-medium">Natureza</th>
               <th className="px-2 py-1 text-right font-medium">Valor</th>
               <th className="px-2 py-1 text-right font-medium">Acumulado</th>
-              <th className="px-2 py-1 text-right font-medium">Previsto</th>
+              <th className="px-2 py-1 text-right font-medium">Pela lei</th>
             </tr>
           </thead>
           <tbody>
@@ -216,41 +218,106 @@ function PagamentoBloco({ pagamento }: { pagamento: Record<string, any> }) {
   );
 }
 
-function ProjecaoBloco({ projecao }: { projecao: Record<string, any> }) {
-  const banda = projecao.banda ?? {};
-  const anos = projecao.anos_de_orcamento ?? {};
-  const cen = projecao.ano_por_cenario ?? {};
+// Os dois cenários do parecer, lidos do mesmo payload do Alfred.
+function cenarios(projecao: Record<string, any>) {
+  const ritmo = projecao.ritmo_observado ?? null;
+  return {
+    ritmo,
+    temRitmo: Boolean(ritmo?.ano_previsto),
+    anosRitmo: Number(ritmo?.anos_media ?? 0),
+    // devedor que paga a fila inteira no exercício do orçamento (União no TRF2,
+    // INSS nos TJs, estatais): não há teto anual, logo não há limite a comparar
+    // com ritmo nenhum — a tela passa a falar de uma data só.
+    exercicio: projecao.fonte_orcamento === "pago_no_exercicio",
+  };
+}
+
+// `pct_p23` já vem em pontos percentuais (1.5 = 1,5% da RCL). O `pct` da lib
+// multiplica por 100 — serve para fração, não para este campo.
+function pctDireto(v: number | null | undefined): string {
+  const n = Number(v);
+  return Number.isFinite(n) ? `${n.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "—";
+}
+
+// O número grande é SEMPRE o cenário da lei; o ritmo real vem abaixo, menor.
+function SeloPrevisao({ projecao }: { projecao: Record<string, any> }) {
+  const { ritmo, temRitmo, exercicio } = cenarios(projecao);
+  return (
+    <div className="rounded-md border border-border bg-background px-3 py-2 text-right">
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Previsão de pagamento</p>
+      <p className="text-lg font-bold">{projecao.ano_previsto}</p>
+      <p className="text-[11px] text-muted-foreground">
+        {exercicio ? "paga a fila no exercício" : "se pagar o limite da lei"}
+      </p>
+      {!exercicio && temRitmo && (
+        <p className="text-[11px] text-muted-foreground">no ritmo real: {ritmo.ano_previsto}</p>
+      )}
+    </div>
+  );
+}
+
+function ProjecaoBloco({ projecao, tribunal, superprecatorio }: {
+  projecao: Record<string, any>;
+  tribunal: string;
+  superprecatorio: boolean;
+}) {
+  const { ritmo, temRitmo, anosRitmo, exercicio } = cenarios(projecao);
+  const rateio = projecao.rateio;
+  const fonte = projecao.fonte_orcamento;
+
+  const notaLei = exercicio
+    ? "paga a fila inteira no exercício do orçamento — sem teto do art. 100 §23"
+    : rateio
+    ? `gastando ${brl(projecao.orcamento_anual)}/ano nesta justiça — parcela do §23 do ente `
+      + `(${Math.round(Number(rateio.fracao) * 100)}% do teto de ${brl(projecao.teto_p23)}, `
+      + `rateio ${rateio.fonte === "mapa" ? "provisório pelo Mapa CNJ" : "pelas filas das justiças"})`
+    : `gastando ${brl(projecao.orcamento_anual)}/ano — ${pctDireto(projecao.pct_p23)} da RCL, `
+      + (fonte === "oficial_valor" ? "valor do plano publicado pelo tribunal"
+         : fonte === "oficial" ? "percentual homologado pelo tribunal"
+         : "teto do art. 100 §23");
+
+  const notaRitmo = exercicio
+    ? "não se aplica — não há teto anual a medir"
+    : !ritmo
+    ? (superprecatorio
+       ? "não se aplica — superprecatório (art. 100 §20): paga 15% à vista + 5 parcelas anuais quando a fila chegar nele"
+       : `sem dado de pagamento para ${tribunal}`)
+    : Number(ritmo.pago_no_ano) > 0
+    ? (anosRitmo > 1
+       ? `média de ${brl(ritmo.pago_no_ano)}/ano ao ${tribunal}`
+       : `pagou ${brl(ritmo.pago_no_ano)} ao ${tribunal} no último ano`)
+      + (Number(ritmo.pct_do_teto) > 100 ? " — acima do limite, sob as regras anteriores" : "")
+    : `não pagou nada ao ${tribunal} no último ano`;
+
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-sm">Projeção de pagamento</CardTitle>
         <CardDescription className="text-xs">
-          Orçamento anual de {brlCurto(projecao.orcamento_anual)}
-          {projecao.fonte_orcamento ? ` (${projecao.fonte_orcamento})` : ""}
+          Em que ano a fila alcança este crédito
           {projecao.exercicio_base ? ` · exercício base ${projecao.exercicio_base}` : ""}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        <div className="grid gap-3 sm:grid-cols-3">
-          {(["conservador", "central", "otimista"] as const).map((c) => (
-            <div key={c} className={`rounded-md border p-3 ${c === "central" ? "border-primary/40 bg-primary/5" : "border-border/70"}`}>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{c}</p>
-              <p className="text-lg font-bold">{cen[c] ?? "—"}</p>
-              <p className="text-[11px] text-muted-foreground">
-                {brlCurto(banda[c])}/ano · {anos[c] ?? "—"} anos
-              </p>
-            </div>
-          ))}
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-md border border-primary/40 bg-primary/5 p-3">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              {exercicio ? "Previsão de pagamento" : "Se pagar o limite da lei"}
+            </p>
+            <p className="text-2xl font-bold">{projecao.ano_previsto ?? "—"}</p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{notaLei}</p>
+          </div>
+          <div className="rounded-md border border-border/70 p-3">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              No ritmo real{anosRitmo > 1 ? ` (${anosRitmo} anos)` : ""}
+            </p>
+            <p className="text-2xl font-bold">{temRitmo ? ritmo.ano_previsto : "—"}</p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{notaRitmo}</p>
+          </div>
         </div>
-        {projecao.fila_zera_em && (
+        {projecao.fila_zera_em && !exercicio && (
           <p className="text-xs text-muted-foreground">
-            Nesse ritmo a fila inteira do ente zera em <strong>{projecao.fila_zera_em}</strong>.
-          </p>
-        )}
-        {projecao.ritmo_observado?.pago_ultimo != null && (
-          <p className="text-xs text-muted-foreground">
-            Ritmo observado: pagou {brlCurto(projecao.ritmo_observado.pago_ultimo)} no último ano
-            {projecao.ritmo_observado.pct_do_teto != null && ` — ${String(projecao.ritmo_observado.pct_do_teto).replace(".", ",")}% do teto do §23`}.
+            No limite da lei, a fila inteira do ente zera em <strong>{projecao.fila_zera_em}</strong>.
           </p>
         )}
       </CardContent>
