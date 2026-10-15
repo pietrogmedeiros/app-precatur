@@ -276,13 +276,6 @@ function Extracao({
       {resultado.multi_conta && (
         <Aviso tom="atencao">Mais de uma conta marcada — a calculadora é um crédito por vez; usei a primeira.</Aviso>
       )}
-      {resultado.conta_por_ocr && (
-        <Aviso tom="atencao">
-          A conta foi lida por <strong>OCR</strong> — o dígito pode sair errado sem parecer errado.
-          Confira cada número contra a página.
-        </Aviso>
-      )}
-
       <p className="text-xs text-muted-foreground">
         <strong>Valores extraídos</strong> — o trecho mostra de onde cada número saiu.
       </p>
@@ -347,11 +340,6 @@ function Extracao({
             {vendo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
             Ver as páginas citadas
           </Button>
-        )}
-        {resultado.custo !== undefined && (
-          <span className="text-[11px] text-muted-foreground">
-            Extraído por IA + regex · custo US$ {resultado.custo}
-          </span>
         )}
       </div>
 
