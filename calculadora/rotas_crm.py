@@ -85,8 +85,24 @@ def estado() -> dict:
 
 @router.get("/cards")
 def cards(termo: str, limite: int = 12) -> dict:
-    """Busca por nome, CPF, ID ou link colado — o advogado não decora ID."""
+    """Busca por nome, CPF, ID ou link colado — o advogado não decora ID.
+
+    ID e link NÃO passam pelo `buscar_cards`: ele filtra por `%TITLE`, e procurar
+    "2693" no TÍTULO não acha o card #2693. Quem informa o ID já disse qual card
+    quer, então vamos direto nele — é o que a tela antiga fazia. O funil continua
+    guardado na gravação (`enviar` recusa card fora do funil permitido), e é lá
+    que a recusa é explicada.
+    """
     bx = _bitrix()
+    deal_id = bx.resolver_id(termo)
+    if deal_id is not None:
+        try:
+            card = bx.resumo_do_card(deal_id)
+        except RuntimeError:
+            return {"cards": []}       # ID que não existe: some, como um nome sem resultado
+        return {"cards": [{"id": card["id"], "titulo": card["titulo"],
+                           "etapa": card["etapa"], "funil": card["funil"],
+                           "url": card["url"]}]}
     try:
         return {"cards": bx.buscar_cards(termo, limite=limite)}
     except RuntimeError as exc:

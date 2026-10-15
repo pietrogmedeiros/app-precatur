@@ -37,6 +37,10 @@ export default function PreAnalisePage() {
   const [baixando, setBaixando] = useState(false);
   const [memorialBase64, setMemorialBase64] = useState<string | null>(null);
   const [numerosCrm, setNumerosCrm] = useState<{ numero_precatorio?: string; numero_oficio?: string }>({});
+  // O formulário EXATO que gerou o resultado na tela. O envio ao CRM gera o
+  // memorial a partir daqui, não do `form` atual: se o advogado mexer num campo
+  // sem recalcular, o PDF ainda é o do número que ele conferiu.
+  const [formDoCalculo, setFormDoCalculo] = useState<FormularioCalculo | null>(null);
 
   useEffect(() => {
     carregarOpcoes().then(setOpcoes).catch(() => setOpcoes(null));
@@ -56,8 +60,10 @@ export default function PreAnalisePage() {
     setMemorialBase64(null);
     try {
       setResposta(await calcular(form));
+      setFormDoCalculo(form);
     } catch (e: any) {
       setResposta(null);
+      setFormDoCalculo(null);
       if (e instanceof ErroDePreenchimento) setErros(e.erros);
       else setFalha(e?.message ?? "Não foi possível calcular.");
     } finally {
@@ -65,19 +71,28 @@ export default function PreAnalisePage() {
     }
   }
 
+  // Memorial do resultado que está na tela. Guarda o PDF para o envio ao CRM —
+  // o card recebe o MESMO arquivo que o advogado baixou, nunca um gerado depois.
+  const obterMemorial = useCallback(async (): Promise<string | null> => {
+    if (memorialBase64) return memorialBase64;
+    if (!formDoCalculo) return null;
+    const { blob } = await memorialPdf(formDoCalculo);
+    const b64 = await paraBase64(blob);
+    setMemorialBase64(b64);
+    return b64;
+  }, [memorialBase64, formDoCalculo]);
+
   async function baixarMemorial() {
     setBaixando(true);
     setFalha(null);
     try {
-      const { blob, nome } = await memorialPdf(form);
+      const { blob, nome } = await memorialPdf(formDoCalculo ?? form);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = nome;
       a.click();
       URL.revokeObjectURL(url);
-      // Guarda o MESMO PDF para o envio ao CRM: gerar outro lá deixaria o card
-      // com um memorial diferente do que o advogado conferiu.
       setMemorialBase64(await paraBase64(blob));
     } catch (e: any) {
       if (e instanceof ErroDePreenchimento) setErros(e.erros);
@@ -149,6 +164,7 @@ export default function PreAnalisePage() {
                   referencia={form.ref}
                   numeros={numerosCrm}
                   memorialBase64={memorialBase64}
+                  obterMemorial={obterMemorial}
                   aoAdotarHonorario={(pct) => mudar({ hc: pct })}
                 />
               )}

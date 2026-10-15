@@ -18,13 +18,15 @@ import {
 } from "@/lib/calculadora";
 
 export function EnviarAoCrm({
-  estado, resposta, referencia, numeros, memorialBase64, aoAdotarHonorario,
+  estado, resposta, referencia, numeros, memorialBase64, obterMemorial, aoAdotarHonorario,
 }: {
   estado: EstadoCrm;
   resposta: RespostaCalculo;
   referencia: string;
   numeros: { numero_precatorio?: string; numero_oficio?: string };
   memorialBase64: string | null;
+  /** Gera (ou devolve o já gerado) memorial do resultado desta tela, em base64. */
+  obterMemorial: () => Promise<string | null>;
   aoAdotarHonorario: (pct: string) => void;
 }) {
   const [termo, setTermo] = useState("");
@@ -34,6 +36,7 @@ export function EnviarAoCrm({
   const [erro, setErro] = useState<string | null>(null);
   const [ensaio, setEnsaio] = useState<RespostaEnvio | null>(null);
   const [gravado, setGravado] = useState<RespostaEnvio | null>(null);
+  const [semMemorial, setSemMemorial] = useState<string | null>(null);
 
   const cen = resposta.resultado.cenario_homologado;
   const liquido = cen.valor_liquido_atualizado;
@@ -45,19 +48,34 @@ export function EnviarAoCrm({
     finally { setOcupado(null); }
   }
 
-  const corpo = (aplicar: boolean) => ({
-    deal_id: card!.id,
-    valor_liquido: liquido,
-    honorarios_contratuais_pct: cen.honorarios_contratuais_pct,
-    numero_precatorio: numeros.numero_precatorio ?? card?.numero_precatorio ?? null,
-    numero_oficio: numeros.numero_oficio ?? null,
-    natureza: cen.pss_detalhe ? null : null,
-    atualizado_para: alvo,
-    aviso_projecao: resposta.aviso_projecao,
-    referencia,
-    memorial_pdf: memorialBase64,
-    aplicar,
-  });
+  // O memorial é anexado SEMPRE — antes dependia de o advogado ter clicado em
+  // "Memorial em PDF", e quem enviava direto deixava o card sem o anexo e sem
+  // aviso nenhum. Falhar ao gerá-lo não cancela o envio: os campos valem por si.
+  async function corpo(aplicar: boolean) {
+    let memorial = memorialBase64;
+    if (!memorial) {
+      try {
+        memorial = await obterMemorial();
+        setSemMemorial(null);
+      } catch (e: any) {
+        memorial = null;
+        setSemMemorial(e?.message ?? "Não foi possível gerar o memorial.");
+      }
+    }
+    return {
+      deal_id: card!.id,
+      valor_liquido: liquido,
+      honorarios_contratuais_pct: cen.honorarios_contratuais_pct,
+      numero_precatorio: numeros.numero_precatorio ?? card?.numero_precatorio ?? null,
+      numero_oficio: numeros.numero_oficio ?? null,
+      natureza: cen.pss_detalhe ? null : null,
+      atualizado_para: alvo,
+      aviso_projecao: resposta.aviso_projecao,
+      referencia,
+      memorial_pdf: memorial,
+      aplicar,
+    };
+  }
 
   return (
     <Card>
@@ -130,16 +148,28 @@ export function EnviarAoCrm({
             <div className="rounded bg-muted/60 p-2 text-xs">
               Vai para o card: <strong>{liquido ? `R$ ${Number(liquido).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "—"}</strong>
               {alvo && <> · atualizado até {alvo.split("-").reverse().join("/")}</>}
+              <br />
+              <span className="text-muted-foreground">
+                Com o memorial de cálculo em PDF no anexo “Cálculo Atualizado” — o mesmo
+                deste resultado, mesmo sem baixar antes.
+              </span>
             </div>
+
+            {semMemorial && (
+              <Aviso tom="atencao">
+                {semMemorial} O envio segue sem o anexo — os campos do card são gravados
+                assim mesmo.
+              </Aviso>
+            )}
 
             <div className="flex flex-wrap gap-2">
               <Button type="button" variant="outline" disabled={!!ocupado}
-                onClick={() => tentar("ensaio", async () => { setEnsaio(await enviarAoCrm(corpo(false))); setGravado(null); })}>
+                onClick={() => tentar("ensaio", async () => { setEnsaio(await enviarAoCrm(await corpo(false))); setGravado(null); })}>
                 {ocupado === "ensaio" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 Conferir (ensaio)
               </Button>
               <Button type="button" disabled={!ensaio || !!ocupado}
-                onClick={() => tentar("gravar", async () => setGravado(await enviarAoCrm(corpo(true))))}>
+                onClick={() => tentar("gravar", async () => setGravado(await enviarAoCrm(await corpo(true))))}>
                 {ocupado === "gravar" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 Gravar no card
               </Button>
