@@ -89,3 +89,20 @@ def test_sessao_expirada_pede_o_pdf_de_novo():
     with pytest.raises(HTTPException) as erro:
         R.paginas_citadas("0" * 32)
     assert erro.value.status_code == 410
+
+
+# ── conflito IA × regex: só o que é conflito de verdade ────────────────────
+
+@pytest.mark.parametrize("llm, regex, sobra", [
+    ("30", "30,00", False),      # o caso real: rstrip("0") faz "30" virar "3"
+    ("10", "10,00", False),
+    ("20,5", "20,50", False),
+    ("30", "20,00", True),       # conflito de verdade
+    ("30", "30,01", True),       # um centésimo é diferença, não grafia
+    (None, "30,00", True),       # IA não leu: a tela precisa saber
+])
+def test_conflito_de_grafia_nao_vira_alarme(llm, regex, sobra):
+    res = {"conflitos": [{"campo": "honorarios_contratuais_pct", "llm": llm,
+                          "regex": regex, "pagina": 3}]}
+    R._descartar_conflito_de_grafia(res)
+    assert bool(res["conflitos"]) is sobra

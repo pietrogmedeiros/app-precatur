@@ -89,6 +89,36 @@ def _recuperar(sid: str) -> dict:
 PECA_PROCESSO = "Processo"
 
 
+def _descartar_conflito_de_grafia(res: dict) -> None:
+    """Tira da lista o "conflito" em que os dois lados dizem o MESMO número.
+
+    O motor compara IA × regex normalizando com `rstrip("0")`, que em número
+    INTEIRO come o zero final: `"30"` vira `"3"` e nunca casa com o `"30,00"`
+    que o regex lê do formulário. Enquanto a tela nova não mostrava conflito
+    nenhum isso passava despercebido; agora todo honorário de 10, 20 ou 30%
+    viraria um alarme falso — e alarme falso é o que faz o advogado parar de
+    ler os verdadeiros.
+
+    Fica aqui, e não no motor, pela mesma regra de sempre: `prefill/` é código
+    de origem. A correção precisa ser replicada lá para a tela do Victor.
+    """
+    from decimal import Decimal, InvalidOperation
+
+    def num(v):
+        try:
+            return Decimal(str(v).strip().replace("%", "").replace(".", "").replace(",", ".")
+                           if "," in str(v) else str(v).strip().replace("%", ""))
+        except (InvalidOperation, ValueError):
+            return None
+
+    restantes = []
+    for c in res.get("conflitos") or []:
+        a, b = num(c.get("llm")), num(c.get("regex"))
+        if a is None or b is None or a != b:
+            restantes.append(c)
+    res["conflitos"] = restantes
+
+
 def _exige_prefill() -> None:
     if not habilitado():
         raise HTTPException(status_code=503, detail=(
@@ -167,6 +197,7 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
     except Exception as exc:  # noqa: BLE001 — rede/LLM instável não derruba a tela
         return JSONResponse(status_code=200, content={"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"})
     if res.get("ok"):
+        _descartar_conflito_de_grafia(res)
         _anotar_citacoes(str(corpo.get("sessao") or ""), res)
         res["sessao_paginas"] = corpo.get("sessao")
     return res
@@ -195,6 +226,7 @@ async def extrair_pecas(
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"}
     if res.get("ok"):
+        _descartar_conflito_de_grafia(res)
         # Os rótulos TÊM de ser os mesmos que o `extrair_pecas` gerou (a sentença
         # só é numerada quando há mais de uma), senão o `mapa_paginas` aponta
         # para uma peça que o visualizador não encontra.
@@ -222,6 +254,7 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"}
     if res.get("ok"):
+        _descartar_conflito_de_grafia(res)
         sid = _guardar([], {}, pdfs={PECA_PROCESSO: conteudo})
         _anotar_citacoes(sid, res)
         res["sessao_paginas"] = sid
