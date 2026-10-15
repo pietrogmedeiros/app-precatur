@@ -8,13 +8,14 @@
 // quem denuncia isso é a prova aritmética abaixo, não o modelo.
 
 import { useState } from "react";
-import { FileSearch, FileUp, Scissors, Loader2, Check, AlertTriangle } from "lucide-react";
+import { FileSearch, FileUp, Scissors, Loader2, Check, AlertTriangle, Eye } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Aviso, Opcoes, inputClass } from "./campos";
 import {
-  analisarPdf, extrairCortes, extrairPecas, preencherPorProcesso,
-  type CorteSugerido, type EstadoDocumentos, type FormularioCalculo, type RespostaExtracao,
+  analisarPdf, extrairCortes, extrairPecas, paginasCitadas, preencherPorProcesso,
+  type CorteSugerido, type EstadoDocumentos, type FormularioCalculo,
+  type PaginaCitada, type RespostaExtracao,
 } from "@/lib/calculadora";
 
 type Modo = "pecas" | "corte" | "autonomo";
@@ -80,9 +81,16 @@ export function Documentos({
     }
   }
 
-  function aplicar() {
+  // Os valores recusados (que a IA propôs e não existem na conta) só entram se
+  // o advogado tiver marcado "usar mesmo assim" — a recusa é a trava contra a
+  // agregação, e desfazê-la é decisão dele, não do código.
+  function aplicar(usados: Set<string>) {
     if (!resultado?.query) return;
-    const { patch, crm } = semearFormulario(resultado.query);
+    const query = { ...resultado.query };
+    for (const r of resultado.rejeitados ?? []) {
+      if (usados.has(r.param)) query[r.param] = String(r.valor);
+    }
+    const { patch, crm } = semearFormulario(query);
     aoSemear(patch, crm);
   }
 
@@ -210,18 +218,50 @@ export function Documentos({
         )}
 
         {erro && <Aviso tom="erro">{erro}</Aviso>}
-        {resultado && <Extracao resultado={resultado} aoAplicar={aplicar} />}
+        {resultado && <Extracao key={resultado.sessao_paginas ?? "x"} resultado={resultado} aoAplicar={aplicar} />}
       </CardContent>
     </Card>
   );
 }
 
-function Extracao({ resultado, aoAplicar }: { resultado: RespostaExtracao; aoAplicar: () => void }) {
+function Extracao({
+  resultado, aoAplicar,
+}: {
+  resultado: RespostaExtracao;
+  aoAplicar: (usados: Set<string>) => void;
+}) {
+  const [usados, setUsados] = useState<Set<string>>(new Set());
+  const [paginas, setPaginas] = useState<PaginaCitada[] | null>(null);
+  const [vendo, setVendo] = useState(false);
+  const [erroPaginas, setErroPaginas] = useState<string | null>(null);
+
   if (!resultado.ok) {
     return <Aviso tom="erro">Não consegui extrair: {resultado.erro}</Aviso>;
   }
   const campos = Object.entries(resultado.campos ?? {});
   const prova = resultado.prova;
+  const mapa = resultado.mapa_paginas ?? {};
+
+  /** "Conta homologada, pág 3" — a página do espaço concatenado não localiza nada. */
+  function onde(pagina?: number): string {
+    if (!pagina) return "";
+    const m = mapa[String(pagina)];
+    return m ? `${m.peca}, pág. ${m.pagina}` : `pág. ${pagina}`;
+  }
+
+  async function verPaginas() {
+    if (!resultado.sessao_paginas) return;
+    setVendo(true);
+    setErroPaginas(null);
+    try {
+      setPaginas((await paginasCitadas(resultado.sessao_paginas)).paginas);
+    } catch (e: any) {
+      setErroPaginas(e?.message ?? "Não consegui renderizar as páginas.");
+    } finally {
+      setVendo(false);
+    }
+  }
+
   return (
     <div className="space-y-3">
       {prova?.ok === true && (
@@ -236,24 +276,106 @@ function Extracao({ resultado, aoAplicar }: { resultado: RespostaExtracao; aoApl
       {resultado.multi_conta && (
         <Aviso tom="atencao">Mais de uma conta marcada — a calculadora é um crédito por vez; usei a primeira.</Aviso>
       )}
+      {resultado.conta_por_ocr && (
+        <Aviso tom="atencao">
+          A conta foi lida por <strong>OCR</strong> — o dígito pode sair errado sem parecer errado.
+          Confira cada número contra a página.
+        </Aviso>
+      )}
+
+      <p className="text-xs text-muted-foreground">
+        <strong>Valores extraídos</strong> — o trecho mostra de onde cada número saiu.
+      </p>
       <div className="overflow-hidden rounded-md border border-border/70">
         <table className="w-full text-xs">
           <tbody>
             {campos.map(([nome, c]) => (
-              <tr key={nome} className="border-b border-border/50 last:border-0">
-                <td className="px-3 py-1.5 text-muted-foreground">{nome}</td>
-                <td className="px-3 py-1.5 text-right tabular-nums">{c?.valor ?? "—"}</td>
-                <td className="px-3 py-1.5 text-right text-[11px] text-muted-foreground/70">
-                  {c?.citacao?.pagina ? `pág. ${c.citacao.pagina}` : ""}
+              <tr key={nome} className="border-b border-border/50 align-top last:border-0">
+                <td className="px-3 py-1.5">
+                  <span className="text-muted-foreground">{nome}</span>
+                  {c?.citacao?.trecho && (
+                    <span className="mt-0.5 block text-[11px] italic text-muted-foreground/70">
+                      “{c.citacao.trecho}”
+                    </span>
+                  )}
+                </td>
+                <td className="whitespace-nowrap px-3 py-1.5 text-right tabular-nums">{c?.valor ?? "—"}</td>
+                <td className="whitespace-nowrap px-3 py-1.5 text-right text-[11px] text-muted-foreground/70">
+                  {onde(c?.citacao?.pagina)}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <Button type="button" onClick={aoAplicar} disabled={!resultado.query}>
-        <Check className="h-4 w-4" /> Levar para o formulário
-      </Button>
+
+      {(resultado.conflitos ?? []).map((cf) => (
+        <Aviso key={cf.campo} tom="atencao">
+          <AlertTriangle className="mr-1 inline h-3 w-3" />
+          <strong>{cf.campo}</strong>: a IA leu <code>{cf.llm ?? "nada"}</code> e a regra determinística
+          leu <code>{cf.regex}</code>{cf.pagina ? ` (${onde(cf.pagina)})` : ""} — confira qual está certo.
+        </Aviso>
+      ))}
+
+      {(resultado.rejeitados ?? []).map((r) => (
+        <Aviso key={r.param} tom="erro">
+          <strong>{r.campo}</strong>: a IA propôs <code>{r.valor}</code>, mas esse número{" "}
+          <strong>não existe em nenhuma página da conta</strong> — o campo ficou <strong>vazio</strong>.
+          Costuma ser soma de linhas: legítima quando são verbas ou períodos do mesmo credor, indevida
+          quando entra honorário ou sucumbência.
+          {r.citacao?.trecho && (
+            <span className="mt-1 block text-[11px] italic">Trecho citado pela IA: “{r.citacao.trecho}”</span>
+          )}
+          <label className="mt-1.5 flex items-center gap-2 text-[11px]">
+            <input type="checkbox" checked={usados.has(r.param)}
+              onChange={(e) => setUsados((s) => {
+                const novo = new Set(s);
+                if (e.target.checked) novo.add(r.param); else novo.delete(r.param);
+                return novo;
+              })} />
+            Usar <code>{r.valor}</code> mesmo assim
+          </label>
+        </Aviso>
+      ))}
+
+      <div className="flex flex-wrap items-center gap-2">
+        <Button type="button" onClick={() => aoAplicar(usados)} disabled={!resultado.query}>
+          <Check className="h-4 w-4" /> Levar para o formulário
+        </Button>
+        {resultado.sessao_paginas && !paginas && (
+          <Button type="button" variant="outline" onClick={verPaginas} disabled={vendo}>
+            {vendo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+            Ver as páginas citadas
+          </Button>
+        )}
+        {resultado.custo !== undefined && (
+          <span className="text-[11px] text-muted-foreground">
+            Extraído por IA + regex · custo US$ {resultado.custo}
+          </span>
+        )}
+      </div>
+
+      {erroPaginas && <Aviso tom="erro">{erroPaginas}</Aviso>}
+      {paginas?.length === 0 && (
+        <Aviso tom="info">Não há páginas citadas para mostrar nesta extração.</Aviso>
+      )}
+      {paginas && paginas.length > 0 && (
+        <div className="space-y-3">
+          {paginas.map((p) => (
+            <figure key={`${p.peca}-${p.pagina}`} className="space-y-1">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`data:image/png;base64,${p.png}`} alt={`${p.peca} — página ${p.pagina}`}
+                className="w-full rounded-md border border-border/70" />
+              <figcaption className="text-[11px] text-muted-foreground">
+                {p.peca} — pág. {p.pagina} ·{" "}
+                {p.n_marcas > 0
+                  ? `${p.n_marcas} valor(es) destacado(s)`
+                  : "nenhum destaque: o número não está escrito assim nesta página"}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

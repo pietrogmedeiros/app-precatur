@@ -213,6 +213,18 @@ export interface CampoExtraido {
   valor: string | null;
   citacao?: { pagina?: number; trecho?: string } | null;
 }
+/** Valor que o modelo propôs e que NÃO existe na conta — fica fora do
+ *  formulário até o advogado mandar usar mesmo assim. */
+export interface ValorRejeitado {
+  campo: string;
+  param: string;
+  valor: string;
+  citacao?: { pagina?: number; trecho?: string } | null;
+  conta_por_ocr?: boolean;
+}
+export interface ConflitoExtracao {
+  campo: string; llm: string | null; regex: string; pagina?: number | null;
+}
 export interface RespostaExtracao {
   ok: boolean;
   erro?: string;
@@ -220,10 +232,24 @@ export interface RespostaExtracao {
   query?: Record<string, string>;
   prova?: { ok?: boolean | null; dif_pct?: number | null };
   data_apresentacao?: string | null;
-  mapa_paginas?: Record<string, string>;
+  /** página do espaço concatenado → peça e página de origem. */
+  mapa_paginas?: Record<string, { peca: string; pagina: number }>;
   multi_conta?: boolean;
   multi_oficio?: boolean;
+  rejeitados?: ValorRejeitado[];
+  conflitos?: ConflitoExtracao[];
+  conta_por_ocr?: boolean;
+  citacoes?: Record<string, string[]>;
+  /** id para pedir as páginas citadas renderizadas; vale 1h. */
+  sessao_paginas?: string | null;
+  custo?: number;
 }
+
+export interface PaginaCitada {
+  peca: string; pagina: number; n_marcas: number; png: string;
+}
+export const paginasCitadas = (sessao: string) =>
+  pedir<{ paginas: PaginaCitada[] }>(`/documentos/paginas/${sessao}`);
 
 export function extrairCortes(sessao: string, cortes: CorteSugerido[]): Promise<RespostaExtracao> {
   return pedir<RespostaExtracao>("/documentos/extrair-cortes", {

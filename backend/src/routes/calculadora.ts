@@ -129,6 +129,15 @@ calculadoraRouter.post("/documentos/extrair-pecas", (req: AuthedRequest, res) =>
   encaminhar(req, res, "/documentos/extrair-pecas"));
 calculadoraRouter.post("/documentos/preencher", (req: AuthedRequest, res) =>
   encaminhar(req, res, "/documentos/preencher"));
+// Páginas citadas, com o valor destacado. A sessão é um id opaco gerado pelo
+// motor; validar o formato aqui evita que um caminho inventado vire requisição.
+calculadoraRouter.get("/documentos/paginas/:sessao", (req: AuthedRequest, res) => {
+  const sessao = String(req.params.sessao);
+  if (!/^[a-f0-9]{32}$/.test(sessao)) {
+    return res.status(400).json({ error: "bad_request", message: "Sessão inválida." });
+  }
+  return encaminhar(req, res, `/documentos/paginas/${sessao}`);
+});
 
 // ── CRM ────────────────────────────────────────────────────────────────────
 calculadoraRouter.get("/crm/estado", (req: AuthedRequest, res) =>

@@ -8,6 +8,7 @@ processo é o documento mais sensível que passa por aqui.
 """
 from __future__ import annotations
 
+import base64
 import os
 import threading
 import time
@@ -19,7 +20,12 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/documentos", tags=["documentos"])
 
-# Sessões do assistente: id → {"paginas", "meta", "expira"}.
+# Sessões: id → {"paginas", "meta", "pdfs", "citacoes", "mapa", "expira"}.
+#
+# `pdfs` é o que o VISUALIZADOR precisa: para desenhar a tarja amarela sobre o
+# número, `prefill.viewer` abre o PDF de novo — texto extraído não vira imagem.
+# Fica na memória com a mesma validade do resto (nunca em disco: é o documento
+# mais sensível que passa por aqui), e some junto quando a sessão expira.
 _SESSOES: dict[str, dict[str, Any]] = {}
 _TRAVA = threading.Lock()
 VALIDADE_S = int(os.environ.get("PREFILL_SESSAO_TTL") or 3600)
@@ -43,12 +49,28 @@ def _limpar() -> None:
         _SESSOES.pop(mais_velha, None)
 
 
-def _guardar(paginas: list[dict], meta: dict) -> str:
+def _guardar(paginas: list[dict], meta: dict, pdfs: dict[str, bytes] | None = None) -> str:
     with _TRAVA:
         _limpar()
         sid = uuid.uuid4().hex
-        _SESSOES[sid] = {"paginas": paginas, "meta": meta, "expira": time.time() + VALIDADE_S}
+        _SESSOES[sid] = {"paginas": paginas, "meta": meta, "pdfs": pdfs or {},
+                         "citacoes": {}, "mapa": {}, "expira": time.time() + VALIDADE_S}
         return sid
+
+
+def _anotar_citacoes(sid: str, res: dict) -> None:
+    """Guarda na sessão de onde cada valor saiu, para o visualizador depois.
+
+    Silencioso de propósito: a extração já deu certo, e perder o visualizador
+    (sessão expirada entre o envio e a leitura) não pode derrubar o resultado
+    que o advogado tem na tela.
+    """
+    with _TRAVA:
+        sessao = _SESSOES.get(sid)
+        if sessao is None:
+            return
+        sessao["citacoes"] = res.get("citacoes") or {}
+        sessao["mapa"] = res.get("mapa_paginas") or {}
 
 
 def _recuperar(sid: str) -> dict:
@@ -59,6 +81,12 @@ def _recuperar(sid: str) -> dict:
         raise HTTPException(status_code=410, detail=(
             "A análise expirou (ou o serviço reiniciou). Envie o PDF de novo."))
     return sessao
+
+
+# Rótulo da peça quando o PDF é o processo inteiro (modos "autônomo" e
+# "assistente de corte"): lá a página citada é a página do próprio arquivo, não
+# há concatenação para desfazer.
+PECA_PROCESSO = "Processo"
 
 
 def _exige_prefill() -> None:
@@ -111,7 +139,7 @@ async def analisar(arquivo: UploadFile = File(...)) -> dict:
         raise HTTPException(status_code=422, detail=f"Não consegui analisar o PDF: {exc}") from exc
     meta = {"homologacao": res.get("homologacao"), "n_paginas": res.get("n_paginas"),
             "escaneadas": res.get("escaneadas")}
-    sid = _guardar(res["paginas"], meta)
+    sid = _guardar(res["paginas"], meta, pdfs={PECA_PROCESSO: conteudo})
     return {
         "sessao": sid,
         "cortes_sugeridos": res.get("cortes_sugeridos"),
@@ -138,6 +166,9 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
         raise
     except Exception as exc:  # noqa: BLE001 — rede/LLM instável não derruba a tela
         return JSONResponse(status_code=200, content={"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"})
+    if res.get("ok"):
+        _anotar_citacoes(str(corpo.get("sessao") or ""), res)
+        res["sessao_paginas"] = corpo.get("sessao")
     return res
 
 
@@ -158,11 +189,24 @@ async def extrair_pecas(
     oficio_b = await oficio.read() if oficio is not None else None
     sent_b = [await s.read() for s in (sentencas or [])]
     try:
-        return P.extrair_pecas(conta=conta_b, oficio=oficio_b, sentencas=sent_b, llm=_llm())
+        res = P.extrair_pecas(conta=conta_b, oficio=oficio_b, sentencas=sent_b, llm=_llm())
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"}
+    if res.get("ok"):
+        # Os rótulos TÊM de ser os mesmos que o `extrair_pecas` gerou (a sentença
+        # só é numerada quando há mais de uma), senão o `mapa_paginas` aponta
+        # para uma peça que o visualizador não encontra.
+        pdfs: dict[str, bytes] = {P.TIPO_CONTA: conta_b}
+        if oficio_b is not None:
+            pdfs[P.TIPO_OFICIO] = oficio_b
+        for i, s in enumerate(sent_b):
+            pdfs[P.TIPO_SENTENCA if len(sent_b) == 1 else f"{P.TIPO_SENTENCA} {i + 1}"] = s
+        sid = _guardar([], {}, pdfs=pdfs)
+        _anotar_citacoes(sid, res)
+        res["sessao_paginas"] = sid
+    return res
 
 
 @router.post("/preencher")
@@ -172,8 +216,56 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
     P = _pipeline()
     conteudo = await arquivo.read()
     try:
-        return P.preencher(pdf_bytes=conteudo, llm=_llm())
+        res = P.preencher(pdf_bytes=conteudo, llm=_llm())
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001
         return {"ok": False, "erro": f"{type(exc).__name__}: {str(exc)[:200]}"}
+    if res.get("ok"):
+        sid = _guardar([], {}, pdfs={PECA_PROCESSO: conteudo})
+        _anotar_citacoes(sid, res)
+        res["sessao_paginas"] = sid
+    return res
+
+
+@router.get("/paginas/{sessao}")
+def paginas_citadas(sessao: str, limite: int = 8) -> dict:
+    """As páginas de onde o modelo tirou cada número, com o valor DESTACADO.
+
+    Fecha o laço da conferência: em vez de acreditar no "pág. 7", o advogado vê
+    a página com a tarja em cima do número. O destaque é determinístico — o
+    `viewer` procura o trecho literal na página e marca o retângulo; não achar
+    (número reescrito pelo modelo, página escaneada) devolve a página sem marca,
+    que já é informação: o valor não está escrito ali daquele jeito.
+
+    A citação vem no espaço CONCATENADO das peças; o `mapa` traduz de volta para
+    (peça, página local), senão a pág 5 do concatenado renderizaria a pág 5 da
+    conta — que pode nem existir.
+    """
+    _exige_prefill()
+    s = _recuperar(sessao)
+    citacoes, mapa, pdfs = s.get("citacoes") or {}, s.get("mapa") or {}, s.get("pdfs") or {}
+    if not citacoes:
+        return {"paginas": []}
+
+    por_peca: dict[str, dict[int, list[str]]] = {}
+    for pg_str, termos in citacoes.items():
+        m = mapa.get(str(pg_str))
+        peca = m["peca"] if m else (PECA_PROCESSO if PECA_PROCESSO in pdfs else None)
+        local = m["pagina"] if m else int(pg_str)
+        if peca:
+            por_peca.setdefault(peca, {})[local] = termos
+
+    from prefill.viewer import render_paginas
+    saida = []
+    for peca, destaques in por_peca.items():
+        pdf = pdfs.get(peca)
+        if not pdf:
+            continue
+        for img in render_paginas(pdf, destaques):
+            saida.append({"peca": peca, "pagina": img["pagina"],
+                          "n_marcas": img["n_marcas"],
+                          "png": base64.b64encode(img["png"]).decode("ascii")})
+            if len(saida) >= max(1, min(int(limite), 20)):
+                return {"paginas": saida}
+    return {"paginas": saida}

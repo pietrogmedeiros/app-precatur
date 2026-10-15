@@ -28,6 +28,12 @@ O motor escuta **só em 127.0.0.1**. Quem o expõe é o Express, que já tem o l
 do app. A autoria que vai para o card do CRM é lida do **token**, nunca do corpo
 da requisição.
 
+**PDF não encosta em disco.** O que a leitura de documentos guarda — o substrato
+do assistente de corte e os PDFs que o visualizador rerenderiza — vive na memória
+do processo, com validade (`PREFILL_SESSAO_TTL`) e teto de 20 sessões. É o
+documento mais sensível que passa por aqui; reiniciar o motor apaga tudo, e isso
+é o comportamento desejado, não um defeito.
+
 ## Variáveis de ambiente
 
 | Variável | Onde | Para quê |
@@ -39,7 +45,7 @@ da requisição.
 | `OPENROUTER_API_KEY` | motor | Chave do modelo que extrai os campos. Sem ela, a extração responde 503 explicando. |
 | `PREFILL_MODELO` | motor | Modelo do OpenRouter (tem padrão no código). |
 | `PREFILL_OCR` | motor | `off` desliga o OCR. Ligado, usa o tesseract da imagem. |
-| `PREFILL_SESSAO_TTL` | motor | Validade da sessão do assistente de corte, em segundos (padrão 3600). |
+| `PREFILL_SESSAO_TTL` | motor | Validade da sessão, em segundos (padrão 3600). Vale para o assistente de corte **e** para o visualizador das páginas citadas — passado esse prazo o PDF sai da memória e a tela pede o arquivo de novo. |
 | `BITRIX_WEBHOOK` | motor | Liga o envio ao card. Sem ela, a tela não mostra o painel do CRM. |
 | `BITRIX_PORTAL`, `BITRIX_CATEGORIA` | motor | Portal e funil permitido para escrita. |
 | `HUB_URL`, `HUB_USER`, `HUB_PASS` | motor | Opcional: registra snapshot/journal do envio. Sem elas tudo funciona, só não guarda. |
