@@ -43,10 +43,14 @@ export function EnviarAoCrm({
   const alvo = cen.atualizacao?.data_alvo ?? null;
   // A trava do funil mora no motor e vale para o ENSAIO também. Descobrir isso
   // só ao clicar — e, pior, como um 502 sem explicação — foi o que aconteceu no
-  // primeiro uso real: o card estava no funil 0 e o ambiente só escreve no 9.
+  // primeiro uso real: o card estava no funil 0 e o ambiente só escrevia no 9.
+  const funisPermitidos = (estado.funis_permitidos?.length
+    ? estado.funis_permitidos
+    : estado.funil_permitido !== null ? [estado.funil_permitido] : []).map(String);
+  const funisTexto = funisPermitidos.join(" ou ");
   const foraDoFunil =
-    card !== null && estado.funil_permitido !== null && card.funil !== undefined &&
-    String(card.funil) !== String(estado.funil_permitido);
+    card !== null && funisPermitidos.length > 0 && card.funil !== undefined &&
+    !funisPermitidos.includes(String(card.funil));
 
   async function tentar(rotulo: string, acao: () => Promise<void>) {
     setOcupado(rotulo); setErro(null);
@@ -91,7 +95,7 @@ export function EnviarAoCrm({
         </CardTitle>
         <CardDescription className="text-xs">
           Grava o valor conferido no negócio do Bitrix
-          {estado.funil_permitido !== null && <> — só no funil {estado.funil_permitido}</>}.
+          {funisTexto && <> — só no funil {funisTexto}</>}.
           Campo já preenchido no card não é sobrescrito.
         </CardDescription>
       </CardHeader>
@@ -143,8 +147,8 @@ export function EnviarAoCrm({
             {foraDoFunil && (
               <Aviso tom="erro">
                 Este card está no <strong>funil {card.funil}</strong>, e o envio deste ambiente só
-                escreve no <strong>funil {estado.funil_permitido}</strong> — nem o ensaio roda. Mova o
-                card para o funil {estado.funil_permitido} ou peça para liberar este funil no envio.
+                escreve no <strong>funil {funisTexto}</strong> — nem o ensaio roda. Mova o card, ou
+                peça para liberar o funil {String(card.funil)} no envio.
               </Aviso>
             )}
 

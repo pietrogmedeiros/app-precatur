@@ -101,8 +101,12 @@ def _data_br(d) -> str:
 def estado() -> dict:
     import bitrix
     hub = _hub()
-    return {"bitrix": bitrix.habilitado(), "hub": hub is not None,
-            "funil_permitido": bitrix.categoria_permitida() if bitrix.habilitado() else None}
+    ligado = bitrix.habilitado()
+    return {"bitrix": ligado, "hub": hub is not None,
+            # `funil_permitido` (singular) continua por compatibilidade: é o
+            # funil de casa. Quem decide a recusa é a LISTA.
+            "funil_permitido": bitrix.categoria_permitida() if ligado else None,
+            "funis_permitidos": bitrix.categorias_permitidas() if ligado else None}
 
 
 @router.get("/cards")

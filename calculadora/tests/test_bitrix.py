@@ -311,7 +311,7 @@ def test_busca_por_cpf_usa_o_campo_e_nao_o_titulo(monkeypatch):
     monkeypatch.setattr(B, "_bx", _bx)
     B.buscar_cards("123.456.789-00")
     assert chamadas[0].get(B.CAMPO_CPF) == "12345678900"
-    assert all(f.get("CATEGORY_ID") == B.categoria_permitida() for f in chamadas)
+    assert all(f.get("CATEGORY_ID") == B.categorias_permitidas() for f in chamadas)
 
 
 def test_busca_por_cpf_tenta_as_duas_grafias(monkeypatch):
@@ -333,7 +333,8 @@ def test_busca_por_cpf_tenta_as_duas_grafias(monkeypatch):
         assert any("%TITLE" in f for f in chamadas), "o fallback por nome some"
 
 
-def test_busca_por_nome_nao_vaza_para_outro_funil(monkeypatch):
+def test_busca_por_nome_nao_vaza_para_funil_nao_permitido(monkeypatch):
+    """A busca cobre os funis liberados — e só eles."""
     chamadas = []
 
     def _bx(metodo, **p):
@@ -341,7 +342,20 @@ def test_busca_por_nome_nao_vaza_para_outro_funil(monkeypatch):
         return []
     monkeypatch.setattr(B, "_bx", _bx)
     B.buscar_cards("Maria")
-    assert chamadas == [{"CATEGORY_ID": B.categoria_permitida(), "%TITLE": "Maria"}]
+    assert chamadas == [{"CATEGORY_ID": B.categorias_permitidas(), "%TITLE": "Maria"}]
+
+
+def test_lista_de_funis(monkeypatch):
+    """`BITRIX_CATEGORIA` aceita lista: a pré-análise acontece no 9 e no 0."""
+    monkeypatch.setenv("BITRIX_CATEGORIA", "9,0")
+    assert B.categorias_permitidas() == [9, 0]
+    assert B.categoria_permitida() == 9          # o funil de casa é o primeiro
+    assert B._funil_permitido({"CATEGORY_ID": "0"})
+    assert B._funil_permitido({"CATEGORY_ID": 9})
+    assert not B._funil_permitido({"CATEGORY_ID": "7"})
+    monkeypatch.setenv("BITRIX_CATEGORIA", "9")  # valor único segue valendo
+    assert B.categorias_permitidas() == [9]
+    assert not B._funil_permitido({"CATEGORY_ID": "0"})
 
 
 def test_busca_ignora_termo_curto(monkeypatch):

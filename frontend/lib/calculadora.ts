@@ -286,7 +286,14 @@ export function preencherPorProcesso(arquivo: File): Promise<RespostaExtracao> {
 
 // ── CRM ────────────────────────────────────────────────────────────────────
 
-export interface EstadoCrm { bitrix: boolean; hub: boolean; funil_permitido: number | null }
+export interface EstadoCrm {
+  bitrix: boolean;
+  hub: boolean;
+  /** O funil "de casa" — o primeiro da lista. */
+  funil_permitido: number | null;
+  /** Todos os funis em que o envio pode escrever; é esta lista que recusa. */
+  funis_permitidos?: number[] | null;
+}
 export const estadoCrm = () => pedir<EstadoCrm>("/crm/estado");
 
 export interface CardCrm {

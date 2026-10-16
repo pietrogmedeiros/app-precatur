@@ -115,8 +115,34 @@ def descrever(campos: dict) -> list[str]:
     return sorted(linhas)
 
 
+def categorias_permitidas() -> list[int]:
+    """Funis em que ESTE ambiente pode escrever. `BITRIX_CATEGORIA` aceita lista.
+
+    Era um funil só. Virou lista em 16/10/2026 porque a pré-análise acontece em
+    dois lugares no CRM da casa: o funil 9 e o funil 0, onde mora a etapa
+    "PRÉ ANÁLISE - FEDERAL". O advogado chegava no card federal pela busca por
+    ID e o envio recusava — a trava certa, no card errado.
+
+    Um valor só (`BITRIX_CATEGORIA=9`) continua valendo exatamente como antes.
+    """
+    bruto = str(os.environ.get("BITRIX_CATEGORIA", "9")).replace(";", ",")
+    return [int(p) for p in bruto.split(",") if p.strip()] or [9]
+
+
 def categoria_permitida() -> int:
-    return int(os.environ.get("BITRIX_CATEGORIA", "9"))
+    """O funil "de casa" — o primeiro da lista. É o que a busca filtra."""
+    return categorias_permitidas()[0]
+
+
+def _funil_permitido(deal: dict) -> bool:
+    return str(deal.get("CATEGORY_ID")) in {str(c) for c in categorias_permitidas()}
+
+
+def _recusa_de_funil(deal_id: int, deal: dict) -> RuntimeError:
+    permitidas = ", ".join(str(c) for c in categorias_permitidas())
+    return RuntimeError(
+        f"funil proibido: o card #{deal_id} está no funil {deal.get('CATEGORY_ID')} "
+        f"e este ambiente só escreve no {permitidas}.")
 
 
 def habilitado() -> bool:
@@ -255,7 +281,10 @@ def buscar_cards(termo: str, limite: int = 12) -> list[dict]:
     termo = (termo or "").strip()
     if len(termo) < 3:
         return []
-    base = {"CATEGORY_ID": categoria_permitida()}
+    # Lista: o Bitrix trata array como "IN" (conferido contra o CRM da casa em
+    # 16/10/2026). Se a busca só olhasse o funil de casa, o card federal seria
+    # invisível por nome e só apareceria por ID — e é por nome que se procura.
+    base = {"CATEGORY_ID": categorias_permitidas()}
     digitos = re.sub(r"\D", "", termo)
     filtros = []
     if len(digitos) == 11:
@@ -444,11 +473,8 @@ def sobrescrever_valor(deal_id: int, texto: str) -> dict:
     Mesma trava de funil do `enviar`: card fora de `BITRIX_CATEGORIA` recusa.
     """
     deal = carregar_deal(deal_id)
-    permitida = categoria_permitida()
-    if str(deal.get("CATEGORY_ID")) != str(permitida):
-        raise RuntimeError(
-            f"funil proibido: o card #{deal_id} está no funil {deal.get('CATEGORY_ID')} "
-            f"e este ambiente só escreve no {permitida}.")
+    if not _funil_permitido(deal):
+        raise _recusa_de_funil(deal_id, deal)
     _bx("crm.deal.update", id=int(deal_id), fields={CAMPO_VALOR: texto})
     return {"aplicado": True, "valor_antes": deal.get(CAMPO_VALOR)}
 
@@ -464,11 +490,8 @@ def enviar(deal_id: int, campos: dict, linhas_auditoria: list[str],
     autor é melhor que com autor chutado num registro que fica no CRM.
     """
     deal = carregar_deal(deal_id)
-    permitida = categoria_permitida()
-    if str(deal.get("CATEGORY_ID")) != str(permitida):
-        raise RuntimeError(
-            f"funil proibido: o card #{deal_id} está no funil {deal.get('CATEGORY_ID')} "
-            f"e este ambiente só escreve no {permitida}.")
+    if not _funil_permitido(deal):
+        raise _recusa_de_funil(deal_id, deal)
 
     anteriores = _auditoria_anterior(deal_id)
     quem = f"por {autor.strip()}" if (autor or "").strip() else "pelo advogado"
