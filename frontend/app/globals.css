@@ -455,3 +455,22 @@ main[data-fundo="balanca"]::before {
   opacity: 0.06;
 }
 
+
+/* ==========================================================================
+   Tema escuro — ajustes que não cabem nas variáveis
+   ========================================================================== */
+
+/* A marca d'água do fundo é arte PRETA (PNG do escudo e SVG da balança).
+   No escuro ela some; inverter transforma o traço em claro mantendo o mesmo
+   desenho e a mesma discrição. */
+.dark main[data-fundo]::before {
+  filter: invert(1);
+  /* Traço claro sobre fundo quase preto salta mais do que o preto sobre
+     branco: a mesma opacidade do claro viraria um escudo gritante. */
+  opacity: 0.025;
+}
+
+/* Impressão: quem devolve a página ao claro é o script do tema (beforeprint),
+   que tira a classe `dark` do <html>. Redefinir só as variáveis aqui não
+   bastaria — as classes `dark:` do Tailwind continuariam valendo e dariam
+   texto claro sobre papel branco. */

@@ -11,10 +11,10 @@ const inputClass =
   "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring";
 
 const SITUACOES: { valor: SubmissionStatus; label: string; classe: string }[] = [
-  { valor: "novo", label: "Novo", classe: "bg-blue-50 text-blue-700 border-blue-200" },
-  { valor: "em_analise", label: "Em análise", classe: "bg-amber-50 text-amber-800 border-amber-200" },
-  { valor: "aprovado", label: "Aprovado", classe: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  { valor: "recusado", label: "Recusado", classe: "bg-red-50 text-red-700 border-red-200" },
+  { valor: "novo", label: "Novo", classe: "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900" },
+  { valor: "em_analise", label: "Em análise", classe: "bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-900" },
+  { valor: "aprovado", label: "Aprovado", classe: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900" },
+  { valor: "recusado", label: "Recusado", classe: "bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border-red-200 dark:border-red-900" },
 ];
 const rotulo = (s: SubmissionStatus) => SITUACOES.find((x) => x.valor === s) ?? SITUACOES[0];
 
@@ -106,7 +106,7 @@ export default function CaptacaoPage() {
         </Button>
       </header>
 
-      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{erro}</p> : null}
+      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{erro}</p> : null}
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative w-full sm:max-w-xs">

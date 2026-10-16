@@ -285,7 +285,7 @@ export function TableEditor({
           </label>
         ) : null}
 
-        {error ? <p className="mt-4 rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{error}</p> : null}
+        {error ? <p className="mt-4 rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
 
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>

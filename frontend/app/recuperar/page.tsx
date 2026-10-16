@@ -34,7 +34,7 @@ export default function RecuperarPage() {
     <Moldura>
       {enviado ? (
         <div className="space-y-4 text-center">
-          <MailCheck className="mx-auto h-11 w-11 text-emerald-600" />
+          <MailCheck className="mx-auto h-11 w-11 text-emerald-600 dark:text-emerald-400" />
           <h1 className="text-xl font-semibold">Verifique seu e-mail</h1>
           <p className="text-sm text-muted-foreground">
             Se existir uma conta com <strong className="text-foreground">{email.trim()}</strong>, enviamos
@@ -61,7 +61,7 @@ export default function RecuperarPage() {
             <input id="email" type="email" className={inputClass} value={email} required autoFocus
               autoComplete="email" onChange={(e) => setEmail(e.target.value)} />
           </label>
-          {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
+          {erro ? <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">{erro}</p> : null}
           <Button type="submit" className="w-full gap-2" disabled={carregando}>
             {carregando ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {carregando ? "Enviando…" : "Enviar link de redefinição"}

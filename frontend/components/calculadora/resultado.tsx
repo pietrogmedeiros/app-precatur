@@ -120,7 +120,7 @@ function Trilha({ cenario }: { cenario: Cenario }) {
               {c.juros_novos && Number(c.juros_novos) > 0 && (
                 <span>+ juros de mora {brl(c.juros_novos)}</span>
               )}
-              {c.cap_acionado && <span className="text-amber-600">teto SELIC acionado</span>}
+              {c.cap_acionado && <span className="text-amber-600 dark:text-amber-400">teto SELIC acionado</span>}
             </div>
           </div>
         ))}

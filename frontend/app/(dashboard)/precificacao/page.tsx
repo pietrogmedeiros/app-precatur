@@ -252,8 +252,8 @@ export default function PrecificacaoPage() {
         ) : null}
       </header>
 
-      {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{error}</p> : null}
-      {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700">{ok}</p> : null}
+      {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
+      {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700 dark:text-green-300">{ok}</p> : null}
 
       <nav className="flex gap-2 overflow-x-auto pb-1" aria-label="Seleção de ente">
         {visiveis.map((e) => (
@@ -314,7 +314,7 @@ export default function PrecificacaoPage() {
             </Choices>
 
             <p className={cn("rounded-md px-3 py-2 text-sm",
-              ruleMessage.tone === "warn" ? "bg-amber-50 text-amber-900" : "bg-emerald-50 text-emerald-900")}>
+              ruleMessage.tone === "warn" ? "bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200" : "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200")}>
               <strong>{ruleMessage.title}</strong> {ruleMessage.text}
             </p>
 
@@ -466,7 +466,7 @@ function Metric({ label, value, warn }: { label: string; value: string; warn?: b
   return (
     <div className="rounded-md border px-2 py-2">
       <div className="text-[11px] text-muted-foreground">{label}</div>
-      <div className={cn("text-sm font-semibold tabular-nums", warn && "text-amber-700")}>{value}</div>
+      <div className={cn("text-sm font-semibold tabular-nums", warn && "text-amber-700 dark:text-amber-300")}>{value}</div>
     </div>
   );
 }

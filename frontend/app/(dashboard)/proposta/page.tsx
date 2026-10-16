@@ -375,7 +375,7 @@ export default function PropostaPage() {
               </Button>
             </div>
             {bitrixErr ? (
-              <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{bitrixErr}</p>
+              <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{bitrixErr}</p>
             ) : null}
           </CardContent>
         </Card>

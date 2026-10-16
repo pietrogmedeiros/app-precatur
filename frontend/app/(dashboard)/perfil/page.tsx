@@ -103,7 +103,7 @@ export default function PerfilPage() {
   }
 
   if (carregando) return <p className="p-8 text-center text-sm text-muted-foreground">Carregando…</p>;
-  if (!me) return <p className="p-8 text-center text-sm text-red-600">{erro ?? "Não foi possível carregar o perfil."}</p>;
+  if (!me) return <p className="p-8 text-center text-sm text-red-600 dark:text-red-400">{erro ?? "Não foi possível carregar o perfil."}</p>;
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 p-4 sm:p-6 md:p-8">
@@ -115,8 +115,8 @@ export default function PerfilPage() {
         <p className="text-sm text-muted-foreground">Seus dados, sua foto e sua senha.</p>
       </header>
 
-      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{erro}</p> : null}
-      {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700">{ok}</p> : null}
+      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{erro}</p> : null}
+      {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700 dark:text-green-300">{ok}</p> : null}
 
       <Card>
         <CardHeader>
@@ -141,7 +141,7 @@ export default function PerfilPage() {
                 {me.avatar ? "Trocar foto" : "Escolher foto"}
               </Button>
               {me.avatar ? (
-                <Button variant="ghost" className="gap-2 text-red-600" disabled={salvando}
+                <Button variant="ghost" className="gap-2 text-red-600 dark:text-red-400" disabled={salvando}
                   onClick={() => salvar({ removerAvatar: true }, "Foto removida.")}>
                   <Trash2 className="h-4 w-4" />
                   Remover
@@ -262,8 +262,8 @@ function TrocarSenha() {
                 onChange={(e) => setConfirma(e.target.value)} required />
             </label>
           </div>
-          {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{erro}</p> : null}
-          {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700">{ok}</p> : null}
+          {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{erro}</p> : null}
+          {ok ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-green-700 dark:text-green-300">{ok}</p> : null}
           <div className="flex justify-end">
             <Button type="submit" disabled={salvando}>
               {salvando ? <Loader2 className="h-4 w-4 animate-spin" /> : null}

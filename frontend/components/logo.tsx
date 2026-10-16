@@ -24,3 +24,26 @@ export function PrecaturMark({ className }: { className?: string }) {
     </svg>
   );
 }
+
+/**
+ * Marca "PRECATUR" por extenso (PNG oficial).
+ *
+ * São dois arquivos, não um filtro: a arte preta some no tema escuro e a casa
+ * já tem a versão branca aprovada. O CSS escolhe — nada de estado no cliente,
+ * que faria a logo certa só aparecer depois da hidratação.
+ */
+export function LogoPrecatur({ className }: { className?: string }) {
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/precatur-logo.png" alt="Precatur" className={cn(className, "dark:hidden")} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/precatur-logo-branco.png"
+        alt=""
+        aria-hidden="true"
+        className={cn(className, "hidden dark:block")}
+      />
+    </>
+  );
+}

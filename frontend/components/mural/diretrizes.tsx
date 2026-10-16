@@ -74,7 +74,7 @@ export function DiretrizesDeCompra({ podeEditar }: { podeEditar: boolean }) {
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {erro && <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{erro}</p>}
+        {erro && <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{erro}</p>}
 
         {editando ? (
           <>

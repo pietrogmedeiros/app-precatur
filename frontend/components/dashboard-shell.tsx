@@ -7,6 +7,7 @@ import { BarChart3, Users, ChevronLeft, ChevronRight, LogOut, Menu, X, UserCog, 
 import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { TemaToggle } from "@/components/tema-toggle";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
@@ -134,23 +135,36 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
         {/* Brand */}
         <div className="flex h-16 items-center gap-3 border-b px-4">
+          {/* O escudo é arte preta sobre fundo transparente — no tema escuro
+              ele some, então inverte. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/precatur-shield.png"
             alt="Precatur"
-            className="h-9 w-9 flex-shrink-0 object-contain"
+            className="h-9 w-9 flex-shrink-0 object-contain dark:invert"
           />
           {!collapsed ? (
             <span className="truncate text-[15px] font-semibold tracking-tight">App Precatur</span>
           ) : null}
+          {/* Tema — canto superior direito do menu. Com o menu recolhido (74px)
+              não sobra largura ao lado do escudo, e ele desce para a faixa logo
+              abaixo, no mesmo lugar da tela. */}
+          <TemaToggle className={cn("ml-auto", collapsed && "md:hidden")} />
           <button
-            className="ml-auto rounded-md p-1.5 text-muted-foreground hover:bg-accent md:hidden"
+            className="rounded-md p-1.5 text-muted-foreground hover:bg-accent md:hidden"
             onClick={() => setMobileOpen(false)}
             aria-label="Fechar menu"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
+
+        {/* Menu recolhido: o interruptor de tema ganha a própria faixa. */}
+        {collapsed ? (
+          <div className="hidden justify-center border-b py-2 md:flex">
+            <TemaToggle />
+          </div>
+        ) : null}
 
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
@@ -230,6 +244,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             className={cn(
               "flex w-full items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors",
               "hover:border-red-200 hover:bg-red-50 hover:text-red-600",
+              "dark:hover:border-red-900 dark:hover:bg-red-950/40 dark:hover:text-red-400",
               collapsed && "md:px-0"
             )}
           >

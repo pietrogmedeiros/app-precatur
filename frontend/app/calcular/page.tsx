@@ -9,6 +9,7 @@ import {
 import { formatBRL, parseBRL } from "@/lib/pricing";
 import { fechaMoeda, maskMoeda, maskProcesso, maskTelefone } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
+import { LogoPrecatur } from "@/components/logo";
 
 const UFS = ["AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"];
 
@@ -110,8 +111,7 @@ export default function CalcularPage() {
     <main className="min-h-screen bg-secondary/40 px-4 py-8 sm:py-12">
       <div className="mx-auto w-full max-w-3xl space-y-6">
         <header className="space-y-2 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/precatur-logo.png" alt="Precatur" className="mx-auto h-12 w-auto object-contain" />
+          <LogoPrecatur className="mx-auto h-12 w-auto object-contain" />
           <h1 className="flex items-center justify-center gap-2 text-2xl font-semibold tracking-tight">
             <Calculator className="h-6 w-6" />
             Simule quanto vale seu precatório
@@ -244,7 +244,7 @@ export default function CalcularPage() {
                 preferencial e outras despesas.
               </Aviso>
             ) : null}
-            {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
+            {erro ? <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">{erro}</p> : null}
 
             <Button className="w-full gap-2" onClick={calcular} disabled={carregando || !praca || !safra || deducoesExcedem}>
               {carregando ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
@@ -329,7 +329,7 @@ function Verificacao({ pendente, onVerificado, onCorrigir }: {
 
   return (
     <section className="space-y-5 rounded-lg border bg-card p-5 text-center shadow-sm sm:p-8">
-      <MessageCircle className="mx-auto h-10 w-10 text-emerald-600" />
+      <MessageCircle className="mx-auto h-10 w-10 text-emerald-600 dark:text-emerald-400" />
       <div className="space-y-1">
         <h2 className="text-lg font-semibold">Confirme seu WhatsApp</h2>
         <p className="text-sm text-muted-foreground">
@@ -343,8 +343,8 @@ function Verificacao({ pendente, onVerificado, onCorrigir }: {
           onChange={(e) => setCodigo(e.target.value.replace(/\D/g, "").slice(0, 6))}
           placeholder="000000"
           className="mx-auto block h-14 w-48 rounded-md border border-input bg-background text-center text-2xl font-semibold tracking-[0.4em] shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring" />
-        {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
-        {aviso ? <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{aviso}</p> : null}
+        {erro ? <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">{erro}</p> : null}
+        {aviso ? <p className="rounded-md bg-emerald-50 dark:bg-emerald-950/40 px-3 py-2 text-sm text-emerald-800 dark:text-emerald-200">{aviso}</p> : null}
         <Button type="submit" className="w-full gap-2" disabled={carregando || codigo.length !== 6}>
           {carregando ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
           {carregando ? "Conferindo…" : "Ver meu valor"}
@@ -379,7 +379,7 @@ function Resultado({ r }: { r: CalculoResposta }) {
       </dl>
 
       {r.liquido <= 0 ? (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-5 text-amber-900">
+        <div className="rounded-lg border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 p-5 text-amber-900 dark:text-amber-200">
           <div className="text-sm font-semibold">As deduções consumiram todo o valor</div>
           <p className="mt-1 text-sm">
             Somadas, as deduções informadas alcançam o valor atualizado de {formatBRL(r.bruto)}, então não
@@ -405,7 +405,7 @@ function Resultado({ r }: { r: CalculoResposta }) {
         </Aviso>
       ) : null}
 
-      <p className="flex items-start gap-2 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+      <p className="flex items-start gap-2 rounded-md bg-emerald-50 dark:bg-emerald-950/40 px-3 py-2 text-sm text-emerald-900 dark:text-emerald-200">
         <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0" />
         <span>
           WhatsApp confirmado. Nossa equipe já recebeu sua simulação e entra em contato para formalizar a
@@ -453,7 +453,7 @@ function Dinheiro({ label, valor, onChange, dica }: {
 
 function Aviso({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex items-start gap-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+    <p className="flex items-start gap-2 rounded-md bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
       <Info className="mt-0.5 h-4 w-4 flex-shrink-0" />
       <span>{children}</span>
     </p>

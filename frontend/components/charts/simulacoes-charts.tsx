@@ -10,10 +10,14 @@ import { formatBRL } from "@/lib/pricing";
 // conferidos no validador — contraste e separação para daltonismo passam com
 // folga (ΔE 27,7). Como são tons de cinza, identidade NUNCA depende só da cor:
 // todo gráfico tem legenda e os valores aparecem escritos.
-const TOM_FORTE = "#525252";
-const TOM_FRACO = "#a3a3a3";
-const EIXO = "#737373";
-const GRADE = "#e5e5e5";
+//
+// São as variáveis do tema, não hexadecimais: no claro valem exatamente os
+// mesmos tons de antes (#525252, #e5e5e5…) e no escuro a rampa se inverte
+// sozinha — cravado, o gráfico ficaria preto sobre preto.
+const TOM_FORTE = "hsl(var(--chart-2))";
+const TOM_FRACO = "hsl(var(--chart-4))";
+const EIXO = "hsl(var(--muted-foreground))";
+const GRADE = "hsl(var(--border))";
 
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 const rotuloMes = (m: string) => {
@@ -22,11 +26,11 @@ const rotuloMes = (m: string) => {
 };
 
 const caixa = {
-  background: "#fff",
+  background: "hsl(var(--card))",
   border: `1px solid ${GRADE}`,
   borderRadius: 6,
   fontSize: 12,
-  color: "#0a0a0a",
+  color: "hsl(var(--card-foreground))",
 };
 
 export function SimulacoesPorMes({ dados }: { dados: { mes: string; simulacoes: number; leads: number }[] }) {
@@ -36,7 +40,7 @@ export function SimulacoesPorMes({ dados }: { dados: { mes: string; simulacoes: 
         <CartesianGrid vertical={false} stroke={GRADE} />
         <XAxis dataKey="rotulo" tickLine={false} axisLine={false} tick={{ fill: EIXO, fontSize: 12 }} />
         <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: EIXO, fontSize: 12 }} width={32} />
-        <Tooltip contentStyle={caixa} cursor={{ fill: "#00000008" }} />
+        <Tooltip contentStyle={caixa} cursor={{ fill: "hsl(var(--foreground) / 0.06)" }} />
         <Legend wrapperStyle={{ fontSize: 12, color: EIXO }} />
         {/* Barras com topo arredondado e folga entre elas, como manda o padrão. */}
         <Bar dataKey="simulacoes" name="Simulações" fill={TOM_FRACO} radius={[4, 4, 0, 0]} maxBarSize={38} />
@@ -46,7 +50,7 @@ export function SimulacoesPorMes({ dados }: { dados: { mes: string; simulacoes: 
   );
 }
 
-const TONS = [TOM_FORTE, TOM_FRACO, "#d4d4d4", "#737373"];
+const TONS = [TOM_FORTE, TOM_FRACO, "hsl(var(--chart-5))", "hsl(var(--chart-3))"];
 
 export function Rosca({ dados, total }: { dados: { rotulo: string; total: number }[]; total: number }) {
   if (!total) return <p className="py-10 text-center text-sm text-muted-foreground">Sem dados ainda.</p>;
@@ -56,7 +60,7 @@ export function Rosca({ dados, total }: { dados: { rotulo: string; total: number
         <ResponsiveContainer width="100%" height={180}>
           <PieChart>
             <Pie data={dados} dataKey="total" nameKey="rotulo" innerRadius={52} outerRadius={78}
-              paddingAngle={2} stroke="#fff" strokeWidth={2}>
+              paddingAngle={2} stroke="hsl(var(--card))" strokeWidth={2}>
               {dados.map((_, i) => <Cell key={i} fill={TONS[i % TONS.length]} />)}
             </Pie>
             <Tooltip contentStyle={caixa} formatter={(v: any, n: any) => [`${v} simulação(ões)`, n]} />

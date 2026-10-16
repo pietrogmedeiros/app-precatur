@@ -53,7 +53,7 @@ export default function RedefinirPage() {
     return (
       <Moldura>
         <div className="space-y-4 text-center">
-          <ShieldAlert className="mx-auto h-11 w-11 text-amber-600" />
+          <ShieldAlert className="mx-auto h-11 w-11 text-amber-600 dark:text-amber-400" />
           <h1 className="text-xl font-semibold">Link expirado ou já usado</h1>
           <p className="text-sm text-muted-foreground">
             Cada link vale por 1 hora e só pode ser usado uma vez. Peça um novo para continuar.
@@ -70,7 +70,7 @@ export default function RedefinirPage() {
     return (
       <Moldura>
         <div className="space-y-4 text-center">
-          <CheckCircle2 className="mx-auto h-11 w-11 text-emerald-600" />
+          <CheckCircle2 className="mx-auto h-11 w-11 text-emerald-600 dark:text-emerald-400" />
           <h1 className="text-xl font-semibold">Senha alterada</h1>
           <p className="text-sm text-muted-foreground">Já pode entrar com a nova senha.</p>
           <Link href="/login" className="inline-block">
@@ -98,7 +98,7 @@ export default function RedefinirPage() {
           <input type="password" className={inputClass} value={confirma} required
             autoComplete="new-password" onChange={(e) => setConfirma(e.target.value)} />
         </label>
-        {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
+        {erro ? <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">{erro}</p> : null}
         <Button type="submit" className="w-full gap-2" disabled={salvando}>
           {salvando ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           {salvando ? "Salvando…" : "Salvar nova senha"}

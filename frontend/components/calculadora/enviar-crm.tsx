@@ -234,7 +234,7 @@ function Previa({ titulo, r }: { titulo: string; r: RespostaEnvio }) {
           </ul>
         </div>
       ) : null}
-      {r.avisos?.map((a) => <p key={a} className="text-amber-600">{a}</p>)}
+      {r.avisos?.map((a) => <p key={a} className="text-amber-600 dark:text-amber-400">{a}</p>)}
     </div>
   );
 }

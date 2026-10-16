@@ -301,7 +301,7 @@ function Summary({ title, tone, rateLabel, rate, s }: {
   title: string; tone: "green" | "red"; rateLabel: string; rate: number;
   s: { gross: number; tax: number; net: number };
 }) {
-  const box = tone === "green" ? "border-emerald-200 bg-emerald-50" : "border-red-200 bg-red-50";
+  const box = tone === "green" ? "border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/40" : "border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40";
   const color = tone === "green" ? GREEN : RED;
   return (
     <div className={`rounded-lg border p-4 ${box}`}>

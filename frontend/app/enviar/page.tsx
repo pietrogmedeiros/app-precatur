@@ -5,6 +5,7 @@ import { CheckCircle2, FileUp, Loader2, Paperclip, X } from "lucide-react";
 import { enviarCaptacao } from "@/lib/api";
 import { maskProcesso, maskTelefone } from "@/lib/masks";
 import { Button } from "@/components/ui/button";
+import { LogoPrecatur } from "@/components/logo";
 
 // Página PÚBLICA: é o link que o cedente/advogado recebe. Não exige login e é a
 // única rota do app fora do portão do middleware, junto com /login.
@@ -82,7 +83,7 @@ export default function EnviarPage() {
     return (
       <Moldura>
         <div className="space-y-4 py-6 text-center">
-          <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600" />
+          <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-600 dark:text-emerald-400" />
           <h2 className="text-xl font-semibold">Recebemos suas informações</h2>
           <p className="text-sm text-muted-foreground">
             Seu protocolo é <strong className="text-foreground">#{protocolo}</strong>. Nossa equipe vai
@@ -193,7 +194,7 @@ export default function EnviarPage() {
           </Campo>
         </Secao>
 
-        {erro ? <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{erro}</p> : null}
+        {erro ? <p className="rounded-md bg-red-50 dark:bg-red-950/40 px-3 py-2 text-sm text-red-700 dark:text-red-300">{erro}</p> : null}
 
         <Button type="submit" className="w-full gap-2" disabled={enviando}>
           {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
@@ -212,8 +213,7 @@ function Moldura({ children }: { children: React.ReactNode }) {
     <main className="min-h-screen bg-secondary/40 px-4 py-8 sm:py-12">
       <div className="mx-auto w-full max-w-2xl space-y-6">
         <header className="space-y-2 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/precatur-logo.png" alt="Precatur" className="mx-auto h-12 w-auto object-contain" />
+          <LogoPrecatur className="mx-auto h-12 w-auto object-contain" />
           <h1 className="text-2xl font-semibold tracking-tight">Envie seu precatório para análise</h1>
           <p className="text-sm text-muted-foreground">
             Preencha os dados e anexe os documentos. Nossa equipe analisa e retorna com uma proposta.
@@ -241,7 +241,7 @@ function Campo({ id, label, obrigatorio, children }: {
     <div className="space-y-1.5">
       <label htmlFor={id} className="text-sm font-medium">
         {label}
-        {obrigatorio ? <span className="text-red-600"> *</span> : null}
+        {obrigatorio ? <span className="text-red-600 dark:text-red-400"> *</span> : null}
       </label>
       {children}
     </div>

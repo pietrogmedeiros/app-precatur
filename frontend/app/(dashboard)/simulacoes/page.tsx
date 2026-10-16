@@ -171,7 +171,7 @@ export default function SimulacoesPage() {
         </div>
       </header>
 
-      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{erro}</p> : null}
+      {erro ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{erro}</p> : null}
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Indicador titulo="Simulações" valor={String(totais.simulacoes)} nota="inclui quem não deixou contato" />
@@ -181,7 +181,7 @@ export default function SimulacoesPage() {
       </div>
 
       {totais.inconsistentes ? (
-        <p className="flex items-start gap-2 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <p className="flex items-start gap-2 rounded-md bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
           <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
           <span>
             {totais.inconsistentes} simulação(ões) com deduções maiores que o valor atualizado — o
@@ -316,7 +316,7 @@ export default function SimulacoesPage() {
                 </div>
                 <div className="shrink-0 text-right">
                   {inconsistente(s) ? (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-900">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-xs font-medium text-amber-900 dark:text-amber-200">
                       <AlertTriangle className="h-3 w-3" />
                       Deduções acima do valor
                     </span>
@@ -331,7 +331,7 @@ export default function SimulacoesPage() {
               <CardContent className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0 text-xs text-muted-foreground">
                 <span>{fmtData(s.created_at)}</span>
                 <span>Líquido {formatBRL(s.liquido)}</span>
-                {s.verificado_em ? <span className="text-emerald-700">WhatsApp confirmado</span> : <span>Não confirmou o código</span>}
+                {s.verificado_em ? <span className="text-emerald-700 dark:text-emerald-300">WhatsApp confirmado</span> : <span>Não confirmou o código</span>}
               </CardContent>
             </Card>
           ))}
@@ -395,7 +395,7 @@ function Detalhe({ s, onClose, isAdmin, onApagar }: { s: Simulacao; onClose: () 
         </div>
 
         {s.estimativa ? (
-          <p className="mb-4 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <p className="mb-4 rounded-md bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
             Praça sem tabela própria — o valor saiu do {s.praca_label} e foi apresentado como estimativa.
           </p>
         ) : null}
@@ -431,7 +431,7 @@ function Detalhe({ s, onClose, isAdmin, onApagar }: { s: Simulacao; onClose: () 
         </div>
 
         {s.bruto > 0 && s.liquido <= 0 ? (
-          <p className="mb-5 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          <p className="mb-5 rounded-md bg-amber-50 dark:bg-amber-950/40 px-3 py-2 text-sm text-amber-900 dark:text-amber-200">
             As deduções informadas somam mais que o valor atualizado, então o líquido ficou zerado e nada
             foi oferecido. O contato continua válido — provavelmente houve erro de digitação em algum campo.
           </p>
@@ -456,7 +456,7 @@ function Detalhe({ s, onClose, isAdmin, onApagar }: { s: Simulacao; onClose: () 
 
         {isAdmin ? (
           <div className="mt-6 flex justify-end border-t pt-4">
-            <Button variant="outline" size="sm" className="gap-2 text-red-600" onClick={onApagar}>
+            <Button variant="outline" size="sm" className="gap-2 text-red-600 dark:text-red-400" onClick={onApagar}>
               <Trash2 className="h-4 w-4" />
               Apagar simulação
             </Button>

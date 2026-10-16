@@ -68,7 +68,7 @@ export default function MuralPage() {
 
       <DiretrizesDeCompra podeEditar={isAdmin} />
 
-      {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600">{error}</p> : null}
+      {error ? <p className="rounded-md bg-secondary px-3 py-2 text-sm text-red-600 dark:text-red-400">{error}</p> : null}
 
       {loading ? (
         <p className="py-10 text-center text-sm text-muted-foreground">Carregando…</p>

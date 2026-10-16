@@ -8,6 +8,7 @@ import { login } from "@/lib/api";
 import { setSession, landingFor } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { LogoPrecatur } from "@/components/logo";
 
 // Chave única do "Lembrar-me". Guarda e-mail + senha para pré-preencher o
 // próximo login. Atenção: a senha fica em texto puro no navegador — só use em
@@ -80,8 +81,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/precatur-logo.png" alt="Precatur" className="h-16 w-auto" />
+          <LogoPrecatur className="h-16 w-auto" />
           <p className="mt-4 text-sm text-muted-foreground">Entre para acessar o painel</p>
         </div>
 
