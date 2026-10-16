@@ -39,6 +39,28 @@ def _hub():
     return hub if hub.habilitado() else None
 
 
+def _erro_do_bitrix(exc: RuntimeError) -> HTTPException:
+    """Traduz a recusa do `bitrix.py` no status que diz a verdade.
+
+    Isto não é preciosismo de REST: o proxy que publica o app (Traefik, no
+    EasyPanel) TROCA o corpo de qualquer 5xx pela página "Service is not
+    reachable". Mandar "funil proibido: o card #7527 está no funil 0 e este
+    ambiente só escreve no 9" dentro de um 502 é o mesmo que não mandar nada —
+    a tela recebe um corpo HTML sem `message` e só consegue dizer "a calculadora
+    respondeu 502". Foi exatamente o que apareceu no primeiro uso real.
+
+    Recusa de regra (funil, card inexistente) é 4xx e chega inteira ao advogado;
+    502 fica para o que é de fato falha de infraestrutura — e aí a página do
+    proxy, pelo menos, não mente.
+    """
+    msg = str(exc)
+    if msg.startswith("funil proibido"):
+        return HTTPException(status_code=409, detail=msg)
+    if "não encontrado" in msg:
+        return HTTPException(status_code=404, detail=msg)
+    return HTTPException(status_code=502, detail=msg)
+
+
 def _dec(v):
     if v in (None, ""):
         return None
@@ -116,7 +138,7 @@ def card(deal_id: int) -> dict:
     try:
         return bx.resumo_do_card(deal_id)
     except RuntimeError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise _erro_do_bitrix(exc) from exc
 
 
 @router.post("/enviar")
@@ -134,7 +156,7 @@ def enviar(corpo: dict = Body(...)) -> dict:
     try:
         deal = bx.carregar_deal(deal_id)
     except RuntimeError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise _erro_do_bitrix(exc) from exc
 
     liquido = _dec(corpo.get("valor_liquido"))
     hon_con = _dec(corpo.get("honorarios_contratuais_pct"))
@@ -191,7 +213,7 @@ def enviar(corpo: dict = Body(...)) -> dict:
     try:
         resposta = bx.enviar(deal_id, campos, linhas, aplicar=aplicar, autor=autor)
     except RuntimeError as exc:
-        raise HTTPException(status_code=502, detail=str(exc)) from exc
+        raise _erro_do_bitrix(exc) from exc
 
     resposta["pulados"] = pulados
     resposta["linhas_auditoria"] = linhas

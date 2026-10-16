@@ -41,6 +41,12 @@ export function EnviarAoCrm({
   const cen = resposta.resultado.cenario_homologado;
   const liquido = cen.valor_liquido_atualizado;
   const alvo = cen.atualizacao?.data_alvo ?? null;
+  // A trava do funil mora no motor e vale para o ENSAIO também. Descobrir isso
+  // só ao clicar — e, pior, como um 502 sem explicação — foi o que aconteceu no
+  // primeiro uso real: o card estava no funil 0 e o ambiente só escreve no 9.
+  const foraDoFunil =
+    card !== null && estado.funil_permitido !== null && card.funil !== undefined &&
+    String(card.funil) !== String(estado.funil_permitido);
 
   async function tentar(rotulo: string, acao: () => Promise<void>) {
     setOcupado(rotulo); setErro(null);
@@ -134,6 +140,14 @@ export function EnviarAoCrm({
               )}
             </div>
 
+            {foraDoFunil && (
+              <Aviso tom="erro">
+                Este card está no <strong>funil {card.funil}</strong>, e o envio deste ambiente só
+                escreve no <strong>funil {estado.funil_permitido}</strong> — nem o ensaio roda. Mova o
+                card para o funil {estado.funil_permitido} ou peça para liberar este funil no envio.
+              </Aviso>
+            )}
+
             {card.honorarios_contratuais_pct && card.honorarios_contratuais_pct !== cen.honorarios_contratuais_pct && (
               <Aviso tom="atencao">
                 O card declara honorário contratual de {card.honorarios_contratuais_pct}%, diferente do
@@ -163,12 +177,12 @@ export function EnviarAoCrm({
             )}
 
             <div className="flex flex-wrap gap-2">
-              <Button type="button" variant="outline" disabled={!!ocupado}
+              <Button type="button" variant="outline" disabled={!!ocupado || foraDoFunil}
                 onClick={() => tentar("ensaio", async () => { setEnsaio(await enviarAoCrm(await corpo(false))); setGravado(null); })}>
                 {ocupado === "ensaio" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 Conferir (ensaio)
               </Button>
-              <Button type="button" disabled={!ensaio || !!ocupado}
+              <Button type="button" disabled={!ensaio || !!ocupado || foraDoFunil}
                 onClick={() => tentar("gravar", async () => setGravado(await enviarAoCrm(await corpo(true))))}>
                 {ocupado === "gravar" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 Gravar no card

@@ -136,7 +136,18 @@ async function pedir<T>(caminho: string, init?: RequestInit): Promise<T> {
   }
   if (!res.ok) {
     const corpo = await res.json().catch(() => ({}));
-    throw new Error(corpo?.message ?? corpo?.detail ?? `A calculadora respondeu ${res.status}.`);
+    // 502/503/504 vêm do proxy que publica o app, e ele TROCA o corpo pela
+    // própria página de erro — não existe `message` para mostrar. Dizer só "a
+    // calculadora respondeu 502" manda o advogado perguntar o que ninguém
+    // consegue responder olhando a tela.
+    const semCorpo = res.status >= 502 && res.status <= 504;
+    throw new Error(
+      corpo?.message ?? corpo?.detail ??
+      (semCorpo
+        ? `A calculadora ou o CRM não respondeu (${res.status}). Tente de novo em alguns instantes; `
+          + "se repetir, avise o suporte."
+        : `A calculadora respondeu ${res.status}.`)
+    );
   }
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
