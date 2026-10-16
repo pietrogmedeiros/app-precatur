@@ -7,6 +7,8 @@
 // Nada aqui soma nem subtrai: todos os números vêm do motor. A tela só escolhe
 // o que mostrar e em que ordem.
 
+import { Download, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Aviso } from "./campos";
 import {
@@ -14,13 +16,19 @@ import {
   type Cenario, type LinhaHonorario, type RespostaCalculo,
 } from "@/lib/calculadora";
 
-export function Resultado({ resposta }: { resposta: RespostaCalculo }) {
+export function Resultado({ resposta, aoBaixarMemorial, baixandoMemorial = false }: {
+  resposta: RespostaCalculo;
+  /** Baixa o memorial em PDF deste resultado. Não envia nada a lugar nenhum. */
+  aoBaixarMemorial?: () => void;
+  baixandoMemorial?: boolean;
+}) {
   const cen = resposta.resultado.cenario_homologado;
   const sentencial = resposta.resultado.cenario_sentencial;
 
   return (
     <div className="space-y-6">
-      <OfertaBase resposta={resposta} />
+      <OfertaBase resposta={resposta} aoBaixarMemorial={aoBaixarMemorial}
+        baixandoMemorial={baixandoMemorial} />
 
       {resposta.aviso_projecao && <Aviso tom="atencao">⚠️ {resposta.aviso_projecao}</Aviso>}
       {resposta.avisos.map((a) => <Aviso key={a} tom="atencao">{a}</Aviso>)}
@@ -39,15 +47,36 @@ export function Resultado({ resposta }: { resposta: RespostaCalculo }) {
   );
 }
 
-function OfertaBase({ resposta }: { resposta: RespostaCalculo }) {
+// O botão do memorial mora AQUI, e não no cabeçalho da página: depois de
+// calcular, é neste cartão que o advogado está olhando — no cabeçalho ele
+// saía da tela com a rolagem e ninguém achava. Gerar o PDF é independente do
+// CRM: quem só quer ver os valores no papel para aqui.
+function OfertaBase({ resposta, aoBaixarMemorial, baixandoMemorial }: {
+  resposta: RespostaCalculo;
+  aoBaixarMemorial?: () => void;
+  baixandoMemorial?: boolean;
+}) {
   const { valor_oferta_base, pior_cenario } = resposta.resultado;
   return (
     <Card className="border-primary/30 bg-primary/5">
       <CardContent className="p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          Oferta-base sugerida (líquido do pior cenário{pior_cenario ? ` — ${pior_cenario}` : ""})
-        </p>
-        <p className="mt-1 text-3xl font-bold tracking-tight">{brl(valor_oferta_base)}</p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              Oferta-base sugerida (líquido do pior cenário{pior_cenario ? ` — ${pior_cenario}` : ""})
+            </p>
+            <p className="mt-1 text-3xl font-bold tracking-tight">{brl(valor_oferta_base)}</p>
+          </div>
+          {aoBaixarMemorial && (
+            <div className="text-right">
+              <Button type="button" variant="outline" onClick={aoBaixarMemorial} disabled={baixandoMemorial}>
+                {baixandoMemorial ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+                Memorial em PDF
+              </Button>
+              <p className="mt-1 text-[11px] text-muted-foreground">baixa o cálculo · não envia ao CRM</p>
+            </div>
+          )}
+        </div>
         {valor_oferta_base === null && (
           <p className="mt-2 text-xs text-muted-foreground">
             Sem oferta-base: faltam dados suficientes (ex.: valor de face ou data do cálculo).

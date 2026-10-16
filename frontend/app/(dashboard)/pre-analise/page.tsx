@@ -7,7 +7,7 @@
 // Por isso o número é idêntico ao da ferramenta antiga: é o mesmo código.
 
 import { useCallback, useEffect, useState } from "react";
-import { Calculator, Download, Loader2, RotateCcw } from "lucide-react";
+import { Calculator, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Aviso } from "@/components/calculadora/campos";
@@ -34,6 +34,7 @@ export default function PreAnalisePage() {
   const [erros, setErros] = useState<string[]>([]);
   const [falha, setFalha] = useState<string | null>(null);
 
+  // o memorial é um fim em si: dá para baixar o PDF e parar aí, sem CRM nenhum
   const [baixando, setBaixando] = useState(false);
   const [memorialBase64, setMemorialBase64] = useState<string | null>(null);
   const [numerosCrm, setNumerosCrm] = useState<{ numero_precatorio?: string; numero_oficio?: string }>({});
@@ -120,12 +121,6 @@ export default function PreAnalisePage() {
               <RotateCcw className="h-4 w-4" /> Limpar resultado
             </Button>
           )}
-          {resposta && (
-            <Button onClick={baixarMemorial} disabled={baixando}>
-              {baixando ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-              Memorial em PDF
-            </Button>
-          )}
         </div>
       </header>
 
@@ -156,7 +151,8 @@ export default function PreAnalisePage() {
         <div className="space-y-6 lg:sticky lg:top-6">
           {resposta ? (
             <>
-              <Resultado resposta={resposta} />
+              <Resultado resposta={resposta} aoBaixarMemorial={baixarMemorial}
+                baixandoMemorial={baixando} />
               {crm?.bitrix && (
                 <EnviarAoCrm
                   estado={crm}
