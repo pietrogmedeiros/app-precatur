@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { clearSession, getUser, roleLabel, type SessionUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { TemaToggle } from "@/components/tema-toggle";
+import { NovidadeTema } from "@/components/novidade-tema";
 
 const DASHBOARD_NAV = [
   { href: "/sales", label: "Dados Sales", icon: BarChart3 },
@@ -165,6 +166,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
             <TemaToggle />
           </div>
         ) : null}
+
+        {/* Apresenta o tema escuro a quem ainda não viu. Recolhido não há onde
+            encaixar o cartão — e o aviso espera o menu abrir. */}
+        <div className={cn(collapsed && "md:hidden")}>
+          <NovidadeTema />
+        </div>
 
         {/* Nav */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
