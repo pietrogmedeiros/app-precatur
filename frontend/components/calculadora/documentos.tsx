@@ -8,7 +8,7 @@
 // quem denuncia isso é a prova aritmética abaixo, não o modelo.
 
 import { useState } from "react";
-import { FileSearch, FileUp, Scissors, Loader2, Check, AlertTriangle, Eye } from "lucide-react";
+import { FileSearch, FileUp, Scissors, Loader2, Check, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Aviso, Opcoes, inputClass } from "./campos";
@@ -232,6 +232,8 @@ function Extracao({
 }) {
   const [usados, setUsados] = useState<Set<string>>(new Set());
   const [paginas, setPaginas] = useState<PaginaCitada[] | null>(null);
+  // as páginas já renderizadas ficam guardadas: fechar e reabrir não pede de novo
+  const [aberto, setAberto] = useState(false);
   const [vendo, setVendo] = useState(false);
   const [erroPaginas, setErroPaginas] = useState<string | null>(null);
 
@@ -251,10 +253,12 @@ function Extracao({
 
   async function verPaginas() {
     if (!resultado.sessao_paginas) return;
+    if (paginas) { setAberto(true); return; }
     setVendo(true);
     setErroPaginas(null);
     try {
       setPaginas((await paginasCitadas(resultado.sessao_paginas)).paginas);
+      setAberto(true);
     } catch (e: any) {
       setErroPaginas(e?.message ?? "Não consegui renderizar as páginas.");
     } finally {
@@ -335,19 +339,21 @@ function Extracao({
         <Button type="button" onClick={() => aoAplicar(usados)} disabled={!resultado.query}>
           <Check className="h-4 w-4" /> Levar para o formulário
         </Button>
-        {resultado.sessao_paginas && !paginas && (
-          <Button type="button" variant="outline" onClick={verPaginas} disabled={vendo}>
-            {vendo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
-            Ver as páginas citadas
+        {resultado.sessao_paginas && (
+          <Button type="button" variant="outline" disabled={vendo}
+            onClick={() => (aberto ? setAberto(false) : verPaginas())}>
+            {vendo ? <Loader2 className="h-4 w-4 animate-spin" />
+              : aberto ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {aberto ? "Fechar as páginas" : "Ver as páginas citadas"}
           </Button>
         )}
       </div>
 
       {erroPaginas && <Aviso tom="erro">{erroPaginas}</Aviso>}
-      {paginas?.length === 0 && (
+      {aberto && paginas?.length === 0 && (
         <Aviso tom="info">Não há páginas citadas para mostrar nesta extração.</Aviso>
       )}
-      {paginas && paginas.length > 0 && (
+      {aberto && paginas && paginas.length > 0 && (
         <div className="space-y-3">
           {paginas.map((p) => (
             <figure key={`${p.peca}-${p.pagina}`} className="space-y-1">
@@ -362,6 +368,11 @@ function Extracao({
               </figcaption>
             </figure>
           ))}
+          {/* a pilha de páginas é longa; quem rolou até o fim não volta ao topo
+              só para fechar */}
+          <Button type="button" variant="outline" onClick={() => setAberto(false)}>
+            <EyeOff className="h-4 w-4" /> Fechar as páginas
+          </Button>
         </div>
       )}
     </div>
