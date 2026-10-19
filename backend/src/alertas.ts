@@ -18,8 +18,14 @@ const TIPO = "reinicio";
 // Intervalo mínimo entre dois avisos do mesmo tipo.
 const SILENCIO_MIN = Number(process.env.ALERTA_SILENCIO_MIN ?? 30);
 
+// Quem recebe o aviso. A lista fica no código, e não só numa variável de
+// ambiente, para não depender de ninguém lembrar de recadastrá-la quando o
+// serviço for recriado no painel. ALERTA_EMAILS continua sobrepondo.
+const AVISADOS = ["pietrogoncalvesmedeiros@gmail.com", "victor.kulnig@precatur.com.br"];
+
 function destinatarios(): string[] {
-  const bruto = process.env.ALERTA_EMAILS ?? "pietrogoncalvesmedeiros@gmail.com";
+  const bruto = process.env.ALERTA_EMAILS;
+  if (!bruto) return AVISADOS;
   return bruto.split(",").map((e) => e.trim()).filter(Boolean);
 }
 
