@@ -47,9 +47,28 @@ echo "[start] booting frontend on :3000"
 ( cd /app/frontend && PORT=3000 HOSTNAME=0.0.0.0 node server.js ) &
 FRONTEND_PID=$!
 
-# Exit (and let the orchestrator restart) as soon as any process dies.
-wait -n 2>/dev/null || wait
-EXIT=$?
-echo "[start] a process exited (code $EXIT); shutting down"
+# Sai (e deixa o orquestrador reiniciar) assim que QUALQUER processo morrer.
+#
+# Aqui havia `wait -n 2>/dev/null || wait`, e isso não cumpria o que promete: o
+# /bin/sh desta imagem é o dash, que não tem `wait -n`. O comando falhava, caía
+# no `wait` puro — que espera TODOS — e o contêiner seguia vivo com um processo
+# morto dentro. Em 19/10/2026 o backend caiu assim: o Next continuou servindo as
+# páginas, nada reiniciou, e /api/* ficou 500 até alguém tentar entrar no app.
+# Por isso a vigília é explícita, em POSIX puro, e diz QUEM morreu.
+vigia() {
+  nome=$1
+  pid=$2
+  kill -0 "$pid" 2>/dev/null && return 0
+  echo "[start] $nome (pid $pid) morreu; derrubando o contêiner para reiniciar"
+  return 1
+}
+
+while sleep 5; do
+  vigia "motor de calculo" "$MOTOR_PID" || break
+  vigia "alfred"           "$ALFRED_PID" || break
+  vigia "backend"          "$BACKEND_PID" || break
+  vigia "frontend"         "$FRONTEND_PID" || break
+done
+
 kill "$MOTOR_PID" "$ALFRED_PID" "$BACKEND_PID" "$FRONTEND_PID" 2>/dev/null || true
-exit "$EXIT"
+exit 1
