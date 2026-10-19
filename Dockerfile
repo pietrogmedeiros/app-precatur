@@ -71,7 +71,16 @@ RUN python3 -m venv /opt/alfred \
 COPY alfred/ ./alfred/
 
 COPY start.sh ./start.sh
+COPY scripts/healthcheck.js ./scripts/healthcheck.js
 RUN chmod +x ./start.sh
 
 EXPOSE 3000
+
+# Rede de proteção que NÃO depende do start.sh estar certo: se qualquer um dos
+# quatro processos parar de atender, a tarefa fica "unhealthy" e o orquestrador
+# a recria. O start-period é generoso porque o boot instala migrations e sobe
+# dois venvs Python.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=180s --retries=3 \
+  CMD node /app/scripts/healthcheck.js
+
 CMD ["./start.sh"]

@@ -19,6 +19,7 @@ import { calculadoraRouter } from "./routes/calculadora";
 import { alfredRouter } from "./routes/alfred";
 import { muralRouter } from "./routes/mural";
 import { requireAuth, requireAdmin, blockJuridico } from "./auth";
+import { avisaQueOAppVoltou } from "./alertas";
 
 dotenv.config();
 
@@ -45,6 +46,16 @@ app.use(express.json());
 let ready = false;
 let bootError: string | null = null;
 
+// Liveness: "este processo está de pé e respondendo". NÃO toca no banco de
+// propósito — é esta a rota que o HEALTHCHECK do contêiner usa, e se ela
+// dependesse do Postgres uma queda do banco viraria contêiner reiniciando em
+// laço sem que o problema fosse dele.
+app.get("/api/health/live", (_req, res) => {
+  res.json({ status: "live", ready, ...(bootError ? { bootError } : {}) });
+});
+
+// Readiness: "dá para usar". Inclui o banco, e é a que um monitor de fora deve
+// olhar.
 app.get("/api/health", async (_req, res) => {
   const base = { ready, ...(bootError ? { bootError } : {}) };
   try {
@@ -110,6 +121,11 @@ async function bootstrap() {
   }
   ready = true;
   console.log("[api] boot concluído — pronto para receber requisições");
+
+  // Conta que o app voltou. Fica depois do `ready` para o e-mail só sair quando
+  // o serviço de fato atende — e sem `await`, porque um Resend lento não pode
+  // atrasar o primeiro pedido de quem está esperando a tela abrir.
+  void avisaQueOAppVoltou();
 }
 
 bootstrap().catch((err) => {
