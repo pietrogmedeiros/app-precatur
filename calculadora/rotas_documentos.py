@@ -168,7 +168,7 @@ async def analisar(arquivo: UploadFile = File(...)) -> dict:
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(status_code=422, detail=f"Não consegui analisar o PDF: {exc}") from exc
     meta = {"homologacao": res.get("homologacao"), "n_paginas": res.get("n_paginas"),
-            "escaneadas": res.get("escaneadas")}
+            "escaneadas": res.get("escaneadas"), "pje": res.get("pje")}
     sid = _guardar(res["paginas"], meta, pdfs={PECA_PROCESSO: conteudo})
     return {
         "sessao": sid,
@@ -177,6 +177,9 @@ async def analisar(arquivo: UploadFile = File(...)) -> dict:
         "n_paginas": res.get("n_paginas"),
         "escaneadas": res.get("escaneadas"),
         "radar": res.get("radar"),
+        # nível 0 (índice + carimbo do PJe): conta, ofícios e alertas de
+        # reconciliação; None fora do PJe
+        "pje": res.get("pje"),
     }
 
 
@@ -191,7 +194,8 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
     P = _pipeline()
     try:
         res = P.extrair_cortes(sessao["paginas"], cortes,
-                               homol=(sessao["meta"] or {}).get("homologacao"), llm=_llm())
+                               homol=(sessao["meta"] or {}).get("homologacao"), llm=_llm(),
+                               pje=(sessao["meta"] or {}).get("pje"))
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001 — rede/LLM instável não derruba a tela

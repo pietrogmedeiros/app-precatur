@@ -22,6 +22,7 @@ consome. `citacoes` = {pagina: [valores]} para o visualizador.
 from __future__ import annotations
 
 import re
+import sys
 from datetime import date
 
 from . import radar as R
@@ -32,6 +33,7 @@ from .deterministico import valor_presente
 from .extracao import extrair, extrair_natureza, extrair_oficio
 from .homologacao import achar_homologacao
 from . import ocr as _ocr
+from . import pje as _pje
 from .llm import LLM, salvage_json
 from .substrato import MIN_TEXTO_NATIVO, processar_pdf
 
@@ -307,6 +309,35 @@ def _rotular_runs(paginas: list[dict], runs, homol: dict | None) -> list[dict]:
     return out
 
 
+def _cortes_com_pje(pj: dict | None, radar: list[dict]) -> list[dict]:
+    """Cortes do PJe na frente; do radar, só o que não se sobrepõe a eles.
+
+    O tipo que o PJe já localizou deixa de ser sugerido pelo radar (vira
+    "Outro"): `extrair_cortes` usa o PRIMEIRO corte de cada tipo, e uma faixa
+    do radar rotulada "conta" faria `multi_conta` disparar à toa. As faixas
+    continuam na lista — o humano ainda pode reclassificar.
+    """
+    if not pj or not pj.get("cortes"):
+        return radar
+    achados = {c["tipo"] for c in pj["cortes"]}
+    ocupadas = {pg for c in pj["cortes"] for pg in range(c["pagina_inicio"], c["pagina_fim"] + 1)}
+    resto = []
+    for c in radar:
+        if any(pg in ocupadas for pg in range(c["pagina_inicio"], c["pagina_fim"] + 1)):
+            continue
+        resto.append({**c, "tipo": TIPO_OUTRO} if c["tipo"] in achados else c)
+    return list(pj["cortes"]) + resto
+
+
+def _pje_seguro(fonte, paginas) -> dict | None:
+    """O nível 0 é melhoria: PDF fora do padrão não pode derrubar a análise."""
+    try:
+        return _pje.analisar(fonte, paginas)
+    except Exception as e:  # noqa: BLE001
+        print(f"[pje] {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
+        return None
+
+
 def analisar(pdf_path: str = None, pdf_bytes: bytes = None, ocr_fn=None) -> dict:
     """PASSO 1 do assistente de corte: substrato + radar + homologação. SEM LLM.
 
@@ -319,9 +350,11 @@ def analisar(pdf_path: str = None, pdf_bytes: bytes = None, ocr_fn=None) -> dict
     textos = [p.get("texto") or "" for p in paginas]
     homol = achar_homologacao(textos)
     rad = R.buscar(paginas, None)
+    pj = _pje_seguro(fonte, paginas)
     return {
         "paginas": paginas,
-        "cortes_sugeridos": _rotular_runs(paginas, rad["runs"], homol),
+        "cortes_sugeridos": _cortes_com_pje(pj, _rotular_runs(paginas, rad["runs"], homol)),
+        "pje": pj,
         "homologacao": homol,
         "n_paginas": len(paginas),
         "escaneadas": sum(1 for p in paginas if not p.get("nativa")),
@@ -388,7 +421,8 @@ def _rejeitar_valores_ausentes(campos: dict, paginas: list[dict],
 
 def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
                       oficio_ref: tuple[int, int] | None, homol: dict | None,
-                      llm: LLM, sentenca_ref: tuple[int, int] | None = None) -> dict:
+                      llm: LLM, sentenca_ref: tuple[int, int] | None = None,
+                      pje: dict | None = None) -> dict:
     """Extrai conta (obrigatória) + ofício (best-effort), aplica a rede
     determinística de honorários, calcula a prova e monta query + citações.
     Compartilhado pelos dois modos (autônomo e assistido)."""
@@ -396,7 +430,7 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
     textos = [p.get("texto") or "" for p in paginas]
 
     # conta (seção 1 + natureza) — obrigatória
-    ext = extrair(paginas, conta_ref, llm)
+    ext = extrair(paginas, conta_ref, llm, pista=_pje.pista_conta(pje, conta_ref))
     if not ext.get("ok"):
         return {"ok": False, "erro": f"extração da conta: {ext.get('erro')}",
                 "conta_ref": f"pp{conta_ref[0]}-{conta_ref[1]}", "homologacao": homol}
@@ -457,6 +491,17 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
                 conflitos.append({"campo": campo, "llm": llm_v, "regex": det["valor"],
                                   "pagina": det["citacao"]["pagina"]})
 
+    # Formulário-ofício do PJe lido por rótulo: mesma rede (preenche o que a IA
+    # deixou passar; divergência vira conflito). Só identificação — os VALORES
+    # do formulário vão como alerta, porque o cartório erra (#3481).
+    for campo, det in _pje.campos_oficio(pje, oficio_ref).items():
+        llm_v = (campos.get(campo) or {}).get("valor")
+        if campo not in campos:
+            campos[campo] = det
+        elif re.sub(r"\W", "", str(llm_v)).lower() != re.sub(r"\W", "", str(det["valor"])).lower():
+            conflitos.append({"campo": campo, "llm": llm_v, "regex": det["valor"],
+                              "pagina": det["citacao"]["pagina"]})
+
     # data de apresentação: determinística (eproc/TJES) tem prioridade; senão a do ofício
     data_apres = extrair_data_envio_tribunal(textos)
     if not data_apres:
@@ -483,6 +528,7 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
         "oficio_ref": f"pp{oficio_ref[0]}-{oficio_ref[1]}" if oficio_ref else None,
         "campos": campos, "prova": prova, "conflitos": conflitos,
         "rejeitados": rejeitados,
+        "alertas_pje": (pje or {}).get("alertas") or [],
         "data_apresentacao": data_apres.isoformat() if data_apres else None,
         "query": montar_query(campos, data_apres),
         "citacoes": {str(k): v for k, v in citacoes.items()},
@@ -505,7 +551,8 @@ def _corte_ref(corte: dict, n_paginas: int | None = None) -> tuple[int, int] | N
 
 
 def extrair_cortes(paginas: list[dict], cortes: list[dict],
-                   homol: dict | None = None, llm: LLM | None = None) -> dict:
+                   homol: dict | None = None, llm: LLM | None = None,
+                   pje: dict | None = None) -> dict:
     """PASSO 2 do assistente: extrai os campos da calculadora dos cortes que o
     humano CONFIRMOU. `cortes` = [{tipo, pagina_inicio, pagina_fim}].
 
@@ -524,7 +571,7 @@ def extrair_cortes(paginas: list[dict], cortes: list[dict],
         return {"ok": False, "erro": "faixa da conta com páginas inválidas."}
     oficio_ref = _corte_ref(oficios[0], n) if oficios else None
 
-    res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm)
+    res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pje)
     if res.get("ok"):
         res["multi_conta"] = len(contas) > 1
         res["multi_oficio"] = len(oficios) > 1
@@ -640,12 +687,20 @@ def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = N
     escaneadas = sum(1 for p in paginas if not p.get("nativa"))
 
     homol = achar_homologacao(textos)
-    rad = R.buscar(paginas, None)
-    conta_ref, oficio_ref = _escolher(paginas, rad["runs"], homol, llm)
+    # Nível 0 primeiro: no PJe, índice + carimbo localizam conta e ofício sem
+    # o juiz LLM (e sem o radar, que carrega o modelo de embedding).
+    pj = _pje_seguro(fonte, paginas)
+    if pj and pj.get("conta"):
+        conta_ref = (pj["conta"]["pagina_inicio"], pj["conta"]["pagina_fim"])
+        of = next((c for c in pj["cortes"] if c["tipo"] == TIPO_OFICIO), None)
+        oficio_ref = (of["pagina_inicio"], of["pagina_fim"]) if of else None
+    else:
+        rad = R.buscar(paginas, None)
+        conta_ref, oficio_ref = _escolher(paginas, rad["runs"], homol, llm)
     if not conta_ref:
         return {"ok": False, "erro": "não localizei a conta homologada",
                 "paginas": len(paginas), "escaneadas": escaneadas, "homologacao": homol}
-    return _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm)
+    return _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pj)
 
 
 if __name__ == "__main__":

@@ -56,7 +56,7 @@ def _enriquecer(p: dict) -> str:
     return "\n".join(partes)
 
 
-def _prompt(paginas: list[dict], a: int, b: int) -> str:
+def _prompt(paginas: list[dict], a: int, b: int, pista: str | None = None) -> str:
     idx = {p["pagina"]: p for p in paginas}
     trechos = []
     for pg in range(a, b + 1):
@@ -70,6 +70,7 @@ def _prompt(paginas: list[dict], a: int, b: int) -> str:
         "(1.234.567,89). Use a TABELA reconstruída para saber qual coluna é Principal/Juros/"
         "Selic/Total — NÃO adivinhe pela ordem do texto corrido. NÃO invente número: se o "
         "campo não estiver no trecho, use null.\n\n"
+        + (f"PISTA (lida dos autos, sem IA): {pista}\n\n" if pista else "") +
         f"CAMPOS:\n{campos_txt}\n\n"
         'Responda SOMENTE com JSON, cada campo como {"valor": <valor ou null>, '
         '"citacao_pagina": <n>, "citacao_trecho": "<trecho literal ou vazio>"}:\n'
@@ -118,10 +119,11 @@ def _normaliza(bruto: dict, campos_def: dict) -> dict:
     return out
 
 
-def extrair(paginas: list[dict], ref: tuple[int, int], llm) -> dict:
-    """Extrai os campos da CONTA (seção 1 + natureza)."""
+def extrair(paginas: list[dict], ref: tuple[int, int], llm, pista: str | None = None) -> dict:
+    """Extrai os campos da CONTA (seção 1 + natureza). `pista` = qual conta da
+    faixa é a operativa, quando os autos dizem (ver `pje.pista_conta`)."""
     a, b = ref
-    txt, meta = llm.responder(_prompt(paginas, a, b))
+    txt, meta = llm.responder(_prompt(paginas, a, b, pista))
     bruto = salvage_json(txt)
     if not bruto:
         return {"ok": False, "erro": "json inválido", "raw": (txt or "")[:300]}
