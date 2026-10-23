@@ -36,6 +36,15 @@ pricingRouter.put("/:key", blockJuridico, requireAdmin, async (req: AuthedReques
     const body = req.body ?? {};
     const patch: PricingPatch = {};
 
+    // A chave continua imutável de propósito: ela é referência da importação da
+    // planilha e do histórico. O que muda aqui é só o nome exibido.
+    if (body.label !== undefined) {
+      const t = String(body.label).trim();
+      if (t.length < 2 || t.length > 120) {
+        return res.status(400).json({ error: "bad_request", message: "O nome da praça precisa ter de 2 a 120 caracteres." });
+      }
+      patch.label = t;
+    }
     if (body.rows !== undefined) {
       const v = validateRows(body.rows);
       if ("error" in v) return res.status(400).json({ error: "bad_request", message: v.error });

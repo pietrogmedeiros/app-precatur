@@ -55,6 +55,8 @@ export function TableEditor({
       setEsfera("estadual");
       setUf("");
       setMunicipio("");
+    } else {
+      setLabel(entity.label);
     }
     setRows(
       (criando ? [] : entity.rows).map((r) => ({
@@ -105,6 +107,7 @@ export function TableEditor({
         return;
       }
       const entities = await api.pricing.update(entity.key, {
+        label,
         rows: linhas,
         fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
         description,
@@ -141,6 +144,16 @@ export function TableEditor({
             ? "A praça passa a valer na hora para todo o time e aparece na barra acima. Onde não houver regra própria, o regime geral da esfera continua valendo."
             : "A alteração vale na hora para todo o time. A versão anterior fica guardada no histórico."}
         </p>
+
+        {criando ? null : (
+          <div className="mb-5 grid gap-4 sm:grid-cols-2">
+            <label className="space-y-1.5 text-sm font-medium">
+              <span>Nome da praça</span>
+              <input className={cell + " h-9"} value={label} maxLength={120} placeholder="Ex.: Alagoas"
+                onChange={(e) => setLabel(e.target.value)} />
+            </label>
+          </div>
+        )}
 
         {criando ? (
           <div className="mb-5 grid gap-4 sm:grid-cols-2">

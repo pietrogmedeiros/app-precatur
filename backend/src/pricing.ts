@@ -29,6 +29,8 @@ export interface PricingEntity {
 }
 
 export interface PricingPatch {
+  /** Nome exibido na barra e no título da praça. */
+  label?: string;
   rows?: PricingRow[];
   fixed_deduction?: number;
   description?: string;
@@ -208,6 +210,7 @@ export async function updatePricing(
                 description = COALESCE($4, description),
                 hidden = COALESCE($6, hidden),
                 municipal_reference = COALESCE($7, municipal_reference),
+                label = COALESCE($8, label),
                 updated_by = $5,
                 updated_at = now()
           WHERE key = $1`,
@@ -219,6 +222,7 @@ export async function updatePricing(
           changedBy,
           patch.hidden ?? null,
           patch.municipal_reference ?? null,
+          patch.label ?? null,
         ]
       );
     }
