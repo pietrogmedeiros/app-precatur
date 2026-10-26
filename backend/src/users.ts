@@ -11,6 +11,8 @@ export interface User {
   email: string;
   role: Role;
   phone: string | null;
+  /** Desativado não entra no app, mas segue visível para o admin. */
+  ativo: boolean;
   created_at: string;
   last_login_at: string | null;
 }
@@ -26,7 +28,7 @@ export function hashPassword(plain: string): string {
 
 export async function findByEmail(email: string): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, phone, avatar, created_at, last_login_at FROM users WHERE email = $1`,
+    `SELECT id, name, email, password, role, phone, avatar, ativo, created_at, last_login_at FROM users WHERE email = $1`,
     [email.toLowerCase()]
   );
   return rows[0] ?? null;
@@ -34,7 +36,7 @@ export async function findByEmail(email: string): Promise<UserWithHash | null> {
 
 export async function listUsers(): Promise<User[]> {
   return query<User>(
-    `SELECT id, name, email, role, phone, created_at, last_login_at FROM users ORDER BY created_at ASC`
+    `SELECT id, name, email, role, phone, ativo, created_at, last_login_at FROM users ORDER BY created_at ASC`
   );
 }
 
@@ -48,7 +50,7 @@ export async function createUser(input: {
   const rows = await query<User>(
     `INSERT INTO users (name, email, password, role, phone)
      VALUES ($1, $2, $3, $4, $5)
-     RETURNING id, name, email, role, phone, created_at, last_login_at`,
+     RETURNING id, name, email, role, phone, ativo, created_at, last_login_at`,
     [input.name, input.email.toLowerCase(), hashPassword(input.password), input.role, input.phone]
   );
   return rows[0];
@@ -67,7 +69,7 @@ export async function updateProfile(
             phone  = COALESCE($3, phone),
             avatar = CASE WHEN $5::boolean THEN NULL ELSE COALESCE($4, avatar) END
       WHERE id = $1
-      RETURNING id, name, email, role, phone, avatar, created_at, last_login_at`,
+      RETURNING id, name, email, role, phone, avatar, ativo, created_at, last_login_at`,
     [id, dados.name ?? null, dados.phone ?? null, dados.avatar ?? null, dados.removerAvatar ?? false]
   );
   return rows[0] ?? null;
@@ -76,7 +78,7 @@ export async function updateProfile(
 export async function updateUserPhone(id: number, phone: string): Promise<User | null> {
   const rows = await query<User>(
     `UPDATE users SET phone = $2 WHERE id = $1
-     RETURNING id, name, email, role, phone, created_at, last_login_at`,
+     RETURNING id, name, email, role, phone, ativo, created_at, last_login_at`,
     [id, phone]
   );
   return rows[0] ?? null;
@@ -89,7 +91,7 @@ export async function recordLogin(id: number): Promise<void> {
 
 export async function findById(id: number): Promise<UserWithHash | null> {
   const rows = await query<UserWithHash>(
-    `SELECT id, name, email, password, role, phone, avatar, created_at, last_login_at FROM users WHERE id = $1`,
+    `SELECT id, name, email, password, role, phone, avatar, ativo, created_at, last_login_at FROM users WHERE id = $1`,
     [id]
   );
   return rows[0] ?? null;
@@ -97,6 +99,23 @@ export async function findById(id: number): Promise<UserWithHash | null> {
 
 export async function updatePassword(id: number, newPlain: string): Promise<void> {
   await query(`UPDATE users SET password = $2 WHERE id = $1`, [id, hashPassword(newPlain)]);
+}
+
+// Liga/desliga o acesso. Devolve null quando o id não existe.
+export async function setUserAtivo(id: number, ativo: boolean): Promise<User | null> {
+  const rows = await query<User>(
+    `UPDATE users SET ativo = $2 WHERE id = $1
+     RETURNING id, name, email, role, phone, ativo, created_at, last_login_at`,
+    [id, ativo]
+  );
+  return rows[0] ?? null;
+}
+
+// Só o necessário para o porteiro de cada requisição: o token já diz quem é,
+// falta saber se a conta continua valendo. Devolve null se o usuário sumiu.
+export async function usuarioAtivo(id: number): Promise<boolean | null> {
+  const rows = await query<{ ativo: boolean }>(`SELECT ativo FROM users WHERE id = $1`, [id]);
+  return rows[0] ? rows[0].ativo : null;
 }
 
 export async function deleteUser(id: number): Promise<void> {

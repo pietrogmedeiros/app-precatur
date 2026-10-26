@@ -49,6 +49,7 @@ export interface UserRecord {
   email: string;
   role: Role;
   phone: string | null;
+  ativo: boolean;
   created_at: string;
   last_login_at: string | null;
 }
@@ -383,6 +384,8 @@ export const api = {
       request<UserRecord>("/api/users", { method: "POST", body: JSON.stringify(payload) }),
     update: (id: number, payload: { phone: string }) =>
       request<UserRecord>(`/api/users/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
+    setAtivo: (id: number, ativo: boolean) =>
+      request<UserRecord>(`/api/users/${id}/ativo`, { method: "PATCH", body: JSON.stringify({ ativo }) }),
     remove: (id: number) => request<void>(`/api/users/${id}`, { method: "DELETE" }),
   },
   me: () => request<Me>("/api/auth/me"),

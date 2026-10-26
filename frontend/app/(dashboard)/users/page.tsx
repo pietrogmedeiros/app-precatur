@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check, Pencil, X } from "lucide-react";
+import { Trash2, UserPlus, Wand2, Eye, EyeOff, Copy, Check, Pencil, X, UserCheck, UserMinus } from "lucide-react";
 import { api, type UserRecord } from "@/lib/api";
 import { roleLabel, type Role } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -124,6 +124,23 @@ export default function UsersPage() {
     }
   }
 
+  async function onToggleAtivo(u: UserRecord) {
+    const desativando = u.ativo;
+    const pergunta = desativando
+      ? `Desativar ${u.name}? A pessoa perde o acesso na hora, mas o cadastro e o histórico continuam aqui.`
+      : `Reativar ${u.name}? O acesso volta ao normal.`;
+    if (!confirm(pergunta)) return;
+    setError(null);
+    setOk(null);
+    try {
+      await api.users.setAtivo(u.id, !u.ativo);
+      setOk(desativando ? `${u.name} foi desativado.` : `${u.name} voltou a ter acesso.`);
+      load();
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }
+
   async function onDelete(u: UserRecord) {
     if (!confirm(`Excluir o usuário ${u.name}?`)) return;
     setError(null);
@@ -236,7 +253,10 @@ export default function UsersPage() {
       <Card>
         <CardHeader>
           <CardTitle>Usuários cadastrados</CardTitle>
-          <CardDescription>{users.length} usuário(s)</CardDescription>
+          <CardDescription>
+            {users.length} usuário(s)
+            {users.some((u) => !u.ativo) ? ` · ${users.filter((u) => !u.ativo).length} desativado(s)` : ""}
+          </CardDescription>
         </CardHeader>
         <CardContent className="px-0">
           <Table>
@@ -248,13 +268,20 @@ export default function UsersPage() {
                 <TableHead>Perfil</TableHead>
                 <TableHead className="hidden sm:table-cell">Último acesso</TableHead>
                 <TableHead className="hidden md:table-cell">Criado em</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
+                <TableHead className="whitespace-nowrap text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((u) => (
-                <TableRow key={u.id}>
-                  <TableCell className="font-medium">{u.name}</TableCell>
+                <TableRow key={u.id} className={u.ativo ? undefined : "opacity-60"}>
+                  <TableCell className="font-medium">
+                    {u.name}
+                    {u.ativo ? null : (
+                      <span className="ml-2 inline-flex whitespace-nowrap rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                        Desativado
+                      </span>
+                    )}
+                  </TableCell>
                   <TableCell className="text-muted-foreground">{u.email}</TableCell>
                   <TableCell className="hidden text-muted-foreground lg:table-cell">
                     {u.phone ? u.phone : <span className="italic opacity-70">—</span>}
@@ -279,9 +306,18 @@ export default function UsersPage() {
                     )}
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground md:table-cell">{fmtDate(u.created_at)}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="whitespace-nowrap text-right">
                     <Button variant="ghost" size="icon" onClick={() => setEditing(u)} aria-label={`Editar telefone de ${u.name}`}>
                       <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onToggleAtivo(u)}
+                      aria-label={u.ativo ? `Desativar ${u.name}` : `Reativar ${u.name}`}
+                      title={u.ativo ? "Desativar acesso" : "Reativar acesso"}
+                    >
+                      {u.ativo ? <UserMinus className="h-4 w-4" /> : <UserCheck className="h-4 w-4" />}
                     </Button>
                     <Button variant="ghost" size="icon" onClick={() => onDelete(u)} aria-label={`Excluir ${u.name}`}>
                       <Trash2 className="h-4 w-4" />

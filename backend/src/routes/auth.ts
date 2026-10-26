@@ -16,6 +16,12 @@ authRouter.post("/login", async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ error: "invalid_credentials", message: "E-mail ou senha incorretos." });
     }
+    if (!user.ativo) {
+      return res.status(403).json({
+        error: "inativo",
+        message: "Seu acesso foi desativado. Fale com um administrador.",
+      });
+    }
     await recordLogin(user.id);
     const token = signToken(user);
     res.json({
@@ -149,7 +155,7 @@ authRouter.post("/forgot", async (req, res, next) => {
     }
 
     const user = await findByEmail(email);
-    if (!user) return res.json(resposta);
+    if (!user || !user.ativo) return res.json(resposta);
 
     const token = await criaToken(user.id, (req.ip ?? "").slice(0, 60) || null);
     const base = (process.env.APP_URL ?? "").replace(/\/+$/, "");

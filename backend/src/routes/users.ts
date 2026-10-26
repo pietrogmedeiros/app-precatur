@@ -1,6 +1,6 @@
 import { Router } from "express";
 import type { Role } from "../users";
-import { listUsers, createUser, deleteUser, updateUserPhone } from "../users";
+import { listUsers, createUser, deleteUser, updateUserPhone, setUserAtivo } from "../users";
 import type { AuthedRequest } from "../auth";
 
 export const usersRouter = Router();
@@ -60,6 +60,33 @@ usersRouter.put("/:id", async (req, res, next) => {
       return res.status(400).json({ error: "bad_request", message: "Informe o telefone." });
     }
     const user = await updateUserPhone(id, phone.trim());
+    if (!user) {
+      return res.status(404).json({ error: "not_found", message: "Usuário não encontrado." });
+    }
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Liga/desliga o acesso. É a alternativa a excluir: o usuário some do app, não
+// do banco — o admin continua vendo o cadastro e o histórico.
+usersRouter.patch("/:id/ativo", async (req: AuthedRequest, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ error: "bad_request", message: "ID inválido." });
+    }
+    const { ativo } = req.body ?? {};
+    if (typeof ativo !== "boolean") {
+      return res.status(400).json({ error: "bad_request", message: "Informe ativo (true ou false)." });
+    }
+    // Mesma proteção da exclusão: desativar a si mesmo tranca o admin para fora
+    // da própria tela que desfaria isso.
+    if (!ativo && Number(req.user?.sub) === id) {
+      return res.status(400).json({ error: "bad_request", message: "Você não pode desativar a própria conta." });
+    }
+    const user = await setUserAtivo(id, ativo);
     if (!user) {
       return res.status(404).json({ error: "not_found", message: "Usuário não encontrado." });
     }
