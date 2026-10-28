@@ -110,6 +110,18 @@ app.use("/api/alfred", requireAuth, alfredRouter);
 
 // Central error handler so route failures return JSON, not an HTML stack.
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  // Erro do PEDIDO (corpo grande demais, JSON quebrado) é 4xx com mensagem
+  // legível — antes virava 500 com o texto do body-parser em inglês
+  // ("request entity too large"), que a tela mostrava cru.
+  const status = Number(err?.status ?? err?.statusCode);
+  if (status >= 400 && status < 500) {
+    const message = status === 413
+      ? "O envio passa do tamanho aceito. Se for o memorial, avise o suporte."
+      : status === 400 && err?.type === "entity.parse.failed"
+        ? "O corpo do pedido não é um JSON válido."
+        : err?.message ?? "Pedido inválido.";
+    return res.status(status).json({ error: err?.type ?? "bad_request", message });
+  }
   console.error("[api] error:", err);
   res.status(500).json({ error: "internal_error", message: err?.message ?? "unknown" });
 });
