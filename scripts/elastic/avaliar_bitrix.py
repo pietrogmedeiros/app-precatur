@@ -86,10 +86,10 @@ def _campos() -> dict:
     return {k: c[k]["id"] for k in (*PECAS, "numero_precatorio")}
 
 
-def listar(wh: str, f: dict, n: int) -> list[dict]:
+def listar(wh: str, f: dict, n: int, pular: int = 0) -> list[dict]:
     """Cards com conta E ofício anexados, do mais novo para o mais velho."""
     out, start = [], 0
-    while len(out) < n:
+    while len(out) < n + pular:
         r = httpx.post(f"{wh}/crm.deal.list.json", timeout=60, json={
             "filter": {f"!{f['anexo_conta']}": "", f"!{f['anexo_oficio']}": ""},
             "select": ["ID", *f.values()], "order": {"ID": "DESC"}, "start": start}).json()
@@ -97,7 +97,7 @@ def listar(wh: str, f: dict, n: int) -> list[dict]:
         if "next" not in r:
             break
         start = r["next"]
-    return out[:n]
+    return out[pular:pular + n]
 
 
 def _camel(uf: str) -> str:
@@ -200,12 +200,14 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--cards", type=int, default=200)
     ap.add_argument("--sem-elastic", action="store_true")
+    ap.add_argument("--pular", type=int, default=0,
+                    help="pula os N cards mais recentes (ex.: 300 = amostra nova, nunca usada para ajustar)")
     ap.add_argument("--min-cards", type=int, default=5,
                     help="mineração: linha precisa se repetir em N cards distintos")
     a = ap.parse_args()
     wh, f = _webhook(), _campos()
-    cards = listar(wh, f, a.cards)
-    print(f"{len(cards)} cards com conta e ofício anexados")
+    cards = listar(wh, f, a.cards, a.pular)
+    print(f"{len(cards)} cards com conta e ofício anexados (pulando os {a.pular} mais recentes)")
 
     # (tribunal, peça) → contadores; "peça reconhecida" = alguma página dela
     # recebe o rótulo do próprio tipo

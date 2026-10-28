@@ -37,6 +37,16 @@ app.use(
     origin: allowedOrigins.includes("*") ? true : allowedOrigins,
   })
 );
+// O envio ao CRM leva o memorial em PDF (base64) dentro do JSON, e passa fácil
+// dos 100 KB padrão ("request entity too large", 28/10/2026). O limite maior
+// vale SÓ nesta rota e só depois do login: as rotas públicas (captação,
+// login) continuam com o padrão. O `express.json()` de baixo não relê um
+// corpo já lido.
+app.use(
+  "/api/calculadora/crm/enviar",
+  requireAuth,
+  express.json({ limit: process.env.JSON_LIMIT_MEMORIAL ?? "15mb" })
+);
 app.use(express.json());
 
 // Estado da inicialização. A API passa a escutar na porta ANTES de migrar, para
