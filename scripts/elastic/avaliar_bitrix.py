@@ -195,6 +195,25 @@ def minerar(nao_rec, por_peca, minimo: int) -> list[dict]:
     return docs
 
 
+def gravar(docs: list, lote: int = 100) -> None:
+    """_bulk em lotes pequenos, com pausa e nova tentativa. O Elastic da VM tem
+    1 GB de RAM: lotes de 500 páginas o derrubaram no meio (28/10/2026)."""
+    import time
+    for k in range(0, len(docs), lote):
+        corpo = "".join(json.dumps(x, ensure_ascii=False) + "\n" for par in docs[k:k + lote] for x in par)
+        for tentativa in range(5):
+            try:
+                st, r = ES.es("POST", "/_bulk", corpo, ndjson=True)
+                if st == 200 and not r.get("errors"):
+                    break
+            except Exception:  # noqa: BLE001 — conexão caiu: espera o Elastic voltar
+                pass
+            time.sleep(10 * (tentativa + 1))
+        else:
+            print(f"! lote {k // lote + 1} não gravou depois de 5 tentativas")
+        time.sleep(0.5)
+
+
 # ── medição ──────────────────────────────────────────────────────────────
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -308,9 +327,7 @@ def main() -> None:
         m = json.loads((Path(__file__).parent / "pre_analises_paginas.mapping.json").read_text())
         m["aliases"] = {IDX: {"is_write_index": True}}
         ES.es("PUT", f"/{IDX}-v1", m)
-    for k in range(0, len(docs), 500):
-        corpo = "".join(json.dumps(x, ensure_ascii=False) + "\n" for par in docs[k:k + 500] for x in par)
-        ES.es("POST", "/_bulk", corpo, ndjson=True)
+    gravar(docs)
     ES.es("POST", f"/{IDX}/_refresh")
     print(f"\n{len(docs)} páginas no índice {IDX} (sem texto)")
     if candidatos:
