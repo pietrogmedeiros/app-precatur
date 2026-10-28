@@ -1,0 +1,138 @@
+{
+  "settings": {
+    "index": { "number_of_shards": 1, "number_of_replicas": 0 }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "_meta": {
+      "versao_esquema": "1.0",
+      "descricao": "Uma pré-análise por documento (id = sessão): sugestão, confirmação do advogado, avaliação, extração e envio. Escrito por calculadora/prefill/telemetria.py. Sem texto nem valor do processo."
+    },
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "analise_id": { "type": "keyword" },
+      "modo": { "type": "keyword" },
+      "versao": { "type": "keyword" },
+      "pdf_hash": { "type": "keyword" },
+      "pecas": { "type": "keyword" },
+      "processo": {
+        "properties": {
+          "tribunal": { "type": "keyword" },
+          "justica": { "type": "keyword" },
+          "sistema_processual": { "type": "keyword" },
+          "cnj_hash": { "type": "keyword" },
+          "n_paginas": { "type": "integer" },
+          "escaneadas": { "type": "integer" }
+        }
+      },
+      "sugestao": {
+        "properties": {
+          "cortes": {
+            "properties": {
+              "tipo": { "type": "keyword" },
+              "pagina_inicio": { "type": "integer" },
+              "pagina_fim": { "type": "integer" },
+              "origem": { "type": "keyword" },
+              "n_paginas": { "type": "integer" }
+            }
+          },
+          "tem_conta": { "type": "boolean" },
+          "tem_oficio": { "type": "boolean" },
+          "n_faixas_radar": { "type": "integer" }
+        }
+      },
+      "pje": {
+        "properties": {
+          "ativo": { "type": "boolean" },
+          "paginas_mapeadas": { "type": "integer" },
+          "achou_conta": { "type": "boolean" },
+          "conta_votos": { "type": "integer" },
+          "conta_ancora": { "type": "boolean" },
+          "n_oficios": { "type": "integer" },
+          "alertas": { "type": "keyword" }
+        }
+      },
+      "homologacao": {
+        "properties": {
+          "achou": { "type": "boolean" },
+          "pagina": { "type": "integer" },
+          "tem_evento": { "type": "boolean" }
+        }
+      },
+      "confirmado_em": { "type": "date" },
+      "confirmacao": {
+        "properties": {
+          "cortes": {
+            "properties": {
+              "tipo": { "type": "keyword" },
+              "pagina_inicio": { "type": "integer" },
+              "pagina_fim": { "type": "integer" },
+              "origem": { "type": "keyword" },
+              "n_paginas": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "avaliacao": {
+        "properties": {
+          "conta": {
+            "properties": {
+              "status": { "type": "keyword" },
+              "iou": { "type": "float" },
+              "origem": { "type": "keyword" },
+              "acertou": { "type": "boolean" },
+              "desvio_inicio": { "type": "integer" },
+              "desvio_fim": { "type": "integer" }
+            }
+          },
+          "oficio": {
+            "properties": {
+              "status": { "type": "keyword" },
+              "iou": { "type": "float" },
+              "origem": { "type": "keyword" },
+              "acertou": { "type": "boolean" },
+              "desvio_inicio": { "type": "integer" },
+              "desvio_fim": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "extracao": {
+        "properties": {
+          "ok": { "type": "boolean" },
+          "erro": { "type": "text" },
+          "campos": {
+            "properties": {
+              "campo": { "type": "keyword" },
+              "fonte": { "type": "keyword" },
+              "com_citacao": { "type": "boolean" },
+              "pagina": { "type": "integer" }
+            }
+          },
+          "n_campos": { "type": "integer" },
+          "rejeitados": { "type": "keyword" },
+          "conflitos": { "type": "keyword" },
+          "alertas": { "type": "keyword" },
+          "prova_ok": { "type": "boolean" },
+          "prova_dif_pct": { "type": "float" },
+          "multi_conta": { "type": "boolean" },
+          "multi_oficio": { "type": "boolean" },
+          "custo_usd": { "type": "float" }
+        }
+      },
+      "enviado_em": { "type": "date" },
+      "envio": {
+        "properties": {
+          "campos": {
+            "properties": {
+              "numero_precatorio": { "properties": { "extraido": { "type": "boolean" }, "igual": { "type": "boolean" } } },
+              "numero_oficio": { "properties": { "extraido": { "type": "boolean" }, "igual": { "type": "boolean" } } },
+              "honorarios_contratuais_pct": { "properties": { "extraido": { "type": "boolean" }, "igual": { "type": "boolean" } } },
+              "natureza": { "properties": { "extraido": { "type": "boolean" }, "igual": { "type": "boolean" } } }
+            }
+          }
+        }
+      }
+    }
+  }
+}

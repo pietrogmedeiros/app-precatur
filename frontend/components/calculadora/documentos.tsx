@@ -48,7 +48,10 @@ export function Documentos({
   estado, aoSemear,
 }: {
   estado: EstadoDocumentos;
-  aoSemear: (patch: Partial<FormularioCalculo>, crm: { numero_precatorio?: string; numero_oficio?: string }) => void;
+  /** `sessao` = id da pré-análise que semeou o formulário: volta no envio ao
+   *  CRM para medir se o advogado manteve o que foi extraído. */
+  aoSemear: (patch: Partial<FormularioCalculo>, crm: { numero_precatorio?: string; numero_oficio?: string },
+             sessao: string | null) => void;
 }) {
   const [modo, setModo] = useState<Modo>("pecas");
   const [ocupado, setOcupado] = useState<string | null>(null);
@@ -91,7 +94,7 @@ export function Documentos({
       if (usados.has(r.param)) query[r.param] = String(r.valor);
     }
     const { patch, crm } = semearFormulario(query);
-    aoSemear(patch, crm);
+    aoSemear(patch, crm, resultado.sessao_paginas ?? null);
   }
 
   return (

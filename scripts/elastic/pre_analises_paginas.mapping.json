@@ -1,0 +1,47 @@
+{
+  "settings": {
+    "index": { "number_of_shards": 1, "number_of_replicas": 0 },
+    "analysis": {
+      "filter": {
+        "pt_stop": { "type": "stop", "stopwords": "_portuguese_" },
+        "pt_stem": { "type": "stemmer", "language": "light_portuguese" }
+      },
+      "analyzer": {
+        "pt_sem_acento": { "tokenizer": "standard", "filter": ["lowercase", "asciifolding", "pt_stop", "pt_stem"] }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "_meta": {
+      "versao_esquema": "1.0",
+      "descricao": "Uma página relevante por documento (id = sessão:página): marcadores que dispararam, tipo sugerido e tipo confirmado pelo advogado. Base para medir a precisão de cada marcador. Escrito por calculadora/prefill/telemetria.py."
+    },
+    "properties": {
+      "@timestamp": { "type": "date" },
+      "analise_id": { "type": "keyword" },
+      "versao": { "type": "keyword" },
+      "pagina": { "type": "integer" },
+      "tribunal": { "type": "keyword" },
+      "justica": { "type": "keyword" },
+      "sistema_processual": { "type": "keyword" },
+      "nativa": { "type": "boolean" },
+      "n_caracteres": { "type": "integer" },
+      "n_valores": { "type": "integer" },
+      "oraculo_razao": { "type": "float" },
+      "tipo_classificador": { "type": "keyword" },
+      "nivel": { "type": "keyword" },
+      "marcadores": { "type": "keyword" },
+      "provisorio": { "type": "boolean" },
+      "rotulo_sistema": { "type": "keyword" },
+      "tipo_sugerido": { "type": "keyword" },
+      "origem_sugestao": { "type": "keyword" },
+      "tipo_confirmado": { "type": "keyword" },
+      "classificador_acertou": { "type": "boolean" },
+      "cabecalho": {
+        "type": "text", "analyzer": "pt_sem_acento",
+        "fields": { "raw": { "type": "keyword", "ignore_above": 256 } }
+      }
+    }
+  }
+}

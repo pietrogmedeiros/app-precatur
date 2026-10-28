@@ -71,6 +71,18 @@ def _anotar_citacoes(sid: str, res: dict) -> None:
             return
         sessao["citacoes"] = res.get("citacoes") or {}
         sessao["mapa"] = res.get("mapa_paginas") or {}
+        # o que a pré-análise extraiu, para o envio ao CRM medir se o advogado
+        # manteve (telemetria grava só o "bateu?", nunca o valor)
+        sessao["extraido"] = {k: (v or {}).get("valor") for k, v in (res.get("campos") or {}).items()}
+
+
+def _telemetria():
+    """Import tardio: telemetria é melhoria, e não pode derrubar a rota."""
+    try:
+        from prefill import telemetria
+        return telemetria
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def _recuperar(sid: str) -> dict:
@@ -168,8 +180,11 @@ async def analisar(arquivo: UploadFile = File(...)) -> dict:
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(status_code=422, detail=f"Não consegui analisar o PDF: {exc}") from exc
     meta = {"homologacao": res.get("homologacao"), "n_paginas": res.get("n_paginas"),
-            "escaneadas": res.get("escaneadas"), "pje": res.get("pje")}
+            "escaneadas": res.get("escaneadas"), "pje": res.get("pje"),
+            "cortes_sugeridos": res.get("cortes_sugeridos")}
     sid = _guardar(res["paginas"], meta, pdfs={PECA_PROCESSO: conteudo})
+    if (T := _telemetria()):
+        T.registrar_analise(sid, conteudo, res)
     return {
         "sessao": sid,
         "cortes_sugeridos": res.get("cortes_sugeridos"),
@@ -204,6 +219,9 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
         _descartar_conflito_de_grafia(res)
         _anotar_citacoes(str(corpo.get("sessao") or ""), res)
         res["sessao_paginas"] = corpo.get("sessao")
+    if (T := _telemetria()):
+        T.registrar_confirmacao(str(corpo.get("sessao") or ""), sessao["paginas"],
+                                (sessao["meta"] or {}).get("cortes_sugeridos") or [], cortes, res)
     return res
 
 
@@ -242,6 +260,8 @@ async def extrair_pecas(
         sid = _guardar([], {}, pdfs=pdfs)
         _anotar_citacoes(sid, res)
         res["sessao_paginas"] = sid
+        if (T := _telemetria()):
+            T.registrar_extracao_direta(sid, "pecas", [], conta_b, res, pecas=list(pdfs))
     return res
 
 
@@ -262,6 +282,8 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
         sid = _guardar([], {}, pdfs={PECA_PROCESSO: conteudo})
         _anotar_citacoes(sid, res)
         res["sessao_paginas"] = sid
+        if (T := _telemetria()):
+            T.registrar_extracao_direta(sid, "autonomo", [], conteudo, res)
     return res
 
 
@@ -306,3 +328,10 @@ def paginas_citadas(sessao: str, limite: int = 8) -> dict:
             if len(saida) >= max(1, min(int(limite), 20)):
                 return {"paginas": saida}
     return {"paginas": saida}
+
+
+def extraido_da_sessao(sid: str) -> dict | None:
+    """Para o envio ao CRM: o que a pré-análise desta sessão extraiu (ou None)."""
+    with _TRAVA:
+        sessao = _SESSOES.get(sid or "")
+        return dict(sessao.get("extraido") or {}) if sessao else None

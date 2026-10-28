@@ -38,6 +38,7 @@ export default function PreAnalisePage() {
   const [baixando, setBaixando] = useState(false);
   const [memorialBase64, setMemorialBase64] = useState<string | null>(null);
   const [numerosCrm, setNumerosCrm] = useState<{ numero_precatorio?: string; numero_oficio?: string }>({});
+  const [sessaoPrefill, setSessaoPrefill] = useState<string | null>(null);
   // O formulário EXATO que gerou o resultado na tela. O envio ao CRM gera o
   // memorial a partir daqui, não do `form` atual: se o advogado mexer num campo
   // sem recalcular, o PDF ainda é o do número que ele conferiu.
@@ -137,9 +138,10 @@ export default function PreAnalisePage() {
       {docs?.habilitado && (
         <Documentos
           estado={docs}
-          aoSemear={(patch, numeros) => {
+          aoSemear={(patch, numeros, sessao) => {
             mudar(patch);
             setNumerosCrm(numeros);
+            setSessaoPrefill(sessao);
           }}
         />
       )}
@@ -162,6 +164,7 @@ export default function PreAnalisePage() {
                   memorialBase64={memorialBase64}
                   obterMemorial={obterMemorial}
                   aoAdotarHonorario={(pct) => mudar({ hc: pct })}
+                  sessaoPrefill={sessaoPrefill}
                 />
               )}
             </>

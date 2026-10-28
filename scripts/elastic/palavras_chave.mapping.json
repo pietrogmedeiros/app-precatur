@@ -1,0 +1,152 @@
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "analysis": {
+      "filter": {
+        "pt_stop": {
+          "type": "stop",
+          "stopwords": "_portuguese_"
+        },
+        "pt_stem": {
+          "type": "stemmer",
+          "language": "light_portuguese"
+        }
+      },
+      "analyzer": {
+        "pt_sem_acento": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "pt_stop",
+            "pt_stem"
+          ]
+        },
+        "termo_exato": {
+          "tokenizer": "keyword",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "tipo_registro": {
+        "type": "keyword"
+      },
+      "tipo_documento": {
+        "type": "keyword"
+      },
+      "papel": {
+        "type": "keyword"
+      },
+      "status": {
+        "type": "keyword"
+      },
+      "termos": {
+        "type": "text",
+        "analyzer": "pt_sem_acento",
+        "fields": {
+          "exato": {
+            "type": "text",
+            "analyzer": "termo_exato"
+          },
+          "raw": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "regex": {
+        "type": "keyword",
+        "index": false,
+        "doc_values": false,
+        "ignore_above": 4096
+      },
+      "regex_flags": {
+        "type": "keyword"
+      },
+      "sistema_processual": {
+        "type": "keyword"
+      },
+      "sistema_gerador": {
+        "type": "keyword"
+      },
+      "tribunal": {
+        "type": "keyword"
+      },
+      "justica": {
+        "type": "keyword"
+      },
+      "tribunais_com_hit": {
+        "type": "keyword"
+      },
+      "sistemas_com_hit": {
+        "type": "keyword"
+      },
+      "tipo_interno": {
+        "type": "keyword"
+      },
+      "formato_indice": {
+        "type": "keyword"
+      },
+      "nivel": {
+        "type": "keyword"
+      },
+      "confianca": {
+        "type": "float"
+      },
+      "observacao": {
+        "type": "text",
+        "analyzer": "pt_sem_acento"
+      },
+      "atualizado_em": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "origem": {
+        "properties": {
+          "arquivo": {
+            "type": "keyword"
+          },
+          "simbolo": {
+            "type": "keyword"
+          },
+          "rotulo": {
+            "type": "keyword",
+            "ignore_above": 256
+          },
+          "linha": {
+            "type": "integer"
+          }
+        }
+      },
+      "evidencia": {
+        "type": "flattened"
+      },
+      "taxa": {
+        "type": "float"
+      },
+      "prioridade": {
+        "type": "keyword"
+      },
+      "prioridade_ordem": {
+        "type": "byte"
+      }
+    },
+    "_meta": {
+      "versao_esquema": "1.0",
+      "descricao": "Registro de palavras-chave por tribunal/sistema (ofício, cálculo homologado, sentença, acórdão). Gerado por montar_registro.py; ver manifesto.json."
+    }
+  }
+}

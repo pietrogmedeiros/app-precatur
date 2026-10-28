@@ -145,6 +145,27 @@ def card(deal_id: int) -> dict:
         raise _erro_do_bitrix(exc) from exc
 
 
+# campo do envio → campo que a pré-análise extrai
+_CAMPOS_MEDIDOS = {"numero_precatorio": "numero_precatorio", "numero_oficio": "numero_oficio",
+                   "honorarios_contratuais_pct": "honorarios_contratuais_pct",
+                   "natureza": "natureza_tributaria"}
+
+
+def _medir_envio(sessao: str, corpo: dict) -> None:
+    """Telemetria: o advogado manteve o que a pré-análise extraiu? Nunca falha."""
+    try:
+        from prefill import telemetria
+        from rotas_documentos import extraido_da_sessao
+        extraido = extraido_da_sessao(sessao)
+        if extraido is None:
+            return
+        telemetria.registrar_envio(
+            sessao, {k: extraido.get(v) for k, v in _CAMPOS_MEDIDOS.items()},
+            {k: corpo.get(k) for k in _CAMPOS_MEDIDOS})
+    except Exception:  # noqa: BLE001
+        pass
+
+
 @router.post("/enviar")
 def enviar(corpo: dict = Body(...)) -> dict:
     """Ensaio (`aplicar=false`) ou gravação no card.
@@ -218,6 +239,9 @@ def enviar(corpo: dict = Body(...)) -> dict:
         resposta = bx.enviar(deal_id, campos, linhas, aplicar=aplicar, autor=autor)
     except RuntimeError as exc:
         raise _erro_do_bitrix(exc) from exc
+
+    if aplicar and corpo.get("sessao_prefill"):
+        _medir_envio(str(corpo["sessao_prefill"]), corpo)
 
     resposta["pulados"] = pulados
     resposta["linhas_auditoria"] = linhas

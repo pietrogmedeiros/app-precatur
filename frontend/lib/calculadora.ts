@@ -315,6 +315,8 @@ export interface EnvioCrm {
   aviso_projecao?: string | null;
   referencia?: string | null;
   memorial_pdf?: string | null; // base64
+  /** sessão da pré-análise que semeou o formulário (telemetria de acerto). */
+  sessao_prefill?: string | null;
   aplicar: boolean;
 }
 export interface RespostaEnvio {

@@ -19,6 +19,7 @@ import {
 
 export function EnviarAoCrm({
   estado, resposta, referencia, numeros, memorialBase64, obterMemorial, aoAdotarHonorario,
+  sessaoPrefill = null,
 }: {
   estado: EstadoCrm;
   resposta: RespostaCalculo;
@@ -28,6 +29,7 @@ export function EnviarAoCrm({
   /** Gera (ou devolve o já gerado) memorial do resultado desta tela, em base64. */
   obterMemorial: () => Promise<string | null>;
   aoAdotarHonorario: (pct: string) => void;
+  sessaoPrefill?: string | null;
 }) {
   const [termo, setTermo] = useState("");
   const [achados, setAchados] = useState<CardCrm[] | null>(null);
@@ -83,6 +85,7 @@ export function EnviarAoCrm({
       aviso_projecao: resposta.aviso_projecao,
       referencia,
       memorial_pdf: memorial,
+      sessao_prefill: sessaoPrefill,
       aplicar,
     };
   }
