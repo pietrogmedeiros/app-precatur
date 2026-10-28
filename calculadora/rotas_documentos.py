@@ -20,7 +20,10 @@ from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/documentos", tags=["documentos"])
 
-# Sessões: id → {"paginas", "meta", "pdfs", "citacoes", "mapa", "expira"}.
+# Sessões: id → {"paginas", "meta", "pdfs", "citacoes", "mapa", "faixas", "expira"}.
+#
+# `faixas` = {"conta"|"oficio"|"sentenca": (a, b)}: as páginas do processo que
+# viraram cada peça. É o que o envio ao CRM recorta para anexar no card.
 #
 # `pdfs` é o que o VISUALIZADOR precisa: para desenhar a tarja amarela sobre o
 # número, `prefill.viewer` abre o PDF de novo — texto extraído não vira imagem.
@@ -74,6 +77,13 @@ def _anotar_citacoes(sid: str, res: dict) -> None:
         # o que a pré-análise extraiu, para o envio ao CRM medir se o advogado
         # manteve (telemetria grava só o "bateu?", nunca o valor)
         sessao["extraido"] = {k: (v or {}).get("valor") for k, v in (res.get("campos") or {}).items()}
+
+
+def _anotar_faixas(sid: str, faixas: dict) -> None:
+    with _TRAVA:
+        sessao = _SESSOES.get(sid)
+        if sessao is not None:
+            sessao["faixas"] = {k: v for k, v in faixas.items() if v}
 
 
 def _telemetria():
@@ -218,6 +228,11 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
     if res.get("ok"):
         _descartar_conflito_de_grafia(res)
         _anotar_citacoes(str(corpo.get("sessao") or ""), res)
+        n = len(sessao["paginas"])
+        _anotar_faixas(str(corpo.get("sessao") or ""), {
+            peca: P._corte_ref(next((c for c in cortes if c.get("tipo") == tipo), {}), n)
+            for peca, tipo in (("conta", P.TIPO_CONTA), ("oficio", P.TIPO_OFICIO),
+                               ("sentenca", P.TIPO_SENTENCA))})
         res["sessao_paginas"] = corpo.get("sessao")
     if (T := _telemetria()):
         T.registrar_confirmacao(str(corpo.get("sessao") or ""), sessao["paginas"],
@@ -281,6 +296,8 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
         _descartar_conflito_de_grafia(res)
         sid = _guardar([], {}, pdfs={PECA_PROCESSO: conteudo})
         _anotar_citacoes(sid, res)
+        _anotar_faixas(sid, {"conta": _faixa(res.get("conta_ref")),
+                             "oficio": _faixa(res.get("oficio_ref"))})
         res["sessao_paginas"] = sid
         if (T := _telemetria()):
             T.registrar_extracao_direta(sid, "autonomo", [], conteudo, res)
@@ -335,3 +352,45 @@ def extraido_da_sessao(sid: str) -> dict | None:
     with _TRAVA:
         sessao = _SESSOES.get(sid or "")
         return dict(sessao.get("extraido") or {}) if sessao else None
+
+
+def _faixa(ref) -> tuple[int, int] | None:
+    """"pp12-15" → (12, 15)."""
+    import re
+    m = re.fullmatch(r"pp(\d+)-(\d+)", str(ref or ""))
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+
+def pecas_da_sessao(sid: str, deal_id) -> tuple[dict | None, str | None]:
+    """Peças para anexar no card: {"conta"|"oficio"|"sentenca": [(nome, bytes)]}.
+
+    Modo peças: os PDFs que o advogado subiu, como vieram. Modo processo (corte
+    assistido ou autônomo): a faixa de cada peça, recortada do processo — nunca
+    o processo inteiro. Devolve também um aviso quando não dá para anexar (a
+    sessão vale 1h), para a tela dizer em vez de calar.
+    """
+    with _TRAVA:
+        _limpar()
+        sessao = _SESSOES.get(sid or "")
+        if sessao is None:
+            return None, ("Anexos das peças: a pré-análise expirou (vale 1h) ou o serviço "
+                          "reiniciou — não anexei conta/ofício. Rode a pré-análise de novo para anexar.")
+        pdfs, faixas = dict(sessao.get("pdfs") or {}), dict(sessao.get("faixas") or {})
+    P = _pipeline()
+    pecas: dict[str, list] = {}
+    if PECA_PROCESSO not in pdfs:  # modo peças
+        for peca, tipo in (("conta", P.TIPO_CONTA), ("oficio", P.TIPO_OFICIO), ("sentenca", P.TIPO_SENTENCA)):
+            arqs = [b for k, b in pdfs.items() if k == tipo or k.startswith(tipo + " ")]
+            if arqs:
+                pecas[peca] = [(f"{peca}_{deal_id}" + (f"_{i}" if len(arqs) > 1 else "") + ".pdf", b)
+                               for i, b in enumerate(arqs, 1)]
+        return pecas, None
+    if not faixas:
+        return None, None  # análise sem extração: nada foi confirmado para anexar
+    from prefill.cortar import cortar_pdf
+    ordem = [p for p in ("conta", "oficio", "sentenca") if p in faixas]
+    cortes = cortar_pdf(pdfs[PECA_PROCESSO], [
+        {"tipo": p, "pagina_inicio": faixas[p][0], "pagina_fim": faixas[p][1]} for p in ordem])
+    for c in cortes:
+        pecas[c["tipo"]] = [(f"{c['tipo']}_{deal_id}_{c['ref']}.pdf", c["pdf_bytes"])]
+    return pecas, None

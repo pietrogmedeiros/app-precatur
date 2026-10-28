@@ -165,6 +165,7 @@ export default function PreAnalisePage() {
                   obterMemorial={obterMemorial}
                   aoAdotarHonorario={(pct) => mudar({ hc: pct })}
                   sessaoPrefill={sessaoPrefill}
+                  natureza={(formDoCalculo ?? form).natureza}
                 />
               )}
             </>

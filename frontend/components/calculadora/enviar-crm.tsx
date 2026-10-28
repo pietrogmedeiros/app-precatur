@@ -19,7 +19,7 @@ import {
 
 export function EnviarAoCrm({
   estado, resposta, referencia, numeros, memorialBase64, obterMemorial, aoAdotarHonorario,
-  sessaoPrefill = null,
+  sessaoPrefill = null, natureza = null,
 }: {
   estado: EstadoCrm;
   resposta: RespostaCalculo;
@@ -30,6 +30,8 @@ export function EnviarAoCrm({
   obterMemorial: () => Promise<string | null>;
   aoAdotarHonorario: (pct: string) => void;
   sessaoPrefill?: string | null;
+  /** Natureza do crédito do formulário do cálculo (remuneratorio, previdenciario…). */
+  natureza?: string | null;
 }) {
   const [termo, setTermo] = useState("");
   const [achados, setAchados] = useState<CardCrm[] | null>(null);
@@ -80,7 +82,7 @@ export function EnviarAoCrm({
       honorarios_contratuais_pct: cen.honorarios_contratuais_pct,
       numero_precatorio: numeros.numero_precatorio ?? card?.numero_precatorio ?? null,
       numero_oficio: numeros.numero_oficio ?? null,
-      natureza: cen.pss_detalhe ? null : null,
+      natureza: natureza || null,
       atualizado_para: alvo,
       aviso_projecao: resposta.aviso_projecao,
       referencia,

@@ -195,13 +195,26 @@ def enviar(corpo: dict = Body(...)) -> dict:
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(status_code=422, detail=f"memorial_pdf inválido: {exc}") from exc
 
+    # As peças da pré-análise (conta, ofício, sentença) vão junto, recortadas do
+    # processo quando ele veio inteiro. Antes ia `pecas=None` sempre e o card
+    # ficava só com o memorial (card #8081, 28/10/2026).
+    pecas, aviso_pecas = None, None
+    if corpo.get("sessao_prefill"):
+        try:
+            from rotas_documentos import pecas_da_sessao
+            pecas, aviso_pecas = pecas_da_sessao(str(corpo["sessao_prefill"]), deal_id)
+        except Exception as exc:  # noqa: BLE001 — sem anexo, o envio segue
+            aviso_pecas = f"Anexos das peças: não consegui recortar ({type(exc).__name__})."
+
     campos, pulados = bx.montar(
         deal, valor_liquido=liquido, hon_contratuais=hon_con,
         atualizado_para=alvo,
         numero_precatorio=(corpo.get("numero_precatorio") or "").strip() or None,
         numero_oficio=(corpo.get("numero_oficio") or "").strip() or None,
         natureza=(corpo.get("natureza") or None),
-        memorial_pdf=pdf_bytes, pecas=None)
+        memorial_pdf=pdf_bytes, pecas=pecas)
+    if aviso_pecas:
+        pulados.append(aviso_pecas)
 
     # As linhas da auditoria são as da TELA (o que o advogado leu), não um
     # resumo derivado dos campos — é esse texto que o comercial lê no card.
