@@ -25,6 +25,8 @@ from collections import defaultdict
 
 import numpy as np
 
+from .marcadores import conta_forte
+
 MODELO_EMB = "intfloat/multilingual-e5-base"
 
 QUERIES = {
@@ -45,6 +47,10 @@ BM25_QUERIES = {
     "bm_difer": "diferenca lancada diferenca devida valor corrigido competencia",
     "bm_dadosliq": "dados da liquidacao",
     "bm_reqpag": "requisicao de pagamento requisitorio precatorio rpv",
+    # levantamento 28/10/2026: o formulário da Res. CNJ 303/2019 (TJMG) e a
+    # totalização da contadoria/Projef, que os termos acima não alcançavam
+    "bm_res303": "requisicao para pagamento de precatorio beneficiario principal juizo de origem",
+    "bm_totaliz": "total partes totalizacao sucumbencias criterios parametros calculo",
 }
 
 RRF_K = 60
@@ -135,7 +141,7 @@ def _runs(paginas: set[int]) -> list[tuple[int, int]]:
 
 def parece_conta(pag: dict) -> bool:
     """Sinal DETERMINÍSTICO: cabeçalho de sistema OU tabela que fecha a aritmética."""
-    if _FORTE.search(pag.get("texto") or ""):
+    if _FORTE.search(pag.get("texto") or "") or conta_forte(pag.get("texto") or ""):
         return True
     orc = pag.get("oraculo")
     return bool(orc and orc.get("razao", 0) >= 0.5)
@@ -181,7 +187,7 @@ def buscar(paginas: list[dict], embedder: Embedder | None = None) -> dict:
         orc = p.get("oraculo") or {}
         razao = orc.get("razao", 0.0) or 0.0
         s = 0.0
-        if _FORTE.search(p.get("texto") or ""):
+        if _FORTE.search(p.get("texto") or "") or conta_forte(p.get("texto") or ""):
             s += 1.0
         if razao >= 0.5:
             s += 1.5 + razao      # tabela que fecha = forte sinal de conta operativa

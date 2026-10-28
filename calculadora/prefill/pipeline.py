@@ -33,6 +33,7 @@ from .deterministico import valor_presente
 from .extracao import extrair, extrair_natureza, extrair_oficio
 from .homologacao import achar_homologacao
 from . import ocr as _ocr
+from . import marcadores as _M
 from . import pje as _pje
 from .llm import LLM, salvage_json
 from .substrato import MIN_TEXTO_NATIVO, processar_pdf
@@ -61,28 +62,15 @@ TIPOS = [TIPO_CONTA, TIPO_OFICIO, TIPO_OUTRO]
 # Sinais para SUGERIR o rótulo da faixa (o humano corrige). Precisam DISTINGUIR
 # conta de ofício — por isso NÃO reuso `radar._FORTE`/`radar.parece_conta`, que
 # tratam "requisição de pagamento" como sinal de conta (é recall do radar, amplo
-# de propósito) e rotulariam todo ofício como conta.
-_RE_CONTA_FORTE = re.compile(
-    r"projef|resumo do c[áa]lculo|c[áa]lculos judiciais|\bsicar\b|demonstrativo de c[áa]lculo|"
-    r"mem[óo]ria de c[áa]lculo|e-?pcalc|pje-?calc|pfe-?inss|diferen[çc]a devida|"
-    r"dados da liquida[çc][ãa]o|conta de liquida[çc][ãa]o",
-    re.I,
-)
-# Marcadores FORTES de ofício requisitório (não a menção genérica a "precatório",
-# que aparece no processo todo).
-_RE_OFICIO_FORTE = re.compile(
-    r"of[íi]cio\s+requisit[óo]rio|requisi[çc][ãa]o\s+de\s+pagamento|"
-    r"requisi[çc][ãa]o\s+de\s+pequeno\s+valor|\bRPV\b|"
-    r"n[º.]?\s*(?:do\s+)?(?:of[íi]cio|precat[óo]rio|requisit[óo]rio)",
-    re.I,
-)
+# de propósito) e rotulariam todo ofício como conta. O catálogo, com o papel de
+# cada marcador e a medição que o justifica, está em `marcadores`.
 
 
 def _parece_conta_estrita(p: dict) -> bool:
     """Sinal de CONTA que não colide com ofício: tabela que FECHA a aritmética
-    (oráculo) OU cabeçalho de sistema de conta. `requisição de pagamento` (que o
-    radar trata como conta) fica de fora — é marcador de ofício."""
-    if _RE_CONTA_FORTE.search(p.get("texto") or ""):
+    (oráculo) OU cabeçalho de conta (`marcadores.conta_forte`). `requisição de
+    pagamento` (que o radar trata como conta) fica de fora — é marcador de ofício."""
+    if _M.conta_forte(p.get("texto") or ""):
         return True
     orc = p.get("oraculo") or {}
     return (orc.get("razao", 0) or 0) >= 0.5
@@ -240,14 +228,14 @@ def montar_query(campos: dict, data_apres: date | None) -> dict:
 
 # ── Rotulagem das faixas sugeridas pelo radar (SUGERE, não decide) ─────────
 def _label_pagina(p: dict, pg: int, homol: dict | None) -> str | None:
-    """Rótulo de UMA página: conta (sinal estrito ou é a pág da homologação),
-    ofício (marcador forte) ou None (indefinido). Conta tem prioridade quando a
-    própria página dispara os dois — não perder a conta OBRIGATÓRIA."""
+    """Rótulo de UMA página: conta (sinal estrito, é a pág da homologação ou o
+    catálogo decide conta), ofício (o catálogo decide ofício) ou None
+    (indefinido). Conta tem prioridade quando a própria página dispara os dois —
+    não perder a conta OBRIGATÓRIA."""
     if _parece_conta_estrita(p) or (homol and homol.get("pagina") == pg):
         return TIPO_CONTA
-    if _RE_OFICIO_FORTE.search(p.get("texto") or ""):
-        return TIPO_OFICIO
-    return None
+    tipo = _M.classificar(p.get("texto") or "")["tipo"]
+    return {_M.CONTA: TIPO_CONTA, _M.OFICIO: TIPO_OFICIO}.get(tipo)
 
 
 def _rotular_run(paginas: list[dict], a: int, b: int, homol: dict | None) -> str:

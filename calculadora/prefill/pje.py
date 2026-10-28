@@ -55,7 +55,14 @@ RECUO_COLUNA_TIPO = 60.0
 
 _RE_DECISAO = re.compile(r"senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o", re.I)
 _RE_CONTA_TITULO = re.compile(
-    r"laudo|c[áa]lculo|planilha|conta de liquida|demonstrativo|contadoria|parecer cont", re.I)
+    r"laudo|c[áa]lculo|planilha|conta de liquida|demonstrativo|contadoria|parecer cont|"
+    r"estudo t[ée]cnico", re.I)
+# Título que CONTÉM "cálculo" mas é a peça de uma parte, não a conta: no
+# levantamento de 28/10/2026, "Impugnação ao Cumprimento de Sentença" (17 casos),
+# "Impugnação aos cálculos de liquidação" e "Execução / Cumprimento de Sentença"
+# (13). Não ganham o ponto do título; se uma decisão os citar, os votos valem.
+_RE_TITULO_NAO_CONTA = re.compile(
+    r"impugna|manifesta|peti[çc]|intima|cumprimento de senten|embargos|recurso|agravo", re.I)
 # Decisão citando o documento da conta: "laudo pericial de Id. 4609108021",
 # "ff. 06/07 do id. 4609108021". A palavra-chave tem de vir ANTES do Id, perto.
 _RE_CITA_CONTA = re.compile(
@@ -66,7 +73,8 @@ _RE_DISPOSITIVO = re.compile(
 _RE_ATE_DATA = re.compile(r"at[ée]\s+(?:a data de\s+)?(\d{2}/\d{2}/\d{4})", re.I)
 _RE_OFICIO_FORM = re.compile(
     r"OF[ÍI]CIO\s+PRECAT[ÓO]RIO|REQUISI[ÇC][ÃA]O\s+(?:PARA|DE)\s+PAGAMENTO|"
-    r"REQUISI[ÇC][ÃA]O\s+DE\s+PEQUENO\s+VALOR", re.I)
+    r"REQUISI[ÇC][ÃA]O\s+DE\s+PEQUENO\s+VALOR|TIPO\s+DE\s+REQUISI[ÇC][ÃA]O|"
+    r"RESOLU[ÇC][ÃA]O\s+N?[º°.]?\s*303/2019", re.I)
 # item do formulário: "4.15. Valor Bruto:" — sempre no início da linha
 _RE_ITEM = re.compile(r"(?m)^[ \t]*(\d{1,2}(?:\.\d{1,2}){1,3})\.?[ \t]+")
 
@@ -201,6 +209,11 @@ def _decisoes(docs: dict, textos_doc: dict) -> list[dict]:
     return out
 
 
+def _titulo_de_conta(info: dict) -> bool:
+    rotulo = f"{info['titulo']} {info['tipo']}"
+    return bool(_RE_CONTA_TITULO.search(rotulo)) and not _RE_TITULO_NAO_CONTA.search(rotulo)
+
+
 def _achar_conta(docs: dict, textos_doc: dict, decisoes: list[dict],
                  paginas: list[dict], oficios_ids: set[str]) -> dict | None:
     """Documento da conta homologada: votos das decisões + âncora de valor.
@@ -219,7 +232,7 @@ def _achar_conta(docs: dict, textos_doc: dict, decisoes: list[dict],
     decisao_ids = {d for d, i in docs.items() if _RE_DECISAO.search(f"{i['titulo']} {i['tipo']}")}
     candidatos = {d for d in docs
                   if d not in decisao_ids and d not in oficios_ids
-                  and (votos[d] or _RE_CONTA_TITULO.search(docs[d]["titulo"] + " " + docs[d]["tipo"]))}
+                  and (votos[d] or _titulo_de_conta(docs[d]))}
     if not candidatos:
         return None
 
@@ -236,7 +249,7 @@ def _achar_conta(docs: dict, textos_doc: dict, decisoes: list[dict],
                     break
             if ancora:
                 break
-        titulo_conta = bool(_RE_CONTA_TITULO.search(docs[d]["titulo"] + " " + docs[d]["tipo"]))
+        titulo_conta = _titulo_de_conta(docs[d])
         score = votos[d] + (5 if ancora else 0) + (1 if titulo_conta else 0)
         chave = (score, docs[d]["pagina_inicio"])  # empate: o mais recente
         if melhor is None or chave > melhor[0]:
