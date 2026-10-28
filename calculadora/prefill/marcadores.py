@@ -44,6 +44,12 @@ SENTENCA = "sentenca"
 NAO_ALVO = "nao_alvo"
 
 FORTE, FRACO, CONTEUDO, VETO = "forte", "fraco", "conteudo", "veto"
+# SINAL: vocabulário que a sentença também usa (SELIC, IPCA-E, juros
+# moratórios). Sozinho não decide — foi ele que fez 32 páginas de sentença
+# virarem "conta" nos anexos do Bitrix (28/10/2026, TJMS e TRF5); só soma ao
+# lado de um marcador de CONTEÚDO de conta (ver `classificar`).
+SINAL = "sinal"
+DECISAO = "decisao"
 
 # mínimo de marcadores de conteúdo distintos para decidir sem um forte
 MIN_CONTEUDO_CONTA = 3
@@ -117,15 +123,15 @@ MARCADORES: tuple[Marcador, ...] = (
        r"total (?:atualizado|do calculo|geral|devido|da conta|\(a ?\+ ?b\))"),
     _m(_L + "conta_generica:vocab:periodo-do-calculo-data-do-calculo-atual", CONTA, CONTEUDO,
        r"periodo d[oe] calculo|data (?:do )?calculo|atualizacao (?:para|ate) \d"),
-    _m(_L + "conta_generica:re_cabecalho:re_cabecalho", CONTA, CONTEUDO,
+    _m(_L + "conta_generica:re_cabecalho:re_cabecalho", CONTA, SINAL,
        r"demonstrativo de (?:de )?calculos?|calculos? de atualiza|atualizacao (?:monetaria )?d[oe]s? "
        r"(?:debito|valor|credito)|(?:resumo|conferencia|planilha) d[eo]s? calculo|"
        r"liquidacao de sentenca|calculo de liquida"),
     _m(_L + "app:conta:valor_corrigido", CONTA, CONTEUDO, r"valor (?:corrigido|atualizado|original)"),
     _m(_L + "app:conta:datas_processuais", CONTA, CONTEUDO,
        r"data (?:liquidacao|ajuizamento|citacao|distribuicao|prescricao):"),
-    _m(_L + "app:conta:juros_moratorios", CONTA, CONTEUDO, r"juros (?:de mora|moratorios)"),
-    _m(_L + "app:conta:indices", CONTA, CONTEUDO, r"\bselic\b|\bipca-?e\b|\binpc\b|poupanca"),
+    _m(_L + "app:conta:juros_moratorios", CONTA, SINAL, r"juros (?:de mora|moratorios)"),
+    _m(_L + "app:conta:indices", CONTA, SINAL, r"\bselic\b|\bipca-?e\b|\binpc\b|poupanca"),
     _m(_L + "conta_generica:vocab:contadoria", CONTA, CONTEUDO, r"contadoria"),
 
     # ── CONTA · veto (RMI/PBC, extratos do INSS: tabela, mas não é a conta) ─
@@ -181,7 +187,26 @@ MARCADORES: tuple[Marcador, ...] = (
        r"ora reiterad|(?:espera|pede) deferimento|termos em que"),
     _m(_L + "app:oficio:intimacao_certidao", OFICIO, VETO,
        r"\bfica(?:m)? (?:a parte |as partes )?intimad|\bintimem-se\b|\bcertifico\b"),
+
+    # ── DECISÃO · veto do que decide por conteúdo (conta e ofício) ────────
+    # a sentença fala de juros, índices, RPV e honorários; o que a distingue
+    # é a forma (levantamento: precisão 0,72-0,98 entre os tipos de peça)
+    _m(_L + "decisao_detector:strong_patterns:ante_o_exposto", DECISAO, VETO,
+       r"ante o exposto|posto isso|diante do exposto|isto posto|pelo exposto"),
+    _m(_L + "decisao_detector:strong_patterns:julgo_procedente", DECISAO, VETO,
+       r"julgo (?:total |parcialmente )?(?:procedente|improcedente)|\bjulgo extint"),
+    _m(_L + "decisao_detector:strong_patterns:acordao", DECISAO, VETO,
+       r"\bacordam\b|vistos, relatados e discutidos|^ ?(?:ementa|acordao)\b", re.M),
+    _m(_L + "decisao_detector:strong_patterns:relatorio", DECISAO, VETO,
+       r"e o relatorio|^ ?sentenca ?$|publique-se|\bdecido\b", re.M),
 )
+
+# conta "citada": o formulário do ofício diz "conforme conta de liquidação" e
+# "memória de cálculo". Com um forte de OFÍCIO na página, estes não ganham dele
+# (86 páginas de ofício viravam conta nos anexos do Bitrix, 28/10/2026)
+CONTA_CITAVEL = frozenset(_L + x for x in (
+    "app:conta:conta_liquidacao", "radar:forte:memoria_calculo", "radar:forte:dados_liquidacao",
+    "radar:forte:demonstrativo_calculo", "radar:forte:calculos_judiciais"))
 
 # qualificador: ofício provisório ("prévia", "minuta") — não muda o tipo, vai no motivo
 PROVISORIO = re.compile(
@@ -290,27 +315,36 @@ def classificar(texto: str, n_valores: int | None = None) -> dict:
         prefixos = {mk.id for mk in _POR_TIPO_PAPEL.get((tipo, papel), ())}
         return [i for i in achados if i in prefixos]
 
-    if ids(CONTA, FORTE):
+    conta_f, oficio_f = ids(CONTA, FORTE), ids(OFICIO, FORTE)
+    if conta_f and not (oficio_f and set(conta_f) <= CONTA_CITAVEL):
         out.update(tipo=CONTA, nivel="forte")
         return out
-    if ids(OFICIO, FORTE):
+    if oficio_f:
         out.update(tipo=OFICIO, nivel="forte")
         return out
     # rótulo do sistema dizendo que é petição/certidão/sentença: só o forte vale
     if sis:
         return out
 
-    veto_of = bool(ids(OFICIO, VETO))
+    decisao = bool(ids(DECISAO, VETO))
+    veto_of = decisao or bool(ids(OFICIO, VETO))
     cont_of = ids(OFICIO, CONTEUDO)
     if not veto_of and ids(OFICIO, FRACO) and cont_of:
         out.update(tipo=OFICIO, nivel="fraco+conteudo")
         return out
 
     cont_ct = ids(CONTA, CONTEUDO)
+    if cont_ct:
+        # SINAL (SELIC, juros, índices) volta a somar, mas só ao lado de um
+        # conteúdo de verdade e longe de vocabulário de decisão: sozinho, ele
+        # rotulava sentença; ignorado, a conta do TJMS caía de 98% para 80%.
+        # Medido nos anexos do Bitrix (300 cards, 28/10/2026): conta 85% → 88%,
+        # sentença confundida 5% → 7% (a regra antiga: 83% e 15%)
+        cont_ct = cont_ct + ids(CONTA, SINAL)
     if n_valores is None:
         n_valores = len(_VALOR.findall(texto or ""))
     minimo = MIN_CONTEUDO_CONTA_COM_TABELA if n_valores >= MIN_VALORES_TABELA else MIN_CONTEUDO_CONTA
-    if not ids(CONTA, VETO) and len(cont_ct) >= minimo:
+    if not decisao and not ids(CONTA, VETO) and len(cont_ct) >= minimo:
         out.update(tipo=CONTA, nivel="conteudo")
         return out
     if not veto_of and len(cont_of) >= MIN_CONTEUDO_OFICIO + 1:
@@ -327,7 +361,7 @@ def catalogo() -> list[dict]:
         out.append({
             "id": mk.id + (":app" if not mk.id.startswith(_L + "app:") else ""),
             "tipo_registro": "marcador",
-            "tipo_documento": ["calculo_homologado" if mk.tipo == CONTA else "oficio"],
+            "tipo_documento": [{CONTA: "calculo_homologado", OFICIO: "oficio"}.get(mk.tipo, "sentenca")],
             "papel": mk.papel,
             "termos": [mk.regex.pattern],
             "regex": mk.regex.pattern,
@@ -336,7 +370,7 @@ def catalogo() -> list[dict]:
             "origem": {"arquivo": "calculadora/prefill/marcadores.py", "simbolo": "MARCADORES",
                        "rotulo": mk.id},
             "status": "ativo_no_app",
-            "prioridade": "muito_importante" if mk.tipo == OFICIO else "importante",
-            "prioridade_ordem": 1 if mk.tipo == OFICIO else 2,
+            "prioridade": {OFICIO: "muito_importante", CONTA: "importante"}.get(mk.tipo, "menos_importante"),
+            "prioridade_ordem": {OFICIO: 1, CONTA: 2}.get(mk.tipo, 3),
         })
     return out

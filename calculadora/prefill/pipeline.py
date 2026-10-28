@@ -228,14 +228,19 @@ def montar_query(campos: dict, data_apres: date | None) -> dict:
 
 # ── Rotulagem das faixas sugeridas pelo radar (SUGERE, não decide) ─────────
 def _label_pagina(p: dict, pg: int, homol: dict | None) -> str | None:
-    """Rótulo de UMA página: conta (sinal estrito, é a pág da homologação ou o
-    catálogo decide conta), ofício (o catálogo decide ofício) ou None
-    (indefinido). Conta tem prioridade quando a própria página dispara os dois —
-    não perder a conta OBRIGATÓRIA."""
+    """Rótulo de UMA página: conta, ofício ou None (indefinido).
+
+    O ofício FORTE vem primeiro: o formulário cita a conta ("conforme conta de
+    liquidação") e a tabela dele FECHA (principal + juros = bruto), então tanto
+    o cabeçalho quanto o oráculo o rotulavam como conta — 86 páginas de ofício
+    nos anexos do Bitrix (28/10/2026). Fora isso, conta tem prioridade quando a
+    página dispara os dois: não perder a conta OBRIGATÓRIA."""
+    cls = _M.classificar(p.get("texto") or "")
+    if cls["tipo"] == _M.OFICIO and cls["nivel"] in ("forte", "rotulo_sistema"):
+        return TIPO_OFICIO
     if _parece_conta_estrita(p) or (homol and homol.get("pagina") == pg):
         return TIPO_CONTA
-    tipo = _M.classificar(p.get("texto") or "")["tipo"]
-    return {_M.CONTA: TIPO_CONTA, _M.OFICIO: TIPO_OFICIO}.get(tipo)
+    return {_M.CONTA: TIPO_CONTA, _M.OFICIO: TIPO_OFICIO}.get(cls["tipo"])
 
 
 def _rotular_run(paginas: list[dict], a: int, b: int, homol: dict | None) -> str:

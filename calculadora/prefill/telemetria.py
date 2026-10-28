@@ -39,7 +39,7 @@ from . import marcadores as M
 
 IDX_ANALISES = "precatur-pre-analises"
 IDX_PAGINAS = "precatur-pre-analises-paginas"
-VERSAO = "2026-10-28"   # muda quando a lógica de sugestão muda: separa as medições
+VERSAO = "2026-10-28b"   # muda quando a lógica de sugestão muda: separa as medições
 MAX_PAGINAS_DOCS = 400
 _FILA_MAX = 2000
 

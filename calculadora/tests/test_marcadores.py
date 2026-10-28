@@ -62,7 +62,7 @@ def test_totalizacao_da_contadoria_sem_sistema_gerador():
 
 
 def test_conta_por_conteudo_com_tabela():
-    t = ("Valor corrigido  Juros de mora\n" + "1.000,00 2.000,00 3.000,00 4.000,00 5.000,00\n")
+    t = ("Valor corrigido  Fator de correção\n" + "1.000,00 2.000,00 3.000,00 4.000,00 5.000,00\n")
     assert tipo(t) == M.CONTA
 
 
@@ -125,3 +125,40 @@ def test_ids_unicos_e_catalogo_no_formato_do_indice():
     assert len(ids) == len(set(ids))
     for doc in M.catalogo():
         assert doc["tipo_registro"] == "marcador" and doc["regex"]
+
+
+# ── achados da avaliação nos anexos do Bitrix (300 cards, 28/10/2026) ───
+def test_oficio_que_cita_a_conta_de_liquidacao_continua_oficio():
+    # 86 páginas de ofício viravam conta por "conta de liquidação"/"memória de cálculo"
+    t = ("REQUISIÇÃO DE PAGAMENTO\nValor conforme conta de liquidação homologada\n"
+         "Memória de cálculo anexa\n")
+    assert tipo(t) == M.OFICIO
+    assert _label_pagina({"texto": t, "oraculo": {"razao": 1.0}}, 1, None) == TIPO_OFICIO
+
+
+def test_conta_de_verdade_ainda_ganha_do_oficio_citado():
+    t = "RESUMO DO CÁLCULO\nRequisição de pagamento a expedir\n"
+    assert tipo(t) == M.CONTA
+
+
+def test_sentenca_com_indices_e_valores_nao_vira_conta():
+    t = ("Ante o exposto, julgo procedente. Correção pelo IPCA-E e juros moratórios, "
+         "depois SELIC; valor corrigido e fator de correção conforme liquidação de sentença.\n"
+         + "1.000,00 " * 6)
+    assert tipo(t) is None
+
+
+def test_sentenca_com_rpv_e_honorarios_nao_vira_oficio():
+    t = ("É o relatório. Decido. Expeça-se RPV. Honorários sucumbenciais de 10%. "
+         "Beneficiário: a parte autora. Data-base da conta.")
+    assert tipo(t) is None
+
+
+def test_sinal_soma_com_conteudo_de_verdade():
+    # conta do TJMS: "valor corrigido" + SELIC + juros, com tabela
+    t = "Valor corrigido  SELIC  Juros de mora\n" + "1.000,00 " * 6
+    assert tipo(t) == M.CONTA
+
+
+def test_sinal_sozinho_nao_faz_conta():
+    assert tipo("SELIC e juros de mora conforme o IPCA-E\n" + "1.000,00 " * 6) is None

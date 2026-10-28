@@ -3,6 +3,7 @@
     python scripts/elastic/precatur_es.py criar      # índices + aliases + data views do Kibana
     python scripts/elastic/precatur_es.py carregar   # levantamento + catálogo do app → palavras-chave
     python scripts/elastic/precatur_es.py relatorio  # precisão real de cada marcador e acerto dos cortes
+    python scripts/elastic/precatur_es.py relatorio precatur-avaliacao-paginas  # idem, na avaliação offline
 
 Lê ELASTIC_URL, ELASTIC_USER (padrão "elastic"), ELASTIC_PASSWORD ou
 ELASTIC_API_KEY, ELASTIC_VERIFY_TLS e KIBANA_URL do ambiente ou do `.env` da
@@ -37,6 +38,7 @@ DATA_VIEWS = {  # id → (padrão, campo de tempo, nome)
     "precatur-palavras-chave": ("precatur-palavras-chave", None, "Palavras-chave (levantamento + app)"),
     "precatur-pre-analises": ("precatur-pre-analises", "@timestamp", "Pré-análises"),
     "precatur-pre-analises-paginas": ("precatur-pre-analises-paginas", "@timestamp", "Pré-análises · páginas"),
+    "precatur-avaliacao-paginas": ("precatur-avaliacao-paginas", "@timestamp", "Avaliação Bitrix · páginas"),
 }
 
 
@@ -156,11 +158,11 @@ def carregar() -> None:
 
 
 # ── relatório: o laço de melhoria ────────────────────────────────────────
-def relatorio() -> None:
+def relatorio(indice: str = "precatur-pre-analises-paginas") -> None:
     """Precisão por marcador = páginas em que disparou e o advogado confirmou o
     mesmo tipo / páginas em que disparou. Sai do índice de páginas, ou seja,
     do uso real — não do corpus de agosto."""
-    st, r = es("POST", "/precatur-pre-analises-paginas/_search", {
+    st, r = es("POST", f"/{indice}/_search", {
         "size": 0,
         "aggs": {"m": {"terms": {"field": "marcadores", "size": 200},
                        "aggs": {"conf": {"terms": {"field": "tipo_confirmado", "size": 10}}}},
@@ -196,4 +198,4 @@ if __name__ == "__main__":
     acoes = {"criar": criar, "carregar": carregar, "relatorio": relatorio}
     if len(sys.argv) < 2 or sys.argv[1] not in acoes:
         sys.exit(__doc__)
-    acoes[sys.argv[1]]()
+    acoes[sys.argv[1]](*sys.argv[2:])
