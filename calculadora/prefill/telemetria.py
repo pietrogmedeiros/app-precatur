@@ -329,9 +329,11 @@ def registrar_extracao_direta(sessao: str, modo: str, paginas: list[dict], pdf: 
     if not habilitada():
         return
     try:
-        if not paginas:  # sem substrato aqui: o CNJ extraído ainda diz o tribunal
+        if not paginas:  # a rota não tem o substrato: lê o texto nativo das pontas do PDF
+            paginas = _paginas_das_pontas(pdf)
             num = ((res.get("campos") or {}).get("numero_precatorio") or {}).get("valor")
-            paginas = [{"texto": str(num)}] if num else []
+            if num:
+                paginas.append({"texto": str(num)})
         doc = {"@timestamp": _agora(), "analise_id": sessao, "modo": modo, "versao": VERSAO,
                "pdf_hash": _hash(pdf), "pecas": pecas or [],
                "processo": {**sinais_processo(paginas), "n_paginas": res.get("paginas"),
@@ -340,6 +342,22 @@ def registrar_extracao_direta(sessao: str, modo: str, paginas: list[dict], pdf: 
         _enviar([_indexar(IDX_ANALISES, sessao, doc)])
     except Exception as e:  # noqa: BLE001
         print(f"[telemetria] extracao: {type(e).__name__}: {e}", file=sys.stderr)
+
+
+def _paginas_das_pontas(pdf: bytes | None, n: int = 12) -> list[dict]:
+    """Texto nativo das primeiras e últimas páginas: é onde estão o número CNJ
+    (capa, índice) e o carimbo do sistema. Sem OCR, sem guardar nada — só para
+    `sinais_processo` achar o tribunal no modo autônomo e no de peças."""
+    if not pdf:
+        return []
+    try:
+        import fitz
+        with fitz.open(stream=pdf, filetype="pdf") as doc:
+            idx = sorted(set(range(min(n, doc.page_count))) |
+                         set(range(max(0, doc.page_count - n // 2), doc.page_count)))
+            return [{"texto": doc[i].get_text()} for i in idx]
+    except Exception:  # noqa: BLE001
+        return []
 
 
 def _igual(a, b) -> bool:

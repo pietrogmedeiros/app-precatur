@@ -116,3 +116,12 @@ def test_sem_elastic_url_nao_envia(monkeypatch):
     monkeypatch.setattr(T, "_fila", type("F", (), {"put_nowait": lambda self, x: chamou.append(x)})())
     T.registrar_confirmacao("s1", _PAGINAS, _SUG, _CONF, _RES)
     assert not chamou and not T.habilitada()
+
+
+def test_modo_autonomo_acha_o_tribunal_no_pdf(capturados):
+    import fitz
+    doc = fitz.open()
+    doc.new_page().insert_text((50, 72), "Processo 5001234-56.2021.8.13.0024")
+    T.registrar_extracao_direta("s3", "autonomo", [], doc.tobytes(), {"ok": True, "campos": {}})
+    corpo = capturados[-1][1]
+    assert corpo["processo"]["tribunal"] == "TJMG" and corpo["processo"]["justica"] == "estadual"
