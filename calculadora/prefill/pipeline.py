@@ -66,15 +66,6 @@ TIPOS = [TIPO_CONTA, TIPO_OFICIO, TIPO_OUTRO]
 # cada marcador e a medição que o justifica, está em `marcadores`.
 
 
-def _parece_conta_estrita(p: dict) -> bool:
-    """Sinal de CONTA que não colide com ofício: tabela que FECHA a aritmética
-    (oráculo) OU cabeçalho de conta (`marcadores.conta_forte`). `requisição de
-    pagamento` (que o radar trata como conta) fica de fora — é marcador de ofício."""
-    if _M.conta_forte(p.get("texto") or ""):
-        return True
-    orc = p.get("oraculo") or {}
-    return (orc.get("razao", 0) or 0) >= 0.5
-
 # ente extraído (texto livre) → opção EXATA da calculadora (senão o advogado digita)
 _ENTE_KNOWN = [
     ("uniao", "União"), ("união", "União"), ("fazenda nacional", "União"),
@@ -230,17 +221,21 @@ def montar_query(campos: dict, data_apres: date | None) -> dict:
 def _label_pagina(p: dict, pg: int, homol: dict | None) -> str | None:
     """Rótulo de UMA página: conta, ofício ou None (indefinido).
 
-    O ofício FORTE vem primeiro: o formulário cita a conta ("conforme conta de
-    liquidação") e a tabela dele FECHA (principal + juros = bruto), então tanto
-    o cabeçalho quanto o oráculo o rotulavam como conta — 86 páginas de ofício
-    nos anexos do Bitrix (28/10/2026). Fora isso, conta tem prioridade quando a
-    página dispara os dois: não perder a conta OBRIGATÓRIA."""
+    O ofício que o catálogo afirma (forte, rótulo do sistema ou formulário que
+    CITA a conta) vem primeiro: o formulário diz "conforme conta de
+    liquidação" e a tabela dele FECHA (principal + juros = bruto), então
+    cabeçalho e oráculo o rotulavam como conta — 86 páginas de ofício nos
+    anexos do Bitrix (28/10/2026). Depois, conta: pelo catálogo (que já tira a
+    conta só citada numa decisão), pela página da homologação ou pela tabela
+    que fecha — esta ganha de ofício fraco, para não perder a conta OBRIGATÓRIA."""
     cls = _M.classificar(p.get("texto") or "")
-    if cls["tipo"] == _M.OFICIO and cls["nivel"] in ("forte", "rotulo_sistema"):
+    if cls["tipo"] == _M.OFICIO and cls["nivel"] in ("forte", "rotulo_sistema", "citacao"):
         return TIPO_OFICIO
-    if _parece_conta_estrita(p) or (homol and homol.get("pagina") == pg):
+    orc = p.get("oraculo") or {}
+    if (cls["tipo"] == _M.CONTA or (homol and homol.get("pagina") == pg)
+            or (orc.get("razao", 0) or 0) >= 0.5):
         return TIPO_CONTA
-    return {_M.CONTA: TIPO_CONTA, _M.OFICIO: TIPO_OFICIO}.get(cls["tipo"])
+    return {_M.OFICIO: TIPO_OFICIO}.get(cls["tipo"])
 
 
 def _rotular_run(paginas: list[dict], a: int, b: int, homol: dict | None) -> str:

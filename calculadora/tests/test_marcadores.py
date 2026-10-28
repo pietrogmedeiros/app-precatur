@@ -162,3 +162,28 @@ def test_sinal_soma_com_conteudo_de_verdade():
 
 def test_sinal_sozinho_nao_faz_conta():
     assert tipo("SELIC e juros de mora conforme o IPCA-E\n" + "1.000,00 " * 6) is None
+
+
+# ── 2ª amostra do Bitrix (cards 301-600, 28/10/2026) ────────────────────
+def test_formulario_sem_cabecalho_que_cita_memoria_de_calculo_e_oficio():
+    # TJES: sem "requisição de pagamento" na página, só os campos do formulário
+    t = "Memória de cálculo: anexa\nData-base: 01/2024\nValor bruto: 120.000,00\n"
+    r = M.classificar(t)
+    assert r["tipo"] == M.OFICIO and r["nivel"] == "citacao"
+    assert _label_pagina({"texto": t, "oraculo": {"razao": 1.0}}, 1, None) == TIPO_OFICIO
+
+
+def test_conta_com_memoria_de_calculo_e_tabela_continua_conta():
+    # o cabeçalho de verdade (resumo do cálculo) não é "citável"
+    t = "RESUMO DO CÁLCULO\nMemória de cálculo\nData-base 01/2024\nValor bruto 1.000,00"
+    assert tipo(t) == M.CONTA
+
+
+def test_acordao_trabalhista_com_diferencas_devidas_nao_e_conta():
+    t = "ACORDAM os Desembargadores... diferença devida ao reclamante, conforme fundamentação."
+    assert tipo(t) is None
+
+
+def test_tabela_que_fecha_ganha_de_oficio_fraco():
+    t = "RPV\nNatureza do crédito"  # ofício fraco + conteúdo
+    assert _label_pagina({"texto": t, "oraculo": {"razao": 0.9}}, 1, None) == TIPO_CONTA

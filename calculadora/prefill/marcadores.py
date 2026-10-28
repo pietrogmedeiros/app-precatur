@@ -208,6 +208,8 @@ CONTA_CITAVEL = frozenset(_L + x for x in (
     "app:conta:conta_liquidacao", "radar:forte:memoria_calculo", "radar:forte:dados_liquidacao",
     "radar:forte:demonstrativo_calculo", "radar:forte:calculos_judiciais"))
 
+DIFERENCA_DEVIDA = _L + "radar:forte:diferenca_devida"
+
 # qualificador: ofício provisório ("prévia", "minuta") — não muda o tipo, vai no motivo
 PROVISORIO = re.compile(
     r"oficio ?n[o.]? ?[:.\-]? ?previa\b|\b(?:previa|minuta) (?:de )?(?:oficio n|requisicao de pagament)"
@@ -316,6 +318,20 @@ def classificar(texto: str, n_valores: int | None = None) -> dict:
         return [i for i in achados if i in prefixos]
 
     conta_f, oficio_f = ids(CONTA, FORTE), ids(OFICIO, FORTE)
+    decisao = bool(ids(DECISAO, VETO))
+    if conta_f and not oficio_f:
+        citada = set(conta_f) <= CONTA_CITAVEL
+        # formulário SEM cabeçalho forte (TJES, TJRJ): "memória de cálculo" ao
+        # lado de "data-base" e "valor bruto" é o ofício citando a conta.
+        # Medido em 600 cards do Bitrix: ofício confundido com conta 15% → 4%,
+        # sem mudar a conta (88%/2%)
+        if citada and len(ids(OFICIO, CONTEUDO)) >= 2 and not ids(OFICIO, VETO):
+            out.update(tipo=OFICIO, nivel="citacao")
+            return out
+        # acórdão trabalhista fala em "diferenças devidas" (TRT2): na decisão,
+        # conta só citada não é conta
+        if decisao and set(conta_f) <= CONTA_CITAVEL | {DIFERENCA_DEVIDA}:
+            conta_f = []
     if conta_f and not (oficio_f and set(conta_f) <= CONTA_CITAVEL):
         out.update(tipo=CONTA, nivel="forte")
         return out
@@ -326,7 +342,6 @@ def classificar(texto: str, n_valores: int | None = None) -> dict:
     if sis:
         return out
 
-    decisao = bool(ids(DECISAO, VETO))
     veto_of = decisao or bool(ids(OFICIO, VETO))
     cont_of = ids(OFICIO, CONTEUDO)
     if not veto_of and ids(OFICIO, FRACO) and cont_of:
