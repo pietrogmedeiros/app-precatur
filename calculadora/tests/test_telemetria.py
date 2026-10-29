@@ -68,6 +68,7 @@ def _corpo(acao, corpo):
     return corpo["doc"] if "update" in acao else corpo
 
 
+@pytest.mark.skipif(not _MAPS.is_dir(), reason="mapping fica no App Precatur (scripts/elastic)")
 def test_documentos_cabem_no_mapping_strict(capturados):
     T.registrar_analise("s1", b"%PDF", {"paginas": _PAGINAS, "cortes_sugeridos": _SUG,
                                         "n_paginas": 3, "escaneadas": 0,
