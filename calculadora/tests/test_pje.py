@@ -247,6 +247,11 @@ def test_decisao_decisiva_e_a_mais_recente_e_nao_a_copia_da_intimacao(res):
     assert "13.000,00" not in d["valores"]
 
 
+def test_sentencas_pelo_tipo_do_indice_sem_a_copia_da_intimacao(res):
+    # o embargo tem título "Despacho" e tipo "Sentença": vale o tipo
+    assert [d["id"] for d in res["sentencas"]] == [_SENT, _EMB]
+
+
 # ── ofícios ──────────────────────────────────────────────────────────────
 def test_oficio_principal_lido_por_rotulo(res):
     o = next(o for o in res["oficios"] if o["beneficiario_tipo"] == "principal")
@@ -351,3 +356,5 @@ def test_preencher_pula_o_juiz_e_manda_a_pista(pdf):
     # rede do formulário preenche o que a IA devolveu nulo
     assert r["campos"]["numero_oficio"]["valor"] == "11500072/2022"
     assert {a["tipo"] for a in r["alertas_pje"]} >= {"oficio_aritmetica", "sucumbencia_separada"}
+    # a sentença e o embargo vão como faixas para anexar no card
+    assert len(r["sentenca_refs"]) == 2

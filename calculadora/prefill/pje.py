@@ -54,6 +54,11 @@ MAX_PAGINAS_INDICE = 10
 RECUO_COLUNA_TIPO = 60.0
 
 _RE_DECISAO = re.compile(r"senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o", re.I)
+# Peça "sentença / acórdão" para anexar no card: pela coluna TIPO do índice, não
+# pelo título — "Cumprimento de Sentença" é título de petição.
+_RE_TIPO_SENTENCA = re.compile(r"^\s*(?:senten[çc]a|ac[óo]rd[ãa]o)", re.I)
+# teto de anexos: processo com muitos agravos não pode virar uma pilha no card
+MAX_SENTENCAS = 6
 _RE_CONTA_TITULO = re.compile(
     r"laudo|c[áa]lculo|planilha|conta de liquida|demonstrativo|contadoria|parecer cont|"
     r"estudo t[ée]cnico", re.I)
@@ -207,6 +212,17 @@ def _decisoes(docs: dict, textos_doc: dict) -> list[dict]:
                         "datas": [_iso(x) for x in _RE_ATE_DATA.findall(disp)]})
     out.sort(key=lambda x: (x["data"] or "", x["pagina_inicio"]), reverse=True)
     return out
+
+
+def _sentencas(docs: dict) -> list[dict]:
+    """Sentenças e acórdãos do processo, na ordem dos autos. A cópia que vai na
+    intimação tem tipo "Intimação" e fica de fora sozinha; no excesso, ficam as
+    MAIS RECENTES (embargos e acórdão corrigem a sentença)."""
+    out = [{"id": d, "titulo": i["titulo"], "tipo": i["tipo"], "data": i["data"],
+            "pagina_inicio": i["pagina_inicio"], "pagina_fim": i["pagina_fim"]}
+           for d, i in docs.items() if _RE_TIPO_SENTENCA.search(i["tipo"] or "")]
+    out.sort(key=lambda x: x["pagina_inicio"])
+    return out[-MAX_SENTENCAS:]
 
 
 def _titulo_de_conta(info: dict) -> bool:
@@ -481,6 +497,7 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
             "documentos": sorted(docs.values(), key=lambda x: x["pagina_inicio"]),
             "conta": conta,
             "decisao": decisoes[0] if decisoes else None,
+            "sentencas": _sentencas(docs),
             "oficios": oficios,
             "alertas": alertas,
             "cortes": cortes,

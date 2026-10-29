@@ -57,6 +57,24 @@ def test_modo_pecas_anexa_os_pdfs_como_vieram():
     assert pecas["conta"][0][0] == "conta_7.pdf"
 
 
+def test_modo_processo_anexa_cada_sentenca_e_acordao():
+    # sentença e acórdão são documentos separados nos autos (Victor, 29/10/2026:
+    # "está pegando ofício e cálculo, mas não a sentença/acórdão")
+    sid = RD._guardar([], {}, pdfs={RD.PECA_PROCESSO: _pdf(12)})
+    RD._anotar_faixas(sid, {"conta": (3, 5), "oficio": None, "sentenca": [(7, 7), (10, 11)]})
+    pecas, aviso = RD.pecas_da_sessao(sid, 9)
+    assert aviso is None and set(pecas) == {"conta", "sentenca"}
+    assert [n for n, _ in pecas["sentenca"]] == ["sentenca_9_pp7-7.pdf", "sentenca_9_pp10-11.pdf"]
+    assert [_n_paginas(b) for _, b in pecas["sentenca"]] == [1, 2]
+
+
+def test_modo_processo_sem_sentenca_nao_anexa_lista_vazia():
+    sid = RD._guardar([], {}, pdfs={RD.PECA_PROCESSO: _pdf(6)})
+    RD._anotar_faixas(sid, {"conta": (2, 3), "sentenca": []})
+    pecas, _ = RD.pecas_da_sessao(sid, 1)
+    assert set(pecas) == {"conta"}
+
+
 def test_sessao_expirada_avisa_em_vez_de_calar():
     pecas, aviso = RD.pecas_da_sessao("nao-existe", 1)
     assert pecas is None and "expirou" in aviso

@@ -688,7 +688,12 @@ def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = N
     if not conta_ref:
         return {"ok": False, "erro": "não localizei a conta homologada",
                 "paginas": len(paginas), "escaneadas": escaneadas, "homologacao": homol}
-    return _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pj)
+    res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pj)
+    # Sentença / acórdão: só para anexar no card. Fora do PJe (sem índice) não
+    # há como achá-los sem IA, e a lista fica vazia.
+    res["sentenca_refs"] = [f"pp{s['pagina_inicio']}-{s['pagina_fim']}"
+                            for s in (pj or {}).get("sentencas") or []]
+    return res
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ router = APIRouter(prefix="/documentos", tags=["documentos"])
 
 # Sessões: id → {"paginas", "meta", "pdfs", "citacoes", "mapa", "faixas", "expira"}.
 #
-# `faixas` = {"conta"|"oficio"|"sentenca": (a, b)}: as páginas do processo que
+# `faixas` = {"conta"|"oficio"|"sentenca": (a, b) ou [(a, b), ...]}: as páginas do processo que
 # viraram cada peça. É o que o envio ao CRM recorta para anexar no card.
 #
 # `pdfs` é o que o VISUALIZADOR precisa: para desenhar a tarja amarela sobre o
@@ -297,7 +297,8 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
         sid = _guardar([], {}, pdfs={PECA_PROCESSO: conteudo})
         _anotar_citacoes(sid, res)
         _anotar_faixas(sid, {"conta": _faixa(res.get("conta_ref")),
-                             "oficio": _faixa(res.get("oficio_ref"))})
+                             "oficio": _faixa(res.get("oficio_ref")),
+                             "sentenca": [f for f in map(_faixa, res.get("sentenca_refs") or []) if f]})
         res["sessao_paginas"] = sid
         if (T := _telemetria()):
             T.registrar_extracao_direta(sid, "autonomo", [], conteudo, res)
@@ -388,9 +389,12 @@ def pecas_da_sessao(sid: str, deal_id) -> tuple[dict | None, str | None]:
     if not faixas:
         return None, None  # análise sem extração: nada foi confirmado para anexar
     from prefill.cortar import cortar_pdf
-    ordem = [p for p in ("conta", "oficio", "sentenca") if p in faixas]
+    # a faixa é (a, b), ou uma lista delas (sentença e acórdão são documentos
+    # separados nos autos: cada um vira um anexo)
     cortes = cortar_pdf(pdfs[PECA_PROCESSO], [
-        {"tipo": p, "pagina_inicio": faixas[p][0], "pagina_fim": faixas[p][1]} for p in ordem])
+        {"tipo": p, "pagina_inicio": a, "pagina_fim": b}
+        for p in ("conta", "oficio", "sentenca") if p in faixas
+        for a, b in (faixas[p] if isinstance(faixas[p], list) else [faixas[p]])])
     for c in cortes:
-        pecas[c["tipo"]] = [(f"{c['tipo']}_{deal_id}_{c['ref']}.pdf", c["pdf_bytes"])]
+        pecas.setdefault(c["tipo"], []).append((f"{c['tipo']}_{deal_id}_{c['ref']}.pdf", c["pdf_bytes"]))
     return pecas, None
