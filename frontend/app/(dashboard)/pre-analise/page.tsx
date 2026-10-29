@@ -43,6 +43,9 @@ export default function PreAnalisePage() {
   // memorial a partir daqui, não do `form` atual: se o advogado mexer num campo
   // sem recalcular, o PDF ainda é o do número que ele conferiu.
   const [formDoCalculo, setFormDoCalculo] = useState<FormularioCalculo | null>(null);
+  // Troca a `key` dos Documentos para zerar o que eles guardam (PDF escolhido,
+  // extração na tela) quando o advogado começa outra análise.
+  const [rodada, setRodada] = useState(0);
 
   useEffect(() => {
     carregarOpcoes().then(setOpcoes).catch(() => setOpcoes(null));
@@ -54,6 +57,25 @@ export default function PreAnalisePage() {
   const mudar = useCallback((patch: Partial<FormularioCalculo>) => {
     setForm((f) => ({ ...f, ...patch }));
   }, []);
+
+  // O resultado e o memorial são do caso anterior: saem junto com o formulário.
+  function esquecerResultado() {
+    setResposta(null);
+    setFormDoCalculo(null);
+    setMemorialBase64(null);
+    setErros([]);
+    setFalha(null);
+  }
+
+  // Volta a tela ao começo. Antes o botão só tirava o resultado, e os
+  // honorários do caso anterior seguiam no formulário (Victor, teste3, 29/10/2026).
+  function novaAnalise() {
+    esquecerResultado();
+    setForm(FORMULARIO_VAZIO);
+    setNumerosCrm({});
+    setSessaoPrefill(null);
+    setRodada((r) => r + 1);
+  }
 
   async function aoCalcular() {
     setCalculando(true);
@@ -117,9 +139,9 @@ export default function PreAnalisePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {resposta && (
-            <Button variant="outline" onClick={() => { setResposta(null); setErros([]); setMemorialBase64(null); }}>
-              <RotateCcw className="h-4 w-4" /> Limpar resultado
+          {(resposta || form !== FORMULARIO_VAZIO) && (
+            <Button variant="outline" onClick={novaAnalise}>
+              <RotateCcw className="h-4 w-4" /> Limpar e começar outra análise
             </Button>
           )}
         </div>
@@ -137,9 +159,14 @@ export default function PreAnalisePage() {
 
       {docs?.habilitado && (
         <Documentos
+          key={rodada}
           estado={docs}
           aoSemear={(patch, numeros, sessao) => {
-            mudar(patch);
+            // Parte do formulário VAZIO, não do atual: o patch só traz o que a
+            // extração achou, e um campo que este processo não tem (honorários,
+            // PSS) ficaria com o valor do processo anterior.
+            esquecerResultado();
+            setForm({ ...FORMULARIO_VAZIO, ...patch });
             setNumerosCrm(numeros);
             setSessaoPrefill(sessao);
           }}
