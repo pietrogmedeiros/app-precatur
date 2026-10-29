@@ -349,7 +349,7 @@ class _FakeLLM:
 
 def test_preencher_pula_o_juiz_e_manda_a_pista(pdf):
     llm = _FakeLLM()
-    r = P.preencher(pdf_bytes=pdf, llm=llm)
+    r = P.preencher(pdf_bytes=pdf, llm=llm, ocr_fn=None)
     assert r["ok"], r
     assert r["prova"]["ok"] is True
     assert any("PISTA (lida dos autos, sem IA)" in p for p in llm.prompts)
@@ -412,3 +412,53 @@ Valor atualizado do crédito: (oitocentos e dois mil reais) R$ 802.000,00""")
     assert o["campos"]["valor_total_requisitado"] == "802.000,00"
     assert o["campos"]["numero_oficio"] == "001/2025"
     assert o["beneficiario_tipo"] == "principal"
+
+
+# ── OCR sob demanda: só nas páginas escaneadas da conta e do ofício ──────
+
+
+def test_ocr_roda_na_pagina_escaneada_do_oficio(pdf, paginas):
+    lidas = []
+
+    def ocr(page):
+        lidas.append(page.number + 1)
+        return "R$ 20.000,00"
+
+    r = P.preencher(pdf_bytes=pdf, llm=_FakeLLM(), ocr_fn=ocr)
+    assert r["ok"], r
+    escaneadas = [p["pagina"] for p in paginas if not p.get("nativa")]
+    assert lidas == escaneadas  # a única escaneada do processo é a do ofício
+    assert r["ocr_paginas"] == lidas
+    assert r["conta_por_ocr"] is False
+
+
+def test_conta_escaneada_vai_ao_modelo_com_o_texto_do_ocr():
+    doc = fitz.open()
+    for _ in range(3):
+        doc.new_page()
+    pdf = doc.tobytes()
+    paginas = [{"pagina": n, "nativa": False, "texto": "", "tabela": []} for n in (1, 2, 3)]
+
+    class LLM(_FakeLLM):
+        def responder(self, prompt, max_tokens=8192):
+            self.prompts.append(prompt)
+            return '{"valor_total": {"valor": "20.000,00", "citacao_pagina": 2}}', {}
+
+    llm = LLM()
+    r = P.extrair_cortes(paginas, [{"tipo": P.TIPO_CONTA, "pagina_inicio": 2, "pagina_fim": 2}],
+                         llm=llm, pdf=pdf, ocr_fn=lambda page: "Valor Total R$ 20.000,00")
+    assert r["ok"], r
+    assert "20.000,00" in llm.prompts[0]
+    assert r["campos"]["valor_total"]["valor"] == "20.000,00"  # não foi recusado
+    assert r["ocr_paginas"] == [2] and r["conta_por_ocr"] is True
+    assert paginas[0]["texto"] == "" and paginas[2]["texto"] == ""  # fora da faixa
+
+
+def test_ocr_sob_demanda_tem_teto(monkeypatch):
+    monkeypatch.setattr(P, "MAX_PAGINAS_OCR", 2)
+    doc = fitz.open()
+    for _ in range(5):
+        doc.new_page()
+    paginas = [{"pagina": n, "nativa": False, "texto": ""} for n in range(1, 6)]
+    lidas = P._ocr_nas_faixas(doc.tobytes(), paginas, [(1, 5)], lambda page: "x")
+    assert lidas == [1, 2]

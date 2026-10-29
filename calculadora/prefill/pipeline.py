@@ -36,7 +36,7 @@ from . import ocr as _ocr
 from . import marcadores as _M
 from . import pje as _pje
 from .llm import LLM, salvage_json
-from .substrato import MIN_TEXTO_NATIVO, processar_pdf
+from .substrato import MIN_TEXTO_NATIVO, VALOR, normalizar_pagina, processar_pdf
 
 # campo extraído → param que a calculadora consome
 MAPA_PARAM = {
@@ -538,9 +538,57 @@ def _corte_ref(corte: dict, n_paginas: int | None = None) -> tuple[int, int] | N
     return (a, b) if a <= b else None
 
 
+# Teto do OCR sob demanda: ~4s por página, e o app espera o motor até 300s.
+MAX_PAGINAS_OCR = 30
+
+
+def _ocr_nas_faixas(fonte, paginas: list[dict], faixas, ocr_fn=_PADRAO) -> list[int]:
+    """OCR só nas páginas ESCANEADAS da conta e do ofício, depois de localizados.
+
+    Nos modos de processo inteiro o substrato roda sem OCR: o processo do TJES
+    do card #6105 tem 247 páginas escaneadas, uns 16 minutos de tesseract. A
+    localização não precisa delas (o carimbo do PJe continua texto), mas a
+    extração precisa: conta escaneada chegava vazia ao modelo e nenhum campo
+    saía. Preenche `paginas` no lugar e devolve as páginas lidas por OCR.
+    """
+    if ocr_fn is _PADRAO:
+        ocr_fn = _ocr.ler_pagina if _ocr.disponivel() else None
+    if not ocr_fn or fonte is None:
+        return []
+    idx = {p["pagina"]: p for p in paginas}
+    alvo = sorted({n for f in faixas if f for n in range(f[0], f[1] + 1)})
+    pendentes = [n for n in alvo if n in idx and not idx[n].get("nativa")
+                 and not (idx[n].get("texto") or "").strip()][:MAX_PAGINAS_OCR]
+    if not pendentes:
+        return []
+    import fitz
+    doc = (fitz.open(stream=bytes(fonte), filetype="pdf") if isinstance(fonte, (bytes, bytearray))
+           else fitz.open(fonte))
+    lidas = []
+    try:
+        for n in pendentes:
+            page = doc[n - 1]
+            normalizar_pagina(page)  # como o substrato faz antes do OCR
+            texto = ocr_fn(page) or ""
+            if texto.strip():
+                idx[n]["texto"] = texto
+                idx[n]["valores"] = VALOR.findall(texto)
+                lidas.append(n)
+    finally:
+        doc.close()
+    return lidas
+
+
+def _conta_por_ocr(res: dict, lidas: list[int], conta_ref: tuple[int, int]) -> None:
+    """A tela exige conferência contra a página quando a conta veio do OCR."""
+    if res.get("ok"):
+        res["ocr_paginas"] = lidas
+        res["conta_por_ocr"] = any(conta_ref[0] <= n <= conta_ref[1] for n in lidas)
+
+
 def extrair_cortes(paginas: list[dict], cortes: list[dict],
                    homol: dict | None = None, llm: LLM | None = None,
-                   pje: dict | None = None) -> dict:
+                   pje: dict | None = None, pdf=None, ocr_fn=_PADRAO) -> dict:
     """PASSO 2 do assistente: extrai os campos da calculadora dos cortes que o
     humano CONFIRMOU. `cortes` = [{tipo, pagina_inicio, pagina_fim}].
 
@@ -559,7 +607,9 @@ def extrair_cortes(paginas: list[dict], cortes: list[dict],
         return {"ok": False, "erro": "faixa da conta com páginas inválidas."}
     oficio_ref = _corte_ref(oficios[0], n) if oficios else None
 
+    lidas = _ocr_nas_faixas(pdf, paginas, (conta_ref, oficio_ref), ocr_fn)
     res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pje)
+    _conta_por_ocr(res, lidas, conta_ref)
     if res.get("ok"):
         res["multi_conta"] = len(contas) > 1
         res["multi_oficio"] = len(oficios) > 1
@@ -665,12 +715,15 @@ def extrair_pecas(conta=None, oficio=None, sentencas=None,
     return res
 
 
-def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = None, ocr_fn=None) -> dict:
+def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = None,
+              ocr_fn=_PADRAO) -> dict:
     """PDF → campos da calculadora (seções 1, 3, 4, 5), modo AUTÔNOMO (juiz LLM
     escolhe a conta e o ofício). Ponto de entrada do expander "Anexar processo"."""
     llm = llm or LLM()
     fonte = pdf_bytes if pdf_bytes is not None else pdf_path
-    paginas = processar_pdf(fonte, ocr_fn=ocr_fn)
+    # Sem OCR aqui: o processo inteiro pode ter centenas de páginas escaneadas.
+    # Ele roda depois, só nas páginas da conta e do ofício (`_ocr_nas_faixas`).
+    paginas = processar_pdf(fonte)
     textos = [p.get("texto") or "" for p in paginas]
     escaneadas = sum(1 for p in paginas if not p.get("nativa"))
 
@@ -688,7 +741,9 @@ def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = N
     if not conta_ref:
         return {"ok": False, "erro": "não localizei a conta homologada",
                 "paginas": len(paginas), "escaneadas": escaneadas, "homologacao": homol}
+    lidas = _ocr_nas_faixas(fonte, paginas, (conta_ref, oficio_ref), ocr_fn)
     res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pj)
+    _conta_por_ocr(res, lidas, conta_ref)
     # Sentença / acórdão: só para anexar no card. Fora do PJe (sem índice) não
     # há como achá-los sem IA, e a lista fica vazia.
     res["sentenca_refs"] = [f"pp{s['pagina_inicio']}-{s['pagina_fim']}"

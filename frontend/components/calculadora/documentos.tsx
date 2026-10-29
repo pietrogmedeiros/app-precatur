@@ -280,6 +280,13 @@ function Extracao({
           A prova aritmética NÃO fechou (diferença de {prova.dif_pct}%). Confira os valores antes de usar.
         </Aviso>
       )}
+      {resultado.conta_por_ocr && (
+        <Aviso tom="atencao">
+          <AlertTriangle className="mr-1 inline h-3 w-3" />
+          A conta é imagem e foi lida por OCR, que pode trocar um dígito sem parecer errado.
+          Confira cada valor contra a página antes de calcular.
+        </Aviso>
+      )}
       {resultado.multi_conta && (
         <Aviso tom="atencao">Mais de uma conta marcada — a calculadora é um crédito por vez; usei a primeira.</Aviso>
       )}

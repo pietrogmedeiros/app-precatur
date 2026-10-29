@@ -220,7 +220,8 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
     try:
         res = P.extrair_cortes(sessao["paginas"], cortes,
                                homol=(sessao["meta"] or {}).get("homologacao"), llm=_llm(),
-                               pje=(sessao["meta"] or {}).get("pje"))
+                               pje=(sessao["meta"] or {}).get("pje"),
+                               pdf=(sessao.get("pdfs") or {}).get(PECA_PROCESSO))
     except HTTPException:
         raise
     except Exception as exc:  # noqa: BLE001 — rede/LLM instável não derruba a tela
