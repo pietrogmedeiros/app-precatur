@@ -358,3 +358,57 @@ def test_preencher_pula_o_juiz_e_manda_a_pista(pdf):
     assert {a["tipo"] for a in r["alertas_pje"]} >= {"oficio_aritmetica", "sucumbencia_separada"}
     # a sentença e o embargo vão como faixas para anexar no card
     assert len(r["sentenca_refs"]) == 2
+
+
+# ── TJES (card #6105, 29/10/2026): Id de 8 dígitos, que quebra linha no índice,
+# sentença como "Documento de comprovação" e formulário de requisição próprio ──
+
+
+def test_carimbo_com_id_de_8_digitos():
+    assert J.mapear_paginas(["texto\nNum. 28498531 - Pág. 1"]) == ["28498531"]
+
+
+def test_indice_junta_id_que_quebrou_linha():
+    doc = fitz.open()
+    p = doc.new_page()
+    p.insert_text((38, 100), "Id.", fontsize=8)
+    p.insert_text((68, 100), "Data", fontsize=8)
+    p.insert_text((143, 100), "Documento", fontsize=8)
+    p.insert_text((490, 100), "Tipo", fontsize=8)
+    for y, fim, titulo in ((130, "537", "Doc. 04 - Sentença"), (170, "539", "Doc. 06 - Acórdão")):
+        p.insert_text((38, y), "28498", fontsize=8)
+        p.insert_text((68, y), "25/07/2023", fontsize=8)
+        p.insert_text((115, y), "09:13", fontsize=8)
+        p.insert_text((143, y), titulo, fontsize=8)
+        p.insert_text((440, y), "Documento de comprovação", fontsize=8)
+        p.insert_text((43, y + 12), fim, fontsize=8)
+    ind = J.ler_indice(doc)
+    assert set(ind) == {"28498537", "28498539"}
+    assert ind["28498537"]["titulo"] == "Doc. 04 - Sentença"
+    assert ind["28498537"]["tipo"] == "Documento de comprovação"
+
+
+@pytest.mark.parametrize("titulo, tipo, esperado", [
+    ("Doc. 04 - Sentença", "Documento de comprovação", True),
+    ("Doc. 08 - Acórdão de julgamento dos embargos", "Documento de comprovação", True),
+    ("Despacho", "Sentença", True),
+    ("Cumprimento de Sentença", "Petição Inicial", False),
+    ("Sentença", "Intimação", False),
+    ("Impugnação à sentença", "Petição (outras)", False),
+])
+def test_sentenca_pelo_titulo_quando_o_tipo_e_generico(titulo, tipo, esperado):
+    assert J._e_sentenca({"titulo": titulo, "tipo": tipo}) is esperado
+
+
+def test_formulario_de_requisicao_do_tjes():
+    doc = fitz.open()
+    p = doc.new_page()
+    _escrever(p, """REQUISIÇÃO DE PRECATÓRIO/RPV N.º 001/2025
+C – NATUREZA DO CRÉDITO
+( ) Honorários Sucumbenciais e Indenizações por morte ou invalidez.
+F – VALOR REQUISITADO
+Valor atualizado do crédito: (oitocentos e dois mil reais) R$ 802.000,00""")
+    o = J.ler_oficio(doc, 1, 1)
+    assert o["campos"]["valor_total_requisitado"] == "802.000,00"
+    assert o["campos"]["numero_oficio"] == "001/2025"
+    assert o["beneficiario_tipo"] == "principal"

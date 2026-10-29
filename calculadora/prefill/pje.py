@@ -42,7 +42,8 @@ import fitz
 from .deterministico import centavos, paginas_com_valor
 from .substrato import VALOR, texto_util
 
-_ID = r"\d{9,11}"
+# TJMG usa 10 dígitos; TJES, 8 (card #6105, 29/10/2026: "Num. 28498531 - Pág.")
+_ID = r"\d{8,11}"
 _RE_CARIMBO = re.compile(rf"Num\.\s*({_ID})\s*-\s*P[áa]g\.\s*(\d+)")
 _RE_DATA = re.compile(r"\b(\d{2})/(\d{2})/(\d{4})\b")
 _RE_CNJ = re.compile(r"\b\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}\b")
@@ -54,9 +55,14 @@ MAX_PAGINAS_INDICE = 10
 RECUO_COLUNA_TIPO = 60.0
 
 _RE_DECISAO = re.compile(r"senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o", re.I)
-# Peça "sentença / acórdão" para anexar no card: pela coluna TIPO do índice, não
-# pelo título — "Cumprimento de Sentença" é título de petição.
+# Peça "sentença / acórdão" para anexar no card. Primeiro pela coluna TIPO; o
+# título só vale quando o tipo é genérico: no cumprimento de sentença do TJES
+# (#6105) a sentença e o acórdão da ação de origem entram como "Documento de
+# comprovação", com título "Doc. 04 - Sentença". E "Cumprimento de Sentença" é
+# título de petição, por isso as exclusões.
 _RE_TIPO_SENTENCA = re.compile(r"^\s*(?:senten[çc]a|ac[óo]rd[ãa]o)", re.I)
+_RE_TITULO_SENTENCA = re.compile(r"\b(?:senten[çc]a|ac[óo]rd[ãa]o)\b", re.I)
+_RE_NAO_SENTENCA = re.compile(r"cumprimento de senten|impugna|peti[çc]|manifesta|intima|certid", re.I)
 # teto de anexos: processo com muitos agravos não pode virar uma pilha no card
 MAX_SENTENCAS = 6
 _RE_CONTA_TITULO = re.compile(
@@ -79,7 +85,12 @@ _RE_ATE_DATA = re.compile(r"at[ée]\s+(?:a data de\s+)?(\d{2}/\d{2}/\d{4})", re.
 _RE_OFICIO_FORM = re.compile(
     r"OF[ÍI]CIO\s+PRECAT[ÓO]RIO|REQUISI[ÇC][ÃA]O\s+(?:PARA|DE)\s+PAGAMENTO|"
     r"REQUISI[ÇC][ÃA]O\s+DE\s+PEQUENO\s+VALOR|TIPO\s+DE\s+REQUISI[ÇC][ÃA]O|"
-    r"RESOLU[ÇC][ÃA]O\s+N?[º°.]?\s*303/2019", re.I)
+    r"RESOLU[ÇC][ÃA]O\s+N?[º°.]?\s*303/2019|"
+    r"REQUISI[ÇC][ÃA]O\s+DE\s+PRECAT[ÓO]RIO", re.I)
+# Formulário próprio do TJES (#6105): seções com letra ("F – VALOR
+# REQUISITADO"), sem os itens numerados da Res. 303; o valor vem por extenso
+# entre o rótulo e o "R$".
+_RE_VALOR_TJES = re.compile(r"Valor atualizado do cr[ée]dito", re.I)
 # item do formulário: "4.15. Valor Bruto:" — sempre no início da linha
 _RE_ITEM = re.compile(r"(?m)^[ \t]*(\d{1,2}(?:\.\d{1,2}){1,3})\.?[ \t]+")
 
@@ -140,12 +151,18 @@ def ler_indice(doc: fitz.Document) -> dict[str, dict]:
             if "Tipo" in palavras and any(p.startswith("Id") for p in palavras):
                 corte_tipo = ws[palavras.index("Tipo")][0] - RECUO_COLUNA_TIPO
                 continue
-            if (len(ws) >= 3 and re.fullmatch(_ID, palavras[0])
+            if (len(ws) >= 3 and re.fullmatch(r"\d{3,11}", palavras[0])
                     and _RE_DATA.fullmatch(palavras[1]) and re.fullmatch(r"\d\d:\d\d", palavras[2])):
                 atual = palavras[0]
+                x_data = ws[1][0]
                 indice[atual] = {"data": _iso(palavras[1]), "titulo": "", "tipo": "",
                                  "ordem": len(indice)}
                 resto = ws[3:]
+            elif atual and re.fullmatch(r"\d+", palavras[0]) and ws[0][0] < x_data:
+                # Id que quebrou linha na coluna estreita (TJES: "28498" / "531")
+                indice[atual + palavras[0]] = indice.pop(atual)
+                atual += palavras[0]
+                resto = ws[1:]
             elif atual and ws and ws[0][0] > 150:  # continuação: só nas colunas de texto
                 resto = ws
             else:
@@ -154,7 +171,7 @@ def ler_indice(doc: fitz.Document) -> dict[str, dict]:
             for w in resto:
                 campo = "tipo" if corte_tipo is not None and w[0] >= corte_tipo else "titulo"
                 indice[atual][campo] = (indice[atual][campo] + " " + w[4]).strip()
-    return indice
+    return {d: i for d, i in indice.items() if re.fullmatch(_ID, d)}
 
 
 # ── 2 · carimbo: página → documento ──────────────────────────────────────
@@ -214,13 +231,21 @@ def _decisoes(docs: dict, textos_doc: dict) -> list[dict]:
     return out
 
 
+def _e_sentenca(info: dict) -> bool:
+    tipo, titulo = info["tipo"] or "", info["titulo"] or ""
+    if _RE_TIPO_SENTENCA.search(tipo):
+        return True
+    return (bool(_RE_TITULO_SENTENCA.search(titulo))
+            and not _RE_NAO_SENTENCA.search(titulo) and not _RE_NAO_SENTENCA.search(tipo))
+
+
 def _sentencas(docs: dict) -> list[dict]:
     """Sentenças e acórdãos do processo, na ordem dos autos. A cópia que vai na
     intimação tem tipo "Intimação" e fica de fora sozinha; no excesso, ficam as
     MAIS RECENTES (embargos e acórdão corrigem a sentença)."""
     out = [{"id": d, "titulo": i["titulo"], "tipo": i["tipo"], "data": i["data"],
             "pagina_inicio": i["pagina_inicio"], "pagina_fim": i["pagina_fim"]}
-           for d, i in docs.items() if _RE_TIPO_SENTENCA.search(i["tipo"] or "")]
+           for d, i in docs.items() if _e_sentenca(i)]
     out.sort(key=lambda x: x["pagina_inicio"])
     return out[-MAX_SENTENCAS:]
 
@@ -347,14 +372,20 @@ def ler_oficio(doc: fitz.Document, a: int, b: int) -> dict | None:
         return None
     itens = _itens(texto)
     campos: dict = {k: _valor_do_item(itens, r) for k, r in _ROT.items()}
+    if not any(campos.values()) and (m := _RE_VALOR_TJES.search(texto)):
+        if v := VALOR.search(texto, m.end(), m.end() + 200):
+            campos["valor_total_requisitado"] = v.group(0)
     campos["data_base"] = _iso(_valor_do_item(itens, re.compile(r"data-base", re.I), _RE_DATA))
     campos["ente_devedor"] = _texto_do_item(itens, re.compile(r"ente devedor", re.I))
     campos["beneficiario"] = _texto_do_item(
         itens, re.compile(r"nome do benefici[áa]rio\s+(?:principal|dos honor)", re.I))
     campos["numero_processo"] = _valor_do_item(itens, re.compile(r"numera[çc][ãa]o [úu]nica", re.I), _RE_CNJ)
-    m = re.search(r"N[º°]\s*(\d{3,10})\s*/\s*(\d{4})", texto[:1500])
+    m = re.search(r"N\.?\s*[º°]\s*(\d{3,10})\s*/\s*(\d{4})", texto[:1500])
     campos["numero_oficio"] = f"{m.group(1)}/{m.group(2)}" if m else None
-    cab = texto[:1500].upper()
+    # O cabeçalho acaba onde começa a lista de naturezas: no formulário do TJES
+    # ela traz "( ) Honorários Sucumbenciais" como opção, e o ofício do credor
+    # virava ofício de honorários (#6105).
+    cab = texto[:1500].upper().split("NATUREZA DO CR")[0]
     campos["modalidade"] = "rpv" if "PEQUENO VALOR" in cab else "precatorio"
     marc = set().union(*(_marcados(p) for p in pages))
     campos["natureza_credito"] = ("alimentar" if any(w.startswith("Alimentar") for w in marc)
