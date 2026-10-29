@@ -290,6 +290,7 @@ export function calcularPrecatorio(entrada: CalculoEntrada) {
 export interface BitrixDeal {
   dealId: string;
   clientName: string | null;
+  nomeCompleto?: string | null;
   clientDoc: string | null;
   clientContact: string | null;
   precatorioNumber: string | null;

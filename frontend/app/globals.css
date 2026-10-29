@@ -474,3 +474,100 @@ main[data-fundo="balanca"]::before {
    que tira a classe `dark` do <html>. Redefinir só as variáveis aqui não
    bastaria — as classes `dark:` do Tailwind continuariam valendo e dariam
    texto claro sobre papel branco. */
+
+/* ==========================================================================
+   Termo de Vista dos Autos (A4 retrato, papel timbrado)
+   Medidas do .docx de origem: margem de 1" (25,4mm = 12,1cqw), Palatino 11pt
+   (1,85cqw numa folha de 210mm), entrelinha 1,5. A base é 30mm porque o
+   rodapé do timbrado (CNPJ, telefone, endereço) começa a ~26mm da borda.
+   ========================================================================== */
+.termo-doc {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  background: #fff url("/papel-timbrado.png") no-repeat center / 100% 100%;
+  color: #1a1a1a;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 8px 24px rgb(0 0 0 / 0.08);
+}
+/* cqw só vale DENTRO do container: por isso a folha é o container e o texto
+   mede por ela aqui, num nível abaixo. */
+.termo-folha {
+  height: 100%;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, "URW Palladio L", serif;
+  font-size: 1.85cqw;
+  line-height: 1.5;
+  text-align: justify;
+  padding: 16cqw 12.1cqw 14.3cqw;
+}
+.termo-doc p {
+  margin: 0 0 1.1em;
+}
+.termo-titulo {
+  margin: 0 0 2em;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.termo-centro {
+  text-align: center;
+}
+.termo-data {
+  margin-top: 2.2em !important;
+}
+/* Campo em branco: linha para preencher à mão. */
+.termo-linha {
+  display: inline-block;
+  max-width: 100%;
+  border-bottom: 1px solid #1a1a1a;
+  height: 1em;
+  vertical-align: baseline;
+}
+.termo-assinatura {
+  margin: 4em auto 0;
+  width: 60%;
+  text-align: center;
+}
+.termo-assinatura-linha {
+  border-top: 1px solid #1a1a1a;
+  margin-bottom: 0.3em;
+}
+
+@page termo {
+  size: A4 portrait;
+  margin: 0;
+}
+@media print {
+  .termo-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .termo-page > * {
+    margin-top: 0 !important;
+  }
+  .termo-layout {
+    display: block !important;
+  }
+  .termo-preview {
+    position: static !important;
+    margin: 0 !important;
+  }
+  .termo-doc {
+    page: termo;
+    margin: 0 !important; /* o space-y da prévia empurrava a folha e o rodapé ia para a pág. 2 */
+    width: 210mm !important;
+    height: 297mm !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  /* o escudo de fundo da tela sairia por cima do timbrado */
+  main:has(.termo-doc)::before {
+    display: none !important;
+  }
+}

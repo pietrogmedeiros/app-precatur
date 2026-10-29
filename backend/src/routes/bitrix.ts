@@ -167,6 +167,9 @@ bitrixRouter.get("/deal", async (req, res) => {
   return res.json({
     dealId: String(deal.ID),
     clientName: str(deal.TITLE),
+    // Campo "Nome" do card: o nome completo do credor. O TITLE é o rótulo do
+    // card e às vezes leva outra coisa junto; o termo de vista precisa do nome.
+    nomeCompleto: str(deal.UF_CRM_1769029110822),
     clientDoc: str(deal.UF_CRM_1769029151931),
     clientContact: joinContact(telefone, contactEmail),
     precatorioNumber: str(deal.UF_CRM_1769029222658),
