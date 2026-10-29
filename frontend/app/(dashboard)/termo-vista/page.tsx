@@ -97,12 +97,13 @@ export default function TermoVistaPage() {
       setCampos({
         ...VAZIO,
         local: campos.local,
-        nome: d.nomeCompleto ?? d.clientName ?? "",
+        // Só o campo Nome: o título do card às vezes leva outra coisa junto.
+        nome: d.nomeCompleto ?? "",
         cpf: d.clientDoc ?? "",
         precatorio: d.precatorioNumber ?? "",
       });
       const faltam = [
-        !(d.nomeCompleto ?? d.clientName) && "nome",
+        !d.nomeCompleto && "nome",
         !d.clientDoc && "CPF",
         !d.precatorioNumber && "nº do precatório",
       ].filter(Boolean);
