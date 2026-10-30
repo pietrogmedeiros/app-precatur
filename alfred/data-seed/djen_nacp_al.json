@@ -1,0 +1,71 @@
+{
+ "uf": "AL",
+ "tribunal": "TJAL",
+ "orgao_id": null,
+ "janela": "manual — PA 0500034-14.2018.8.02.9003 (Maceió) lido no DJEN em 20/10/2026",
+ "coletado_em": "2026-10-20",
+ "observacao": "Só Maceió, a partir do despacho do Presidente do TJAL no PA de acompanhamento. O TJAL NÃO publica tabela §23 de todos os municípios como o TJBA; cada município tem o seu PA. RCL do tribunal (SICONFI 2025) R$ 4.096.719.815,19 != RCL do Alfred (RREO) R$ 4.467.441.068. Rateio TJ/TRT/TRF NÃO consta do despacho (só manda oficiar TRT19/TRF5) -> rateio_* vazio.",
+ "tabela_p23": {
+  "2026": {
+   "ano": 2026,
+   "fonte": {
+    "tipo": "plano_anual",
+    "data": "2026-02-09",
+    "pa": "0500034-14.2018.8.02.9003",
+    "id_djen": 525316500
+   },
+   "entes": [
+    {
+     "devedor": "MACEIÓ",
+     "ibge": "2704302",
+     "mora_1jan": 141606487.9,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 3413933.17,
+     "valor_anual": 40967198.15,
+     "rateio": {
+      "TJ": null,
+      "TRT": null,
+      "TRF": null
+     },
+     "fonte": {
+      "tipo": "plano_anual",
+      "data": "2026-02-09",
+      "pa": "0500034-14.2018.8.02.9003",
+      "id_djen": 525316500
+     }
+    }
+   ]
+  },
+  "2025": {
+   "ano": 2025,
+   "fonte": {
+    "tipo": "plano_anual",
+    "data": "2025-09-04",
+    "pa": "0500034-14.2018.8.02.9003",
+    "id_djen": 370629047
+   },
+   "entes": [
+    {
+     "devedor": "MACEIÓ",
+     "ibge": "2704302",
+     "mora_1jan": null,
+     "pct_aplicado": 1.0,
+     "valor_parcela": null,
+     "valor_anual": 49886659.61,
+     "rateio": {
+      "TJ": null,
+      "TRT": null,
+      "TRF": null
+     },
+     "fonte": {
+      "tipo": "plano_anual",
+      "data": "2025-09-04",
+      "pa": "0500034-14.2018.8.02.9003",
+      "id_djen": 370629047
+     }
+    }
+   ]
+  }
+ },
+ "atos": []
+}

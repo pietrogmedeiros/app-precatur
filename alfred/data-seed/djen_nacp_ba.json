@@ -4,1794 +4,4331 @@
  "orgao_id": 94109,
  "janela": {
   "de": "2026-01-01",
-  "ate": "2026-10-12"
+  "ate": "2026-10-30"
  },
- "coletado_em": "2026-10-12",
+ "coletado_em": "2026-10-30",
  "tabela_p23": {
   "2026": {
    "ano": 2026,
    "fonte": {
     "tipo": "tabela_p23",
     "data": "2026-01-26",
-    "pa": "8023804-11.2021.8.05.0000",
-    "id_djen": 510705100
+    "pa": "8027804-88.2020.8.05.0000",
+    "id_djen": 510670950
    },
    "entes": [
     {
      "devedor": "ABARÉ",
      "mora_1jan": 4590601.32,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1014714.06,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2900207"
+     "ibge": "2900207",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ACAJUTIBA",
      "mora_1jan": 24100.95,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 24100.95,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2900306"
+     "ibge": "2900306",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ADUSTINA",
      "mora_1jan": 11121.9,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 11121.9,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2900355"
+     "ibge": "2900355",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "AMÉRICA DOURADA",
      "mora_1jan": 2929307.02,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 975420.28,
      "rateio": {
       "TJ": 87.61,
       "TRT": 12.39,
       "TRF": 0.0
      },
-     "ibge": "2901155"
+     "ibge": "2901155",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ANAGÉ",
+     "mora_1jan": 14654350.84,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 84702.21,
+     "valor_anual": 1016426.51,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 97.47,
+      "TRF": 2.53
+     },
+     "ibge": "2901205",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ANDORINHA",
      "mora_1jan": 21211.2,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 21211.2,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2901353"
+     "ibge": "2901353",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ANGUERA",
      "mora_1jan": 1738802.24,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 852004.5,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2901502"
+     "ibge": "2901502",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ANTAS",
      "mora_1jan": 91048.17,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 91048.17,
      "rateio": {
       "TJ": 48.96,
       "TRT": 51.04,
       "TRF": 0.0
      },
-     "ibge": "2901601"
+     "ibge": "2901601",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ANTÔNIO CARDOSO",
      "mora_1jan": 151372.31,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 151372.31,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2901700"
+     "ibge": "2901700",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "APORÁ",
      "mora_1jan": 3110895.96,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 940051.97,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2901908"
+     "ibge": "2901908",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "APUAREMA",
      "mora_1jan": 2990656.74,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 417094.5,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2901957"
+     "ibge": "2901957",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ARACATU",
      "mora_1jan": 17621.34,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 17621.34,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2902005"
+     "ibge": "2902005",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ARACI",
      "mora_1jan": 270340.22,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 270340.22,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2902104"
+     "ibge": "2902104",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ARATACA",
      "mora_1jan": 372003.51,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 372003.51,
      "rateio": {
       "TJ": 91.35,
       "TRT": 0.0,
       "TRF": 8.65
      },
-     "ibge": "2902252"
+     "ibge": "2902252",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ARATUÍPE",
      "mora_1jan": 327758.57,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 327758.57,
      "rateio": {
       "TJ": 43.57,
       "TRT": 56.43,
       "TRF": 0.0
      },
-     "ibge": "2902302"
+     "ibge": "2902302",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "AURELINO LEAL",
+     "mora_1jan": 2213659.33,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 71309.57,
+     "valor_anual": 855714.84,
+     "rateio": {
+      "TJ": 23.26,
+      "TRT": 72.01,
+      "TRF": 4.73
+     },
+     "ibge": "2902401",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "BAIANÓPOLIS",
      "mora_1jan": 804061.01,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 804061.01,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2902500"
+     "ibge": "2902500",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "BARRA",
      "mora_1jan": 1023778.21,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1023778.21,
      "rateio": {
       "TJ": 17.83,
       "TRT": 82.17,
       "TRF": 0.0
      },
-     "ibge": "2902708"
+     "ibge": "2902708",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "BARRA DO ROCHA",
      "mora_1jan": 1387410.48,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 375706.65,
      "rateio": {
       "TJ": 76.77,
       "TRT": 0.0,
       "TRF": 23.23
      },
-     "ibge": "2903102"
+     "ibge": "2903102",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "BARREIRAS",
+     "mora_1jan": 37108153.69,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 780567.53,
+     "valor_anual": 9366810.39,
+     "rateio": {
+      "TJ": 86.99,
+      "TRT": 13.01,
+      "TRF": 0.0
+     },
+     "ibge": "2903201",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "BARRO PRETO",
+     "mora_1jan": 2701610.63,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 46192.08,
+     "valor_anual": 554304.93,
+     "rateio": {
+      "TJ": 11.48,
+      "TRT": 84.76,
+      "TRF": 3.76
+     },
+     "ibge": "2903300",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "BELMONTE",
+     "mora_1jan": 10774797.14,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 100236.41,
+     "valor_anual": 1202836.89,
+     "rateio": {
+      "TJ": 79.45,
+      "TRT": 17.54,
+      "TRF": 3.01
+     },
+     "ibge": "2903409",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "BOM JESUS DA LAPA",
      "mora_1jan": 4704546.77,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 3711555.42,
      "rateio": {
       "TJ": 16.95,
       "TRT": 0.0,
       "TRF": 83.05
      },
-     "ibge": "2903904"
+     "ibge": "2903904",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "BOTUPORÃ",
      "mora_1jan": 75569.0,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 75569.0,
      "rateio": {
       "TJ": 85.38,
       "TRT": 14.62,
       "TRF": 0.0
      },
-     "ibge": "2904209"
+     "ibge": "2904209",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "BRUMADO",
      "mora_1jan": 97685.44,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 97685.44,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2904605"
+     "ibge": "2904605",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "BUERAREMA",
+     "mora_1jan": 7592921.82,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 67700.25,
+     "valor_anual": 812403.05,
+     "rateio": {
+      "TJ": 21.72,
+      "TRT": 78.14,
+      "TRF": 0.15
+     },
+     "ibge": "2904704",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "BURITIRAMA",
      "mora_1jan": 235502.45,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 235502.45,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2904753"
+     "ibge": "2904753",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CAATIBA",
+     "mora_1jan": 428432.54,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 37269.56,
+     "valor_anual": 428432.54,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2904803",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CACHOEIRA",
+     "mora_1jan": 5787565.8,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 111160.51,
+     "valor_anual": 1333926.17,
+     "rateio": {
+      "TJ": 1.02,
+      "TRT": 98.78,
+      "TRF": 0.2
+     },
+     "ibge": "2904902",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CAÉM",
      "mora_1jan": 789295.04,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 774328.25,
      "rateio": {
       "TJ": 11.11,
       "TRT": 34.12,
       "TRF": 54.77
      },
-     "ibge": "2905107"
+     "ibge": "2905107",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CAETANOS",
      "mora_1jan": 627228.7,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 627228.7,
      "rateio": {
       "TJ": 33.23,
       "TRT": 12.04,
       "TRF": 54.73
      },
-     "ibge": "2905156"
+     "ibge": "2905156",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CAETITÉ",
      "mora_1jan": 19048.49,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 19048.49,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2905206"
+     "ibge": "2905206",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CAMACAN",
+     "mora_1jan": 1962778.04,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 105398.83,
+     "valor_anual": 1264786.02,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 97.45,
+      "TRF": 2.55
+     },
+     "ibge": "2905602",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CAMAÇARI",
+     "mora_1jan": 148374338.54,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 1583313.7,
+     "valor_anual": 18999764.37,
+     "rateio": {
+      "TJ": 96.6,
+      "TRT": 3.4,
+      "TRF": 0.0
+     },
+     "ibge": "2905701",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CAMAMU",
+     "mora_1jan": 5958161.95,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 105329.97,
+     "valor_anual": 1263959.68,
+     "rateio": {
+      "TJ": 4.69,
+      "TRT": 95.31,
+      "TRF": 0.0
+     },
+     "ibge": "2905800",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CAMPO ALEGRE DE LOURDES",
      "mora_1jan": 697863.31,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 697863.31,
      "rateio": {
       "TJ": 77.37,
       "TRT": 22.63,
       "TRF": 0.0
      },
-     "ibge": "2905909"
+     "ibge": "2905909",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CAMPO FORMOSO",
      "mora_1jan": 554637.61,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 554637.61,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2906006"
+     "ibge": "2906006",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CANÁPOLIS",
      "mora_1jan": 706940.31,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 543856.42,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2906105"
+     "ibge": "2906105",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CANARANA",
+     "mora_1jan": 15540639.38,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 125046.18,
+     "valor_anual": 1500554.15,
+     "rateio": {
+      "TJ": 0.6,
+      "TRT": 88.01,
+      "TRF": 11.39
+     },
+     "ibge": "2906204",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CANAVIEIRAS",
+     "mora_1jan": 13910991.61,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 114904.13,
+     "valor_anual": 1378849.6,
+     "rateio": {
+      "TJ": 86.02,
+      "TRT": 13.63,
+      "TRF": 0.35
+     },
+     "ibge": "2906303",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CANDEAL",
+     "mora_1jan": 3409397.81,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 37103.8,
+     "valor_anual": 445245.61,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2906402",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "CÂNDIDO SALES",
+     "mora_1jan": 16685525.57,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 118014.17,
+     "valor_anual": 1416170.0,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 98.98,
+      "TRF": 1.02
+     },
+     "ibge": "2906709",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CANSANÇÃO",
      "mora_1jan": 191540.87,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 191540.87,
      "rateio": {
       "TJ": 68.2,
       "TRT": 31.8,
       "TRF": 0.0
      },
-     "ibge": "2906808"
+     "ibge": "2906808",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CANUDOS",
+     "mora_1jan": 9655083.46,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 83120.03,
+     "valor_anual": 997440.37,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2906824",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CAPIM GROSSO",
      "mora_1jan": 2451799.45,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1857797.54,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2906873"
+     "ibge": "2906873",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CARAÍBAS",
+     "mora_1jan": 1036782.72,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 44884.1,
+     "valor_anual": 538609.22,
+     "rateio": {
+      "TJ": 73.42,
+      "TRT": 26.58,
+      "TRF": 0.0
+     },
+     "ibge": "2906899",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CARDEAL DA SILVA",
      "mora_1jan": 280953.46,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 280953.46,
      "rateio": {
       "TJ": 81.54,
       "TRT": 0.0,
       "TRF": 18.46
      },
-     "ibge": "2907004"
+     "ibge": "2907004",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CASA NOVA",
+     "mora_1jan": 5184398.7,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 256715.67,
+     "valor_anual": 3080588.04,
+     "rateio": {
+      "TJ": 2.89,
+      "TRT": 79.6,
+      "TRF": 17.51
+     },
+     "ibge": "2907202",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CATU",
      "mora_1jan": 845473.2,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 845473.2,
      "rateio": {
       "TJ": 91.03,
       "TRT": 0.0,
       "TRF": 8.97
      },
-     "ibge": "2907509"
+     "ibge": "2907509",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CENTRAL",
      "mora_1jan": 52581.48,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 52581.48,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2907608"
+     "ibge": "2907608",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CÍCERO DANTAS",
      "mora_1jan": 1647291.39,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1617404.78,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2907806"
+     "ibge": "2907806",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CIPÓ",
      "mora_1jan": 2002273.79,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1740960.94,
      "rateio": {
       "TJ": 96.05,
       "TRT": 3.95,
       "TRF": 0.0
      },
-     "ibge": "2907905"
+     "ibge": "2907905",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "COARACI",
+     "mora_1jan": 18947605.47,
+     "pct_aplicado": 1.5,
+     "valor_parcela": 113139.05,
+     "valor_anual": 1357668.62,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2908002",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CONCEIÇÃO DO JACUÍPE",
      "mora_1jan": 2500763.02,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2500763.02,
      "rateio": {
       "TJ": 48.46,
       "TRT": 51.54,
       "TRF": 0.0
      },
-     "ibge": "2908507"
+     "ibge": "2908507",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CONSORCIO PUBLICO INTERFEDERATIVO DE SAUDE RECONV",
      "mora_1jan": 108311.21,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 108311.21,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": null
+     "ibge": null,
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "CONTENDAS DO SINCORÁ",
+     "mora_1jan": 1150796.27,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 27991.73,
+     "valor_anual": 335900.71,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 8.27,
+      "TRF": 91.73
+     },
+     "ibge": "2908804",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CORAÇÃO DE MARIA",
      "mora_1jan": 1123627.66,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1123627.66,
      "rateio": {
       "TJ": 18.19,
       "TRT": 81.81,
       "TRF": 0.0
      },
-     "ibge": "2908903"
+     "ibge": "2908903",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "COTEGIPE",
+     "mora_1jan": 888530.54,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 62387.19,
+     "valor_anual": 748646.31,
+     "rateio": {
+      "TJ": 98.1,
+      "TRT": 1.9,
+      "TRF": 0.0
+     },
+     "ibge": "2909406",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "CRISTÓPOLIS",
      "mora_1jan": 16803.54,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 16803.54,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2909703"
+     "ibge": "2909703",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "CRUZ DAS ALMAS",
      "mora_1jan": 910570.35,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 910570.35,
      "rateio": {
       "TJ": 84.77,
       "TRT": 15.23,
       "TRF": 0.0
      },
-     "ibge": "2909802"
+     "ibge": "2909802",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "DÁRIO MEIRA",
      "mora_1jan": 38180.58,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 38180.58,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2910008"
+     "ibge": "2910008",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "EMPRESA BAIANA DE AGUAS E SANEAMENTO S/A - EMBASA",
      "mora_1jan": 4045731.81,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 4045731.81,
      "rateio": {
       "TJ": 50.65,
       "TRT": 49.35,
       "TRF": 0.0
      },
-     "ibge": null
+     "ibge": null,
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ENCRUZILHADA",
      "mora_1jan": 544678.16,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 544678.16,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2910404"
+     "ibge": "2910404",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ENTRE RIOS",
      "mora_1jan": 7607526.54,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2032225.17,
      "rateio": {
       "TJ": 93.91,
       "TRT": 6.09,
       "TRF": 0.0
      },
-     "ibge": "2910503"
+     "ibge": "2910503",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ESPLANADA",
+     "mora_1jan": 6069814.55,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 169163.6,
+     "valor_anual": 2029963.19,
+     "rateio": {
+      "TJ": 71.87,
+      "TRT": 28.13,
+      "TRF": 0.0
+     },
+     "ibge": "2910602",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "ESTADO DA BAHIA",
+     "mora_1jan": 7761437106.78,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 56110822.09,
+     "valor_anual": 673329865.04,
+     "rateio": {
+      "TJ": 93.25,
+      "TRT": 6.72,
+      "TRF": 0.03
+     },
+     "ibge": null,
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "EUCLIDES DA CUNHA",
      "mora_1jan": 11828020.67,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 3398258.65,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2910701"
+     "ibge": "2910701",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "EUNÁPOLIS",
+     "mora_1jan": 4644506.89,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 446866.31,
+     "valor_anual": 4644506.89,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2910727",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "FÁTIMA",
      "mora_1jan": 246965.61,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 246965.61,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2910750"
+     "ibge": "2910750",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "FEIRA DA MATA",
      "mora_1jan": 38182.03,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 38182.03,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2910776"
+     "ibge": "2910776",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "FEIRA DE SANTANA",
      "mora_1jan": 16151915.68,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 16151915.68,
      "rateio": {
       "TJ": 3.85,
       "TRT": 96.15,
       "TRF": 0.0
      },
-     "ibge": "2910800"
+     "ibge": "2910800",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "FIRMINO ALVES",
+     "mora_1jan": 963156.19,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 31106.93,
+     "valor_anual": 373283.13,
+     "rateio": {
+      "TJ": 19.43,
+      "TRT": 70.53,
+      "TRF": 10.05
+     },
+     "ibge": "2910909",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "FLORESTA AZUL",
+     "mora_1jan": 5336030.95,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 41923.89,
+     "valor_anual": 503086.63,
+     "rateio": {
+      "TJ": 5.95,
+      "TRT": 94.05,
+      "TRF": 0.0
+     },
+     "ibge": "2911006",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "FORMOSA DO RIO PRETO",
      "mora_1jan": 921.4,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 921.4,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2911105"
+     "ibge": "2911105",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "GANDU",
      "mora_1jan": 345503.53,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 345503.53,
      "rateio": {
       "TJ": 25.67,
       "TRT": 74.33,
       "TRF": 0.0
      },
-     "ibge": "2911204"
+     "ibge": "2911204",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "GENTIO DO OURO",
      "mora_1jan": 10011.38,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 10011.38,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2911303"
+     "ibge": "2911303",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "GLÓRIA",
      "mora_1jan": 514071.32,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 514071.32,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2911402"
+     "ibge": "2911402",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "GONGOGI",
+     "mora_1jan": 4156315.85,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 40509.67,
+     "valor_anual": 486116.06,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 98.82,
+      "TRF": 1.18
+     },
+     "ibge": "2911501",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "GUANAMBI",
      "mora_1jan": 304782.83,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 304782.83,
      "rateio": {
       "TJ": 71.29,
       "TRT": 28.71,
       "TRF": 0.0
      },
-     "ibge": "2911709"
+     "ibge": "2911709",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "HELIÓPOLIS",
      "mora_1jan": 725142.42,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 725142.42,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2911857"
+     "ibge": "2911857",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "IAÇU",
+     "mora_1jan": 2378654.22,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 127868.72,
+     "valor_anual": 1534424.59,
+     "rateio": {
+      "TJ": 5.64,
+      "TRT": 94.36,
+      "TRF": 0.0
+     },
+     "ibge": "2911907",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "IBIASSUCÊ",
+     "mora_1jan": 1266114.26,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 46127.93,
+     "valor_anual": 553535.22,
+     "rateio": {
+      "TJ": 9.11,
+      "TRT": 79.57,
+      "TRF": 11.31
+     },
+     "ibge": "2912004",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "IBICARAÍ",
+     "mora_1jan": 9104558.97,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 81508.87,
+     "valor_anual": 978106.5,
+     "rateio": {
+      "TJ": 20.43,
+      "TRT": 74.58,
+      "TRF": 4.99
+     },
+     "ibge": "2912103",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "IBICOARA",
      "mora_1jan": 3410958.98,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1407972.59,
      "rateio": {
       "TJ": 98.61,
       "TRT": 1.39,
       "TRF": 0.0
      },
-     "ibge": "2912202"
+     "ibge": "2912202",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IBICUÍ",
      "mora_1jan": 1061770.02,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 643209.12,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2912301"
+     "ibge": "2912301",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IBIPITANGA",
      "mora_1jan": 560743.44,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 560743.44,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2912509"
+     "ibge": "2912509",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "IBIRAPITANGA",
+     "mora_1jan": 5383158.38,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 101606.5,
+     "valor_anual": 1219277.99,
+     "rateio": {
+      "TJ": 10.85,
+      "TRT": 88.47,
+      "TRF": 0.68
+     },
+     "ibge": "2912707",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "IBIRATAIA",
      "mora_1jan": 24649.32,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 24649.32,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2912905"
+     "ibge": "2912905",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IBITITÁ",
      "mora_1jan": 343548.65,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 343548.65,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2913101"
+     "ibge": "2913101",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ICHU",
      "mora_1jan": 98504.89,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 98504.89,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2913309"
+     "ibge": "2913309",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IGUAÍ",
      "mora_1jan": 188050.83,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 188050.83,
      "rateio": {
       "TJ": 89.57,
       "TRT": 10.43,
       "TRF": 0.0
      },
-     "ibge": "2913507"
+     "ibge": "2913507",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ILHÉUS",
+     "mora_1jan": 306756603.2,
+     "pct_aplicado": 2.5,
+     "valor_parcela": 1616955.21,
+     "valor_anual": 19403462.57,
+     "rateio": {
+      "TJ": 3.47,
+      "TRT": 94.85,
+      "TRF": 1.69
+     },
+     "ibge": "2913606",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "INHAMBUPE",
      "mora_1jan": 613089.56,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 613089.56,
      "rateio": {
       "TJ": 78.76,
       "TRT": 21.24,
       "TRF": 0.0
      },
-     "ibge": "2913705"
+     "ibge": "2913705",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IPIAÚ",
      "mora_1jan": 3124308.92,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1813956.63,
      "rateio": {
       "TJ": 80.55,
       "TRT": 19.45,
       "TRF": 0.0
      },
-     "ibge": "2913903"
+     "ibge": "2913903",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "IPIRÁ",
+     "mora_1jan": 186229.36,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 186229.36,
+     "valor_anual": 186229.36,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2914000",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "IRAJUBA",
      "mora_1jan": 83977.72,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 83977.72,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2914208"
+     "ibge": "2914208",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "IRECÊ",
      "mora_1jan": 2241879.36,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2241879.36,
      "rateio": {
       "TJ": 25.37,
       "TRT": 74.63,
       "TRF": 0.0
      },
-     "ibge": "2914604"
+     "ibge": "2914604",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITABERABA",
      "mora_1jan": 3023512.73,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 3023512.73,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2914703"
+     "ibge": "2914703",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITABUNA",
+     "mora_1jan": 226411565.74,
+     "pct_aplicado": 1.5,
+     "valor_parcela": 1214127.04,
+     "valor_anual": 14569524.46,
+     "rateio": {
+      "TJ": 8.76,
+      "TRT": 90.14,
+      "TRF": 1.1
+     },
+     "ibge": "2914802",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITACARÉ",
      "mora_1jan": 647094.11,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 647094.11,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2914901"
+     "ibge": "2914901",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITAGI",
+     "mora_1jan": 42327.67,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 42327.67,
+     "valor_anual": 42327.67,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915106",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITAGIBÁ",
      "mora_1jan": 1153361.75,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1153361.75,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2915205"
+     "ibge": "2915205",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITAGIMIRIM",
+     "mora_1jan": 698658.9,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 28209.36,
+     "valor_anual": 338512.34,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915304",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITAGUAÇU DA BAHIA",
      "mora_1jan": 56728.35,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 56728.35,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2915353"
+     "ibge": "2915353",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITAJU DO COLÔNIA",
+     "mora_1jan": 247307.32,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 37346.86,
+     "valor_anual": 247307.32,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2915403",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "ITAJUÍPE",
+     "mora_1jan": 15328588.61,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 116853.16,
+     "valor_anual": 1402237.88,
+     "rateio": {
+      "TJ": 66.73,
+      "TRT": 28.04,
+      "TRF": 5.24
+     },
+     "ibge": "2915502",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITAMARI",
      "mora_1jan": 783237.3,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 431226.97,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2915700"
+     "ibge": "2915700",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITAMBÉ",
+     "mora_1jan": 21887100.62,
+     "pct_aplicado": 1.5,
+     "valor_parcela": 138257.58,
+     "valor_anual": 1659090.97,
+     "rateio": {
+      "TJ": 2.84,
+      "TRT": 96.48,
+      "TRF": 0.68
+     },
+     "ibge": "2915809",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITANAGRA",
      "mora_1jan": 61379.81,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 61379.81,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2915908"
+     "ibge": "2915908",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITANHÉM",
      "mora_1jan": 323553.28,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 323553.28,
      "rateio": {
       "TJ": 37.45,
       "TRT": 62.55,
       "TRF": 0.0
      },
-     "ibge": "2916005"
+     "ibge": "2916005",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITAPARICA",
      "mora_1jan": 377438.02,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 377438.02,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2916104"
+     "ibge": "2916104",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITAPÉ",
+     "mora_1jan": 4530579.29,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 48696.54,
+     "valor_anual": 584358.42,
+     "rateio": {
+      "TJ": 5.32,
+      "TRT": 83.98,
+      "TRF": 10.7
+     },
+     "ibge": "2916203",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITAPEBI",
      "mora_1jan": 2519297.82,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 661900.27,
      "rateio": {
       "TJ": 0.05,
       "TRT": 99.95,
       "TRF": 0.0
      },
-     "ibge": "2916302"
+     "ibge": "2916302",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITAPETINGA",
      "mora_1jan": 17926754.86,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 3156547.9,
      "rateio": {
       "TJ": 92.46,
       "TRT": 7.09,
       "TRF": 0.44
      },
-     "ibge": "2916401"
+     "ibge": "2916401",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITAQUARA",
      "mora_1jan": 1330450.7,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 425468.39,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2916708"
+     "ibge": "2916708",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITARANTIM",
      "mora_1jan": 3246074.15,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1064915.89,
      "rateio": {
       "TJ": 89.42,
       "TRT": 10.58,
       "TRF": 0.0
      },
-     "ibge": "2916807"
+     "ibge": "2916807",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITIRUÇU",
+     "mora_1jan": 218935.62,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 55755.5,
+     "valor_anual": 218935.62,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2916906",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITIÚBA",
      "mora_1jan": 308707.6,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 308707.6,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2917003"
+     "ibge": "2917003",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "ITORORÓ",
+     "mora_1jan": 7495898.09,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 74171.55,
+     "valor_anual": 890058.63,
+     "rateio": {
+      "TJ": 10.7,
+      "TRT": 89.3,
+      "TRF": 0.0
+     },
+     "ibge": "2917102",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "ITUAÇU",
      "mora_1jan": 1630004.55,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 996397.6,
      "rateio": {
       "TJ": 84.17,
       "TRT": 15.83,
       "TRF": 0.0
      },
-     "ibge": "2917201"
+     "ibge": "2917201",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "ITUBERÁ",
      "mora_1jan": 1898151.89,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1297154.34,
      "rateio": {
       "TJ": 39.16,
       "TRT": 4.52,
       "TRF": 56.33
      },
-     "ibge": "2917300"
+     "ibge": "2917300",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "JAGUAQUARA",
      "mora_1jan": 6797976.26,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2105982.35,
      "rateio": {
       "TJ": 99.86,
       "TRT": 0.14,
       "TRF": 0.0
      },
-     "ibge": "2917607"
+     "ibge": "2917607",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "JAGUARARI",
+     "mora_1jan": 4066.39,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 4066.39,
+     "valor_anual": 4066.39,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 0.0,
+      "TRF": 100.0
+     },
+     "ibge": "2917706",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "JAGUARIPE",
      "mora_1jan": 39326.0,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 39326.0,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2917805"
+     "ibge": "2917805",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "JEQUIÉ",
      "mora_1jan": 248657392.78,
      "pct_aplicado": 2.5,
+     "valor_parcela": null,
      "valor_anual": 17286095.79,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2918001"
+     "ibge": "2918001",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "JEREMOABO",
      "mora_1jan": 61818.46,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 61818.46,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2918100"
+     "ibge": "2918100",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "JITAÚNA",
+     "mora_1jan": 3355523.17,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 105390.06,
+     "valor_anual": 1264680.76,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 99.28,
+      "TRF": 0.72
+     },
+     "ibge": "2918308",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "JUAZEIRO",
+     "mora_1jan": 34694131.47,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 1008806.38,
+     "valor_anual": 12105676.56,
+     "rateio": {
+      "TJ": 59.66,
+      "TRT": 37.01,
+      "TRF": 3.33
+     },
+     "ibge": "2918407",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "JUSSARA",
      "mora_1jan": 32506.52,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 32506.52,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2918506"
+     "ibge": "2918506",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "JUSSIAPE",
      "mora_1jan": 811278.6,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 358008.2,
      "rateio": {
       "TJ": 97.21,
       "TRT": 2.79,
       "TRF": 0.0
      },
-     "ibge": "2918605"
+     "ibge": "2918605",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LAJEDO DO TABOCAL",
      "mora_1jan": 201309.23,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 201309.23,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919058"
+     "ibge": "2919058",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LAMARÃO",
      "mora_1jan": 12212620.26,
      "pct_aplicado": 1.5,
+     "valor_parcela": null,
      "valor_anual": 743058.34,
      "rateio": {
       "TJ": 10.59,
       "TRT": 89.41,
       "TRF": 0.0
      },
-     "ibge": "2919108"
+     "ibge": "2919108",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LAURO DE FREITAS",
      "mora_1jan": 53756.15,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 53756.15,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919207"
+     "ibge": "2919207",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LICÍNIO DE ALMEIDA",
      "mora_1jan": 164586.47,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 164586.47,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919405"
+     "ibge": "2919405",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LIVRAMENTO DE NOSSA SENHORA",
      "mora_1jan": 433804.68,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 433804.68,
      "rateio": {
       "TJ": 90.83,
       "TRT": 9.17,
       "TRF": 0.0
      },
-     "ibge": "2919504"
+     "ibge": "2919504",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "LUÍS EDUARDO MAGALHÃES",
      "mora_1jan": 847622.76,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 847622.76,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919553"
+     "ibge": "2919553",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MACAÚBAS",
      "mora_1jan": 23462.61,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 23462.61,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919801"
+     "ibge": "2919801",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MACURURÉ",
      "mora_1jan": 2548866.67,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 492300.95,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919900"
+     "ibge": "2919900",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MAETINGA",
      "mora_1jan": 93921.7,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 93921.7,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2919959"
+     "ibge": "2919959",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MAIQUINIQUE",
      "mora_1jan": 153632.43,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 153632.43,
      "rateio": {
       "TJ": 44.89,
       "TRT": 55.11,
       "TRF": 0.0
      },
-     "ibge": "2920007"
+     "ibge": "2920007",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "MAIRI",
+     "mora_1jan": 3208197.92,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 77736.2,
+     "valor_anual": 932834.34,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2920106",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "MARAGOJIPE",
      "mora_1jan": 68305.26,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 68305.26,
      "rateio": {
       "TJ": 37.64,
       "TRT": 62.36,
       "TRF": 0.0
      },
-     "ibge": null
+     "ibge": null,
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MARCIONÍLIO SOUZA",
      "mora_1jan": 321726.74,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 321726.74,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2920809"
+     "ibge": "2920809",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MASCOTE",
      "mora_1jan": 40959.01,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 40959.01,
      "rateio": {
       "TJ": 40.19,
       "TRT": 59.81,
       "TRF": 0.0
      },
-     "ibge": "2920908"
+     "ibge": "2920908",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MEDEIROS NETO",
      "mora_1jan": 676339.1,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 676339.1,
      "rateio": {
       "TJ": 20.69,
       "TRT": 79.31,
       "TRF": 0.0
      },
-     "ibge": "2921104"
+     "ibge": "2921104",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "MIGUEL CALMON",
+     "mora_1jan": 4762401.86,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 103141.85,
+     "valor_anual": 1237702.21,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2921203",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "MIRANGABA",
      "mora_1jan": 142996.48,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 142996.48,
      "rateio": {
       "TJ": 41.35,
       "TRT": 12.86,
       "TRF": 45.78
      },
-     "ibge": "2921401"
+     "ibge": "2921401",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MIRANTE",
      "mora_1jan": 73678.76,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 73678.76,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2921450"
+     "ibge": "2921450",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MONTE SANTO",
      "mora_1jan": 526376.26,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 526376.26,
      "rateio": {
       "TJ": 52.58,
       "TRT": 0.0,
       "TRF": 47.42
      },
-     "ibge": "2921500"
+     "ibge": "2921500",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "MUCURI",
      "mora_1jan": 5278640.37,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2494146.18,
      "rateio": {
       "TJ": 88.39,
       "TRT": 11.61,
       "TRF": 0.0
      },
-     "ibge": "2922003"
+     "ibge": "2922003",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "MUTUÍPE",
+     "mora_1jan": 18992558.59,
+     "pct_aplicado": 1.5,
+     "valor_parcela": 132058.74,
+     "valor_anual": 1584704.83,
+     "rateio": {
+      "TJ": 89.39,
+      "TRT": 10.61,
+      "TRF": 0.0
+     },
+     "ibge": "2922409",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "NOVA IBIÁ",
      "mora_1jan": 132340.85,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 132340.85,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2922755"
+     "ibge": "2922755",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "NOVA ITARANA",
+     "mora_1jan": 91103.76,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 49077.25,
+     "valor_anual": 91103.76,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2922805",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "NOVO HORIZONTE",
      "mora_1jan": 138814.49,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 138814.49,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2923035"
+     "ibge": "2923035",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "OUROLÂNDIA",
      "mora_1jan": 30967.31,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 30967.31,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2923357"
+     "ibge": "2923357",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PARAMIRIM",
      "mora_1jan": 10049524.61,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1204699.78,
      "rateio": {
       "TJ": 2.46,
       "TRT": 97.54,
       "TRF": 0.0
      },
-     "ibge": "2923605"
+     "ibge": "2923605",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PARATINGA",
      "mora_1jan": 1457469.24,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1457469.24,
      "rateio": {
       "TJ": 16.56,
       "TRT": 0.0,
       "TRF": 83.44
      },
-     "ibge": "2923704"
+     "ibge": "2923704",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "PARIPIRANGA",
+     "mora_1jan": 1942953.15,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 135429.53,
+     "valor_anual": 1625154.36,
+     "rateio": {
+      "TJ": 19.51,
+      "TRT": 80.49,
+      "TRF": 0.0
+     },
+     "ibge": "2923803",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "PAU BRASIL",
+     "mora_1jan": 5981630.25,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 44848.63,
+     "valor_anual": 538183.59,
+     "rateio": {
+      "TJ": 61.63,
+      "TRT": 29.71,
+      "TRF": 8.65
+     },
+     "ibge": "2923902",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "PAULO AFONSO",
      "mora_1jan": 506979.08,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 506979.08,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2924009"
+     "ibge": "2924009",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "PÉ DE SERRA",
+     "mora_1jan": 4227672.42,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 75317.54,
+     "valor_anual": 903810.47,
+     "rateio": {
+      "TJ": 2.72,
+      "TRT": 97.28,
+      "TRF": 0.0
+     },
+     "ibge": "2924058",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "PIATÃ",
      "mora_1jan": 167226.68,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 167226.68,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2924306"
+     "ibge": "2924306",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PILÃO ARCADO",
      "mora_1jan": 2891874.51,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1713516.71,
      "rateio": {
       "TJ": 17.1,
       "TRT": 0.0,
       "TRF": 82.9
      },
-     "ibge": "2924405"
+     "ibge": "2924405",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PINDAÍ",
      "mora_1jan": 2097688.24,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1213153.52,
      "rateio": {
       "TJ": 29.35,
       "TRT": 70.65,
       "TRF": 0.0
      },
-     "ibge": "2924504"
+     "ibge": "2924504",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PINDOBAÇU",
      "mora_1jan": 2075241.59,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1562361.7,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2924603"
+     "ibge": "2924603",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PINTADAS",
      "mora_1jan": 83824.21,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 83824.21,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2924652"
+     "ibge": "2924652",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "PLANALTINO",
      "mora_1jan": 39851.0,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 39851.0,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2924900"
+     "ibge": "2924900",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "PLANALTO",
+     "mora_1jan": 8753435.91,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 91500.34,
+     "valor_anual": 1098004.03,
+     "rateio": {
+      "TJ": 1.51,
+      "TRT": 56.25,
+      "TRF": 42.23
+     },
+     "ibge": "2925006",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "POÇÕES",
+     "mora_1jan": 827483.04,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 174966.25,
+     "valor_anual": 827483.04,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2925105",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "PONTO NOVO",
+     "mora_1jan": 9736355.61,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 112692.54,
+     "valor_anual": 1352310.47,
+     "rateio": {
+      "TJ": 92.94,
+      "TRT": 7.06,
+      "TRF": 0.0
+     },
+     "ibge": "2925253",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "PRESIDENTE TANCREDO NEVES",
      "mora_1jan": 309996.18,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 309996.18,
      "rateio": {
       "TJ": 72.97,
       "TRT": 27.03,
       "TRF": 0.0
      },
-     "ibge": "2925758"
+     "ibge": "2925758",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "QUEIMADAS",
+     "mora_1jan": 9576042.98,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 115800.09,
+     "valor_anual": 1389601.12,
+     "rateio": {
+      "TJ": 97.94,
+      "TRT": 1.46,
+      "TRF": 0.6
+     },
+     "ibge": "2925808",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "QUIJINGUE",
+     "mora_1jan": 2689879.09,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 113010.57,
+     "valor_anual": 1356126.83,
+     "rateio": {
+      "TJ": 70.4,
+      "TRT": 29.6,
+      "TRF": 0.0
+     },
+     "ibge": "2925907",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "RAFAEL JAMBEIRO",
      "mora_1jan": 3309714.14,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1017386.39,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2925956"
+     "ibge": "2925956",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "REMANSO",
+     "mora_1jan": 11136541.5,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 181754.62,
+     "valor_anual": 2181055.5,
+     "rateio": {
+      "TJ": 5.83,
+      "TRT": 5.8,
+      "TRF": 88.37
+     },
+     "ibge": "2926004",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "RETIROLÂNDIA",
      "mora_1jan": 198095.88,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 198095.88,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2926103"
+     "ibge": "2926103",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "RIACHÃO DO JACUÍPE",
      "mora_1jan": 10382446.65,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1435336.47,
      "rateio": {
       "TJ": 0.31,
       "TRT": 99.69,
       "TRF": 0.0
      },
-     "ibge": "2926301"
+     "ibge": "2926301",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "RIACHO DE SANTANA",
      "mora_1jan": 2329901.83,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1384127.87,
      "rateio": {
       "TJ": 95.2,
       "TRT": 4.8,
       "TRF": 0.0
      },
-     "ibge": "2926400"
+     "ibge": "2926400",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "RIBEIRA DO AMPARO",
      "mora_1jan": 2197421.92,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 991671.45,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2926509"
+     "ibge": "2926509",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "RIBEIRA DO POMBAL",
      "mora_1jan": 95387.19,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 95387.19,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2926608"
+     "ibge": "2926608",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "RIO DE CONTAS",
      "mora_1jan": 77678.68,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 77678.68,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2926707"
+     "ibge": "2926707",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "RIO DO ANTÔNIO",
+     "mora_1jan": 5312653.95,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 90827.88,
+     "valor_anual": 1089934.5,
+     "rateio": {
+      "TJ": 31.93,
+      "TRT": 64.98,
+      "TRF": 3.09
+     },
+     "ibge": "2926806",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "RUY BARBOSA",
      "mora_1jan": 260873.21,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 260873.21,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2927200"
+     "ibge": "2927200",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SALVADOR",
+     "mora_1jan": 518494415.28,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 8952599.86,
+     "valor_anual": 107431198.31,
+     "rateio": {
+      "TJ": 83.75,
+      "TRT": 15.05,
+      "TRF": 1.2
+     },
+     "ibge": "2927408",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SANTA BRÍGIDA",
+     "mora_1jan": 462423.65,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 69641.16,
+     "valor_anual": 462423.65,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2927606",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SANTA CRUZ CABRÁLIA",
      "mora_1jan": 1211047.49,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1211047.49,
      "rateio": {
       "TJ": 86.76,
       "TRT": 13.24,
       "TRF": 0.0
      },
-     "ibge": "2927705"
+     "ibge": "2927705",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SANTA LUZIA",
      "mora_1jan": 106962.12,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 106962.12,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2928059"
+     "ibge": "2928059",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SANTA RITA DE CÁSSIA",
      "mora_1jan": 7591321.09,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1411549.36,
      "rateio": {
       "TJ": 96.44,
       "TRT": 3.56,
       "TRF": 0.0
      },
-     "ibge": "2928406"
+     "ibge": "2928406",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SANTO AMARO",
+     "mora_1jan": 12106769.93,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 220075.02,
+     "valor_anual": 2640900.25,
+     "rateio": {
+      "TJ": 43.93,
+      "TRT": 56.07,
+      "TRF": 0.0
+     },
+     "ibge": "2928604",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SANTO ANTÔNIO DE JESUS",
      "mora_1jan": 3067524.7,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 3067524.7,
      "rateio": {
       "TJ": 17.03,
       "TRT": 82.97,
       "TRF": 0.0
      },
-     "ibge": "2928703"
+     "ibge": "2928703",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SÃO DESIDÉRIO",
      "mora_1jan": 466424.66,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 466424.66,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2928901"
+     "ibge": "2928901",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SÃO FÉLIX",
+     "mora_1jan": 1923215.97,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 81430.63,
+     "valor_anual": 977167.6,
+     "rateio": {
+      "TJ": 22.23,
+      "TRT": 77.77,
+      "TRF": 0.0
+     },
+     "ibge": "2929008",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SÃO FRANCISCO DO CONDE",
+     "mora_1jan": 31420751.03,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 377586.05,
+     "valor_anual": 4531032.65,
+     "rateio": {
+      "TJ": 69.08,
+      "TRT": 30.92,
+      "TRF": 0.0
+     },
+     "ibge": "2929206",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SÃO JOSÉ DA VITÓRIA",
+     "mora_1jan": 2259374.62,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 26873.29,
+     "valor_anual": 322479.47,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2929354",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SÃO JOSÉ DO JACUÍPE",
      "mora_1jan": 266682.47,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 266682.47,
      "rateio": {
       "TJ": 93.82,
       "TRT": 6.18,
       "TRF": 0.0
      },
-     "ibge": "2929370"
+     "ibge": "2929370",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SÃO SEBASTIÃO DO PASSÉ",
      "mora_1jan": 131254.92,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 131254.92,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2929503"
+     "ibge": "2929503",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SAPEAÇU",
      "mora_1jan": 76410.12,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 76410.12,
      "rateio": {
       "TJ": 55.42,
       "TRT": 44.58,
       "TRF": 0.0
      },
-     "ibge": "2929602"
+     "ibge": "2929602",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SÁTIRO DIAS",
+     "mora_1jan": 1006379.15,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 131384.59,
+     "valor_anual": 1006379.15,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2929701",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SAÚDE",
+     "mora_1jan": 356161.23,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 54955.1,
+     "valor_anual": 356161.23,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 97.48,
+      "TRF": 2.52
+     },
+     "ibge": "2929800",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SENHOR DO BONFIM",
      "mora_1jan": 248073.75,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 248073.75,
      "rateio": {
       "TJ": 84.02,
       "TRT": 0.0,
       "TRF": 15.98
      },
-     "ibge": "2930105"
+     "ibge": "2930105",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SENTO SÉ",
+     "mora_1jan": 6972010.2,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 238217.03,
+     "valor_anual": 2858604.35,
+     "rateio": {
+      "TJ": 21.86,
+      "TRT": 58.06,
+      "TRF": 20.08
+     },
+     "ibge": "2930204",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SERRA PRETA",
      "mora_1jan": 1221375.61,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 988766.25,
      "rateio": {
       "TJ": 1.79,
       "TRT": 98.21,
       "TRF": 0.0
      },
-     "ibge": "2930402"
+     "ibge": "2930402",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "SERRINHA",
      "mora_1jan": 2826909.18,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 2826909.18,
      "rateio": {
       "TJ": 75.07,
       "TRT": 0.0,
       "TRF": 24.93
      },
-     "ibge": "2930501"
+     "ibge": "2930501",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SERROLÂNDIA",
+     "mora_1jan": 387315.58,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 66980.36,
+     "valor_anual": 387315.58,
+     "rateio": {
+      "TJ": 59.6,
+      "TRT": 40.4,
+      "TRF": 0.0
+     },
+     "ibge": "2930600",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SIMÕES FILHO",
+     "mora_1jan": 31451023.43,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 554637.32,
+     "valor_anual": 6655647.79,
+     "rateio": {
+      "TJ": 26.39,
+      "TRT": 73.61,
+      "TRF": 0.0
+     },
+     "ibge": "2930709",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "SÍTIO DO MATO",
+     "mora_1jan": 4947115.25,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 65249.69,
+     "valor_anual": 782996.24,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 30.84,
+      "TRF": 69.16
+     },
+     "ibge": "2930758",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "SÍTIO DO QUINTO",
      "mora_1jan": 445487.56,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 445487.56,
      "rateio": {
       "TJ": 90.4,
       "TRT": 9.6,
       "TRF": 0.0
      },
-     "ibge": "2930766"
+     "ibge": "2930766",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "SOBRADINHO",
+     "mora_1jan": 377031.71,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 126035.3,
+     "valor_anual": 377031.71,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2930774",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "TANHAÇU",
      "mora_1jan": 598125.91,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 598125.91,
      "rateio": {
       "TJ": 44.98,
       "TRT": 55.02,
       "TRF": 0.0
      },
-     "ibge": "2931004"
+     "ibge": "2931004",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "TANQUE NOVO",
+     "mora_1jan": 5970590.31,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 82903.79,
+     "valor_anual": 994845.44,
+     "rateio": {
+      "TJ": 0.34,
+      "TRT": 99.66,
+      "TRF": 0.0
+     },
+     "ibge": "2931053",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "TEOFILÂNDIA",
+     "mora_1jan": 18878.49,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 18878.49,
+     "valor_anual": 18878.49,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2931509",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "TEOLÂNDIA",
      "mora_1jan": 12345027.13,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1132961.77,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2931608"
+     "ibge": "2931608",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "TUCANO",
      "mora_1jan": 1060812.65,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 1060812.65,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2931905"
+     "ibge": "2931905",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "UAUÁ",
      "mora_1jan": 357735.48,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 357735.48,
      "rateio": {
       "TJ": 46.89,
       "TRT": 10.34,
       "TRF": 42.77
      },
-     "ibge": "2932002"
+     "ibge": "2932002",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "UBAITABA",
+     "mora_1jan": 38685.18,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 38685.18,
+     "valor_anual": 38685.18,
+     "rateio": {
+      "TJ": 100.0,
+      "TRT": 0.0,
+      "TRF": 0.0
+     },
+     "ibge": "2932200",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "UIBAÍ",
      "mora_1jan": 2406915.83,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 828724.89,
      "rateio": {
       "TJ": 93.24,
       "TRT": 6.76,
       "TRF": 0.0
      },
-     "ibge": "2932408"
+     "ibge": "2932408",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "UMBURANAS",
      "mora_1jan": 137767.82,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 137767.82,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2932457"
+     "ibge": "2932457",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "URANDI",
+     "mora_1jan": 7518194.62,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 95500.65,
+     "valor_anual": 1146007.76,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2932606",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "URUÇUCA",
+     "mora_1jan": 10878352.31,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 93446.86,
+     "valor_anual": 1121362.35,
+     "rateio": {
+      "TJ": 8.75,
+      "TRT": 91.25,
+      "TRF": 0.0
+     },
+     "ibge": "2932705",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
+    },
+    {
+     "devedor": "VALENÇA",
+     "mora_1jan": 32165943.97,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 319349.56,
+     "valor_anual": 3832194.72,
+     "rateio": {
+      "TJ": 0.21,
+      "TRT": 99.25,
+      "TRF": 0.54
+     },
+     "ibge": "2932903",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "VÁRZEA DA ROÇA",
      "mora_1jan": 1222337.88,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 949973.68,
      "rateio": {
       "TJ": 89.13,
       "TRT": 10.87,
       "TRF": 0.0
      },
-     "ibge": "2933059"
+     "ibge": "2933059",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
+    },
+    {
+     "devedor": "VÁRZEA DO POÇO",
+     "mora_1jan": 2236321.84,
+     "pct_aplicado": 1.0,
+     "valor_parcela": 34546.28,
+     "valor_anual": 414555.35,
+     "rateio": {
+      "TJ": 0.0,
+      "TRT": 100.0,
+      "TRF": 0.0
+     },
+     "ibge": "2933109",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8023751-30.2021.8.05.0000",
+      "id_djen": 510416007
+     }
     },
     {
      "devedor": "VÁRZEA NOVA",
      "mora_1jan": 7080510.94,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 971609.78,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2933158"
+     "ibge": "2933158",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "VARZEDO",
      "mora_1jan": 580126.17,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 580126.17,
      "rateio": {
       "TJ": 100.0,
       "TRT": 0.0,
       "TRF": 0.0
      },
-     "ibge": "2933174"
+     "ibge": "2933174",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "VERA CRUZ",
      "mora_1jan": 832559.2,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 832559.2,
      "rateio": {
       "TJ": 99.9,
       "TRT": 0.1,
       "TRF": 0.0
      },
-     "ibge": "2933208"
+     "ibge": "2933208",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "WENCESLAU GUIMARÃES",
      "mora_1jan": 62763.49,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 62763.49,
      "rateio": {
       "TJ": 17.34,
       "TRT": 82.66,
       "TRF": 0.0
      },
-     "ibge": "2933505"
+     "ibge": "2933505",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     },
     {
      "devedor": "XIQUE-XIQUE",
      "mora_1jan": 597522.29,
      "pct_aplicado": 1.0,
+     "valor_parcela": null,
      "valor_anual": 597522.29,
      "rateio": {
       "TJ": 2.27,
       "TRT": 97.73,
       "TRF": 0.0
      },
-     "ibge": "2933604"
+     "ibge": "2933604",
+     "fonte": {
+      "tipo": "tabela_p23",
+      "data": "2026-01-23",
+      "pa": "8027757-17.2020.8.05.0000",
+      "id_djen": 510476738
+     }
     }
    ]
   }
@@ -4183,7 +6720,7 @@
    "ano_orcamento": 2027
   },
   {
-   "tipo": "bloqueio_sisbajud",
+   "tipo": "bloqueio_liberado",
    "data": "2026-05-26",
    "pa": "8023946-15.2021.8.05.0000",
    "id_djen": 620421712,
