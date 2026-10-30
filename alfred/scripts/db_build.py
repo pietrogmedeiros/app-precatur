@@ -398,11 +398,14 @@ UF_ESTADO = {"ES": "32", "MG": "31", "GO": "52", "BA": "29", "CE": "23", "RN": "
 # empresas, mesma duvida da EMBASA), INPAS e FUNDEC (RJ: nao confirmados como estaduais).
 ESTADUAIS_CD = {
     "RJ": {"1", "65", "4", "3", "20", "351", "6", "17", "224", "76", "116", "191", "5", "208",
-           "95", "14", "57", "236", "260", "252", "101", "12", "134", "228", "277", "80", "220",
-           "293", "73", "247", "112", "126", "212", "210", "217", "60", "61", "79"},
-    "MT": {"51", "148", "77", "82", "80", "79", "197", "230", "81", "50", "83", "47", "48"},
-    "PB": {"78", "227", "233", "230", "247", "229", "241", "246", "271", "280", "261", "263",
+           "95", "14", "57", "236", "260", "252", "101", "12", "134", "277", "80", "220",
+           "293", "73", "247", "112", "126", "212", "210", "217", "60", "61", "79", "13", "109"},
+    "MT": {"51", "148", "77", "82", "80", "79", "197", "230", "81", "50", "83", "47", "48",
+           "165"},   # 13/10/2026: ISSSPL (autarquia do Legislativo, 0 prec.)
+    "PB": {"78", "227", "233", "230", "247", "229", "241", "246", "271", "261", "263",
            "273",
+           # cd 280 (DETRAN) saiu em 13/10/2026: no site do TJPB e' do grupo "Estado de Sao Paulo"
+           # (ordens 1-3 proprias); o DETRAN-PB e' o cd 229.
            # EMPAER e CEHAP: estatais DEPENDENTES, no Orcamento Fiscal da LOA-PB 2026 (Lei 14.257,
            # p. 893 e 850). A CAGEPA fica fora: so' no Orcamento de Investimento (p. 520).
            "234", "245"},
@@ -426,20 +429,56 @@ ESTADUAIS_CD = {
     # caia no municipio de Jeronimo Monteiro: R$ 25,9 mi sobre uma fila propria de R$ 1,9 mi.
     # Ja' tinha sido corrigido em jul/2026 no pipeline antigo (fetch_lup_tjes.py) e voltou no
     # db_build. O IPASJM (cd 2669) e' a previdencia MUNICIPAL e continua no municipio.
-    "ES": {"1218"},
+    # 13/10/2026: IJSN e IASES (nome nao casa com _e_estadual) + preventivos sem fila (IDAF, DIO, JUCEES, RTV)
+    "ES": {"1218", "1221", "2342", "1276", "1715", "3132", "1067"},
     # 05/10/2026: os 9 Estados que ainda nao tinham RCL. Lista lida nome a nome na lista de cada TJ;
     # ficam FORA empresas (SANACRE, EMATER/AC, COSAMA, SANESUL, CAER, COMPESA, ATS -- mesma duvida da
     # EMBASA: so' entram se a LOA mostrar que sao dependentes), INSS e orgaos de OUTROS Estados.
     # No TJRS e no TJSC o Estado vem como devedor unico. TJAC/TJAM/TJPA: cd_externo = nome normalizado.
-    "RS": {'1'},
+    "RS": {'1', '492'},   # 13/10/2026: + OSPA (fundacao estadual; estava no municipio de Porto Alegre)
     "SC": {'11'},
-    "TO": {'5', '21'},
-    "RR": {'10', '35', '32', '36', '30', '31', '28', '29', '48'},
+    # 13/10/2026: ATS (autarquia, R$ 115 mil) + preventivos sem fila (DERTINS, DETRAN, UNITINS, ADAPEC, AGETO, JUCETINS, FAPTO)
+    "TO": {'5', '21', '156', '22', '120', '101', '151', '148', '143', '169'},
+    # 13/10/2026: sai a FETEC (cd 29, fundacao MUNICIPAL de Boa Vista, Receita 1155; ver MUNICIPAIS_CD);
+    # entram, sem fila hoje, FEMARH (45), IERR (47) e UNIVIRR (37, extinta)
+    "RR": {'10', '35', '32', '36', '30', '31', '28', '48', '45', '47', '37'},
     "MS": {'113', '1', '123', '114', '135', '125', '118', '115', '126', '116', '117', '121', '134'},
-    "PA": {'GOVERNO DO ESTADO DO PARA', 'IGEPREV', 'HOSPITAL OPHIR LOYOLA', 'CENTRO DE HEMOTERAPIA E HEMATOLOGIA DO PARA HEMOPA', 'DEPARTAMENTO DE TRANSITO DO ESTADO DO PARA', 'UNIVERSIDADE DO ESTADO DO PARA', 'FUNDACAO SANTA CASA DE MISERICORDIA DO PARA', 'JUNTA COMERCIAL DO ESTADO DO PARA JUCEPA', 'FASEPA FUNDACAO DE ATENDIMENTO SOCIOEDUCATIVO DO PARA', 'FUNDACAO CULTURAL DO PARA TANCREDO NEVES', 'CENTRO DE PERICIAS CIENTIFICAS RENATO CHAVES'},
-    "AM": {'ESTADO DO AMAZONAS', 'UNIVERSIDADE DO ESTADO DO AMAZONAS UEA', 'FUNDO PREVIDENCIARIO DO ESTADO DO AMAZONAS AMAZONPREV', 'FUNDACAO DE VIGILANCIA EM SAUDE FVS', 'SUPERINTENDENCIA DE HABITACAO SUHAB', 'FUNDACAO CENTRO DE CONTROLE DE ONCOLOGIA DO ESTADO DO AMAZON', 'FUNDACAO HOSPITAL ADRIANO JORGE', 'FUNDACAO DE MEDICINA TROPICAL DOUTOR HEITOR VIEIRA DOURADO F', 'DEPARTAMENTO ESTADUAL DE TRANSITO DO AMAZONAS', 'TRIBUNAL DE JUSTICA DO ESTADO DO AMAZONAS TJAM', 'ASSEMBLEIA LEGISLATIVA DO ESTADO DO AMAZONAS', 'FUNDACAO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS HEMOAM', 'SUPERINTENDENCIA ESTADUAL DE NAVEGACAO PORTOS E HIDROVIAS SN', 'INSTITUTO DE PROTECAO AMBIENTAL DO AMAZONAS IPAAM', 'CENTRO DE EDUCACAO TECNOLOGICA DO AMAZONAS', 'FUNDACAO DE DERMATOLOGIA TROPICAL E VENEREOLOGIA ALFREDO DA '},
-    "AC": {'ESTADO DO ACRE', 'INSTITUTO DE PREVIDENCIA DO ESTADO DO ACRE ACREPREVIDENCIA', 'FUNDACAO HOSPITAL ESTADUAL DO ACRE FUNDHACRE', 'INSTITUTO DE ADMINISTRACAO PENITENCIARIA DO ESTADO DO ACRE I', 'INSTITUTO SOCIO EDUCATIVO DO ESTADO DO ACRE ISE', 'FUNDACAO DE DESENVOLVIMENTO DE RECURSOS HUMANOS DA CULTURA E', 'DEPARTAMENTO DE ESTRADAS DE RODAGEM INFRAESTRUTURA HIDROVIAR', 'FUNDACAO DE TECNOLOGIA DO ESTADO DO ACRE FUNTAC', 'SERVICO DE AGUA E ESGOSTO DO ESTADO DO ACRE SANEACRE', 'DEPARTAMENTO ESTADUAL DE TRANSITO DO ESTADO DO ACRE DETRAN A', 'INSTITUTO DE DEFESA AGROPECUARIA E FLORESTAL DO ESTADO DO AC', 'INSTITUTO DE MEIO AMBIENTE DO ACRE IMAC', 'INSTITUTO DE TERRAS DO ACRE ITERACRE', 'INSTITUTO ESTADUAL DE DESENVOLVIMENTO DA EDUCACAO PROFISSION'},
-    "PE": {'250', '396', '370', '426', '282'},
+    "PA": {'GOVERNO DO ESTADO DO PARA', 'IGEPREV', 'HOSPITAL OPHIR LOYOLA', 'CENTRO DE HEMOTERAPIA E HEMATOLOGIA DO PARA HEMOPA', 'DEPARTAMENTO DE TRANSITO DO ESTADO DO PARA', 'UNIVERSIDADE DO ESTADO DO PARA', 'FUNDACAO SANTA CASA DE MISERICORDIA DO PARA', 'JUNTA COMERCIAL DO ESTADO DO PARA JUCEPA', 'FASEPA FUNDACAO DE ATENDIMENTO SOCIOEDUCATIVO DO PARA', 'FUNDACAO CULTURAL DO PARA TANCREDO NEVES', 'CENTRO DE PERICIAS CIENTIFICAS RENATO CHAVES',
+           'FUNDACAO PUBLICA ESTADUAL HOSPITAL DE CLINICAS GASPAR VIANA'},   # FHCGV (UO 64201), 13/10/2026
+    "AM": {'ESTADO DO AMAZONAS', 'UNIVERSIDADE DO ESTADO DO AMAZONAS UEA', 'FUNDO PREVIDENCIARIO DO ESTADO DO AMAZONAS AMAZONPREV', 'FUNDACAO DE VIGILANCIA EM SAUDE FVS', 'SUPERINTENDENCIA DE HABITACAO SUHAB', 'FUNDACAO CENTRO DE CONTROLE DE ONCOLOGIA DO ESTADO DO AMAZON', 'FUNDACAO HOSPITAL ADRIANO JORGE', 'FUNDACAO DE MEDICINA TROPICAL DOUTOR HEITOR VIEIRA DOURADO F', 'DEPARTAMENTO ESTADUAL DE TRANSITO DO AMAZONAS', 'TRIBUNAL DE JUSTICA DO ESTADO DO AMAZONAS TJAM', 'ASSEMBLEIA LEGISLATIVA DO ESTADO DO AMAZONAS', 'FUNDACAO DE HEMATOLOGIA E HEMOTERAPIA DO AMAZONAS HEMOAM', 'SUPERINTENDENCIA ESTADUAL DE NAVEGACAO PORTOS E HIDROVIAS SN', 'INSTITUTO DE PROTECAO AMBIENTAL DO AMAZONAS IPAAM', 'CENTRO DE EDUCACAO TECNOLOGICA DO AMAZONAS', 'FUNDACAO DE DERMATOLOGIA TROPICAL E VENEREOLOGIA ALFREDO DA ',
+           # 13/10/2026: JUCEA e IDAM (autarquias, 0 prec.; o TJAM grafa IDAM com erros)
+           'JUNTA COMERCIAL DO ESTADO DO AMAZONAS JUCEA',
+           'INSTITUTO DE DESONVOLVIMENTO AGROPEDUARIO E FLORETAL SUSTENT'},
+    "AC": {'ESTADO DO ACRE', 'INSTITUTO DE PREVIDENCIA DO ESTADO DO ACRE ACREPREVIDENCIA', 'FUNDACAO HOSPITAL ESTADUAL DO ACRE FUNDHACRE', 'INSTITUTO DE ADMINISTRACAO PENITENCIARIA DO ESTADO DO ACRE I', 'INSTITUTO SOCIO EDUCATIVO DO ESTADO DO ACRE ISE', 'FUNDACAO DE DESENVOLVIMENTO DE RECURSOS HUMANOS DA CULTURA E', 'DEPARTAMENTO DE ESTRADAS DE RODAGEM INFRAESTRUTURA HIDROVIAR', 'FUNDACAO DE TECNOLOGIA DO ESTADO DO ACRE FUNTAC', 'SERVICO DE AGUA E ESGOSTO DO ESTADO DO ACRE SANEACRE', 'DEPARTAMENTO ESTADUAL DE TRANSITO DO ESTADO DO ACRE DETRAN A', 'INSTITUTO DE DEFESA AGROPECUARIA E FLORESTAL DO ESTADO DO AC', 'INSTITUTO DE MEIO AMBIENTE DO ACRE IMAC', 'INSTITUTO DE TERRAS DO ACRE ITERACRE', 'INSTITUTO ESTADUAL DE DESENVOLVIMENTO DA EDUCACAO PROFISSION',
+           # 13/10/2026: SANACRE (SEM dependente, UO 502 no Fiscal) e EMATER-AC (empresa publica dependente);
+           # o comentario acima sobre 'fora por duvida' esta desatualizado: a LOA 2026 do AC so tem
+           # Investimento da COHAB (R$ 100 mil), as demais estatais sao dependentes
+           'COMPANHIA DE SANEAMENTO DO ESTADO DO ACRE SANACRE',
+           'EMPRESA DE ASSISTENCIA TECNICA E EXTENSAO RURAL DO ACRE EMAT'},
+    "PE": {'250', '396', '370', '426', '282',
+           '427', '451', '464', '474'},   # 13/10/2026: HEMOPE, DETRAN-PE, IRH-PE (-> IASSEPE), TJPE; todos 0 prec.
+    # GO (09/10/2026): autarquias do art. 51 da Lei 21.792/2023 que a regra por nome de
+    # _e_estadual ("ESTADO DE GOIAS"/"ESTADUAL"/GOIASPREV) deixava sem ibge: GOINFRA, AGRODEFESA
+    # e ABC (R$ 112 mi). cd_externo = nome normalizado. O IPASGO SAUDE (servico social autonomo,
+    # direito privado) entrou em 13/10/2026 so' pela posicao na fila: ver o comentario no fim da lista.
+    "GO": {'AGENCIA GOIANA DE INFRAESTRUTURA E TRANSPORTES GOINFRA',
+           'AGENCIA GOIANA DE DEFESA AGROPECUARIA AGRODEFESA',
+           'AGENCIA BRASIL CENTRAL ABC',
+           # UEG (art. 51, XII) caia no municipio de Goias (5208905) pelo sufixo "GOIAS" do nome;
+           # AGECOM nao esta' no art. 51 (extinta/sucedida), mas o TJGO a lista no mesmo ente
+           # devedor "Estado de Goias" (as ordens da fila das duas fecham as lacunas da
+           # sequencia unica do Estado).
+           'UNIVERSIDADE ESTADUAL DE GOIAS', 'AGECOM',
+           # 13/10/2026 (decisao: incluir): o TJGO poe o IPASGO Saude na MESMA sequencia de ordem do Estado
+           # (preenche 117 lacunas); e' servico social autonomo (direito privado, Receita 3077), sucessor da
+           # autarquia IPASGO extinta pela Lei 21.880/2023 (arts. 20 e 24). Entra pela POSICAO NA FILA.
+           'SERVICO SOCIAL AUTONOMO DE ASSISTENCIA A SAUDE DOS SERVIDORE'},
+    # RN (13/10/2026): a lista consolidada do Estado ja' embute as autarquias; so' JUCERN e IPEM (sem fila)
+    # ficavam sem ibge porque _e_estadual nao casa o nome
+    "RN": {'f1ceffcf-958e-4137-aaaa-aac408733c5a', 'd5e7ca79-7336-4e56-87f7-80c1a57411a2'},
+    # SP (13/10/2026): UNESP (sem ibge), USP (caia em Sao Paulo) e UNICAMP (caia em Campinas) tem lista
+    # PROPRIA no TJSP (catalogo DEPRE); o resto das autarquias esta' dentro da fila da Fazenda (cd 56)
+    "SP": {'21', '22', '23'},
 }
 CD_DO_ESTADO = {"RJ": "1", "MT": "51", "PB": "78", "PR": "12", "PI": "41", "AP": "1",
                 "RS": '1', "SC": '11', "TO": '5', "RR": '10', "MS": '113', "PA": 'GOVERNO DO ESTADO DO PARA', "AM": 'ESTADO DO AMAZONAS', "AC": 'ESTADO DO ACRE', "PE": '250'}  # o governo estadual na lista
@@ -454,7 +493,13 @@ MUNICIPAIS_CD = {("RJ", "81"): "3304557",     # PREVI RIO
                  ("PR", "649"): "4106902",    # FAS - Fundacao de Acao Social de Curitiba
                  ("PR", "66"): "4106902",     # IPPUC (planejamento urbano de Curitiba)
                  # PREV SAO JOSE: o casamento por sufixo punha em PINHAIS (4119152), outro municipio
-                 ("PR", "576"): "4125506"}    # -> Sao Jose dos Pinhais
+                 ("PR", "576"): "4125506",    # -> Sao Jose dos Pinhais
+                 # 13/10/2026
+                 ("RJ", "228"): "3304706",    # Fundacao Jose Kezen: 10 processos do foro 0050 (Santo Antonio de Padua)
+                 ("RR", "29"): "1400100",     # FETEC: fundacao municipal de Boa Vista (Receita 1155)
+                 # DETRAN do PARANA na lista do TJRN: o casamento por sufixo o punha no municipio de Parana-RN.
+                 # E' de outro Estado: ibge None de proposito (resolve_ibge devolve None).
+                 ("RN", "8815f82c-7f39-4270-be13-66be81f2173e"): None}
 # URBS e COHAB (Curitiba) ficam fora de proposito: empresas, mesma duvida da EMBASA.
 # IPMC: ficou fora em 04/10 porque 387 dos 820 itens vinham sem valor; eram as linhas espelho
 # de superpreferencia do TJPR, que o ad_tjpr pula desde 05/10.
@@ -882,6 +927,104 @@ def ad_trf2_federal(path):
                "situacao": f"Inciso {inciso} do art. 107-A §8º ADCT" if inciso else None,
                "superpreferencia": "Prioridade (idade/doença/PCD)" if inciso == "II" else None,
                "suspenso": 0, "credor": None, "cpf_cnpj": None, "advogado": None}
+
+
+TRF5_FED_PREFIXO = "TRF5_FED:"     # cd_externo dos entes federais do TRF5 = prefixo + sigla; alfred_core reconhece
+# Exercicios carregados da fila federal do TRF5. 2025 fica de fora: exercicio encerrado, 98,7% pago no ano
+# (listas de pagos do TRF5, medido em 19/10/2026) e os 158 restantes nao tem status conhecido (pago em
+# lista nenhuma, mas tambem sem baixa): entrar como "pendente" seria afirmar mais do que a fonte diz.
+EXERCICIOS_FEDERAIS_TRF5 = (2026, 2027)
+
+
+def ad_trf5_federal(itens, exercicio, pagos):
+    """TRF5, fila FEDERAL (scripts/fetch_trf5_federal.py): Uniao e autarquias/fundacoes/universidades
+    federais. Um PDF por orgao x natureza x exercicio, com a `ordem` recomecando em 1 em cada um -- aqui
+    ela e' a do PDF (e' a que o usuario ve' no site do TRF5). `ano_orcamento` = exercicio da proposta.
+    A lista da proposta nao perde o precatorio quando ele e' pago, entao sai o que consta na lista de
+    PAGOS do TRF5 (chave = PRC/UF, `pagos`). Sem credor (o PDF nao traz)."""
+    for it in itens:
+        if it["prc"] in pagos:
+            continue
+        yield {"numero_fmt": it["processo"], "numero": so_digitos(it["processo"]),
+               "numero_origem": it.get("proc_origem"), "ordem": it["ordem"],
+               "data_apresentacao": norm_data(it.get("data_apresentacao")), "natureza": it["natureza"],
+               "ano_orcamento": exercicio, "valor": money(it["valor"]), "situacao": it["prc"],
+               "superpreferencia": f"Prioridade ({it['superpref']})" if it.get("superpref") else None,
+               "suspenso": 0, "credor": None, "cpf_cnpj": None, "advogado": None}
+
+
+def ad_trf1_federal(itens, exercicio):
+    """TRF1, fila FEDERAL da proposta orcamentaria (scripts/fetch_trf1_federal.py): UMA ordem por natureza
+    (alimentar / comum) para todo devedor federal -- o arquivo nao traz devedor nem credor. `ordem` e' a da
+    planilha do TRF1 (recomeca em 1 em cada natureza). Preferencia legal -> superpreferencia."""
+    for it in itens:
+        yield {"numero_fmt": it["cnj"], "numero": it["precatorio"], "numero_origem": None,
+               "ordem": it["ordem"], "data_apresentacao": None,
+               "natureza": "Alimentar" if it["secao"] == "ALIMENTAR" else "Comum",
+               "ano_orcamento": exercicio, "valor": money(it["valor"]), "situacao": None,
+               "superpreferencia": f"Prioridade ({it['preferencia']})" if it.get("preferencia") else None,
+               "suspenso": 0, "credor": None, "cpf_cnpj": None, "advogado": None}
+
+
+def carrega_trf5_federal(cx):
+    """TRF5 federal (scripts/fetch_trf5_federal.py): 1 ente por ORGAO (UFC, INSS, UNIAO...), sem ibge --
+    o devedor e' o orcamento da Uniao, nao municipio/Estado (mesmo padrao do TRF2 federal). So' entra PDF
+    cujo rodape confere. O exercicio que ja' comecou exige a lista de PAGOS baixada junto: sem ela a carga
+    poria como pendente o que ja' foi pago. Devolve (entes, precatorios)."""
+    d5f = os.path.join(BASE, "data", "trf5_federal")
+    pagos5f = {}
+    for ano_p in EXERCICIOS_FEDERAIS_TRF5:
+        fpg = os.path.join(d5f, f"_pagos_{ano_p}.json")
+        if os.path.exists(fpg):
+            dpg = json.load(open(fpg, encoding="utf-8"))
+            if dpg.get("confere"):
+                pagos5f[ano_p] = set(dpg["prcs"])
+    orgaos5f = {}
+    for f in sorted(glob.glob(os.path.join(d5f, "[0-9]*_*.json"))):
+        try:
+            d = json.load(open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        ex = d.get("exercicio")
+        if (not isinstance(d, dict) or d.get("confere") is not True or not d.get("itens")
+                or ex not in EXERCICIOS_FEDERAIS_TRF5
+                or (ex <= datetime.now().year and ex not in pagos5f)):
+            continue
+        o = orgaos5f.setdefault(d["orgao_sigla"], {"nome": "", "regs": [], "mt": ""})
+        if len(d["rotulo"]) > len(o["nome"]):
+            o["nome"] = d["rotulo"]               # o rotulo mais completo (os PDFs truncam/variam a grafia)
+        o["regs"] += ad_trf5_federal(d["itens"], ex, pagos5f.get(ex, set()))
+        o["mt"] = max(o["mt"], mtime_iso(f))
+    n_prec_f = n_ent_f = 0
+    for sigla, o in sorted(orgaos5f.items()):
+        if not o["regs"]:
+            continue
+        cx.execute("INSERT OR IGNORE INTO ente (tribunal,cd_externo,nome,ibge,tipo) VALUES (?,?,?,?,?)",
+                   ("TRF5", TRF5_FED_PREFIXO + sigla, o["nome"], None, "outro"))
+        eid = cx.execute("SELECT id FROM ente WHERE tribunal=? AND cd_externo=?",
+                         ("TRF5", TRF5_FED_PREFIXO + sigla)).fetchone()[0]
+        n_prec_f += grava(cx, "TRF5", f"trf5_federal_{sigla.lower().replace('/', '_')}.json", o["mt"], eid, o["regs"])
+        n_ent_f += 1
+    return n_ent_f, n_prec_f
+
+
+def carrega_trf1_federal(cx):
+    """TRF1 federal (scripts/fetch_trf1_federal.py): ordem unica do orcamento federal, sem devedor no arquivo
+    -> 1 ente, mesmo padrao do TRF2 federal. O TRF1 NAO publica lista de pagos, entao so' entra o exercicio
+    que ainda nao comecou (proposta do ano seguinte); o do ano corrente ja' tem pago e nao da' para separar.
+    Devolve (entes, precatorios)."""
+    n_prec = n_ent = 0
+    for f in sorted(glob.glob(os.path.join(BASE, "data", "trf1_federal", "federal_*.json"))):
+        d = json.load(open(f, encoding="utf-8"))
+        if d.get("confere") is not True or not d.get("itens") or d["exercicio"] <= datetime.now().year:
+            continue
+        cx.execute("INSERT OR IGNORE INTO ente (tribunal,cd_externo,nome,ibge,tipo) VALUES (?,?,?,?,?)",
+                   ("TRF1", TRF2_FEDERAL_CD, "UNIÃO FEDERAL E AUTARQUIAS FEDERAIS (orçamento federal - TRF1)", None, "outro"))
+        eid = cx.execute("SELECT id FROM ente WHERE tribunal=? AND cd_externo=?", ("TRF1", TRF2_FEDERAL_CD)).fetchone()[0]
+        n_prec += grava(cx, "TRF1", os.path.basename(f), mtime_iso(f),
+                        eid, list(ad_trf1_federal(d["itens"], d["exercicio"])))
+        n_ent = 1
+    return n_ent, n_prec
 
 
 # TRT -> UF primaria (p/ resolver o ente do GPREC ao municipio). Os multi-estados
@@ -1504,8 +1647,39 @@ def marca_parcelas_p20(tribunal, regs):
     return regs
 
 
+def cnj_valido(d):
+    """Digito verificador do numero CNJ (Res. CNJ 65/2008, modulo 97)."""
+    if not d or len(d) != 20 or not d.isdigit():
+        return False
+    return int(d[7:9]) == 98 - int(d[:7] + d[9:] + "00") % 97
+
+
+# Fontes que publicam o numero fora do padrao CNJ, mas com o CNJ do precatorio dentro
+# (15/10/2026). Sem isto a busca pelo numero do precatorio nao acha esses itens:
+#   TJBA "0005303-34.2010.805.0000-0"  digito extra no fim (4.928 itens, 4.384 do Estado da BA)
+#   TJES "O0028075720248080000"        letra O no lugar do 1o zero: e' o RESTO ordinario do
+#        precatorio cuja parcela superpreferencial vem na linha "0002807..." (351 itens)
+#   TJAL "0501009-89.2025.8.02.9003/2" desmembramento /N (345 itens)
+# O CNJ recuperado vai para numero_eproc ("CNJ do precatorio", o 1o campo da busca); `numero`
+# fica como a fonte publica, porque marca_parcelas_p20 agrupa por ele.
+_CNJ_NA_FONTE = {
+    "TJBA": lambda f: (so_digitos(f) or "")[:20],
+    "TJES": lambda f: so_digitos(f.replace("O", "0")),
+    "TJAL": lambda f: so_digitos(f.split("/")[0]),
+}
+
+
+def recupera_cnj(tribunal, r):
+    if tribunal not in _CNJ_NA_FONTE or r.get("numero_eproc") or cnj_valido(r.get("numero")):
+        return r
+    cand = _CNJ_NA_FONTE[tribunal](str(r.get("numero_fmt") or ""))
+    if cnj_valido(cand):
+        r["numero_eproc"] = cand
+    return r
+
+
 def grava(cx, tribunal, arquivo, coletado_em, ente_id, regs):
-    regs = marca_parcelas_p20(tribunal, [quarentena_valor(r) for r in regs])
+    regs = marca_parcelas_p20(tribunal, [recupera_cnj(tribunal, quarentena_valor(r)) for r in regs])
     cur = cx.execute(
         "INSERT INTO coleta (tribunal,fonte,arquivo,coletado_em,carregado_em,n_registros) "
         "VALUES (?,?,?,?,?,?)",
@@ -1518,7 +1692,7 @@ def grava(cx, tribunal, arquivo, coletado_em, ente_id, regs):
         "data_apresentacao,natureza,ano_orcamento,valor,situacao,superpreferencia,suspenso,"
         "credor,cpf_cnpj,advogado) "
         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-        # .get no numero_eproc: so o TJMG tem esse campo, os outros ad_* nao o produzem
+        # .get no numero_eproc: so o TJMG e os TRTs o produzem; TJBA/TJES/TJAL via recupera_cnj
         [(cid, ente_id, tribunal, r["numero"], r["numero_fmt"], r["numero_origem"],
           r.get("numero_eproc"), r["ordem"],
           r.get("data_apresentacao"), r["natureza"], r["ano_orcamento"], r["valor"], r["situacao"],
@@ -1769,6 +1943,15 @@ def carrega(cx, muns, ix):
             n_ent += 1
     if n_ent:
         resumo["TRF5"] = (n_ent, n_prec)
+
+    # TRF5 federal (fetch_trf5_federal.py) e TRF1 federal (fetch_trf1_federal.py): ver carrega_trf*_federal.
+    n_ent_f, n_prec_f = carrega_trf5_federal(cx)
+    if n_ent_f:
+        e0, p0 = resumo.get("TRF5", (0, 0))
+        resumo["TRF5"] = (e0 + n_ent_f, p0 + n_prec_f)
+    n_ent_1, n_prec_1 = carrega_trf1_federal(cx)
+    if n_ent_1:
+        resumo["TRF1"] = (n_ent_1, n_prec_1)
 
     # TJCE e TJPA: paineis Power BI publicos (scripts/powerbi_publico.py). Um arquivo
     # por ente, mas com esquema proprio -- nao entram no laco generico de FONTES, que

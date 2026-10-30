@@ -54,6 +54,7 @@ derivada do dado, valida para REGIME GERAL e REGIME ESPECIAL.
 """
 import re
 from collections import defaultdict
+from datetime import date as _date, datetime as _datetime
 
 # Escada do art. 100 §23, incisos I a IX, na redacao da EC 136/2025 — conferida
 # LITERALMENTE no texto do Planalto em 2026-08-25. Sao NOVE faixas de 0,5 p.p.,
@@ -306,8 +307,37 @@ def ordena(fila):
     return sorted(fila, key=lambda f: (_ordem(f), _ano(f) or 9999))
 
 
-def proj20(fila, orcamento, ano_base, marcar=True, regime=None):
+def fracao_restante_ano(ref=None, exercicio=2026):
+    """Fracao do orcamento anual que AINDA falta depositar no exercicio, na data `ref`.
+
+    Teto anual / 12 = deposito mensal (art. 59 ADCT); a fila coletada em `ref` ja nao
+    tem o que foi pago antes, entao so' resta (meses restantes / 12) do teto. Em dias,
+    para nao ter de decidir se o deposito do mes corrente ja saiu: 20/10 -> ~19,7%.
+    `ref`: date, string ISO ('2026-09-04T...' / '2026-09-04 15:44') ou None (= hoje).
+    Fora do exercicio (fila de ano anterior, ou `exercicio` desatualizado): 1.0, ou
+    seja, nao mexe no orcamento."""
+    if isinstance(ref, str):
+        try:
+            ref = _date.fromisoformat(ref[:10])
+        except ValueError:
+            ref = None
+    if isinstance(ref, _datetime):
+        ref = ref.date()
+    if ref is None:
+        ref = _date.today()
+    if ref.year != exercicio:
+        return 1.0
+    fim = _date(exercicio, 12, 31)
+    dias_ano = (fim - _date(exercicio, 1, 1)).days + 1
+    return max(0.0, min(1.0, ((fim - ref).days + 1) / dias_ano))
+
+
+def proj20(fila, orcamento, ano_base, marcar=True, regime=None, fracao_ano_base=1.0):
     """Distribui o orcamento anual pela fila respeitando o §20.
+
+    fracao_ano_base: so' o ANO-BASE recebe esta fracao do orcamento anual (ver
+    fracao_restante_ano) — a fila de hoje ja' descontou o pago de janeiro ate' a coleta.
+    Os anos seguintes recebem o orcamento cheio. Default 1.0 = comportamento antigo.
 
     Escreve it['ano_previsto'] em cada item e devolve um resumo. Cada precatorio
     so pode ser pago a partir do seu ano-orcamento (art. 100 §5o), por isso o
@@ -349,7 +379,12 @@ def proj20(fila, orcamento, ano_base, marcar=True, regime=None):
 
     reservado = defaultdict(float)
     ano = ano_base
-    disp = orcamento
+
+    def cap(a):
+        """Orcamento do ano `a`: so' o ano-base e' encolhido (o que ja' foi pago saiu da fila)."""
+        return orcamento * (fracao_ano_base if a == ano_base else 1.0)
+
+    disp = cap(ano)
     resto = None
     i, guarda, pagos_ano_base = 0, 0, 0
     # trava anti-laco infinito; proporcional a fila (o Estado da BA tem 30k itens e a
@@ -361,26 +396,26 @@ def proj20(fila, orcamento, ano_base, marcar=True, regime=None):
         exercicio = max(_ano(f) or ano_base, ano_base)
         if exercicio > ano:                      # art. 100 §5o: ainda nao pode
             ano = exercicio
-            disp = orcamento - reservado.get(ano, 0.0)
+            disp = cap(ano) - reservado.get(ano, 0.0)
             resto = None
             continue
         if disp <= 1e-9:
             ano += 1
-            disp = orcamento - reservado.get(ano, 0.0)
+            disp = cap(ano) - reservado.get(ano, 0.0)
             resto = None
             continue
         if f.get("sp"):
             # chegou a vez: a partir de AGORA (nao do ano-base) o §20 trava a
             # fila. gasto_ja preserva o que os itens normais deste mesmo ano
             # ja consumiram antes do cursor chegar aqui.
-            gasto_ja = (orcamento - reservado.get(ano, 0.0)) - disp
+            gasto_ja = (cap(ano) - reservado.get(ano, 0.0)) - disp
             inicio = ano
             reservado[inicio] += FRACAO_SP * _val(f)
             for k in range(1, N_PARCELAS_SP + 1):
                 reservado[inicio + k] += PARCELA_SP * _val(f)
             f["ano_previsto"] = inicio + N_PARCELAS_SP
             f["p20"] = True
-            disp = orcamento - reservado.get(ano, 0.0) - gasto_ja
+            disp = cap(ano) - reservado.get(ano, 0.0) - gasto_ja
             i += 1
             continue
         resto = _val(f) if resto is None else resto
@@ -396,7 +431,7 @@ def proj20(fila, orcamento, ano_base, marcar=True, regime=None):
             resto = None
         else:
             ano += 1
-            disp = orcamento - reservado.get(ano, 0.0)
+            disp = cap(ano) - reservado.get(ano, 0.0)
 
     normal = [f for f in seq if not f.get("sp")]
     sp = [f for f in seq if f.get("sp")]
@@ -404,7 +439,8 @@ def proj20(fila, orcamento, ano_base, marcar=True, regime=None):
     zera_sp = max((f["ano_previsto"] for f in sp), default=None)
     return {"zera": zera, "zera_sp": zera_sp, "n_sp": len(sp),
             "pagos_ano_base": pagos_ano_base, "reservado": dict(reservado),
-            "orcamento": orcamento, "ano_base": ano_base}
+            "orcamento": orcamento, "ano_base": ano_base,
+            "fracao_ano_base": fracao_ano_base}
 
 
 def acumulado_ate(fila, item, so_normal=True, excluir_provisionado=False):

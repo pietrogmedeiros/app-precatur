@@ -716,7 +716,7 @@ async function buscaDev() {
     drop.innerHTML = d.itens.length ? d.itens.map(x => `<div class="ente-op" role="option" data-chave="${esc(x.chave)}">
         <span class="ente-nome">${esc(x.nome)}</span>
         <span class="ente-tag">${esc(TIPO_DEV[x.tipo] || x.tipo)}${x.uf ? " · " + esc(x.uf) : ""} · ${esc(x.tribunais.join(", "))}
-          <br>${int(x.n)} precatório(s) · ${brlK(x.valor)}${x.n_orgaos > 1 ? " · " + x.n_orgaos + " órgãos" : ""}</span>
+          <br>${int(x.n)} precatório(s) · ${brlK(x.valor)}${x.n_orgaos > 1 ? " · " + x.n_orgaos + " órgãos" : ""}${x.via_orgao ? "<br>inclui " + esc(x.via_orgao) : ""}</span>
       </div>`).join("")
       : `<div class="ente-mais">nenhum devedor com fila no Alfred para “${esc(q)}”</div>`;
   } catch (err) {
@@ -800,15 +800,17 @@ function graficoPago(pts) {
 
 /* ---------- grafico: divida na fila por ano de orcamento (vencida x a vencer) ---------- */
 function graficoDivida(e) {
-  const corte = e.exercicio - 5;  // ate 5 anos atras, ano a ano; antes disso, agrupado
-  const pts = (e.por_ano || []).filter(p => p.valor > 0);
-  const antigo = pts.filter(p => p.ano < corte).reduce((a, p) => a + p.valor, 0);
-  const lst = (antigo ? [{ano: "até " + (corte - 1), v: antigo, venc: true}] : [])
-    .concat(pts.filter(p => p.ano >= corte).map(p => ({ano: p.ano, v: p.valor, venc: p.ano < e.exercicio})));
+  // todos os anos, um a um (sem agrupar os antigos): o ano velho e' justamente o que importa p/ mora
+  const lst = (e.por_ano || []).filter(p => p.valor > 0)
+    .map(p => ({ano: p.ano, v: p.valor, venc: p.ano < e.exercicio}));
   if (!lst.length) return "";
-  const W = 640, H = 210, L = 58, R = 10, T = 18, B = 30;
-  const max = Math.max(...lst.map(p => p.v)) * 1.12;
+  const n = lst.length, fs = n > 16 ? 8.5 : n > 11 ? 9.5 : 11;   // fonte encolhe com o n. de barras
+  const W = 640, L = 58, R = 10, B = 30;
   const step = (W - L - R) / lst.length, bw = Math.min(54, step * 0.62);
+  // rotulo horizontal ("526,4 mi" ~ 4,6 x fonte de largura) so cabe se a coluna for larga; senao vira vertical
+  const vert = step < fs * 4.8, vfs = 10;
+  const H = vert ? 240 : 210, T = vert ? 52 : 18;
+  const max = Math.max(...lst.map(p => p.v)) * 1.12;
   const y = v => T + (H - T - B) * (1 - v / max);
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Dívida na fila por ano de orçamento">`;
   [0, 0.5, 1].forEach(f => {
@@ -818,8 +820,9 @@ function graficoDivida(e) {
   lst.forEach((p, i) => {
     const cx = L + step * i + step / 2;
     s += `<rect x="${cx - bw / 2}" y="${y(p.v)}" width="${bw}" height="${y(0) - y(p.v)}" rx="2" style="fill:var(${p.venc ? "--vencido" : "--avencer"})"/>`
-       + `<text class="lbl" x="${cx}" y="${y(p.v) - 5}" font-size="11" text-anchor="middle">${eixo(p.v)}</text>`
-       + `<text x="${cx}" y="${H - 10}" font-size="11.5" text-anchor="middle">${p.ano}</text>`;
+       + (vert ? `<text class="lbl" transform="translate(${cx + 3.5} ${y(p.v) - 5}) rotate(-90)" font-size="${vfs}" text-anchor="start">${eixo(p.v)}</text>`
+               : `<text class="lbl" x="${cx}" y="${y(p.v) - 5}" font-size="${fs}" text-anchor="middle">${eixo(p.v)}</text>`)
+       + `<text x="${cx}" y="${H - 10}" font-size="${fs + 0.5}" text-anchor="middle">${p.ano}</text>`;
   });
   return s + `</svg>`;
 }
@@ -952,7 +955,8 @@ function renderSaude() {
       ${linhaDl("Plano do tribunal", pl && pl.valor_do_plano_no_ano ? `${brlK(pl.valor_do_plano_no_ano)} em ${pl.ano}`
         : `não publicado para ${ex} — o Alfred usa o teto da lei`)}</dl>
       ${rat.length > 1 ? `<p class="sd-nota">Rateio do teto entre tribunais (${pj.rateio.fonte === "mapa"
-        ? "pelo saldo do Mapa do CNJ" : "pelas filas coletadas"}): ${rat.map(r => esc(r.tribunal) + " " + pct(r.pct)).join(" · ")}</p>` : ""}`;
+        ? "pelo saldo do Mapa do CNJ" : pj.rateio.fonte === "comite_gestor"
+        ? "oficial, Comitê Gestor" : "pelas filas coletadas"}): ${rat.map(r => esc(r.tribunal) + " " + pct(r.pct)).join(" · ")}</p>` : ""}`;
   }
   const edit = ed && ed.tem
     ? `<dl class="lv">${linhaDl("Último edital", `${esc(ed.edital || "")} — <b>${ed.aberto ? "aberto" : esc(ed.situacao || "encerrado")}</b>`)}</dl>
@@ -1411,7 +1415,11 @@ function cartao(p) {
   /* A conta que o vendedor faz no papel — com as duas regras que ela não tem:
      a reserva do §20 e o piso do §5º. */
   const orc = j && j.orcamento_anual;
-  const anosFila = (aFrente != null && orc) ? aFrente / orc : null;
+  // ano-base proporcional: a fila de hoje ja' nao tem o pago ate' a coleta, entao o exercicio
+  // corrente so' tem a fatia `fab` do orcamento anual; a parte que ja' passou entra na conta.
+  const fab = (j && j.fracao_ano_base != null) ? j.fracao_ano_base : 1;
+  const jaPassou = (orc && fab < 0.995) ? orc * (1 - fab) : 0;
+  const anosFila = (aFrente != null && orc) ? (aFrente + jaPassou) / orc : null;
   // floor, nao ceil: 0,35 ano de fila significa que o credito e alcancado DENTRO
   // de 2026. Com ceil o piso do art. 100 §5º ficava invisivel justamente nos casos
   // em que ele e quem decide a data.
@@ -1424,9 +1432,12 @@ function cartao(p) {
   let linhasConta =
       '<tr><td class="op"></td><td class="v">' + brl(aFrente) + '</td>'
     + '<td class="d">que está à sua frente na fila</td></tr>'
+    + (jaPassou ? '<tr><td class="op">+</td><td class="v">' + brl(jaPassou) + '</td>'
+      + '<td class="d">do orçamento de ' + j.exercicio_base + ' que já passou (a fila foi coletada com '
+      + Math.round(fab * 100) + '% do ano pela frente)</td></tr>' : '')
     + '<tr><td class="op">÷</td><td class="v">' + brl(orc) + '</td>'
     + '<td class="d">de orçamento por ano — ' + (rat
-        ? "parcela do §23 desta justiça (" + ratPct + "% do teto, rateado por estoque entre " + rat.por_tribunal.length + " justiças)"
+        ? "parcela do §23 desta justiça (" + ratPct + "% do teto, " + (rat.fonte === "comite_gestor" ? "rateio oficial do Comitê Gestor" : "rateado por estoque") + " entre " + rat.por_tribunal.length + " justiças)"
         : (j && j.fonte_orcamento === "oficial_valor" ? "valor anual publicado pelo tribunal" : j && j.fonte_orcamento === "oficial" ? "percentual homologado do §23" : "teto do art. 100 §23")) + '</td></tr>'
     + '<tr class="regra"><td class="op">=</td><td class="v">'
     + (anosFila != null ? anosFila.toFixed(2).replace(".", ",") + " ano" : "—") + '</td>'

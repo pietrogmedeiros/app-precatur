@@ -46,6 +46,10 @@ _spec = importlib.util.spec_from_file_location("db_nacp", os.path.join(BASE, "sc
 NACP = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(NACP)
 
+_spec = importlib.util.spec_from_file_location("pct_oficial_estados", os.path.join(BASE, "scripts", "pct_oficial_estados.py"))
+PCT_ESTADOS = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(PCT_ESTADOS)
+
 _spec = importlib.util.spec_from_file_location("credor_norm", os.path.join(BASE, "scripts", "credor_norm.py"))
 CN = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(CN)
@@ -54,7 +58,7 @@ _spec.loader.exec_module(CN)
 # pratica: nesses, busca por nome ou CPF nunca acha nada — so' por numero. O
 # conjunto tem de bater com a realidade da base (SELECT tribunal, COUNT(credor)),
 # senao a UI devolve "nada encontrado" sem dizer por que.
-SEM_CREDOR = {"TJRJ", "TJPE", "TJSP", "TJMA", "TJCE", "TJPA", "TRF2", "TRF5", "TRT17", "TRT3"}
+SEM_CREDOR = {"TJRJ", "TJPE", "TJSP", "TJMA", "TJCE", "TJPA", "TRF1", "TRF2", "TRF5", "TRT17", "TRT3"}
 # TJPE: a view publica traz saldo zerado em 100% dos registros (caveat do coletor)
 SEM_VALOR = {"TJPE"}
 # TJMG: o EPD nao publica numero de processo (so uma sequencia interna: "1","2"...)
@@ -190,6 +194,17 @@ def explica_vazio(cx, termo):
             f"O Alfred cobre hoje apenas tribunais estaduais: {', '.join(tribs)}.")
 
 
+def numero_interno_tjrj(d):
+    """O TJRJ publica a fila pelo numero INTERNO do precatorio ("2024.07260-1" = ano + 5
+    ultimos digitos do sequencial + DV), mas o credor e o card trazem o CNJ
+    (0007260-14.2024.8.19.0801). O DV interno nao e' derivavel: devolve os 10 candidatos.
+    Validado em 15/10/2026 em 159 cards do Bitrix: 92 com a origem conferindo, nenhum
+    divergente, 43 fora da lista (o coletor descarta quitados e suspensos)."""
+    if len(d) != 20 or d[13:16] != "819" or d[16:] != "0801" or d[:2] != "00":
+        return []
+    return [d[9:13] + d[2:7] + str(k) for k in range(10)]
+
+
 def _criterio(cx, termo, ordem="valor"):
     """(where, params, order_by, criterio) do termo -- UMA definicao para busca(),
     conta() e busca_pagina(), p/ pagina e total nunca divergirem. Aceita nº de
@@ -203,8 +218,12 @@ def _criterio(cx, termo, ordem="valor"):
     if len(d) >= 15:
         # numero_eproc = CNJ do precatorio (TJMG). E o numero que o comercial recebe,
         # entao vem primeiro na clausula. numero_origem = processo de conhecimento.
-        return ("numero_eproc = ? OR numero = ? OR numero_origem = ?", [d, d, d],
-                (alfa or "tribunal, ordem") + ", id", "numero_processo")
+        w, params = "numero_eproc = ? OR numero = ? OR numero_origem = ?", [d, d, d]
+        rj = numero_interno_tjrj(d)
+        if rj:
+            w += " OR (tribunal = 'TJRJ' AND numero IN (%s))" % ",".join("?" * len(rj))
+            params += rj
+        return ("(%s)" % w, params, (alfa or "tribunal, ordem") + ", id", "numero_processo")
     if 11 <= len(d) <= 14:
         return "cpf_cnpj = ?", [d], (alfa or "ordem") + ", id", "cpf_cnpj"
     frag, params = _where_credor(cx, termo)
@@ -418,6 +437,22 @@ def _rateio_tribunal(cx, ibge, tribunal):
                 "por_tribunal": [{"tribunal": t, "estoque": round(v, 2), "pct": round(100 * v / total, 1)}
                                  for t, v in sorted(pesos.items(), key=lambda kv: -kv[1])]}
 
+    # (0) RATEIO OFICIAL do Comite Gestor (plano anual do exercicio): e' a divisao que o
+    # tribunal de fato aplica ao deposito do ente entre TJ/TRT/TRF, apurada em 1o/jan.
+    # Vence as duas aproximacoes abaixo. Juazeiro/BA 2026: oficial TJBA 59,66% x 69,7% do
+    # Mapa CNJ -- a fila do TJBA recebe R$ 7,2 mi/ano, nao R$ 9,0 mi (previsoes +1 a 2 anos).
+    if NACP.existe(cx):
+        _p = NACP.plano(cx, ibge, EXERCICIO)
+        if _p:
+            campo = ("rateio_trt" if tribunal.startswith("TRT") else
+                     "rateio_trf" if tribunal.startswith("TRF") else "rateio_tj")
+            pesos = {"TJ": _p.get("rateio_tj"), "TRT": _p.get("rateio_trt"), "TRF": _p.get("rateio_trf")}
+            tot = sum(v for v in pesos.values() if v)
+            if _p.get(campo) and tot > 0 and 99 <= tot <= 101:
+                return {"fracao": round(_p[campo] / tot, 4), "fonte": "comite_gestor",
+                        "por_tribunal": [{"tribunal": k, "estoque": None, "pct": round(100 * v / tot, 1)}
+                                         for k, v in pesos.items() if v]}
+
     # (1) FILAS REAIS no banco -- valor elegivel (orcamento <= exercicio) por tribunal
     reais = {}
     for r in cx.execute("SELECT tribunal, SUM(valor) v FROM precatorio_atual "
@@ -519,6 +554,11 @@ def enquadramento_mg(ibge):
         if os.path.exists(p):
             for row in csv.DictReader(open(p, encoding="utf-8-sig")):
                 k = (row.get("codigo_ibge") or "").strip()
+                # O PDF do TJMG publica o Estado de MG com codigo "13" (o certo e' 31,
+                # IBGE da UF). "13" e' o pseudo-IBGE do Estado do AMAZONAS: sem esta
+                # troca o AM herdava a mora e o 1% de MG e o Estado de MG ficava sem nada.
+                if (row.get("ente") or "").strip() == "Estado de Minas Gerais":
+                    k = "31"
                 if not k:
                     continue
                 def _f(c):
@@ -543,9 +583,24 @@ def enquadramento_mg(ibge):
 _REPASSE = None
 
 
-def fracao_repasse_fila(ibge, tribunal):
+# Fracao que chega a fila quando o ente tem edital de acordo e nao ha' documento proprio
+# (ver fracao_repasse_fila). Decisao do usuario em 21/10/2026: premissa CONSERVADORA — erra
+# p/ mais na previsao, a ajustar quando houver mais informacao.
+FRACAO_FILA_COM_EDITAL = 0.5
+
+
+def fracao_repasse_fila(ibge, tribunal, regime=None):
     """Fracao do orcamento TEORICO do §23 (RCL x percentual) que de fato chega na
     ordem cronologica. Default 1.0 (100%) para todo ente sem entrada no CSV.
+
+    REGRA CONSERVADORA (21/10/2026): sem entrada no CSV, ente em regime ESPECIAL que tem
+    edital de acordo direto cadastrado (`data/editais_acordo_*.csv`, qualquer situacao,
+    salvo "prejudicado") recebe 50%: o art. 102 do ADCT deixa o ente destinar ate' 50% dos
+    aportes a acordos, entao metade do deposito PODE nao andar a fila. E' pessimista de
+    proposito: onde o acordo segue a ordem cronologica (RN, BA) o dinheiro do acordo paga
+    quem ja' esta' na frente, com 40% de desagio, e a fila anda MAIS rapido, nao mais lento;
+    e sem edital aberto o saldo volta p/ a conta cronologica (Juazeiro 19/12/2025, RN
+    16/01/2026). O CSV, quando traz o ente, vence a regra.
 
     Existe porque o teto do §23 e' um limite de DEPOSITO, nao de PAGAMENTO A CREDOR:
     alguns entes reservam parte do repasse para outro canal antes de chegar na fila
@@ -568,9 +623,19 @@ def fracao_repasse_fila(ibge, tribunal):
                 k = (str(row.get("codigo_ibge") or "").strip(), (row.get("tribunal") or "").strip())
                 _REPASSE[k] = row
     row = _REPASSE.get((str(ibge or "").strip(), tribunal))
-    if not row or not row.get("pct_fila"):
-        return 1.0, None
-    return float(row["pct_fila"]) / 100, row
+    if row and row.get("pct_fila"):
+        return float(row["pct_fila"]) / 100, row
+    if regime == "Especial":
+        ed = edital_acordo(ibge)
+        if ed and ed.get("tem") and not ed.get("prejudicado"):
+            return FRACAO_FILA_COM_EDITAL, {
+                "pct_fila": str(round(100 * FRACAO_FILA_COM_EDITAL)), "regra": "conservadora_edital",
+                "fonte": ("Regra conservadora do Alfred: ente em regime especial com edital de acordo "
+                          f"direto cadastrado ({ed.get('edital') or 'edital'})"),
+                "observacao": ("Metade do orçamento do §23 considerada fora da fila cronológica, porque o "
+                               "ente pode destinar até 50% dos aportes a acordos (ADCT art. 102). "
+                               "Premissa pessimista: pode estar mais longe do que será.")}
+    return 1.0, None
 
 
 _EDITAIS = None
@@ -729,7 +794,15 @@ def contexto(cx, r, todos_itens=False):
             fonte_oficial = _e["fonte"]
             doc_oficial = _e["documento"]
             ref_oficial = _e["referencia"]
-    base_mora = mora_oficial if mora_oficial is not None else mora
+    # Estado: so' o PERCENTUAL oficial (a mora segue a da fila); ver pct_oficial_estados.
+    pct_fonte = pct_doc = None
+    if pct_oficial is None and r["ibge"]:
+        _pe = PCT_ESTADOS.pct_estado(r["ibge"])
+        if _pe:
+            pct_oficial = _pe["pct"]
+            pct_fonte = _pe["fonte"]
+            pct_doc = f"{_pe['documento']} ({_pe['data']})"
+    base_mora =mora_oficial if mora_oficial is not None else mora
 
     # Fila sem valor nao produz projecao: o acumulado seria zero e o parecer diria
     # "recebe no exercicio base" para qualquer posicao. Ver SEM_VALOR (TJPE).
@@ -750,8 +823,12 @@ def contexto(cx, r, todos_itens=False):
     rateio = _rateio_tribunal(cx, r["ibge"], r["tribunal"])
     # E dentro do que cabe a esta justica, uma fracao do repasse pode ir para outro
     # canal (acordo) antes de chegar na ordem cronologica — ver fracao_repasse_fila.
-    frac_repasse, repasse_info = fracao_repasse_fila(r["ibge"], r["tribunal"])
+    frac_repasse, repasse_info = fracao_repasse_fila(r["ibge"], r["tribunal"], r["regime"])
     frac = rateio["fracao"] * frac_repasse
+    # ANO-BASE PROPORCIONAL (20/10/2026): a fila coletada em `coletado_em` ja' nao tem o
+    # que o ente pagou antes dessa data, entao o exercicio corrente so' tem (dias que
+    # faltam / dias do ano) do orcamento anual — nao o teto cheio. Vale p/ todo ente.
+    f_ano = M.fracao_restante_ano(r["coletado_em"], EXERCICIO)
     # por ID: o numero repete dentro do ente nas parcelas de precatorio parcelado,
     # e casar por numero devolvia sempre a primeira parcela — ano e posicao errados.
     alvo = next((f for f in fila if f.get("id") == r["id"]), None)
@@ -760,6 +837,7 @@ def contexto(cx, r, todos_itens=False):
     out = {"n_total": n_tot, "estoque": estoque, "mora": mora, "n_mora": n_mora,
            "prop_mora": round(100 * mora / r["rcl"], 2) if r["rcl"] else None,
            "mora_oficial": mora_oficial, "pct_oficial": pct_oficial,
+           "pct_oficial_fonte": pct_fonte, "pct_oficial_documento": pct_doc,
            "mora_oficial_fonte": fonte_oficial, "mora_oficial_documento": doc_oficial,
            "mora_oficial_ref": ref_oficial,
            "mora_oficial_sobre_rcl_pct": (round(100 * mora_oficial / r["rcl"], 2)
@@ -778,6 +856,7 @@ def contexto(cx, r, todos_itens=False):
            # (sem a fracao de repasse) mostraria orcamento maior do que o ano
            # projetado realmente supoe, os dois numeros do parecer se contradizendo.
            "frac_orcamento": frac,
+           "fracao_ano_base": round(f_ano, 4),
            "quitacao_por_natureza": quitacao_por_natureza(cx, r["ente_id"], r["tribunal"]),
            "acumulado": None, "acumulado_bruto": None, "acumulado_a_financiar": None,
            "valor_provisionado": round(sum((f.get("val") or 0.0) for f in fila
@@ -786,7 +865,7 @@ def contexto(cx, r, todos_itens=False):
     if cen and alvo:
         prev = {}
         for k in ("conservador", "central", "otimista"):
-            proj = M.proj20(fila, cen[k] * frac, EXERCICIO, regime=r["regime"])   # frac: parcela do teto desta justica
+            proj = M.proj20(fila, cen[k] * frac, EXERCICIO, regime=r["regime"], fracao_ano_base=f_ano)   # frac: parcela do teto desta justica
             prev[k] = alvo.get("ano_previsto")
             if k == "central":
                 out["n_superprecatorios"] = proj["n_sp"]
@@ -865,7 +944,7 @@ def contexto(cx, r, todos_itens=False):
             # paga de fato. A divisao simples que havia aqui ignorava a reserva do §20
             # e o piso do §5o, e errava para o lado otimista em ente com
             # superprecatorio (Passos: dizia 2028 onde a conta honesta da ~2039).
-            M.proj20(fila, pago, EXERCICIO, regime=r["regime"])
+            M.proj20(fila, pago, EXERCICIO, regime=r["regime"], fracao_ano_base=f_ano)
             ano_ritmo = alvo.get("ano_previsto")
             ritmo_por_id = {f.get("id"): f.get("ano_previsto") for f in fila} if todos_itens else None
             out["ritmo_observado"] = {
@@ -880,7 +959,7 @@ def contexto(cx, r, todos_itens=False):
                                 if cen.get("teto_p23") else None)}
             # proj20 escreve ano_previsto na fila; devolver o cenario central para
             # nao deixar o item marcado com o ritmo para quem ler depois
-            M.proj20(fila, cen["central"] * frac, EXERCICIO, regime=r["regime"])
+            M.proj20(fila, cen["central"] * frac, EXERCICIO, regime=r["regime"], fracao_ano_base=f_ano)
             if ritmo_por_id is not None:
                 for it in out.get("fila_itens") or []:
                     it["ano_ritmo"] = ritmo_por_id.get(it["id"])
@@ -899,7 +978,8 @@ def contexto(cx, r, todos_itens=False):
                    acumulado_bruto=M.acumulado_ate(fila, alvo, so_normal=False),
                    acumulado_a_financiar=acum_financiar,
                    ano_previsto=prev["central"], ano_previsto_por_cenario=prev,
-                   anos={k: M.anos_ate(acum_p_anos, cen[k] * frac) for k in prev})
+                   anos={k: M.anos_ate(None if acum_p_anos is None else acum_p_anos + cen[k] * frac * (1 - f_ano),
+                             cen[k] * frac) for k in prev})
     return out
 
 
@@ -934,8 +1014,16 @@ def _bloco_plano(cx, r, avisos):
     if conf and conf["codigo"] == "bloqueio":
         avisos.append(
             f"O tribunal bloqueou valores do ente via SISBAJUD em {conf['em']} "
-            f"(PA {conf['pa']}): o pagamento do plano anual estava atrasado e teve de "
-            f"ser forçado judicialmente.")
+            f"(PA {conf['pa']}): o bloqueio acontece quando a parcela do plano anual não é "
+            f"paga no prazo — possível atraso, ainda não confirmado (o ente pode reverter "
+            f"provando o pagamento)."
+            + (f" {conf['n_bloqueios_devolvidos']} bloqueio(s) anterior(es) já foi(ram) "
+               f"devolvido(s) por decisão, porque o ente havia pago."
+               if conf.get("n_bloqueios_devolvidos") else ""))
+    elif conf and conf["codigo"] == "bloqueio_devolvido":
+        avisos.append(
+            f"O tribunal bloqueou valores do ente via SISBAJUD, mas devolveu o bloqueio "
+            f"({conf['em']}): o ente havia pago a parcela — não há atraso registrado.")
     elif conf and conf["codigo"] == "regular":
         avisos.append(
             f"O Núcleo de Precatórios certificou em {conf['em']} que o ente está REGULAR "
@@ -1008,6 +1096,7 @@ def _bloco_pagamento(cx, r, avisos):
 
 
 TRF2_FEDERAL_CD = "UNIAO_ORCAMENTO_FEDERAL"   # mesmo valor do db_build
+TRF5_FED_PREFIXO = "TRF5_FED:"           # mesmo valor do db_build (ente = prefixo + sigla do orgao)
 
 
 def _devedor_do_exercicio(cx, r):
@@ -1030,6 +1119,18 @@ def _devedor_do_exercicio(cx, r):
     if r["tribunal"] == "TRF2" and e[0] == TRF2_FEDERAL_CD:
         return ("Devedor federal (fila orçamentária do TRF2): não há teto do §23. A União paga a "
                 "proposta orçamentária inteira no exercício — a proposta 2026 do TRF2 saiu toda em 03/2026.")
+    if r["tribunal"] == "TRF1" and e[0] == TRF2_FEDERAL_CD:
+        return ("Devedor federal (proposta orçamentária do TRF1): não há teto do §23. A União paga a proposta "
+                "do exercício até 31/12 (art. 100 §5 da CF, com a EC 136). O TRF1 não publica lista de pagos, "
+                "então o ritmo dele não foi medido; no TRF5, que publica, saíram no próprio exercício 98,7% da "
+                "proposta de 2025 e 99,1% da de 2026 (até 19/10/2026). A ordem mostrada recomeça em 1 em cada "
+                "natureza (alimentar e comum).")
+    if r["tribunal"] == "TRF5" and str(e[0] or "").startswith(TRF5_FED_PREFIXO):
+        return ("Devedor federal (proposta orçamentária do TRF5): não há teto do §23. A União paga a "
+                "proposta do exercício até 31/12 — nas listas de pagos do TRF5, 98,7% da proposta de 2025 e "
+                "99,1% da de 2026 (até 19/10/2026) saíram no próprio exercício; o resíduo, perto de 1%, fica "
+                "sem pagamento registrado. A ordem mostrada é a da lista do órgão (recomeça em 1 a cada "
+                "exercício e natureza), não uma fila única.")
     if r["tribunal"].startswith("TJ") and ("SEGURO SOCIAL" in n or "SEGURIDADE SOCIAL" in n
                                           or re.search(r"INSS", n)):
         return ("INSS na Justiça Estadual (ação de acidente de trabalho, CF art. 109, I): o precatório é "
@@ -1111,9 +1212,16 @@ def parecer(cx, r, completo=False, todos_itens=False):
                       f"futuro; a previsão já desconta isso.")
     if c and c.get("repasse_fila"):
         rf = c["repasse_fila"]
-        avisos.append(f"Apenas {rf['pct']:.0f}% do orçamento teórico do art. 100 §23 chega à "
-                      f"ordem cronológica deste ente — o restante vai para outro canal "
-                      f"(ver fonte). A previsão já usa a fração menor.")
+        if (rf.get("fonte") or "").startswith("Regra conservadora"):
+            avisos.append(
+                f"Este ente tem edital de acordo direto e está no regime especial (que pode destinar até "
+                f"50% dos aportes a acordos). Por cautela, a previsão considera que só {rf['pct']:.0f}% "
+                f"do orçamento do art. 100 §23 anda a fila cronológica — é uma estimativa conservadora: "
+                f"o ano real pode ser mais cedo, sobretudo se o acordo pagar quem já está na frente.")
+        else:
+            avisos.append(f"Apenas {rf['pct']:.0f}% do orçamento teórico do art. 100 §23 chega à "
+                          f"ordem cronológica deste ente — o restante vai para outro canal "
+                          f"(ver fonte). A previsão já usa a fração menor.")
     qn = c.get("quitacao_por_natureza") if c else None
     if qn:
         pn = qn["por_natureza"]
@@ -1256,6 +1364,9 @@ def parecer(cx, r, completo=False, todos_itens=False):
             "ano_previsto": c["ano_previsto"],
             "ano_por_cenario": c.get("ano_previsto_por_cenario"),
             "fila_zera_em": c["zera"], "exercicio_base": EXERCICIO,
+            # fatia do orcamento anual que ainda cabe no exercicio-base (dias restantes / ano,
+            # a partir da coleta): o ano-base NAO tem o teto cheio, ver contexto().
+            "fracao_ano_base": c.get("fracao_ano_base", 1.0),
             # orcamento_anual e banda = a PARCELA desta justica (teto x fracao do rateio);
             # teto_p23 = o limite CHEIO do ente (todas as justicas). Quando fracao=1 (ente
             # de uma justica so), orcamento_anual == teto e rateio vem None: nada muda.
@@ -1302,21 +1413,41 @@ def devedores(cx):
         out.append({"chave": "e%d" % r["id"], "nome": r["nome"], "uf": None, "tipo": "orgao",
                     "regime": None, "n_orgaos": 1, "n": r["n"], "valor": round(r["v"], 2),
                     "tribunais": [r["tribunal"]]})
+    # nomes dos orgaos de cada pool (ex.: IPAJM dentro do Estado do ES), para a busca achar o
+    # devedor pelo orgao. Fica em _orgaos (sai da resposta, como _busca).
+    orgaos = {}
+    for r in cx.execute(
+            "SELECT DISTINCT e.ibge, e.nome FROM ente e JOIN precatorio_atual p ON p.ente_id = e.id "
+            "WHERE e.ibge IS NOT NULL AND p.ordem IS NOT NULL"):
+        orgaos.setdefault(r["ibge"], []).append((_chave_devedor(r["nome"]), r["nome"]))
     for d in out:
         d["_busca"] = _chave_devedor("%s %s" % (d["nome"], d["uf"] or ""))
+        d["_orgaos"] = orgaos.get(d["chave"], [])
     out.sort(key=lambda d: -d["n"])
     return out
 
 
 def busca_devedor(lista, termo, limite=20):
     """Todas as palavras do termo, sem acento, em qualquer ordem. Estado e nome que comeca
-    com o termo vem primeiro; depois por tamanho da fila."""
+    com o termo vem primeiro; depois por tamanho da fila. Depois dos que casam pelo nome do
+    devedor vêm os que casam pelo nome de um ORGAO do pool (todas as palavras no MESMO orgao),
+    com `via_orgao` dizendo qual — e' como "ipajm" leva ao Estado do ES."""
     t = [w for w in _chave_devedor(termo).split() if len(w) >= 2]
     if not t:
         return []
     achados = [d for d in lista if all(w in d["_busca"] for w in t)]
     achados.sort(key=lambda d: (d["tipo"] != "estado", not d["_busca"].startswith(t[0]), -d["n"]))
-    return [{k: v for k, v in d.items() if k != "_busca"} for d in achados[:limite]]
+    vistos = {d["chave"] for d in achados}
+    por_orgao = []
+    for d in lista:
+        if d["chave"] in vistos:
+            continue
+        via = next((nome for norm, nome in d["_orgaos"] if all(w in norm for w in t)), None)
+        if via:
+            por_orgao.append(dict(d, via_orgao=via))
+    por_orgao.sort(key=lambda d: (d["tipo"] != "estado", -d["n"]))
+    return [{k: v for k, v in d.items() if not k.startswith("_")}
+            for d in (achados + por_orgao)[:limite]]
 
 
 def _where_chave(chave):
