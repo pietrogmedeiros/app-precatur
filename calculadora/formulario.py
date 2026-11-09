@@ -134,6 +134,13 @@ def build_regime(preset: str | None) -> list[dict] | None:
     return None
 
 
+# IR retido sobre os honorários SUCUMBENCIAIS (exibição no memorial). Federal:
+# 3% (art. 27 da Lei 10.833/2003, retenção na fonte do requisitório federal;
+# pedido do Matheus, 09/11/2026). Demais esferas: faixa máxima da tabela.
+IR_SUC_FEDERAL = Decimal("3")
+IR_SUC_PADRAO = Decimal("27.5")
+IR_SUCUMBENCIAIS_OPCOES = ("3", "27.5")
+
 @dataclass
 class Formulario:
     """O formulário já lido — entrada do motor + o que o memorial precisa."""
@@ -151,6 +158,9 @@ class Formulario:
     referencia: str = ""
     observacao: str = ""
     honorarios_sucumbenciais_pct: Decimal | None = None
+    # IR sobre o sucumbencial (só exibição, no memorial): 3% na esfera federal,
+    # 27,5% nas demais — ver `memorial.ir_sucumbenciais_padrao`
+    ir_sucumbenciais_pct: Decimal | None = None
     meses: int = 0
     aliquota_pss: Decimal | None = None
     # valores crus, para as iniciais da trilha do memorial
@@ -294,6 +304,11 @@ def ler(bruto: dict) -> Formulario:
         _ente_l = (ente_devedor or "").lower()
         esfera = "federal" if any(k in _ente_l for k in ("união", "uniao", "inss", "federal")) else "estadual"
 
+    # IR do sucumbencial: "" = automático pela esfera; "3" ou "27.5" = escolha
+    _ir_suc = (bruto.get("ir_suc") or "").strip().replace(",", ".")
+    ir_suc_pct = (Decimal(_ir_suc) if _ir_suc in IR_SUCUMBENCIAIS_OPCOES
+                  else IR_SUC_FEDERAL if esfera == "federal" else IR_SUC_PADRAO)
+
     # ── 6 · Atualização ao presente ───────────────────────────────────────
     data_alvo = _data(bruto, "data_alvo")
 
@@ -353,6 +368,7 @@ def ler(bruto: dict) -> Formulario:
         referencia=(bruto.get("ref") or "").strip(),
         observacao=(bruto.get("obs") or "").strip(),
         honorarios_sucumbenciais_pct=hon_suc,
+        ir_sucumbenciais_pct=ir_suc_pct,
         meses=meses,
         aliquota_pss=aliq_pss,
         valor_total=valor_total,

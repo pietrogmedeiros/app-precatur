@@ -229,7 +229,8 @@ def test_pdf_fora_do_pje_devolve_none():
 def test_conta_e_o_documento_citado_pelas_decisoes_com_ancora_na_pagina_operativa(pdf, res):
     c = res["conta"]
     assert c["id"] == _LAUDO
-    assert c["votos"] >= 3
+    # sentença + embargos; a cópia da sentença na intimação não vota de novo
+    assert c["votos"] >= 2
     # a âncora é o valor do dispositivo, na página do RESUMO (a 1ª tem a conta antiga)
     assert c["ancora"]["valor"] == "22.000,00"
     assert c["ancora"]["pagina"] == _pagina_de(pdf, _LAUDO, 2)
@@ -462,3 +463,163 @@ def test_ocr_sob_demanda_tem_teto(monkeypatch):
     paginas = [{"pagina": n, "nativa": False, "texto": ""} for n in range(1, 6)]
     lidas = P._ocr_nas_faixas(doc.tobytes(), paginas, [(1, 5)], lambda page: "x")
     assert lidas == [1, 2]
+
+
+# ── feedback do jurídico (Matheus, 09/11/2026) ───────────────────────────
+def test_mapa_das_pecas_no_sintetico(res):
+    pc = res["pecas"]
+    assert [r["id"] for r in pc["cumprimento"]["calculo_homologado"]] == [_LAUDO]
+    # sem "homologo" no texto, a sentença que decide com base no laudo é a homologatória
+    assert [r["id"] for r in pc["cumprimento"]["homologacao"]] == [_SENT, _EMB]
+    assert [r["id"] for r in pc["oficio"]] == [_OF_PRINC]
+    assert "Ofício requisitório" not in pc["faltando"]
+
+
+def test_peticao_de_cumprimento_de_sentenca_nao_e_decisao():
+    # #2699: a petição "Cumprimento de Sentença Dr. Lauro" virava a decisão
+    assert not J._e_decisao({"titulo": "Cumprimento de Sentença Dr. Fulano", "tipo": "Petição"})
+    assert not J._e_decisao({"titulo": "Despacho", "tipo": "Intimação"})
+    assert J._e_decisao({"titulo": "Despacho", "tipo": "Sentença"})
+    assert J._e_decisao({"titulo": "Processo nº 1 - Sentença - Pedido Julgado Procedente",
+                         "tipo": "Documento de Comprovação"})
+
+
+def _of(id_, pag, data):
+    return {"id": id_, "pagina_inicio": pag, "pagina_fim": pag + 3, "data": data,
+            "beneficiario_tipo": "principal", "campos": {}, "preenchidos": 5}
+
+
+def test_oficio_do_cartorio_ganha_do_rascunho_do_advogado():
+    # #2699: o advogado protocola o formulário (pág 289); o cartório expede o oficial (295)
+    docs = {
+        "1": {"tipo": "Manifestação", "titulo": "Manifestação", "signatario": "ADVOGADA"},
+        "2": {"tipo": "Documento de Comprovação", "titulo": "Formulário Beneficiario Principal",
+              "signatario": "ADVOGADA"},
+        "3": {"tipo": "Certidão", "titulo": "Certidão", "signatario": "SERVIDOR"},
+        "4": {"tipo": "Documento de Comprovação",
+              "titulo": "SEI_TJMG - 5983361 - Formulário - Ofício Precatório-Beneficiário Principal",
+              "signatario": "SERVIDOR"},
+    }
+    J._quem_juntou(docs)
+    assert docs["2"]["juntado_por"] == "parte" and docs["4"]["juntado_por"] == "cartorio"
+    # mesmo se o rascunho fosse o mais recente, o do cartório vale
+    alvo, desc = J._escolher_oficio([_of("4", 295, "2022-02-24"), _of("2", 300, "2022-03-01")], docs)
+    assert alvo["id"] == "4"
+    assert desc[0]["id"] == "2" and "advogado" in desc[0]["motivo"]
+
+
+def test_sem_assinatura_vale_o_mais_recente_com_titulo_de_oficio():
+    docs = {"a": {"tipo": "Documento de Comprovação", "titulo": "Formulário-Ofício Precatório"},
+            "b": {"tipo": "Documento de Comprovação", "titulo": "Formulário-Ofício Precatório"}}
+    J._quem_juntou(docs)
+    alvo, desc = J._escolher_oficio([_of("a", 10, "2022-01-01"), _of("b", 50, "2023-01-01")], docs)
+    assert alvo["id"] == "b" and desc[0]["motivo"] == "há um ofício mais recente"
+
+
+@pytest.mark.parametrize("data,ano", [
+    ("2021-07-01", "2022"), ("2021-07-02", "2023"),   # 1º/07 até 2021
+    ("2022-02-24", "2023"), ("2023-10-04", "2025"),   # 02/04 (EC 114)
+    ("2026-02-01", "2027"), ("2026-02-02", "2028"),   # 1º/02 (EC 136)
+])
+def test_ano_orcamentario_pela_data_limite_da_epoca(data, ano):
+    assert J.ano_de_apresentacao(data) == ano
+
+
+def test_ano_orcamentario_declarado_no_oficio_ganha_da_estimativa():
+    of = _of("x", 7, "2023-10-04")
+    of["campos"] = {"ano_orcamentario": "2024"}
+    assert J.ano_orcamentario(of)["valor"] == "2024"
+    of["campos"] = {}
+    est = J.ano_orcamentario(of)
+    assert est == {"valor": "2025", "fonte": "estimado", "pagina": 7, "data_oficio": "2023-10-04"}
+
+
+# ── casos reais (#2781 e #2699): os PDFs ficam fora do repositório. Baixe do
+# Bitrix (campo "Anexo - Processo") e aponte PRECATUR_CASOS_PJE para a pasta,
+# com os nomes 2781_processo_0.pdf e 2699_processo_0.pdf.
+_CASOS = Path(__import__("os").environ.get("PRECATUR_CASOS_PJE", "/nao/existe"))
+
+
+def _ids(lista):
+    return [r["id"] for r in lista]
+
+
+@pytest.mark.skipif(not (_CASOS / "2781_processo_0.pdf").exists(), reason="PDF do #2781 ausente")
+def test_caso_real_2781_um_oficio():
+    r = J.analisar(str(_CASOS / "2781_processo_0.pdf"))
+    pc = r["pecas"]
+    assert _ids(pc["conhecimento"]["sentenca"]) == ["146298677", "146298679"]
+    assert _ids(pc["conhecimento"]["transito"]) == ["146298683"]
+    assert _ids(pc["cumprimento"]["calculo_homologado"]) == ["2946936413"]
+    assert _ids(pc["cumprimento"]["homologacao"]) == ["7159628077"]
+    assert _ids(pc["oficio"]) == ["10083110937"]
+    assert pc["faltando"] == []
+
+
+@pytest.mark.skipif(not (_CASOS / "2699_processo_0.pdf").exists(), reason="PDF do #2699 ausente")
+def test_caso_real_2699_varios_oficios():
+    r = J.analisar(str(_CASOS / "2699_processo_0.pdf"))
+    assert r["oficio"]["id"] == "8565998007"          # oficial, juntado pelo cartório
+    assert _ids(r["oficios_descartados"]) == ["8559923025"]  # rascunho do advogado
+    assert [c["pagina_inicio"] for c in r["cortes"] if c["tipo"] == P.TIPO_OFICIO] == [295]
+    pc = r["pecas"]
+    assert _ids(pc["conhecimento"]["sentenca"]) == ["110408198"]
+    assert _ids(pc["conhecimento"]["transito"]) == ["110408208"]
+    assert _ids(pc["cumprimento"]["calculo_homologado"]) == ["110406591"]
+    assert _ids(pc["cumprimento"]["homologacao"]) == ["125195656"]
+    assert r["ano_orcamentario"]["valor"] == "2023"
+
+
+# ── total da conta com o sucumbencial embutido ──────────────────────────
+def _pag(n, texto):
+    return {"pagina": n, "texto": texto, "tabela": [], "nativa": True}
+
+
+@pytest.mark.parametrize("texto,total,esperado", [
+    # #4879: linha fora de ordem, e o rótulo não diz "sucumbencial"
+    ("SUB TOTAL\nTOTAL 117.669,18 10.697,20 106.971,98 HONORÁRIOS DE 10%", "117.669,18", "106.971,98"),
+    # #3445: formato americano e honorários com atualização própria (4,2%)
+    ("27,362.31 R$\nHonorários Valor Atualizado 1,000.00 R$ 1,153.40 R$\n28,515.71 R$ TOTAL DA CONDENAÇÃO",
+     "28.515,71", "27.362,31"),
+])
+def test_total_sem_o_honorario_que_esta_na_conta(texto, total, esperado):
+    campos = {"valor_total": {"valor": total, "citacao": {}}}
+    aviso = P._descontar_sucumbencial(campos, [_pag(1, texto)], (1, 1))
+    assert campos["valor_total"]["valor"] == esperado
+    assert aviso["tipo"] == "sucumbencial_descontado"
+
+
+@pytest.mark.parametrize("texto,total", [
+    # o crédito já veio sem os honorários: nada a descontar
+    ("SUB TOTAL 106.971,98 HONORÁRIOS DE 10% 10.697,20 TOTAL 117.669,18", "106.971,98"),
+    # a diferença existe, mas não está junto de "honorários"
+    ("Principal 100.000,00 Juros 20.000,00 Total 120.000,00", "120.000,00"),
+    # juros + principal = subtotal, com "Honorários" na linha de baixo: o
+    # honorário é o da PRÓPRIA linha (2.000,00), não os juros (8.000,00)
+    ("Valor Atualizado R$ 12.000,00\nJuros Moratórios R$ 8.000,00\nSub Total R$ 20.000,00\n"
+     "Honorários Advocatícios R$ 2.000,00\nValor Total R$ 22.000,00", "20.000,00"),
+])
+def test_total_fica_quando_nao_ha_honorario_exato(texto, total):
+    campos = {"valor_total": {"valor": total, "citacao": {}}}
+    assert P._descontar_sucumbencial(campos, [_pag(1, texto)], (1, 1)) is None
+    assert campos["valor_total"]["valor"] == total
+
+
+@pytest.mark.skipif(not (_CASOS / "3445_processo_0.pdf").exists(), reason="PDF do #3445 ausente")
+def test_caso_real_3445_planilha_sem_carimbo_e_oficio_escaneado():
+    r = J.analisar(str(_CASOS / "3445_processo_0.pdf"))
+    assert (r["conta"]["id"], r["conta"]["pagina_inicio"], r["conta"]["pagina_fim"]) == ("16163663", 72, 74)
+    assert r["conta"]["ancora"]["fraca"]                 # não vira pista para o extrator
+    assert r["oficio"]["id"] == "34512198" and r["oficio"]["origem"] == "indice"
+    tipos = {a["tipo"] for a in r["alertas"]}
+    assert {"oficio_sem_texto", "conta_sem_carimbo"} <= tipos
+    assert _ids(r["pecas"]["conhecimento"]["transito"]) == ["16163646"]  # triagem fora
+
+
+@pytest.mark.skipif(not (_CASOS / "4879_processo_0.pdf").exists(), reason="PDF do #4879 ausente")
+def test_caso_real_4879():
+    r = J.analisar(str(_CASOS / "4879_processo_0.pdf"))
+    pc = r["pecas"]
+    assert _ids(pc["cumprimento"]["calculo_homologado"]) == ["10215502668"]
+    assert _ids(pc["cumprimento"]["homologacao"]) == ["10241388304"]
+    assert _ids(pc["cumprimento"]["transito"]) == ["10260273118"]

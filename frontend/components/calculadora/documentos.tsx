@@ -14,8 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Aviso, Opcoes, inputClass } from "./campos";
 import {
   analisarPdf, extrairCortes, extrairPecas, paginasCitadas, preencherPorProcesso,
-  type CorteSugerido, type EstadoDocumentos, type FormularioCalculo,
-  type PaginaCitada, type RespostaExtracao,
+  type AlertaPje, type CorteSugerido, type EstadoDocumentos, type FormularioCalculo,
+  type PaginaCitada, type PecaPje, type PecasPje, type RespostaExtracao,
 } from "@/lib/calculadora";
 
 type Modo = "pecas" | "corte" | "autonomo";
@@ -29,7 +29,7 @@ export function semearFormulario(
     vt: "vt", vp: "vp", vj: "vj", vs: "vs",
     hc: "hc", hs: "hs", natureza: "natureza", modalidade: "modalidade",
     data_calculo: "data_calculo", data_apres: "data_apres",
-    ente_outro: "ente_outro", ref: "ref",
+    ente_outro: "ente_outro", ref: "ref", ano_orc: "ano_orc",
   };
   for (const [param, campo] of Object.entries(direto)) {
     if (q[param] !== undefined && q[param] !== "") (patch as any)[campo] = q[param];
@@ -67,6 +67,7 @@ export function Documentos({
   const [sessao, setSessao] = useState<string | null>(null);
   const [cortes, setCortes] = useState<CorteSugerido[]>([]);
   const [paginas, setPaginas] = useState<{ n: number; escaneadas: number } | null>(null);
+  const [pecasPje, setPecasPje] = useState<PecasPje | null>(null);
 
   // modo autônomo
   const [processo, setProcesso] = useState<File | null>(null);
@@ -152,6 +153,7 @@ export function Documentos({
                 setSessao(r.sessao);
                 setCortes(r.cortes_sugeridos ?? []);
                 setPaginas({ n: r.n_paginas, escaneadas: r.escaneadas });
+                setPecasPje(r.pje?.pecas ?? null);
                 setResultado(null);
               })}>
               {ocupado === "analisar" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scissors className="h-4 w-4" />}
@@ -164,6 +166,8 @@ export function Documentos({
                 a extração só roda sobre o que você marcar.
               </p>
             )}
+
+            {pecasPje && <PecasLocalizadas pecas={pecasPje} />}
 
             {cortes.length > 0 && (
               <div className="space-y-2">
@@ -271,6 +275,13 @@ function Extracao({
 
   return (
     <div className="space-y-3">
+      {resultado.pecas_pje && <PecasLocalizadas pecas={resultado.pecas_pje} />}
+      {(resultado.alertas_pje ?? []).map((a: AlertaPje, i: number) => (
+        <Aviso key={`${a.tipo}-${i}`} tom="atencao">
+          <AlertTriangle className="mr-1 inline h-3 w-3" />
+          {a.mensagem}
+        </Aviso>
+      ))}
       {prova?.ok === true && (
         <Aviso tom="info">✅ Prova aritmética bateu: principal + juros = total.</Aviso>
       )}
@@ -384,6 +395,66 @@ function Extracao({
             <EyeOff className="h-4 w-4" /> Fechar as páginas
           </Button>
         </div>
+      )}
+    </div>
+  );
+}
+
+/** Lista das peças que o jurídico confere, com as páginas no PDF do processo.
+ *  Vem do índice do PJe (sem IA); fora do PJe não aparece. */
+function PecasLocalizadas({ pecas }: { pecas: PecasPje }) {
+  const grupos: { titulo: string; itens: [string, PecaPje[]][] }[] = [
+    {
+      titulo: "Processo de conhecimento",
+      itens: [
+        ["Sentença", pecas.conhecimento.sentenca],
+        ["Acórdão", pecas.conhecimento.acordao],
+        ["Trânsito em julgado", pecas.conhecimento.transito],
+      ],
+    },
+    {
+      titulo: "Cumprimento de sentença",
+      itens: [
+        ["Cálculo homologado", pecas.cumprimento.calculo_homologado],
+        ["Sentença/decisão homologatória", pecas.cumprimento.homologacao],
+        ["Outra sentença", pecas.cumprimento.sentenca ?? []],
+        ["Acórdão", pecas.cumprimento.acordao],
+        ["Trânsito em julgado", pecas.cumprimento.transito],
+      ],
+    },
+    { titulo: "Ofício", itens: [["Ofício requisitório", pecas.oficio]] },
+  ];
+  const paginas = (l: PecaPje[]) =>
+    l.map((p) => (p.pagina_inicio === p.pagina_fim ? `pág. ${p.pagina_inicio}` : `págs. ${p.pagina_inicio}–${p.pagina_fim}`))
+      .join("; ");
+  return (
+    <div className="space-y-2 rounded-md border border-border/70 p-3 text-xs">
+      <p className="font-semibold">Peças localizadas no processo</p>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {grupos.map((g) => (
+          <div key={g.titulo} className="space-y-1">
+            <p className="text-[11px] font-medium text-muted-foreground">{g.titulo}</p>
+            {g.itens
+              // acórdão e "outra sentença" só aparecem quando existem: são raros,
+              // e "não achei" assustaria à toa
+              .filter(([rot, l]) => l.length > 0 || (rot !== "Acórdão" && rot !== "Outra sentença"))
+              .map(([rot, l]) => (
+                <div key={rot} className="flex justify-between gap-2">
+                  <span className={l.length ? "" : "text-muted-foreground"}>
+                    {l.length ? "✓" : "—"} {rot}
+                  </span>
+                  <span className="text-right tabular-nums text-muted-foreground">
+                    {l.length ? paginas(l) : "não localizado"}
+                  </span>
+                </div>
+              ))}
+          </div>
+        ))}
+      </div>
+      {pecas.faltando.length > 0 && (
+        <p className="text-[11px] text-amber-700 dark:text-amber-400">
+          Não localizei: {pecas.faltando.join(", ")}. Confira no PDF.
+        </p>
       )}
     </div>
   );

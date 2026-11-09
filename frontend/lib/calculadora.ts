@@ -23,6 +23,8 @@ export interface FormularioCalculo {
   pss_modo: ModoPss; pss: string; apss: string;
   ir_modo: ModoIr; ir: string; meses: string;
   hc: string; hs: string;
+  /** IR sobre o sucumbencial: "" = automático pela esfera (3% federal, 27,5% nas demais). */
+  ir_suc: string;
   modalidade: string; data_apres: string;
   sp_val: string; sp_data: string;
   ente: string; ente_outro: string; ano_orc: string;
@@ -40,7 +42,7 @@ export const FORMULARIO_VAZIO: FormularioCalculo = {
   // apaga o número recebe erro — o 14 é da tela, não do motor.
   pss_modo: "nao", pss: "", apss: "14",
   ir_modo: "nao", ir: "", meses: "0",
-  hc: "", hs: "",
+  hc: "", hs: "", ir_suc: "",
   modalidade: "", data_apres: "",
   sp_val: "", sp_data: "",
   ente: "", ente_outro: "", ano_orc: "",
@@ -103,6 +105,7 @@ export interface RespostaCalculo {
   cenarios_honorarios: LinhaHonorario[] | null;
   sucumbenciais_valor: string | null;
   sucumbenciais_pct: string | null;
+  sucumbenciais_ir_pct?: string | null;
   versao_motor: string | null;
 }
 
@@ -206,9 +209,27 @@ export const estadoDocumentos = () => pedir<EstadoDocumentos>("/documentos/estad
 export interface CorteSugerido {
   tipo: string; pagina_inicio: number; pagina_fim: number; rotulo?: string;
 }
+/** Uma peça localizada pelo índice do PJe. */
+export interface PecaPje {
+  id: string; titulo: string; tipo: string; data: string | null;
+  pagina_inicio: number; pagina_fim: number;
+}
+/** Mapa das peças que a pré-análise confere (conhecimento / cumprimento / ofício). */
+export interface PecasPje {
+  conhecimento: { sentenca: PecaPje[]; acordao: PecaPje[]; transito: PecaPje[] };
+  cumprimento: {
+    calculo_homologado: PecaPje[]; homologacao: PecaPje[]; acordao: PecaPje[]; transito: PecaPje[];
+    sentenca?: PecaPje[];
+  };
+  oficio: PecaPje[];
+  faltando: string[];
+}
+export interface AlertaPje { tipo: string; mensagem: string; paginas?: number[] }
+
 export interface RespostaAnalise {
   sessao: string;
   cortes_sugeridos: CorteSugerido[];
+  pje?: { pecas?: PecasPje; alertas?: AlertaPje[] } | null;
   homologacao: Record<string, unknown> | null;
   n_paginas: number;
   escaneadas: number;
@@ -251,6 +272,8 @@ export interface RespostaExtracao {
   conflitos?: ConflitoExtracao[];
   conta_por_ocr?: boolean;
   citacoes?: Record<string, string[]>;
+  alertas_pje?: AlertaPje[];
+  pecas_pje?: PecasPje | null;
   /** id para pedir as páginas citadas renderizadas; vale 1h. */
   sessao_paginas?: string | null;
   custo?: number;

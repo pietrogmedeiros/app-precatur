@@ -38,7 +38,8 @@ export function Resultado({ resposta, aoBaixarMemorial, baixandoMemorial = false
       <Trilha cenario={cen} />
       <MemoriaDescontos cenario={cen} />
       <Cascata cenario={cen} sucumbenciaisPct={resposta.sucumbenciais_pct}
-        sucumbenciaisValor={resposta.sucumbenciais_valor} />
+        sucumbenciaisValor={resposta.sucumbenciais_valor}
+        sucumbenciaisIrPct={resposta.sucumbenciais_ir_pct ?? null} />
       {resposta.cenarios_honorarios?.length ? (
         <CenariosHonorarios linhas={resposta.cenarios_honorarios} />
       ) : null}
@@ -186,9 +187,10 @@ function Linha({ rotulo, valor, forte }: { rotulo: string; valor: string; forte?
 }
 
 function Cascata({
-  cenario, sucumbenciaisPct, sucumbenciaisValor,
+  cenario, sucumbenciaisPct, sucumbenciaisValor, sucumbenciaisIrPct,
 }: {
   cenario: Cenario; sucumbenciaisPct: string | null; sucumbenciaisValor: string | null;
+  sucumbenciaisIrPct: string | null;
 }) {
   const linhas: { rotulo: string; valor: string | null; sinal: "+" | "−" | "=" }[] = [
     { rotulo: "Valor bruto atualizado", valor: cenario.valor_total_atualizado, sinal: "+" },
@@ -231,7 +233,8 @@ function Cascata({
         </div>
         {sucumbenciaisValor && (
           <p className="pt-3 text-[11px] leading-snug text-muted-foreground">
-            ℹ️ Honorários sucumbenciais de {sucumbenciaisPct}% = {brl(sucumbenciaisValor)}.
+            ℹ️ Honorários sucumbenciais de {sucumbenciaisPct}% = {brl(sucumbenciaisValor)}
+            {sucumbenciaisIrPct && <> (IR de {sucumbenciaisIrPct.replace(".", ",")}% no memorial)</>}.
             Não saem do líquido do credor — o valor vai no memorial, na seção “Honorários do advogado”.
           </p>
         )}
