@@ -55,6 +55,12 @@ MAX_PAGINAS_INDICE = 10
 RECUO_COLUNA_TIPO = 60.0
 
 _RE_DECISAO = re.compile(r"senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o", re.I)
+# Decisão se decide pela coluna TIPO; o título só vale quando o tipo é genérico
+# (cópia juntada pela parte). No #2699 (09/11/2026) a petição "Cumprimento de
+# Sentença Dr. Lauro" (tipo Petição) virava a decisão "mais recente" e o valor
+# do dispositivo saía da conta do advogado.
+_RE_TIPO_DECISAO = re.compile(r"^\s*(?:senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o)", re.I)
+_RE_TIPO_GENERICO = re.compile(r"^\s*$|documento de comprova|outros documentos|^\s*anexo", re.I)
 # Peça "sentença / acórdão" para anexar no card. Primeiro pela coluna TIPO; o
 # título só vale quando o tipo é genérico: no cumprimento de sentença do TJES
 # (#6105) a sentença e o acórdão da ação de origem entram como "Documento de
@@ -63,8 +69,33 @@ _RE_DECISAO = re.compile(r"senten[çc]a|decis[ãa]o|despacho|ac[óo]rd[ãa]o", r
 _RE_TIPO_SENTENCA = re.compile(r"^\s*(?:senten[çc]a|ac[óo]rd[ãa]o)", re.I)
 _RE_TITULO_SENTENCA = re.compile(r"\b(?:senten[çc]a|ac[óo]rd[ãa]o)\b", re.I)
 _RE_NAO_SENTENCA = re.compile(r"cumprimento de senten|impugna|peti[çc]|manifesta|intima|certid", re.I)
+_RE_ACORDAO = re.compile(r"ac[óo]rd[ãa]o", re.I)
+_RE_TRANSITO = re.compile(r"tr[âa]nsit\w*\s+em\s+julgado", re.I)
+_RE_HOMOLOG = re.compile(r"homolog", re.I)
+# o ATO de homologar ("HOMOLOGO os cálculos", "homologação dos mesmos"), não a
+# menção a "cálculos homologados" que toda decisão posterior repete (#2699,
+# decisão de 01/03/2021 sobre o formulário do ofício)
+_RE_HOMOLOGA = re.compile(
+    r"\bhomolog(?:o|a-se|ou|uei|ando|ar)\b|\bhomologa[çc][ãa]o\s+d[oae]s?\b|ficam\s+homologad", re.I)
 # teto de anexos: processo com muitos agravos não pode virar uma pilha no card
-MAX_SENTENCAS = 6
+MAX_SENTENCAS = 8
+# Quem juntou o documento: a linha de assinatura do PJe ("Assinado
+# eletronicamente por: FULANO - 24/02/2022 10:22:13"). Ela separa o formulário
+# que o ADVOGADO protocola como rascunho do ofício que o CARTÓRIO expede
+# (#2699: págs 289 e 295, mesmo título).
+_RE_ASSINATURA = re.compile(r"Assinado eletronicamente por:\s*(.+?)\s+-\s+\d{2}/\d{2}/\d{4}")
+_RE_TIPO_CARTORIO = re.compile(
+    r"^\s*(?:certid|despacho|decis|senten|intima|of[íi]cio|ato ordinat|ac[óo]rd|alvar|mandado|juntada)",
+    re.I)
+_RE_TIPO_PARTE = re.compile(r"^\s*(?:peti[çc]|manifesta|substabelec|procura)", re.I)
+# Título do ofício oficial do TJMG: "SEI_TJMG - 5983361 - Formulário - Ofício
+# Precatório-Beneficiário Principal". O rascunho do advogado (#2699) se chama
+# "Formulário Beneficiario Principal", sem "Ofício".
+_RE_TITULO_OFICIO = re.compile(r"of[íi]cio\W+precat[óo]rio|requisi[çc][ãa]o de pagamento|of[íi]cio requisit", re.I)
+# Proposta orçamentária declarada no formulário (federais e alguns estaduais).
+_RE_ANO_ORC = re.compile(
+    r"(?:proposta\s+or[çc]ament[áa]ria|ano\s+(?:da\s+proposta|do\s+or[çc]amento|or[çc]ament[áa]rio)|"
+    r"exerc[íi]cio\s+(?:financeiro|or[çc]ament[áa]rio))[^0-9\n]{0,30}\n?[^0-9\n]{0,10}((?:19|20)\d{2})\b", re.I)
 _RE_CONTA_TITULO = re.compile(
     r"laudo|c[áa]lculo|planilha|conta de liquida|demonstrativo|contadoria|parecer cont|"
     r"estudo t[ée]cnico", re.I)
@@ -73,7 +104,8 @@ _RE_CONTA_TITULO = re.compile(
 # "Impugnação aos cálculos de liquidação" e "Execução / Cumprimento de Sentença"
 # (13). Não ganham o ponto do título; se uma decisão os citar, os votos valem.
 _RE_TITULO_NAO_CONTA = re.compile(
-    r"impugna|manifesta|peti[çc]|intima|cumprimento de senten|embargos|recurso|agravo", re.I)
+    r"impugna|manifesta|peti[çc]|intima|cumprimento de senten|embargos|recurso|agravo|"
+    r"honor[áa]rios?\s+(?:advocat[íi]cios\s+)?sucumb", re.I)
 # Decisão citando o documento da conta: "laudo pericial de Id. 4609108021",
 # "ff. 06/07 do id. 4609108021". A palavra-chave tem de vir ANTES do Id, perto.
 _RE_CITA_CONTA = re.compile(
@@ -192,6 +224,57 @@ def mapear_paginas(textos: list[str]) -> list[str | None]:
     return ids
 
 
+def _palavras(texto: str) -> set[str]:
+    return set(re.findall(r"[a-zà-ú]{3,}", (texto or "").lower()))
+
+
+def preencher_lacunas(ids: list[str | None], textos: list[str], indice: dict) -> set[str]:
+    """Páginas sem carimbo ENTRE dois documentos: atribui aos documentos que o
+    índice lista entre eles e que não têm página nenhuma. Devolve os Ids
+    inferidos assim.
+
+    #3445 (09/11/2026): a planilha de cálculo (Id 16163663) e a tabela de
+    fatores foram juntadas sem carimbo; as págs 72–76 ficavam sem dono e a
+    conta não era achada. Um documento faltando leva a lacuna toda; vários,
+    corta onde o vocabulário de uma página para a seguinte menos se parece.
+    """
+    inferidos: set[str] = set()
+    tem = {d for d in ids if d}
+    ordem = {d: i["ordem"] for d, i in indice.items()}
+    i = 0
+    while i < len(ids):
+        if ids[i] is not None:
+            i += 1
+            continue
+        a = i
+        while i < len(ids) and ids[i] is None:
+            i += 1
+        b = i - 1  # lacuna = páginas a..b (0-based)
+        antes = ids[a - 1] if a > 0 else None
+        depois = ids[i] if i < len(ids) else None
+        if antes not in ordem or depois not in ordem:
+            continue
+        faltam = sorted((d for d, o in ordem.items() if ordem[antes] < o < ordem[depois] and d not in tem),
+                        key=ordem.get)
+        n = b - a + 1
+        if not faltam or len(faltam) > n:
+            continue
+        if len(faltam) == 1:
+            cortes = []
+        else:
+            sim = []
+            for k in range(a, b):
+                x, y = _palavras(textos[k]), _palavras(textos[k + 1])
+                sim.append((len(x & y) / max(1, len(x | y)), k + 1))
+            cortes = sorted(k for _, k in sorted(sim)[:len(faltam) - 1])
+        limites = [a, *cortes, b + 1]
+        for d, (x, y) in zip(faltam, zip(limites, limites[1:])):
+            for k in range(x, y):
+                ids[k] = d
+            inferidos.add(d)
+    return inferidos
+
+
 def _faixas(ids: list[str | None]) -> dict[str, tuple[int, int]]:
     """{id: (primeira, última)} em páginas 1-based."""
     out: dict[str, tuple[int, int]] = {}
@@ -210,16 +293,47 @@ def _dispositivo(texto: str) -> str:
     return texto[ms[-1].start():] if ms else ""
 
 
+def _e_decisao(info: dict) -> bool:
+    tipo, titulo = info.get("tipo") or "", info.get("titulo") or ""
+    if _RE_TIPO_DECISAO.search(tipo):
+        return True
+    if not _RE_TIPO_GENERICO.search(tipo):
+        return False  # Petição, Intimação, Certidão... mesmo com "sentença" no título
+    return bool(_RE_DECISAO.search(titulo)) and not _RE_NAO_SENTENCA.search(titulo)
+
+
+def _quem_juntou(docs: dict) -> None:
+    """Marca `juntado_por` = "cartorio" | "parte" | None em cada documento.
+
+    O signatário de Certidão/Despacho/Intimação é servidor ou juiz; o de
+    Petição/Manifestação é advogado. Um nome que só assina atos do juízo é do
+    cartório. Sem linha de assinatura (TJES, sintético), fica None.
+    """
+    cartorio, parte = set(), set()
+    for info in docs.values():
+        nome = info.get("signatario")
+        if not nome:
+            continue
+        if _RE_TIPO_CARTORIO.search(info.get("tipo") or ""):
+            cartorio.add(nome)
+        elif _RE_TIPO_PARTE.search(info.get("tipo") or ""):
+            parte.add(nome)
+    for info in docs.values():
+        nome = info.get("signatario")
+        info["juntado_por"] = ("cartorio" if nome in cartorio and nome not in parte
+                               else "parte" if nome in parte and nome not in cartorio else None)
+
+
 def _decisoes(docs: dict, textos_doc: dict) -> list[dict]:
     """Decisões com valor no dispositivo, da mais RECENTE para a mais antiga
     (embargos corrigem a sentença: no #3481, de "até 13/10/2020" para "até
     15/07/2021")."""
     out = []
     for d, info in docs.items():
-        if not _RE_DECISAO.search(f"{info['titulo']} {info['tipo']}"):
+        # a cópia da decisão que vai na intimação (tipo "Intimação") fica de
+        # fora sozinha: `_e_decisao` só aceita tipo de decisão ou genérico
+        if not _e_decisao(info):
             continue
-        if re.search(r"intima[çc]|certid", info["tipo"], re.I):
-            continue  # a cópia da decisão que vai na intimação repete o original
         disp = _dispositivo(re.sub(r"\s+", " ", textos_doc[d]))
         valores = list(dict.fromkeys(VALOR.findall(disp)))
         if valores:
@@ -265,12 +379,18 @@ def _achar_conta(docs: dict, textos_doc: dict, decisoes: list[dict],
     """
     votos: Counter = Counter()
     for d, info in docs.items():
-        if not _RE_DECISAO.search(f"{info['titulo']} {info['tipo']}"):
+        if not _e_decisao(info):
             continue
-        for m in _RE_CITA_CONTA.finditer(re.sub(r"\s+", " ", textos_doc[d])):
+        texto = re.sub(r"\s+", " ", textos_doc[d])
+        for m in _RE_CITA_CONTA.finditer(texto):
             if m.group(2) in docs and m.group(2) != d:
-                votos[m.group(2)] += 1
-    decisao_ids = {d for d, i in docs.items() if _RE_DECISAO.search(f"{i['titulo']} {i['tipo']}")}
+                # "HOMOLOGO os cálculos de Id X" (#2781) vale mais que uma
+                # menção de passagem ao laudo
+                perto = texto[max(0, m.start() - 120): m.end()]
+                votos[m.group(2)] += 3 if _RE_HOMOLOG.search(perto) else 1
+    decisao_ids = {d for d, i in docs.items() if _e_decisao(i)}
+    citados = [(d, list(dict.fromkeys(VALOR.findall(re.sub(r"\s+", " ", textos_doc[d])))))
+               for d in sorted(decisao_ids, key=lambda x: docs[x]["pagina_inicio"], reverse=True)]
     candidatos = {d for d in docs
                   if d not in decisao_ids and d not in oficios_ids
                   and (votos[d] or _titulo_de_conta(docs[d]))}
@@ -291,7 +411,22 @@ def _achar_conta(docs: dict, textos_doc: dict, decisoes: list[dict],
             if ancora:
                 break
         titulo_conta = _titulo_de_conta(docs[d])
-        score = votos[d] + (5 if ancora else 0) + (1 if titulo_conta else 0)
+        if not ancora and titulo_conta:
+            # #3445: nenhuma decisão cita a planilha nem tem dispositivo; o
+            # despacho manda pagar os honorários "de R$ 1.153,40", valor que
+            # só a planilha tem. Âncora FRACA: confirma a planilha, mas não vira
+            # pista para o extrator (o valor pode ser só uma parcela).
+            for dec_id, vals in citados:
+                pgs = next(((v, paginas_com_valor(v, do_doc)) for v in vals
+                            if paginas_com_valor(v, do_doc)), None)
+                if pgs:
+                    ancora = {"valor": pgs[0], "pagina": pgs[1][-1], "decisao": dec_id, "fraca": True}
+                    break
+        # fraca vale 1: só desempata e tira a planilha do "título não basta";
+        # nunca ganha de uma conta que as decisões citam (#2699: a planilha de
+        # honorários do advogado, pág 16, também tem um valor de despacho)
+        score = votos[d] + (5 if ancora and not ancora.get("fraca") else 1 if ancora else 0) \
+            + (1 if titulo_conta else 0)
         chave = (score, docs[d]["pagina_inicio"])  # empate: o mais recente
         if melhor is None or chave > melhor[0]:
             melhor = (chave, d, ancora)
@@ -382,6 +517,8 @@ def ler_oficio(doc: fitz.Document, a: int, b: int) -> dict | None:
     campos["numero_processo"] = _valor_do_item(itens, re.compile(r"numera[çc][ãa]o [úu]nica", re.I), _RE_CNJ)
     m = re.search(r"N\.?\s*[º°]\s*(\d{3,10})\s*/\s*(\d{4})", texto[:1500])
     campos["numero_oficio"] = f"{m.group(1)}/{m.group(2)}" if m else None
+    m = _RE_ANO_ORC.search(texto)
+    campos["ano_orcamentario"] = m.group(1) if m else None
     # O cabeçalho acaba onde começa a lista de naturezas: no formulário do TJES
     # ela traz "( ) Honorários Sucumbenciais" como opção, e o ofício do credor
     # virava ofício de honorários (#6105).
@@ -416,13 +553,167 @@ def _ultima_versao(oficios: list[dict]) -> list[dict]:
     return sorted(grupos.values(), key=lambda o: o["pagina_inicio"])
 
 
+def _oficio_pelo_indice(docs: dict, conta: dict | None) -> dict | None:
+    """Ofício que não deu para LER (escaneado: #3445, "Prec 365/2017", págs
+    145–147 sem texto), localizado só pelo índice: tipo "Ofício" (ou genérico
+    com título de ofício precatório), não RPV, não juntado pelo advogado, depois
+    da conta. Prefere o que vem logo após a "Certidão de expedição de
+    precatório"; no empate, o mais recente. Os campos ficam vazios: o OCR
+    sob demanda do pipeline lê as páginas depois."""
+    ordem = sorted(docs.values(), key=lambda i: i["pagina_inicio"])
+    cands = []
+    for k, info in enumerate(ordem):
+        tipo, titulo = info.get("tipo") or "", info.get("titulo") or ""
+        e_oficio = (re.match(r"\s*of[íi]cio", tipo, re.I)
+                    or (_RE_TIPO_GENERICO.search(tipo) and _RE_TITULO_OFICIO.search(titulo)))
+        if (not e_oficio or re.search(r"\bRPV\b|pequeno valor|honor", titulo, re.I)
+                or info.get("juntado_por") == "parte"
+                or (conta and info["pagina_inicio"] <= conta["pagina_fim"])):
+            continue
+        if not re.search(r"\bprec\b|precat|requisit", titulo, re.I):
+            continue
+        ant = ordem[k - 1] if k else {}
+        certidao = bool(re.search(r"certid", ant.get("tipo") or "", re.I)
+                        and re.search(r"precat", ant.get("titulo") or "", re.I))
+        cands.append(((certidao, info.get("data") or "", info["pagina_inicio"]), info))
+    if not cands:
+        return None
+    info = max(cands, key=lambda c: c[0])[1]
+    return {"id": info["id"], "data": info.get("data"), "pagina_inicio": info["pagina_inicio"],
+            "pagina_fim": info["pagina_fim"], "beneficiario_tipo": "principal",
+            "campos": {}, "preenchidos": 0, "origem": "indice"}
+
+
+def _escolher_oficio(oficios: list[dict], docs: dict) -> tuple[dict | None, list[dict]]:
+    """O ofício do CREDOR que a pré-análise lê, e os descartados com o motivo.
+
+    Regra do jurídico (Matheus, 09/11/2026, caso #2699): o alvo é o formulário
+    do beneficiário principal JUNTADO PELO CARTÓRIO, com título de ofício, e o
+    mais recente. O advogado protocola o mesmo formulário como rascunho (pág
+    289, sem nº e com valores trocados); o cartório expede o oficial (pág 295).
+    """
+    principais = [o for o in oficios if o["beneficiario_tipo"] == "principal"]
+    if not principais:
+        return None, []
+
+    def chave(o):
+        info = docs.get(o.get("id"), {})
+        return (info.get("juntado_por") == "cartorio",
+                info.get("juntado_por") != "parte",
+                bool(_RE_TITULO_OFICIO.search(info.get("titulo") or "")),
+                o.get("data") or "", o["pagina_inicio"])
+
+    alvo = max(principais, key=chave)
+    descartados = []
+    for o in principais:
+        if o is alvo:
+            continue
+        info = docs.get(o.get("id"), {})
+        if info.get("juntado_por") == "parte":
+            motivo = "juntado pelo advogado (rascunho), não pelo cartório"
+        elif not _RE_TITULO_OFICIO.search(info.get("titulo") or ""):
+            motivo = "título não é de ofício precatório"
+        else:
+            motivo = "há um ofício mais recente"
+        descartados.append({"id": o.get("id"), "pagina_inicio": o["pagina_inicio"],
+                            "pagina_fim": o["pagina_fim"], "titulo": info.get("titulo"),
+                            "motivo": motivo})
+    return alvo, descartados
+
+
+# ── 4b · peças que o jurídico confere ────────────────────────────────────
+def _ref(info: dict) -> dict:
+    return {k: info.get(k) for k in ("id", "titulo", "tipo", "data", "pagina_inicio", "pagina_fim")}
+
+
+def _e_transito(info: dict, texto: str) -> bool:
+    rotulo = f"{info.get('titulo') or ''} {info.get('tipo') or ''}"
+    if _RE_TRANSITO.search(rotulo):
+        return True
+    # certidão nativa do cartório: o título é só "Certidão"; vale o texto curto
+    return (bool(re.search(r"certid", rotulo, re.I)) and len(texto) < 4000
+            # "transitou", não "trânsito": a certidão de triagem do #3445
+            # MENCIONA o trânsito dos autos principais sem certificá-lo
+            and bool(re.search(r"transitou\s+(?:\w+\s+)?em\s+julgado", texto, re.I)))
+
+
+def _homologacoes(docs: dict, textos_doc: dict, conta: dict | None) -> list[dict]:
+    """Sentença/decisão/despacho homologatório: cita o Id da conta, ou diz
+    "homolog" perto de cálculo/conta. Vem DEPOIS da conta (o cálculo é juntado
+    antes da decisão que o homologa)."""
+    out, citam = [], []
+    for d, info in docs.items():
+        if not _e_decisao(info) or _RE_ACORDAO.search(f"{info['titulo']} {info['tipo']}"):
+            continue
+        if conta and info["pagina_inicio"] <= conta["pagina_fim"]:
+            continue
+        texto = re.sub(r"\s+", " ", textos_doc[d])
+        cita = bool(conta and re.search(rf"\b{conta['id']}\b", texto))
+        if _RE_HOMOLOGA.search(texto) and (
+                cita or re.search(r"homolog\w*[^.;]{0,120}(?:c[áa]lculo|conta|laudo)", texto, re.I)):
+            out.append(info)
+        elif cita and not re.search(r"despacho", info["tipo"] or "", re.I):
+            citam.append(info)
+    # Sem "homologo" em lugar nenhum, a sentença que julga a impugnação com
+    # base na conta É a homologatória (#3481: "conforme apontado pelo Perito").
+    return sorted(out or citam, key=lambda i: i["pagina_inicio"])
+
+
+def _pecas(docs: dict, textos_doc: dict, conta: dict | None, oficio: dict | None) -> dict:
+    """Mapa das peças da pré-análise, nas duas fases (lista do Matheus,
+    09/11/2026):
+
+      conhecimento   sentença, acórdão, certidão de trânsito em julgado
+      cumprimento    cálculo homologado, sentença/decisão homologatória,
+                     acórdão (raro), trânsito
+      ofício         o formulário escolhido por `_escolher_oficio`
+
+    A fronteira entre as fases é a 1ª homologação (sem ela, a conta): no
+    cumprimento de sentença do PJe a sentença e o trânsito da ação de origem
+    entram como cópia junto da petição inicial — às vezes DEPOIS da planilha
+    do exequente (#2699: conta na pág 9, sentença na 17, trânsito na 22,
+    homologação na 188).
+    """
+    homol = _homologacoes(docs, textos_doc, conta)
+    homol_ids = {h["id"] for h in homol}
+    corte = (homol[0]["pagina_inicio"] if homol
+             else conta["pagina_inicio"] if conta else None)
+    conhec = {"sentenca": [], "acordao": [], "transito": []}
+    cumpr = {"calculo_homologado": [_ref(docs[conta["id"]])] if conta else [],
+             "homologacao": [_ref(h) for h in homol], "acordao": [], "transito": [],
+             "sentenca": []}  # outra sentença da fase (extinção etc.): só anexo
+    for d, info in sorted(docs.items(), key=lambda kv: kv[1]["pagina_inicio"]):
+        if d in homol_ids or (conta and d == conta["id"]):
+            continue
+        rotulo = f"{info['titulo']} {info['tipo']}"
+        antes = corte is None or info["pagina_inicio"] < corte
+        if _e_transito(info, textos_doc[d]):
+            (conhec if antes else cumpr)["transito"].append(_ref(info))
+        elif _e_sentenca(info) and not re.search(r"intima|certid", info["tipo"] or "", re.I):
+            if _RE_ACORDAO.search(rotulo):
+                (conhec if antes else cumpr)["acordao"].append(_ref(info))
+            else:
+                (conhec if antes else cumpr)["sentenca"].append(_ref(info))
+    faltando = [nome for nome, lista in (
+        ("Sentença (conhecimento)", conhec["sentenca"] or conhec["acordao"]),
+        ("Certidão de trânsito em julgado (conhecimento)", conhec["transito"]),
+        ("Cálculo homologado", cumpr["calculo_homologado"]),
+        ("Sentença/decisão homologatória", cumpr["homologacao"]),
+        ("Ofício requisitório", [oficio] if oficio else []),
+    ) if not lista]
+    return {"conhecimento": conhec, "cumprimento": cumpr,
+            "oficio": [_ref(docs[oficio["id"]])] if oficio and oficio.get("id") in docs else [],
+            "faltando": faltando}
+
+
 # ── 5 · reconciliação ────────────────────────────────────────────────────
 def _alertas(conta: dict | None, oficios: list[dict], decisoes: list[dict],
-             paginas: list[dict]) -> list[dict]:
+             paginas: list[dict], principal: dict | None = None) -> list[dict]:
     alertas = []
     do_conta = ([p for p in paginas if conta["pagina_inicio"] <= p["pagina"] <= conta["pagina_fim"]]
                 if conta else [])
-    principal = next((o for o in oficios if o["beneficiario_tipo"] == "principal"), None)
+    if principal is None:
+        principal = next((o for o in oficios if o["beneficiario_tipo"] == "principal"), None)
     decisao = decisoes[0] if decisoes else None
 
     for o in oficios:
@@ -491,11 +782,16 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
         if not any(ids):
             return None
         indice = ler_indice(doc)
+        sem_carimbo = preencher_lacunas(ids, textos, indice)
         docs = {}
         for d, (a, b) in _faixas(ids).items():
             info = indice.get(d, {})
+            m = _RE_ASSINATURA.search(crus[a - 1])
             docs[d] = {"id": d, "data": info.get("data"), "titulo": info.get("titulo", ""),
-                       "tipo": info.get("tipo", ""), "pagina_inicio": a, "pagina_fim": b}
+                       "tipo": info.get("tipo", ""), "pagina_inicio": a, "pagina_fim": b,
+                       "signatario": m.group(1).strip().upper() if m else None,
+                       "sem_carimbo": d in sem_carimbo}
+        _quem_juntou(docs)
         textos_doc = {d: "\n".join(textos[i["pagina_inicio"] - 1: i["pagina_fim"]]) for d, i in docs.items()}
 
         brutos = []
@@ -505,9 +801,32 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
                 o["id"], o["data"] = d, i["data"]
                 brutos.append(o)
         oficios = _ultima_versao(brutos)
+        oficio, descartados = _escolher_oficio(oficios, docs)
+        # os rascunhos saem da lista: alerta e corte só olham o ofício que vale
+        fora = {x["id"] for x in descartados}
+        oficios = [o for o in oficios if o.get("id") not in fora]
         decisoes = _decisoes(docs, textos_doc)
         conta = _achar_conta(docs, textos_doc, decisoes, paginas, {o["id"] for o in brutos})
-        alertas = _alertas(conta, oficios, decisoes, paginas)
+        if oficio is None and (o := _oficio_pelo_indice(docs, conta)):
+            oficio = o
+            oficios = [o, *oficios]
+        alertas = _alertas(conta, oficios, decisoes, paginas, oficio)
+        if oficio and oficio.get("origem") == "indice":
+            alertas.append({"tipo": "oficio_sem_texto", "paginas": [oficio["pagina_inicio"]],
+                            "mensagem": (f"O ofício (págs {oficio['pagina_inicio']}–{oficio['pagina_fim']}, "
+                                         f"\"{docs[oficio['id']]['titulo']}\") foi achado pelo índice, mas é "
+                                         f"imagem: os campos dependem do OCR. Confira no PDF.")})
+        if conta and docs[conta["id"]].get("sem_carimbo"):
+            alertas.append({"tipo": "conta_sem_carimbo", "paginas": [conta["pagina_inicio"]],
+                            "mensagem": (f"A conta (\"{conta['titulo']}\") não tem o carimbo do PJe; as págs "
+                                         f"{conta['pagina_inicio']}–{conta['pagina_fim']} foram deduzidas pela "
+                                         f"ordem do índice. Confira se começam e terminam aí.")})
+        for x in descartados:
+            alertas.append({"tipo": "oficio_descartado", "paginas": [x["pagina_inicio"]],
+                            "mensagem": (f"Formulário nas págs {x['pagina_inicio']}–{x['pagina_fim']} "
+                                         f"não foi usado: {x['motivo']}. Usei o das págs "
+                                         f"{oficio['pagina_inicio']}–{oficio['pagina_fim']}.")})
+        pecas = _pecas(docs, textos_doc, conta, oficio)
 
         cortes = []
         if conta:
@@ -517,7 +836,7 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
                                      + (f"; valor da decisão {conta['ancora']['valor']} na pág "
                                         f"{conta['ancora']['pagina']}" if conta["ancora"] else "")})
         # ofício do CREDOR primeiro: `extrair_cortes` usa o 1º corte de ofício
-        for o in sorted(oficios, key=lambda o: o["beneficiario_tipo"] != "principal"):
+        for o in sorted(oficios, key=lambda o: o is not oficio):
             cortes.append({"tipo": _TIPO_OFICIO, "pagina_inicio": o["pagina_inicio"],
                            "pagina_fim": o["pagina_fim"], "origem": "pje",
                            "motivo": f"formulário-ofício nº {o['campos'].get('numero_oficio') or '?'} "
@@ -528,7 +847,11 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
             "documentos": sorted(docs.values(), key=lambda x: x["pagina_inicio"]),
             "conta": conta,
             "decisao": decisoes[0] if decisoes else None,
-            "sentencas": _sentencas(docs),
+            "sentencas": _anexos_sentenca(pecas) if pecas else _sentencas(docs),
+            "pecas": pecas,
+            "oficio": oficio,
+            "oficios_descartados": descartados,
+            "ano_orcamentario": ano_orcamentario(oficio, docs),
             "oficios": oficios,
             "alertas": alertas,
             "cortes": cortes,
@@ -538,12 +861,62 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
             doc.close()
 
 
+def _anexos_sentenca(pecas: dict) -> list[dict]:
+    """Peças que vão no campo "Sentença / Acórdão" do card: tudo o que foi
+    localizado nas duas fases, menos conta e ofício (têm campo próprio), na
+    ordem dos autos. Sem nada localizado, cai na lista antiga (`_sentencas`)."""
+    vistos, out = set(), []
+    for fase, chaves in (("conhecimento", ("sentenca", "acordao", "transito")),
+                         ("cumprimento", ("homologacao", "sentenca", "acordao", "transito"))):
+        for k in chaves:
+            for r in pecas[fase][k]:
+                if r["id"] not in vistos:
+                    vistos.add(r["id"])
+                    out.append(r)
+    out.sort(key=lambda r: r["pagina_inicio"])
+    return out[-MAX_SENTENCAS:]
+
+
+# Art. 100 §5º CF: apresentado até a data-limite do ano X → orçamento de X+1;
+# depois → X+2. Mesmas datas de `precaturia.pipeline.cenarios._corte_apresentacao`
+# (repetidas aqui: o prefill roda sem o motor no repositório de origem).
+def _corte_orcamento(ano: int) -> tuple[int, int]:
+    if ano <= 2021:
+        return (7, 1)
+    if ano <= 2025:
+        return (4, 2)
+    return (2, 1)
+
+
+def ano_de_apresentacao(data_iso: str | None) -> str | None:
+    m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", data_iso or "")
+    if not m:
+        return None
+    ano, mes, dia = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    return str(ano + 1 if (mes, dia) <= _corte_orcamento(ano) else ano + 2)
+
+
+def ano_orcamentario(oficio: dict | None, docs: dict | None = None) -> dict | None:
+    """{valor, fonte, pagina}: o ano escrito no formulário; senão, estimado
+    pela data em que o ofício foi juntado (proxy da apresentação ao tribunal,
+    que raramente está nos autos). A fonte diz qual dos dois."""
+    if not oficio:
+        return None
+    if oficio["campos"].get("ano_orcamentario"):
+        return {"valor": oficio["campos"]["ano_orcamentario"], "fonte": "oficio",
+                "pagina": oficio["pagina_inicio"]}
+    data = oficio.get("data") or ((docs or {}).get(oficio.get("id")) or {}).get("data")
+    ano = ano_de_apresentacao(data)
+    return ({"valor": ano, "fonte": "estimado", "pagina": oficio["pagina_inicio"], "data_oficio": data}
+            if ano else None)
+
+
 def pista_conta(pje: dict | None, conta_ref: tuple[int, int]) -> str | None:
     """Frase para o prompt do extrator quando a âncora cai DENTRO da faixa
     que ele vai ler. Diz qual conta é a operativa — a página pode ter várias
     (#3481 pág 126: a de 04/2020 vem antes da de 07/2021)."""
     anc = ((pje or {}).get("conta") or {}).get("ancora")
-    if not anc or not (conta_ref[0] <= anc["pagina"] <= conta_ref[1]):
+    if not anc or anc.get("fraca") or not (conta_ref[0] <= anc["pagina"] <= conta_ref[1]):
         return None
     dec = (pje or {}).get("decisao") or {}
     ate = f", corrigido até {_data_br(dec['datas'][-1])}" if dec.get("datas") else ""

@@ -29,7 +29,7 @@ from . import radar as R
 from .apresentacao import extrair_data_envio_tribunal
 from .deterministico import honorarios as _det_honorarios
 from .deterministico import numero_cnj as _det_cnj
-from .deterministico import valor_presente
+from .deterministico import _tokens, centavos, paginas_com_valor, valor_presente
 from .extracao import extrair, extrair_natureza, extrair_oficio
 from .homologacao import achar_homologacao
 from . import ocr as _ocr
@@ -45,6 +45,7 @@ MAPA_PARAM = {
     "honorarios_contratuais_pct": "hc", "honorarios_sucumbenciais_pct": "hs",
     "natureza_tributaria": "natureza", "modalidade": "modalidade",
     "data_calculo": "data_calculo",
+    "ano_orcamentario": "ano_orc",
 }
 TOL_PROVA = 0.01
 
@@ -407,6 +408,69 @@ def _rejeitar_valores_ausentes(campos: dict, paginas: list[dict],
     return rejeitados
 
 
+_RE_HONOR = re.compile(r"honor[áa]rio", re.I)
+
+
+def _descontar_sucumbencial(campos: dict, paginas: list[dict],
+                            conta_ref: tuple[int, int]) -> dict | None:
+    """Total da conta SEM o sucumbencial (Matheus, 09/11/2026).
+
+    Há planilhas que fecham com "TOTAL DA CONDENAÇÃO" = crédito + honorários
+    sucumbenciais (#3445: 28.515,71 = 27.362,31 + 1.153,40), e os honorários
+    saem por RPV do advogado. Regra do jurídico: se dois totais da conta diferem
+    EXATAMENTE por um valor que aparece junto de "honorários", vale o que não o
+    inclui. Só números escritos na própria conta: nada de dividir por (1 + %),
+    que erra quando os honorários têm atualização própria (no #3445 são 4,2%
+    do crédito, não 10%).
+    """
+    total = (campos.get("valor_total") or {}).get("valor")
+    v = centavos(total)
+    if not v:
+        return None
+    a, b = conta_ref
+    da_conta = [p for p in paginas if a <= p["pagina"] <= b]
+    todos: set = set()
+    for p in da_conta:
+        todos |= _tokens(p.get("texto") or "")
+        for linha in p.get("tabela") or []:
+            for cel in linha:
+                todos |= _tokens(cel or "")
+
+    def candidatos(p):
+        """Valores do honorário, do mais confiável ao menos: a linha da tabela
+        cujo rótulo diz "honorários"; a mesma linha do texto; e, quando a linha
+        do rótulo não tem número (#4879: o texto sai fora de ordem, "10.697,20
+        106.971,98 HONORÁRIOS DE 10%"), a vizinhança."""
+        for linha in p.get("tabela") or []:
+            if linha and _RE_HONOR.search(linha[0] or ""):
+                yield _tokens(" ".join(c or "" for c in linha[1:]))
+        texto = p.get("texto") or ""
+        for m in _RE_HONOR.finditer(texto):
+            ini = texto.rfind("\n", 0, m.start()) + 1
+            fim = texto.find("\n", m.end())
+            mesma = _tokens(texto[ini: fim if fim >= 0 else len(texto)])
+            yield mesma or _tokens(texto[max(0, m.start() - 250): m.start() + 250])
+
+    for p in da_conta:
+        for toks in candidatos(p):
+            for h in sorted(toks - {None}):
+                # o honorário é a parcela MENOR e cabe na sucumbência (CPC art.
+                # 85: até 20%; folga para a atualização própria). Sem isto o
+                # par juros + principal (#3481 sintético: 8.000 + 12.000) ou o
+                # próprio principal "descontariam".
+                if 0 < h <= (v - h) // 4 and (v - h) in todos:
+                    novo = _pje._br(v - h)
+                    campos["valor_total"] = {
+                        **campos["valor_total"], "valor": novo, "fonte": "sem_sucumbencial",
+                        "citacao": {"pagina": (paginas_com_valor(novo, da_conta) or [p["pagina"]])[-1],
+                                    "trecho": f"{total} − honorários {_pje._br(h)} = {novo}"}}
+                    return {"tipo": "sucumbencial_descontado", "paginas": [p["pagina"]],
+                            "mensagem": (f"O total da conta ({total}) inclui honorários sucumbenciais de "
+                                         f"{_pje._br(h)} (pág {p['pagina']}). Usei o crédito sem eles: "
+                                         f"{novo}, que também está na conta.")}
+    return None
+
+
 def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
                       oficio_ref: tuple[int, int] | None, homol: dict | None,
                       llm: LLM, sentenca_ref: tuple[int, int] | None = None,
@@ -426,6 +490,7 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
     # ANTES de tudo que lê os valores (prova, query, citações): um valor que
     # não existe na conta não pode fechar a prova nem viajar para a calculadora.
     rejeitados = _rejeitar_valores_ausentes(campos, paginas, conta_ref)
+    aviso_suc = _descontar_sucumbencial(campos, paginas, conta_ref)
 
     # ofício (seções 4 e 5) — best-effort, não derruba se faltar
     if oficio_ref:
@@ -499,6 +564,8 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
         except ValueError:
             data_apres = None
 
+    _ano_orcamentario(campos, pje, oficio_ref, data_apres)
+
     prova = _prova(campos)
     citacoes: dict[int, list[str]] = {}
     for k, d in campos.items():
@@ -516,12 +583,40 @@ def _montar_resultado(paginas: list[dict], conta_ref: tuple[int, int],
         "oficio_ref": f"pp{oficio_ref[0]}-{oficio_ref[1]}" if oficio_ref else None,
         "campos": campos, "prova": prova, "conflitos": conflitos,
         "rejeitados": rejeitados,
-        "alertas_pje": (pje or {}).get("alertas") or [],
+        "alertas_pje": ([aviso_suc] if aviso_suc else []) + ((pje or {}).get("alertas") or []),
         "data_apresentacao": data_apres.isoformat() if data_apres else None,
         "query": montar_query(campos, data_apres),
         "citacoes": {str(k): v for k, v in citacoes.items()},
         "custo": round(llm.custo_total, 4),
     }
+
+
+def _ano_orcamentario(campos: dict, pje: dict | None, oficio_ref, data_apres: date | None) -> None:
+    """Ano orçamentário (pedido do Matheus, 09/11/2026). Ordem: o que o ofício
+    DECLARA (IA ou formulário do PJe); senão, estimado pelo art. 100 §5º CF a
+    partir da apresentação ao tribunal ou, sem ela, da data em que o ofício foi
+    juntado. A estimativa vai marcada (`fonte: "estimado"`) e com o motivo no
+    trecho: ninguém a lê como dado dos autos."""
+    if (campos.get("ano_orcamentario") or {}).get("valor"):
+        return
+    ano = (pje or {}).get("ano_orcamentario")
+    if ano and oficio_ref and not (oficio_ref[0] <= ano["pagina"] <= oficio_ref[1]):
+        ano = None  # o humano cortou outro ofício: o ano do PJe não é dele
+    if ano and ano["fonte"] == "oficio":
+        campos["ano_orcamentario"] = {"valor": ano["valor"], "fonte": "pje",
+                                      "citacao": {"pagina": ano["pagina"], "trecho": ano["valor"]}}
+        return
+    if data_apres:
+        valor, base = _pje.ano_de_apresentacao(data_apres.isoformat()), f"apresentação em {data_apres:%d/%m/%Y}"
+    elif ano:
+        valor, base = ano["valor"], f"ofício juntado em {_pje._data_br(ano.get('data_oficio'))}"
+    else:
+        return
+    if valor:
+        campos["ano_orcamentario"] = {
+            "valor": valor, "fonte": "estimado",
+            "citacao": {"pagina": (ano or {}).get("pagina"),
+                        "trecho": f"estimado pelo art. 100 §5º CF: {base}"}}
 
 
 def _corte_ref(corte: dict, n_paginas: int | None = None) -> tuple[int, int] | None:
@@ -748,6 +843,8 @@ def preencher(pdf_path: str = None, pdf_bytes: bytes = None, llm: LLM | None = N
     # há como achá-los sem IA, e a lista fica vazia.
     res["sentenca_refs"] = [f"pp{s['pagina_inicio']}-{s['pagina_fim']}"
                             for s in (pj or {}).get("sentencas") or []]
+    # mapa das peças (conhecimento / cumprimento / ofício) para a tela
+    res["pecas_pje"] = (pj or {}).get("pecas")
     return res
 
 

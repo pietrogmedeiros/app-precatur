@@ -86,6 +86,8 @@ CAMPOS_OFICIO = {
     "modalidade": "modalidade da requisição: 'precatorio' ou 'rpv'",
     "ente_devedor": "nome do ENTE devedor (quem paga: União, INSS, Estado do X, Município de Y...)",
     "data_apresentacao": "DATA de apresentação/envio do requisitório ao tribunal (AAAA-MM-DD), senão null",
+    "ano_orcamentario": ("ANO ORÇAMENTÁRIO (AAAA): exercício/proposta orçamentária em que o precatório "
+                         "será pago, SÓ se o documento o declarar; não calcule, senão null"),
     "beneficiario": "nome do BENEFICIÁRIO/credor do requisitório",
     # ⚠ DOIS números diferentes, e confundi-los é o erro fácil: o ofício tem
     # número PRÓPRIO (N/AAAA, o que o time digita em "Número Ofício" — amostra
