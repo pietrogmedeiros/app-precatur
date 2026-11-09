@@ -178,7 +178,17 @@ export function Formulario({
               ajuda="Descontado no FINAL, sobre o valor atualizado — entra no memorial como linha própria, igual PSS e IR." />
             <CampoTexto label="Honorários de Sucumbência (%)" placeholder="10" inputMode="decimal"
               valor={form.hs} onChange={(v) => aoMudar({ hs: v })}
-              ajuda="NÃO sai do líquido do credor. Vai para o memorial, com o valor sobre o bruto atualizado e o IR de 27,5%." />
+              ajuda="NÃO sai do líquido do credor. Vai para o memorial, com o valor sobre o bruto atualizado e o IR abaixo." />
+            {form.hs && (
+              <CampoSelect label="↳ IR sobre os sucumbenciais" valor={form.ir_suc}
+                onChange={(v) => aoMudar({ ir_suc: v })}
+                opcoes={[
+                  { valor: "", rotulo: "Automático (3% se federal, 27,5% nos demais)" },
+                  { valor: "3", rotulo: "3% (requisitório federal)" },
+                  { valor: "27.5", rotulo: "27,5% (faixa máxima)" },
+                ]}
+                ajuda="Federal: retenção de 3% na fonte (Lei 10.833/2003, art. 27). Estadual e municipal: faixa máxima da tabela." />
+            )}
           </div>
           {!form.hc && (
             <Aviso tom="atencao">

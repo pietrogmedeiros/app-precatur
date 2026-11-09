@@ -192,6 +192,7 @@ def calcular(bruto: dict = Body(...), x_motor_segredo: str | None = Header(None)
         "cenarios_honorarios": cenarios_hc,
         "sucumbenciais_valor": _sucumbenciais(form, res),
         "sucumbenciais_pct": str(form.honorarios_sucumbenciais_pct) if form.honorarios_sucumbenciais_pct else None,
+        "sucumbenciais_ir_pct": str(form.ir_sucumbenciais_pct) if form.ir_sucumbenciais_pct is not None else None,
         "versao_motor": _versao(),
     }
 
@@ -280,6 +281,7 @@ def gerar_memorial(bruto: dict = Body(...), x_motor_segredo: str | None = Header
             sucumbenciais_pct=hon_suc,
             sucumbenciais_valor=Decimal(suc_valor) if suc_valor else None,
             cenarios_honorarios=cenarios_hc,
+            ir_sucumbenciais_pct=form.ir_sucumbenciais_pct,
         )
     except Exception as exc:  # noqa: BLE001
         return JSONResponse(status_code=500, content={"erros": [f"Não foi possível gerar o PDF: {exc}"]})

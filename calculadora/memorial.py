@@ -537,7 +537,7 @@ def _cascata_html(cen: dict) -> str:
     return f'<table class="wf">{rows}</table>'
 
 
-def _honorarios_html(cen: dict, sucumb_pct=None, sucumb_valor=None) -> str:
+def _honorarios_html(cen: dict, sucumb_pct=None, sucumb_valor=None, ir_suc_pct=None) -> str:
     """Crédito do ADVOGADO, separado do crédito do credor.
 
     Existe para o comercial: advogado que quer ceder a própria parte precisa ver
@@ -577,10 +577,12 @@ def _honorarios_html(cen: dict, sucumb_pct=None, sucumb_valor=None) -> str:
             rot += f" ({_pct_num(sucumb_pct)})"
         linhas.append((rot, _brl(sucumb_valor),
                        "sobre o valor bruto atualizado — não deduzidos do líquido"))
-        ir_suc = _q(Decimal(str(sucumb_valor)) * IR_SUCUMBENCIAIS_PCT / Decimal("100"))
+        aliq = Decimal(str(ir_suc_pct)) if ir_suc_pct is not None else IR_SUCUMBENCIAIS_PCT
+        ir_suc = _q(Decimal(str(sucumb_valor)) * aliq / Decimal("100"))
         suc_liquido = _q(Decimal(str(sucumb_valor)) - ir_suc)
-        linhas.append((f"(−) IR sobre os sucumbenciais ({_pct_num(IR_SUCUMBENCIAIS_PCT)})",
-                       _brl(ir_suc), "faixa máxima da tabela do IR"))
+        linhas.append((f"(−) IR sobre os sucumbenciais ({_pct_num(aliq)})", _brl(ir_suc),
+                       "retenção do requisitório federal (Lei 10.833/2003, art. 27)"
+                       if aliq == Decimal("3") else "faixa máxima da tabela do IR"))
         linhas.append(("Sucumbenciais líquidos", _brl(suc_liquido), ""))
 
     rows = "".join(
@@ -645,6 +647,7 @@ def gerar_memorial_pdf(
     sucumbenciais_pct=None,
     sucumbenciais_valor=None,
     cenarios_honorarios: list[dict] | None = None,
+    ir_sucumbenciais_pct=None,
 ) -> bytes:
     """Monta o memorial em HTML e converte para PDF (bytes)."""
     cen = res.get("cenario_homologado") or {}
@@ -701,7 +704,7 @@ def gerar_memorial_pdf(
     # Crédito do advogado — sai DEPOIS do resultado de propósito: primeiro
     # "quanto sobra para o credor", que é a resposta do memorial, e só então
     # "quanto é do advogado", que é a pergunta do comercial.
-    honorarios = _honorarios_html(cen, sucumbenciais_pct, sucumbenciais_valor)
+    honorarios = _honorarios_html(cen, sucumbenciais_pct, sucumbenciais_valor, ir_sucumbenciais_pct)
     honorarios_sec = ""
     if honorarios:
         _num += 1
