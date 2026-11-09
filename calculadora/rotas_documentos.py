@@ -230,10 +230,13 @@ def extrair_cortes(corpo: dict = Body(...)) -> dict:
         _descartar_conflito_de_grafia(res)
         _anotar_citacoes(str(corpo.get("sessao") or ""), res)
         n = len(sessao["paginas"])
-        _anotar_faixas(str(corpo.get("sessao") or ""), {
-            peca: P._corte_ref(next((c for c in cortes if c.get("tipo") == tipo), {}), n)
-            for peca, tipo in (("conta", P.TIPO_CONTA), ("oficio", P.TIPO_OFICIO),
-                               ("sentenca", P.TIPO_SENTENCA))})
+        faixas = {peca: P._corte_ref(next((c for c in cortes if c.get("tipo") == tipo), {}), n)
+                  for peca, tipo in (("conta", P.TIPO_CONTA), ("oficio", P.TIPO_OFICIO))}
+        # sentença, acórdão, trânsito e homologação: cada faixa marcada vira
+        # um anexo no campo "Sentença / Acórdão" do card
+        faixas["sentenca"] = [f for f in (P._corte_ref(c, n) for c in cortes
+                                          if c.get("tipo") in P.TIPOS_ANEXO) if f]
+        _anotar_faixas(str(corpo.get("sessao") or ""), faixas)
         res["sessao_paginas"] = corpo.get("sessao")
     if (T := _telemetria()):
         T.registrar_confirmacao(str(corpo.get("sessao") or ""), sessao["paginas"],
