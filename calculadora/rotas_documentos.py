@@ -17,6 +17,7 @@ from typing import Any
 
 from fastapi import APIRouter, Body, File, Form, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 
 router = APIRouter(prefix="/documentos", tags=["documentos"])
 
@@ -185,6 +186,16 @@ async def analisar(arquivo: UploadFile = File(...)) -> dict:
     _exige_prefill()
     P = _pipeline()
     conteudo = await arquivo.read()
+    # ⚠ O trabalho pesado vai para a thread, NUNCA no loop: rota `async` que
+    # roda PDF/OCR/LLM direto trava o uvicorn inteiro (é um worker só), o
+    # /saude para de responder, a sonda do contêiner reprova 3 vezes e o
+    # orquestrador recria tudo no meio da análise. Foi o 502 do card #8423
+    # (10/11/2026, reinício às 08:43): processo com muita página escaneada no
+    # modo autônomo, OCR + chamadas ao modelo segurando o loop por minutos.
+    return await run_in_threadpool(_analisar_sync, P, conteudo)
+
+
+def _analisar_sync(P, conteudo: bytes) -> dict:
     try:
         res = P.analisar(pdf_bytes=conteudo)
     except Exception as exc:  # noqa: BLE001
@@ -260,6 +271,10 @@ async def extrair_pecas(
     conta_b = await conta.read()
     oficio_b = await oficio.read() if oficio is not None else None
     sent_b = [await s.read() for s in (sentencas or [])]
+    return await run_in_threadpool(_extrair_pecas_sync, P, conta_b, oficio_b, sent_b)
+
+
+def _extrair_pecas_sync(P, conta_b: bytes, oficio_b: bytes | None, sent_b: list[bytes]) -> dict:
     try:
         res = P.extrair_pecas(conta=conta_b, oficio=oficio_b, sentencas=sent_b, llm=_llm())
     except HTTPException:
@@ -290,6 +305,10 @@ async def preencher(arquivo: UploadFile = File(...)) -> dict:
     _exige_prefill()
     P = _pipeline()
     conteudo = await arquivo.read()
+    return await run_in_threadpool(_preencher_sync, P, conteudo)
+
+
+def _preencher_sync(P, conteudo: bytes) -> dict:
     try:
         res = P.preencher(pdf_bytes=conteudo, llm=_llm())
     except HTTPException:
