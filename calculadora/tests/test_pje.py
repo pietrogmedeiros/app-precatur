@@ -623,3 +623,21 @@ def test_caso_real_4879():
     assert _ids(pc["cumprimento"]["calculo_homologado"]) == ["10215502668"]
     assert _ids(pc["cumprimento"]["homologacao"]) == ["10241388304"]
     assert _ids(pc["cumprimento"]["transito"]) == ["10260273118"]
+
+
+def test_pecas_localizadas_viram_faixas_com_o_nome(res):
+    # Victor, 09/11/2026: sentença, acórdão etc. vinham como "Outro / não usar"
+    tipos = [c["tipo"] for c in res["cortes"]]
+    assert tipos[:2] == [P.TIPO_CONTA, P.TIPO_OFICIO]
+    assert tipos.count(P.TIPO_HOMOLOGACAO) == 2  # sentença e embargos que decidem pelo laudo
+    assert set(tipos) <= set(P.TIPOS)
+
+
+def test_extrair_cortes_le_a_natureza_da_sentenca_marcada(pdf, paginas):
+    llm = _FakeLLM()
+    cortes = [{"tipo": P.TIPO_CONTA, "pagina_inicio": 2, "pagina_fim": 3},
+              {"tipo": P.TIPO_SENT, "pagina_inicio": 4, "pagina_fim": 4}]
+    r = P.extrair_cortes(paginas, cortes, llm=llm, ocr_fn=None)
+    assert r["ok"], r
+    # a conta do falso não traz natureza: a sentença marcada é consultada
+    assert any("4" in p and "natureza" in p.lower() for p in llm.prompts[1:])

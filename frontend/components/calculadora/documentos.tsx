@@ -20,6 +20,13 @@ import {
 
 type Modo = "pecas" | "corte" | "autonomo";
 
+// Mesmos nomes de `pipeline.TIPOS`. Conta e ofício são lidos pela IA; os
+// demais só vão anexos no card (campo "Sentença / Acórdão").
+const TIPOS_DE_FAIXA = [
+  "Conta homologada", "Ofício requisitório", "Sentença", "Acórdão",
+  "Trânsito em julgado", "Decisão homologatória", "Outro / não usar",
+];
+
 /** Query params da extração → campos do formulário (mesmo vocabulário da tela antiga). */
 export function semearFormulario(
   q: Record<string, string>
@@ -175,7 +182,7 @@ export function Documentos({
                   <div key={i} className="flex flex-wrap items-end gap-2 rounded-md border border-border/70 p-2">
                     <select className={`${inputClass} w-48`} value={c.tipo}
                       onChange={(e) => setCortes(cortes.map((x, j) => j === i ? { ...x, tipo: e.target.value } : x))}>
-                      {["Conta homologada", "Ofício requisitório", "Outro / não usar"].map((t) => (
+                      {TIPOS_DE_FAIXA.map((t) => (
                         <option key={t} value={t}>{t}</option>
                       ))}
                     </select>

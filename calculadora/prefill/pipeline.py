@@ -58,7 +58,14 @@ TIPO_CONTA = "Conta homologada"
 TIPO_OFICIO = "Ofício requisitório"
 TIPO_SENTENCA = "Sentença / acórdão"
 TIPO_OUTRO = "Outro / não usar"
-TIPOS = [TIPO_CONTA, TIPO_OFICIO, TIPO_OUTRO]
+# Peças que só vão anexas no card (campo "Sentença / Acórdão"); os nomes são
+# os mesmos que `pje` dá às faixas que localiza.
+TIPO_SENT = "Sentença"
+TIPO_ACORDAO = "Acórdão"
+TIPO_TRANSITO = "Trânsito em julgado"
+TIPO_HOMOLOGACAO = "Decisão homologatória"
+TIPOS_ANEXO = (TIPO_SENTENCA, TIPO_SENT, TIPO_ACORDAO, TIPO_TRANSITO, TIPO_HOMOLOGACAO)
+TIPOS = [TIPO_CONTA, TIPO_OFICIO, TIPO_SENT, TIPO_ACORDAO, TIPO_TRANSITO, TIPO_HOMOLOGACAO, TIPO_OUTRO]
 
 # Sinais para SUGERIR o rótulo da faixa (o humano corrige). Precisam DISTINGUIR
 # conta de ofício — por isso NÃO reuso `radar._FORTE`/`radar.parece_conta`, que
@@ -702,8 +709,14 @@ def extrair_cortes(paginas: list[dict], cortes: list[dict],
         return {"ok": False, "erro": "faixa da conta com páginas inválidas."}
     oficio_ref = _corte_ref(oficios[0], n) if oficios else None
 
+    # natureza tributária: a 1ª sentença/acórdão marcada, só se a conta calar
+    sent = next((c for c in cortes if c.get("tipo") in (TIPO_SENT, TIPO_ACORDAO, TIPO_SENTENCA,
+                                                        TIPO_HOMOLOGACAO)), None)
+    sentenca_ref = _corte_ref(sent, n) if sent else None
+
     lidas = _ocr_nas_faixas(pdf, paginas, (conta_ref, oficio_ref), ocr_fn)
-    res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm, pje=pje)
+    res = _montar_resultado(paginas, conta_ref, oficio_ref, homol, llm,
+                            sentenca_ref=sentenca_ref, pje=pje)
     _conta_por_ocr(res, lidas, conta_ref)
     if res.get("ok"):
         res["multi_conta"] = len(contas) > 1

@@ -130,6 +130,16 @@ _RE_ITEM = re.compile(r"(?m)^[ \t]*(\d{1,2}(?:\.\d{1,2}){1,3})\.?[ \t]+")
 # import circular — `pipeline` importa este módulo)
 _TIPO_CONTA = "Conta homologada"
 _TIPO_OFICIO = "Ofício requisitório"
+_TIPO_SENT = "Sentença"
+_TIPO_ACORDAO = "Acórdão"
+_TIPO_TRANSITO = "Trânsito em julgado"
+_TIPO_HOMOLOGACAO = "Decisão homologatória"
+# peça localizada → rótulo da faixa no assistente de corte (Victor, 09/11/2026:
+# as peças achadas vinham como "Outro / não usar")
+_ROTULO_PECA = (("conhecimento", "sentenca", _TIPO_SENT), ("conhecimento", "acordao", _TIPO_ACORDAO),
+                ("conhecimento", "transito", _TIPO_TRANSITO),
+                ("cumprimento", "homologacao", _TIPO_HOMOLOGACAO), ("cumprimento", "sentenca", _TIPO_SENT),
+                ("cumprimento", "acordao", _TIPO_ACORDAO), ("cumprimento", "transito", _TIPO_TRANSITO))
 
 
 def _abrir(fonte) -> fitz.Document:
@@ -841,6 +851,11 @@ def analisar(fonte, paginas: list[dict] | None = None) -> dict | None:
                            "pagina_fim": o["pagina_fim"], "origem": "pje",
                            "motivo": f"formulário-ofício nº {o['campos'].get('numero_oficio') or '?'} "
                                      f"({o['beneficiario_tipo'].replace('_', ' ')})"})
+        # as demais peças, na ordem dos autos: só para anexar no card
+        outras = [{"tipo": rot, "pagina_inicio": r["pagina_inicio"], "pagina_fim": r["pagina_fim"],
+                   "origem": "pje", "motivo": f"Id {r['id']}: {r['titulo'] or r['tipo']}"}
+                  for fase, chave, rot in _ROTULO_PECA for r in pecas[fase].get(chave, [])]
+        cortes += sorted(outras, key=lambda c: c["pagina_inicio"])
         return {
             "n_paginas": len(ids),
             "paginas_mapeadas": sum(1 for d in ids if d),
