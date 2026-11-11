@@ -32,9 +32,11 @@ nunca sobrescreve nada do Mapa, e as duas fontes convivem lado a lado.
 O GRAO e' (ano, ente): o plano e' anual e reenquadrado todo 1o de janeiro, entao
 2027 entra ao lado de 2026 em vez de sobrescrever.
 
-Um unico despacho do Comite Gestor traz a tabela do ESTADO INTEIRO (148 entes na
-BA em 2026) e e' republicado no PA de Fiscalizacao de cada municipio — por isso
-o coletor deduplica por ano antes de gravar.
+O Comite Gestor publica a tabela dos entes da BA REPARTIDA em mais de um despacho
+(2026: 148 entes no PA 8023804-11 e mais ~79 — Salvador, Camacari, Ilheus, Itabuna,
+Juazeiro, o Estado... — no PA de cada um deles, em outro formato de planilha). Cada
+despacho e' republicado em varios PAs; o coletor UNE as listas por ano e dedup por
+nome do ente. (Ate' 21/10/2026 ficava so' a maior e ~79 entes ficavam sem plano.)
 """
 import argparse
 import json
@@ -107,9 +109,11 @@ def carrega(cx, uf=None):
 
         for chave, bloco in (d.get("tabela_p23") or {}).items():
             ano = bloco.get("ano") or int(chave)
-            f = bloco.get("fonte") or {}
             for e in bloco.get("entes") or []:
                 r = e.get("rateio") or {}
+                # cada ente guarda o despacho DE ONDE saiu (a tabela da BA vem repartida
+                # em mais de um); JSON antigo nao tem, ai' vale o do bloco
+                f = e.get("fonte") or bloco.get("fonte") or {}
                 cx.execute(
                     "INSERT OR REPLACE INTO nacp_plano (ano, uf, tribunal, ibge, devedor,"
                     " mora_1jan, pct_aplicado, valor_anual, rateio_tj, rateio_trt, rateio_trf,"
@@ -174,16 +178,36 @@ def conformidade(cx, ibge):
         return None
     rs = cx.execute(
         "SELECT tipo, data, situacao, ano_plano, pa FROM nacp_ato"
-        " WHERE ibge = ? AND tipo IN ('certidao_regular','certidao_irregular','bloqueio_sisbajud')"
+        " WHERE ibge = ? AND tipo IN ('certidao_regular','certidao_irregular',"
+        "'bloqueio_sisbajud','bloqueio_liberado')"
         " ORDER BY data DESC LIMIT 12", (ibge,)).fetchall()
     if not rs:
         return None
+    # Uma decisao de LIBERACAO devolve o bloqueio imediatamente anterior (o ente provou
+    # que pagou): esse par nao e' atraso, nem conta como bloqueio. Vai do mais antigo p/
+    # o mais novo casando cada liberacao com o ultimo bloqueio ainda em aberto.
+    em_aberto, devolvidos = [], []
+    for r in sorted((dict(x) for x in rs), key=lambda x: (x["data"], x["tipo"] != "bloqueio_sisbajud")):
+        if r["tipo"] == "bloqueio_sisbajud":
+            em_aberto.append(r)
+        elif r["tipo"] == "bloqueio_liberado" and em_aberto:
+            devolvidos.append(em_aberto.pop())
+    rs = [r for r in rs if r["tipo"] != "bloqueio_liberado"
+          and not any(r["data"] == d["data"] and r["tipo"] == d["tipo"] for d in devolvidos)]
+    if not rs:
+        ult_dev = max(devolvidos, key=lambda x: x["data"])
+        return {"codigo": "bloqueio_devolvido",
+                "texto": f"bloqueio SISBAJUD de {ult_dev['data']} foi DEVOLVIDO por decisão (o ente havia pago)",
+                "em": ult_dev["data"], "pa": ult_dev.get("pa"), "ultima_certidao": None,
+                "ultimo_bloqueio": None, "n_bloqueios_12m": 0, "n_bloqueios_devolvidos": len(devolvidos)}
     ult = dict(rs[0])
     bloqueios = [dict(r) for r in rs if r["tipo"] == "bloqueio_sisbajud"]
     certidoes = [dict(r) for r in rs if r["tipo"].startswith("certidao")]
     if ult["tipo"] == "bloqueio_sisbajud":
         codigo, texto = "bloqueio", (
-            f"houve bloqueio SISBAJUD em {ult['data']} — sinal de atraso no plano")
+            f"houve bloqueio SISBAJUD em {ult['data']} — o tribunal bloqueia quando a parcela "
+            f"não é paga no prazo; é possível atraso, não confirmado"
+            + (f" ({len(devolvidos)} bloqueio(s) anterior(es) devolvido(s) por decisão)" if devolvidos else ""))
     elif ult.get("situacao") == "REGULAR":
         codigo, texto = "regular", (
             f"certidao de {ult['data']}: REGULAR no Plano de Pagamento"
@@ -193,7 +217,7 @@ def conformidade(cx, ibge):
     return {"codigo": codigo, "texto": texto, "em": ult["data"], "pa": ult.get("pa"),
             "ultima_certidao": certidoes[0] if certidoes else None,
             "ultimo_bloqueio": bloqueios[0] if bloqueios else None,
-            "n_bloqueios_12m": len(bloqueios)}
+            "n_bloqueios_12m": len(bloqueios), "n_bloqueios_devolvidos": len(devolvidos)}
 
 
 def _brl(v):

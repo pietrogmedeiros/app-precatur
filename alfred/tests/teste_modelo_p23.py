@@ -57,6 +57,17 @@ fila2 = [dict(f) for f in fila]
 n2, _ = M.marca_superprecatorios(fila2)              # minimo padrao = R$ 1 mi
 check("piso de materialidade descarta o falso positivo", n2, 0)
 
+# Regime ESPECIAL nao tem o parcelamento do §20 (regra do usuario, 2026-09-21): o
+# grande vulto segue na FIFO como precatorio normal, pago por inteiro na sua vez.
+f_e = [{"pos": 1, "ano": 2026, "val": 2_000_000.0}, {"pos": 2, "ano": 2026, "val": 100_000.0}]
+f_c = [dict(f) for f in f_e]
+M.proj20(f_c, orcamento=1_000_000, ano_base=2026)                       # comum: §20 aplica
+M.proj20(f_e, orcamento=1_000_000, ano_base=2026, regime="Especial")    # especial: FIFO pura
+check("comum: grande vulto e' marcado como §20", f_c[0]["sp"], True)
+check("especial: grande vulto NAO e' marcado", f_e[0]["sp"], False)
+check("especial: grande vulto paga por inteiro na vez (2 anos, nao 15%+5 parcelas)", f_e[0]["ano_previsto"], 2027)
+check("especial: o de tras espera o da frente", f_e[1]["ano_previsto"], 2028)
+
 # §5o: precatorio de exercicio futuro nao e' pago antes do seu ano
 fila3 = [{"pos": 1, "ano": 2028, "val": 10.0}]
 M.proj20(fila3, orcamento=1_000_000, ano_base=2026)
@@ -168,6 +179,25 @@ check("plano = mora -> fonte", b["fonte"], "oficial")
 # (c) sem valor oficial: comportamento historico intacto
 b = M.orcamento_anual(90_779_185.58, 804_061.01, "Comum", pct_oficial=1.0)
 check("sem valor oficial -> teto de sempre", b["valor"], 907_791.86)
+
+# ------------------------------------------- 6. ano-base proporcional (20/10/2026)
+# A fila coletada no meio do ano ja' nao tem o pago ate' a coleta: o exercicio-base so'
+# recebe (dias que faltam / dias do ano) do orcamento anual. Decisao do usuario.
+print("\n[6] ano-base proporcional")
+check("1o de janeiro = ano inteiro", M.fracao_restante_ano("2026-01-01", 2026), 1.0, tol=1e-9)
+check("20/10 = 73 dias de 365", M.fracao_restante_ano("2026-10-20", 2026), 73 / 365, tol=1e-9)
+check("fila de 2025 nao mexe no orcamento", M.fracao_restante_ano("2025-12-01", 2026), 1.0, tol=1e-9)
+check("aceita 'AAAA-MM-DD HH:MM'", M.fracao_restante_ano("2026-10-20 15:44", 2026), 73 / 365, tol=1e-9)
+_f = lambda: [{"numero": str(i), "ordem": i, "val": 100.0, "ano": 2026, "natureza": "COMUM"}
+              for i in range(1, 9)]
+# 8 x 100 = 800; orcamento 400/ano: cheio paga 4 em 2026; com metade do ano paga 2
+_a = _f(); r1 = M.proj20(_a, 400.0, 2026, marcar=False)
+check("orcamento cheio: pagos no ano-base", r1["pagos_ano_base"], 4)
+check("orcamento cheio: fila zera em", r1["zera"], 2027)
+_b = _f(); r2 = M.proj20(_b, 400.0, 2026, marcar=False, fracao_ano_base=0.5)
+check("metade do ano: pagos no ano-base", r2["pagos_ano_base"], 2)
+check("metade do ano: fila zera em", r2["zera"], 2028)
+check("so' o ano-base encolhe: 2o ano ainda paga 4", sum(1 for x in _b if x["ano_previsto"] == 2027), 4)
 
 # ---------------------------------------------------------------- veredito
 print("\n" + "=" * 62)

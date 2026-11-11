@@ -223,7 +223,7 @@ def gerar(p):
                           f"gastando {brl(j.get('orcamento_anual'))}/ano"
                           + (f" — parcela do §23 ({round(rat['fracao'] * 100)}% do total)" if rat else
                              (" — valor anual do plano do tribunal" if _fonte_orc == "oficial_valor"
-                              else f" — {pct(j.get('pct_p23'), 0)} da RCL"))))
+                              else f" — {pct(j.get('pct_p23'), 0 if float(j.get('pct_p23') or 0).is_integer() else 1)} da RCL"))))
         if _exerc:
             sub_ritmo = "não se aplica — não há teto anual a medir"
         elif f.get("e_superprecatorio"):
@@ -312,7 +312,9 @@ def gerar(p):
     # ---------- a conta ----------
     if j and a_frente is not None and j.get("orcamento_anual"):
         orc = j["orcamento_anual"]
-        anos_fila = a_frente / orc if orc else None
+        fab = j.get("fracao_ano_base") if j.get("fracao_ano_base") is not None else 1.0
+        ja_passou = orc * (1 - fab) if fab < 0.995 else 0.0    # parte do ano-base que ja' passou
+        anos_fila = (a_frente + ja_passou) / orc if orc else None
         ano_simples = j.get("exercicio_base", 0) + int(anos_fila) if anos_fila is not None else None
         res20 = f.get("reserva_p20") or {}
         anos_res = sorted(res20)
@@ -322,6 +324,10 @@ def gerar(p):
         A(Paragraph("A conta", st_h1))
         lc = [[Paragraph("", st_cell), Paragraph(f"<b>{brl(a_frente)}</b>", st_cell),
                Paragraph("que está à frente na fila", st_cell)],
+              *([[Paragraph("+", st_cell), Paragraph(brl(ja_passou), st_cell),
+                 Paragraph(f"do orçamento de {j.get('exercicio_base')} que já passou (a fila foi "
+                           f"coletada com {round(fab * 100)}% do ano pela frente)", st_cell)]]
+                if ja_passou else []),
               [Paragraph("÷", st_cell), Paragraph(brl(orc), st_cell),
                Paragraph("de orçamento por ano"
                          + (f" — parcela do §23 desta justiça ({round(rat['fracao'] * 100)}% do teto)"
@@ -372,13 +378,15 @@ def gerar(p):
                     f"{brl(mc.get('saldo'))} — {pct(mc.get('sobre_rcl_pct'))} da RCL, "
                     f"saldo em 31/12/{mc.get('ano_ref')} · declarado pelo próprio {_esc(trib)}"))
     if j and j.get("fonte_orcamento") != "pago_no_exercicio":
-        cap.append(("Teto anual do §23", f"{brl(j.get('teto_p23'))} — {pct(j.get('pct_p23'), 0)} "
+        cap.append(("Teto anual do §23", f"{brl(j.get('teto_p23'))} — {pct(j.get('pct_p23'), 0 if float(j.get('pct_p23') or 0).is_integer() else 1)} "
                                          f"da RCL: o máximo que a lei permite pagar, não o que paga"))
         if rat:
             cap.append(("Rateio entre justiças",
                         " · ".join(f"{_esc(t['tribunal'])} {t['pct']}%" for t in rat["por_tribunal"])
                         + (" <font color='#5b6b78' size='7.5'>(provisório — Mapa CNJ)</font>"
                            if rat.get("fonte") == "mapa" else
+                           " <font color='#5b6b78' size='7.5'>(oficial — Comitê Gestor)</font>"
+                           if rat.get("fonte") == "comite_gestor" else
                            " <font color='#5b6b78' size='7.5'>(pelas filas reais)</font>")))
     A(_ficha(cap))
 

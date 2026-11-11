@@ -47,10 +47,15 @@ ORGAOS = {
 
 # A tabela vem achatada numa linha so: "DEVEDOR R$ x,xx 1,00% R$ y,yy 100,00% 0,00% 0,00%".
 # O nome do ente e' greedy-safe porque ancoramos no "R$" seguinte.
+# Existem DUAS variantes do despacho: a antiga (sem coluna de parcela) e a que traz
+# "VALOR DA PARCELA" entre o % aplicado e o valor anual (PA de Juazeiro, jan/2026).
+# O Comite publica a lista dos entes da BA repartida entre despachos diferentes, entao
+# ler so' uma variante deixa dezenas de entes sem plano (Salvador, Camacari, Juazeiro...).
 RX_LINHA = re.compile(
     r"([A-ZÀ-Ú][A-ZÀ-Ú0-9\s\-\.\/']*?)\s+"
     r"R\$\s*([\d.]+,\d{2})\s+"          # total devido (mora em 1o/jan)
     r"([\d,]+)%\s+"                     # % aplicado (faixa do §23)
+    r"(?:R\$\s*([\d.]+,\d{2})\s+)?"     # valor da parcela mensal (so' na variante nova)
     r"R\$\s*([\d.]+,\d{2})\s+"          # valor anual do plano
     r"([\d,]+)%\s+([\d,]+)%\s+([\d,]+)%"  # rateio TJ / TRT / TRF
 )
@@ -184,8 +189,9 @@ def parse_tabela(texto):
             "devedor": nome,
             "mora_1jan": moeda(m.group(2)),
             "pct_aplicado": pct(m.group(3)),
-            "valor_anual": moeda(m.group(4)),
-            "rateio": {"TJ": pct(m.group(5)), "TRT": pct(m.group(6)), "TRF": pct(m.group(7))},
+            "valor_parcela": moeda(m.group(4)) if m.group(4) else None,
+            "valor_anual": moeda(m.group(5)),
+            "rateio": {"TJ": pct(m.group(6)), "TRT": pct(m.group(7)), "TRF": pct(m.group(8))},
         })
     return linhas
 
@@ -199,6 +205,11 @@ def classifica(texto):
         return "certidao_regular"
     if "IRREGULAR" in up and "CERTIFICO" in up:
         return "certidao_irregular"
+    # A DECISAO que manda devolver um bloqueio tambem diz "valor bloqueado" — sem esta
+    # guarda ela era contada como um bloqueio a mais (Juazeiro, 26/05/2026: o municipio
+    # tinha pago a parcela e a juiza mandou liberar R$ 656 mil bloqueados por engano).
+    if "VALOR BLOQUEADO" in up and "PROTOCOLO DE VALOR BLOQUEADO" not in up and "LIBERA" in up:
+        return "bloqueio_liberado"
     if "VALOR BLOQUEADO" in up:
         return "bloqueio_sisbajud"
     if RX_ORCAMENTO.search(texto):
@@ -226,6 +237,16 @@ def casa_ibge(nome, mapa):
 SOBREPOSICAO_DIAS = 10   # ver docstring de janela_incremental
 
 
+def uniao_entes(*listas):
+    """Junta listas de entes da tabela §23 do mesmo ano. Mesmo devedor em duas listas
+    (despacho republicado): vale a ultima. Ordem alfabetica do nome normalizado."""
+    por_nome = {}
+    for lista in listas:
+        for e in lista or []:
+            por_nome[norm(e["devedor"])] = e
+    return [por_nome[k] for k in sorted(por_nome)]
+
+
 def extrai(pas, mapa):
     """Publicacoes do PA -> (tabela §23 por ano, lista de atos)."""
     tabela, atos = {}, []
@@ -241,15 +262,21 @@ def extrai(pas, mapa):
             # O MESMO despacho e' republicado no PA de cada municipio, MAS existem
             # variantes curtas que citam o Comite/o "% APLICADO" sem reproduzir a
             # tabela. Ficar com a PRIMEIRA que aparece gravava justamente uma dessas
-            # (0 entes). Por isso: parseia todas e fica a que tiver MAIS entes.
+            # (0 entes) — essas sao ignoradas; as que trazem linhas sao UNIDAS (ver uniao_entes).
             ano = int(m.group(1)) if (m := RX_ANO_TABELA.search(texto)) else None
             chave = str(ano or pub["data"][:4])
             linhas = parse_tabela(texto)
-            anterior = tabela.get(chave)
-            if anterior and len(anterior["entes"]) >= len(linhas):
+            if not linhas:
                 continue
             for ln in linhas:
                 ln["ibge"] = casa_ibge(ln["devedor"], mapa)
+                ln["fonte"] = pub
+            anterior = tabela.get(chave)
+            if anterior:
+                # NAO descartar a menor: o Comite reparte os entes entre despachos
+                # (148 num PA, ~79 noutro) — as listas se COMPLETAM, nao se repetem.
+                linhas = uniao_entes(anterior["entes"], linhas)
+                pub = anterior["fonte"]
             tabela[chave] = {"ano": ano, "fonte": pub, "entes": linhas}
             continue
 
@@ -277,14 +304,14 @@ def funde(antigo, tabela_nova, atos_novos):
     2. A TABELA §23 do ano anterior e' PRESERVADA. Ela sai UMA VEZ por ano, em
        janeiro. Uma coleta incremental de 10 dias em agosto nao a encontra — se
        o merge simplesmente substituisse, a rotina APAGARIA o plano de todos os
-       entes do estado na primeira execucao. Dentro do mesmo ano, fica a versao
-       com MAIS entes (mesmo criterio da extracao).
+       entes do estado na primeira execucao. Dentro do mesmo ano, as listas de entes
+       sao UNIDAS (o Comite reparte os entes entre despachos).
     """
     tabela = dict((antigo.get("tabela_p23") or {}))
     for chave, bloco in tabela_nova.items():
         atual = tabela.get(chave)
-        if atual and len(atual.get("entes") or []) >= len(bloco.get("entes") or []):
-            continue
+        if atual:
+            bloco = dict(bloco, entes=uniao_entes(atual.get("entes"), bloco.get("entes")))
         tabela[chave] = bloco
 
     por_id = {a["id_djen"]: a for a in (antigo.get("atos") or []) if a.get("id_djen")}

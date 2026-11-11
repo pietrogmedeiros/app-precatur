@@ -269,8 +269,7 @@ function ProjecaoBloco({ projecao, tribunal, superprecatorio }: {
     ? "paga a fila inteira no exercício do orçamento — sem teto do art. 100 §23"
     : rateio
     ? `gastando ${brl(projecao.orcamento_anual)}/ano nesta justiça — parcela do §23 do ente `
-      + `(${Math.round(Number(rateio.fracao) * 100)}% do teto de ${brl(projecao.teto_p23)}, `
-      + `rateio ${rateio.fonte === "mapa" ? "provisório pelo Mapa CNJ" : "pelas filas das justiças"})`
+      + `(${Math.round(Number(rateio.fracao) * 100)}% do teto de ${brl(projecao.teto_p23)})`
     : `gastando ${brl(projecao.orcamento_anual)}/ano — ${pctDireto(projecao.pct_p23)} da RCL, `
       + (fonte === "oficial_valor" ? "valor do plano publicado pelo tribunal"
          : fonte === "oficial" ? "percentual homologado pelo tribunal"
