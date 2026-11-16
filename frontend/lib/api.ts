@@ -118,6 +118,9 @@ export interface PricingRow {
   asset: string;
   // Quando nula, a linha vale para as duas naturezas (caso da maioria das praças).
   natureza?: "alimentar" | "comum" | null;
+  // Faixa de valor bruto em que a linha vale. Precisa viajar de ida e volta pelo
+  // editor: se a tela a descartasse, salvar desfaria o desdobramento da praça.
+  faixa?: { min?: number | null; max?: number | null } | null;
 }
 
 export interface PricingEntity {
@@ -132,6 +135,40 @@ export interface PricingEntity {
   rows: PricingRow[];
   updated_by: string | null;
   updated_at: string;
+}
+
+// Pré-visualização de uma mudança de preço (nada é gravado).
+export interface PricingPreviewLinha {
+  rotulo: string;
+  antes: number[] | null;
+  depois: number[] | null;
+  delta: (number | null)[];
+  proposta_antes: number | null;
+  proposta_depois: number | null;
+}
+
+export interface PricingPreview {
+  key: string;
+  label: string;
+  linhas: PricingPreviewLinha[];
+  abatimento: { antes: number; depois: number };
+  trimestre: number;
+  liquido_referencia: number;
+  avisos: string[];
+  mudou: boolean;
+}
+
+export interface PricingHistoryEntry {
+  id: number;
+  entity_key: string;
+  rows: PricingRow[];
+  fixed_deduction: number;
+  description: string;
+  /** Quem substituiu esta versão. */
+  changed_by: string | null;
+  source: "import" | "edit" | "restore";
+  /** Quando esta versão foi substituída. */
+  changed_at: string;
 }
 
 export interface PricingImport {
@@ -459,6 +496,16 @@ export const api = {
       payload: { label?: string; rows?: PricingRow[]; fixed_deduction?: number; description?: string; hidden?: boolean; municipal_reference?: boolean }
     ) =>
       request<PricingEntity[]>(`/api/pricing/${key}`, { method: "PUT", body: JSON.stringify(payload) }),
+    // Antes × depois e avisos de coerência, sem gravar. O corpo é o mesmo do update.
+    preview: (
+      key: string,
+      payload: { rows?: PricingRow[]; fixed_deduction?: number; description?: string }
+    ) => request<PricingPreview>(`/api/pricing/${key}/preview`, { method: "POST", body: JSON.stringify(payload) }),
+    previewImport: (payload: PricingImport) =>
+      request<PricingPreview[]>("/api/pricing/import-preview", { method: "POST", body: JSON.stringify(payload) }),
+    history: (key: string) => request<PricingHistoryEntry[]>(`/api/pricing/${key}/history`),
+    restore: (key: string, id: number) =>
+      request<PricingEntity[]>(`/api/pricing/${key}/restore/${id}`, { method: "POST" }),
     import: (payload: PricingImport) =>
       request<{ updated: string[]; entities: PricingEntity[] }>("/api/pricing/import", {
         method: "POST",

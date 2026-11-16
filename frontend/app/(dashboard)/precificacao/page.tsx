@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calculator, FileText, Pencil, Plus, Upload } from "lucide-react";
-import { api, type PricingEntity, type PricingImport } from "@/lib/api";
+import { Calculator, FileText, History, Pencil, Plus, Upload } from "lucide-react";
+import { api, type PricingEntity, type PricingImport, type PricingPreview } from "@/lib/api";
 import { getUser } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import {
@@ -21,6 +21,7 @@ import {
   naturezaLabel,
   parseBRL,
   paymentYearOf,
+  rotuloDoAno,
   pctFromProposal,
   yearsUntil,
 } from "@/lib/pricing";
@@ -29,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import { CurveChart } from "@/components/pricing/curve-chart";
 import { Simulator } from "@/components/pricing/simulator";
 import { TableEditor } from "@/components/pricing/table-editor";
+import { HistoryDialog } from "@/components/pricing/history-dialog";
+import { PreviewDialog } from "@/components/pricing/preview-dialog";
 
 const inputClass =
   "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring";
@@ -51,6 +54,12 @@ export default function PrecificacaoPage() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [criarOpen, setCriarOpen] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [historicoOpen, setHistoricoOpen] = useState(false);
+  // Planilha lida, aguardando o admin conferir o antes × depois e confirmar.
+  const [importPendente, setImportPendente] = useState<
+    { found: PricingImport; resumo: string[]; previews: PricingPreview[] } | null
+  >(null);
+  const [confirmandoImport, setConfirmandoImport] = useState(false);
 
   // Seleção (mesmo modelo da calculadora antiga).
   const [entityKey, setEntityKey] = useState("federal");
@@ -172,9 +181,23 @@ export default function PrecificacaoPage() {
         setError("Não encontrei as tabelas Federal, Estadual ou Municipal na planilha. Confira se segue o modelo comercial.");
         return;
       }
-      if (!confirm(`Substituir para todo o time: ${resumo.join(", ")}?\n\nA versão atual fica guardada no histórico.`)) {
-        return;
-      }
+      // Nada é gravado ainda: o servidor devolve o antes × depois e os avisos, e a
+      // gravação só acontece em confirmaImport().
+      setImportPendente({ found, resumo, previews: await api.pricing.previewImport(found) });
+    } catch (e: any) {
+      setError(e.message ?? "Não foi possível processar a planilha.");
+    } finally {
+      setImporting(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  async function confirmaImport() {
+    if (!importPendente) return;
+    const { found, resumo } = importPendente;
+    setConfirmandoImport(true);
+    setError(null);
+    try {
       const res = await api.pricing.import(found);
       setEntities(res.entities);
       setOk(
@@ -182,10 +205,10 @@ export default function PrecificacaoPage() {
           (found.municipal ? " Pernambuco e Mato Grosso acompanham a Municipal automaticamente." : "")
       );
     } catch (e: any) {
-      setError(e.message ?? "Não foi possível processar a planilha.");
+      setError(e.message ?? "Não foi possível gravar a planilha.");
     } finally {
-      setImporting(false);
-      if (fileRef.current) fileRef.current.value = "";
+      setImportPendente(null);
+      setConfirmandoImport(false);
     }
   }
 
@@ -248,6 +271,10 @@ export default function PrecificacaoPage() {
               <Pencil className="h-4 w-4" />
               Editar tabela
             </Button>
+            <Button variant="outline" className="gap-2" onClick={() => setHistoricoOpen(true)}>
+              <History className="h-4 w-4" />
+              Histórico
+            </Button>
           </div>
         ) : null}
       </header>
@@ -300,7 +327,7 @@ export default function PrecificacaoPage() {
               </Choices>
             ) : null}
 
-            <Choices label="Safra / ano de previsão de pagamento">
+            <Choices label={rotuloDoAno(entity.key)}>
               {rows.map((r, i) => (
                 <Choice key={`${r.year}-${r.asset}-${r.natureza ?? ""}`} active={i === rowIndex} onClick={() => setRowIndex(i)}
                   sub={formatPct(r.values[quarter])}>{labelDaLinha(r)}</Choice>
@@ -425,6 +452,18 @@ export default function PrecificacaoPage() {
 
       <TableEditor entity={entity} open={editorOpen} onClose={() => setEditorOpen(false)}
         onSaved={(list) => { setEntities(list); setOk(`Tabela ${entity.label} atualizada para todo o time.`); }} />
+
+      <HistoryDialog entity={entity} open={historicoOpen} onClose={() => setHistoricoOpen(false)}
+        onRestored={(list) => { setEntities(list); setOk(`Tabela ${entity.label} restaurada para todo o time.`); }} />
+
+      <PreviewDialog
+        previews={importPendente?.previews ?? null}
+        titulo={`Conferir importação · ${importPendente?.resumo.join(", ") ?? ""}`}
+        confirmarTexto="Importar para o time"
+        busy={confirmandoImport}
+        onConfirm={confirmaImport}
+        onCancel={() => setImportPendente(null)}
+      />
 
       <TableEditor entity={entity} open={criarOpen} modo="criar" onClose={() => setCriarOpen(false)}
         onSaved={(list) => {

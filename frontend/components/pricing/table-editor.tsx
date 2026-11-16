@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
-import { api, type PricingEntity } from "@/lib/api";
+import { api, type PricingEntity, type PricingPreview, type PricingRow } from "@/lib/api";
 import { QUARTERS, formatDecimal, parseBRL } from "@/lib/pricing";
 import { Button } from "@/components/ui/button";
+import { PreviewDialog } from "@/components/pricing/preview-dialog";
 
 const cell =
   "h-8 w-full rounded-md border border-input bg-transparent px-2 text-sm shadow-sm outline-none focus-visible:ring-1 focus-visible:ring-ring";
@@ -15,6 +16,8 @@ interface DraftRow {
   asset: string;
   /** "" = a linha vale para as duas naturezas. */
   natureza: "" | "alimentar" | "comum";
+  /** Não é editável aqui, mas precisa voltar no save: sem isso a faixa se perde. */
+  faixa: PricingRow["faixa"];
 }
 
 // Edição manual de uma tabela de preço (só admin). Serve sobretudo para as
@@ -47,6 +50,8 @@ export function TableEditor({
   const [segueMunicipal, setSegueMunicipal] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  // Edição passa por uma conferência (antes × depois) antes de gravar.
+  const [preview, setPreview] = useState<PricingPreview | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -64,6 +69,7 @@ export function TableEditor({
         values: r.values.map((v) => String(v).replace(".", ",")),
         asset: r.asset,
         natureza: r.natureza ?? "",
+        faixa: r.faixa ?? null,
       }))
     );
     setDeduction(criando ? "" : entity.fixed_deduction ? formatDecimal(entity.fixed_deduction) : "");
@@ -75,53 +81,83 @@ export function TableEditor({
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    // Com a conferência aberta, o Esc fecha só ela (o diálogo cuida do próprio).
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && !preview && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, onClose, preview]);
 
   if (!open) return null;
 
   const patch = (i: number, fn: (r: DraftRow) => DraftRow) =>
     setRows((cur) => cur.map((r, idx) => (idx === i ? fn(r) : r)));
 
+  function montaPayload() {
+    // A API valida faixa (0–100) e formato; vírgula decimal é aceita aqui.
+    const linhas: PricingRow[] = rows.map((r) => ({
+      year: r.year,
+      values: r.values.map((v) => Number(v.replace(",", "."))),
+      asset: r.asset,
+      natureza: r.natureza || null,
+      faixa: r.faixa ?? null,
+    }));
+    return {
+      label,
+      rows: linhas,
+      fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
+      description,
+      hidden: oculta,
+      municipal_reference: segueMunicipal,
+    };
+  }
+
+  // Cadastro grava direto; edição pede antes a pré-visualização ao servidor.
   async function save() {
     setError(null);
     setSaving(true);
     try {
-      // A API valida faixa (0–100) e formato; vírgula decimal é aceita aqui.
-      const linhas = rows.map((r) => ({
-        year: r.year,
-        values: r.values.map((v) => Number(v.replace(",", "."))),
-        asset: r.asset,
-        natureza: r.natureza || null,
-      }));
+      const payload = montaPayload();
       if (criando) {
         const entities = await api.pricing.create({
           label, esfera, uf: uf || null, municipio: municipio || null,
-          description, fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
-          rows: linhas,
+          description, fixed_deduction: payload.fixed_deduction,
+          rows: payload.rows,
         });
         onSaved(entities);
         onClose();
         return;
       }
-      const entities = await api.pricing.update(entity.key, {
-        label,
-        rows: linhas,
-        fixed_deduction: deduction.trim() ? parseBRL(deduction) : 0,
-        description,
-        hidden: oculta,
-        municipal_reference: segueMunicipal,
-      });
-      onSaved(entities);
-      onClose();
+      setPreview(await api.pricing.preview(entity.key, payload));
     } catch (e: any) {
       setError(e.message);
     } finally {
       setSaving(false);
     }
   }
+
+  async function confirmar() {
+    setError(null);
+    setSaving(true);
+    try {
+      const entities = await api.pricing.update(entity.key, montaPayload());
+      setPreview(null);
+      onSaved(entities);
+      onClose();
+    } catch (e: any) {
+      setPreview(null);
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // Mudanças que não mexem em valor (nome, descrição, ocultar) também gravam.
+  const mudouOutroCampo =
+    !criando &&
+    (label !== entity.label ||
+      description !== entity.description ||
+      oculta !== Boolean(entity.hidden) ||
+      segueMunicipal !== Boolean(entity.municipal_reference));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
@@ -142,7 +178,7 @@ export function TableEditor({
         <p className="mb-4 rounded-md bg-secondary px-3 py-2 text-sm">
           {criando
             ? "A praça passa a valer na hora para todo o time e aparece na barra acima. Onde não houver regra própria, o regime geral da esfera continua valendo."
-            : "A alteração vale na hora para todo o time. A versão anterior fica guardada no histórico."}
+            : "Ao salvar você vê antes × depois e os avisos de coerência. Só depois de confirmar a alteração vale para todo o time, e a versão anterior fica no histórico."}
         </p>
 
         {criando ? null : (
@@ -249,7 +285,7 @@ export function TableEditor({
         </div>
 
         <Button variant="outline" size="sm" className="mt-2 gap-2"
-          onClick={() => setRows((cur) => [...cur, { year: "", values: ["0", "0", "0", "0"], asset: "Precatório", natureza: "" }])}>
+          onClick={() => setRows((cur) => [...cur, { year: "", values: ["0", "0", "0", "0"], asset: "Precatório", natureza: "", faixa: null }])}>
           <Plus className="h-4 w-4" />
           Adicionar linha
         </Button>
@@ -303,10 +339,20 @@ export function TableEditor({
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
           <Button onClick={save} disabled={saving || (criando && (!label.trim() || (esfera !== "federal" && !uf) || !rows.length))}>
-            {saving ? "Salvando…" : criando ? "Cadastrar praça" : "Salvar para o time"}
+            {saving ? (criando ? "Salvando…" : "Conferindo…") : criando ? "Cadastrar praça" : "Conferir alteração"}
           </Button>
         </div>
       </div>
+
+      <PreviewDialog
+        previews={preview ? [preview] : null}
+        titulo={`Conferir alteração · ${entity.label}`}
+        confirmarTexto="Salvar para o time"
+        busy={saving}
+        confirmarSempre={mudouOutroCampo}
+        onConfirm={confirmar}
+        onCancel={() => setPreview(null)}
+      />
     </div>
   );
 }

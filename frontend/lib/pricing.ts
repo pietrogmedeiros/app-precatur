@@ -78,6 +78,15 @@ export function yearsUntil(label: string, currentYear: number): number | null {
 
 /* ------------------------------- Mural ---------------------------------- */
 
+// Nome do seletor de ano na Precificação. Em geral o ano é o orçamentário; nas
+// praças abaixo ele vem da projeção do Alfred (ano previsto de pagamento).
+// Lista no código de propósito: mudar de praça é uma linha, sem tocar no banco.
+const PRACAS_ANO_ALFRED = new Set(["municipal", "espirito-santo"]);
+
+export function rotuloDoAno(entityKey: string): string {
+  return PRACAS_ANO_ALFRED.has(entityKey) ? "Ano de previsão de pagamento (alfred)" : "Ano Orçamentário";
+}
+
 // Até que ano de previsão de pagamento a região ainda é comprada. O rótulo da
 // safra É o ano previsto de pagamento ("Safra / ano de previsão de pagamento"
 // na ferramenta original), então o horizonte é o maior ano das linhas. Regiões
