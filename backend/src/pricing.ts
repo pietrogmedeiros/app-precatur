@@ -162,12 +162,72 @@ export class PricingError extends Error {
   }
 }
 
+// Regra de quem segue a curva Municipal, compartilhada entre a gravação e a
+// pré-visualização para as duas recusarem exatamente os mesmos casos.
+export function checaEdicaoMunicipal(
+  key: string,
+  entity: { municipal_reference: boolean },
+  patch: PricingPatch
+): void {
+  // Quem segue a curva Municipal não tem tabela própria para editar. A
+  // exceção é justamente a edição que a solta da curva: aí as linhas que
+  // vêm no mesmo patch passam a ser as dela.
+  const seguiraMunicipal = patch.municipal_reference ?? entity.municipal_reference;
+  if (entity.municipal_reference && seguiraMunicipal) {
+    throw new PricingError(400, `"${key}" segue a curva do Regime Geral Municipal — edite a tabela Municipal.`);
+  }
+  if (entity.municipal_reference && !seguiraMunicipal && !patch.rows?.length) {
+    throw new PricingError(400, `"${key}" precisa de uma tabela própria para deixar de seguir a curva Municipal.`);
+  }
+}
+
+export interface PricingHistoryEntry {
+  id: number;
+  entity_key: string;
+  rows: PricingRow[];
+  fixed_deduction: number;
+  description: string;
+  /** Quem SUBSTITUIU esta versão (a versão em si foi gravada antes). */
+  changed_by: string | null;
+  source: "import" | "edit" | "restore";
+  /** Quando esta versão foi substituída. */
+  changed_at: string;
+}
+
+export async function listHistory(key: string, limit = 30): Promise<PricingHistoryEntry[]> {
+  const rows = await query<any>(
+    `SELECT id, entity_key, rows, fixed_deduction, description, changed_by, source, changed_at
+       FROM pricing_history WHERE entity_key = $1
+      ORDER BY changed_at DESC, id DESC LIMIT $2`,
+    [key, limit]
+  );
+  return rows.map((r) => ({ ...r, id: Number(r.id), fixed_deduction: Number(r.fixed_deduction) }));
+}
+
+export async function getHistoryEntry(key: string, id: number): Promise<PricingHistoryEntry> {
+  const [row] = await query<any>(
+    `SELECT id, entity_key, rows, fixed_deduction, description, changed_by, source, changed_at
+       FROM pricing_history WHERE id = $1 AND entity_key = $2`,
+    [id, key]
+  );
+  if (!row) throw new PricingError(404, "Versão não encontrada no histórico desta praça.");
+  return { ...row, id: Number(row.id), fixed_deduction: Number(row.fixed_deduction) };
+}
+
+// Estado atual de um ente como a calculadora o vê (já com a curva Municipal
+// resolvida), para a pré-visualização comparar contra o que está valendo.
+export async function getPricing(key: string): Promise<PricingEntity> {
+  const e = (await listPricing()).find((x) => x.key === key);
+  if (!e) throw new PricingError(404, `Ente "${key}" não encontrado.`);
+  return e;
+}
+
 // Atualiza entes numa transação só, guardando a versão anterior de cada um.
 // Se qualquer ente falhar, nada é gravado — uma importação nunca fica pela metade.
 export async function updatePricing(
   patches: Record<string, PricingPatch>,
   changedBy: string | null,
-  source: "import" | "edit"
+  source: "import" | "edit" | "restore"
 ): Promise<PricingEntity[]> {
   const client = await pool.connect();
   try {
@@ -180,22 +240,7 @@ export async function updatePricing(
       );
       const entity = cur.rows[0];
       if (!entity) throw new PricingError(404, `Ente "${key}" não encontrado.`);
-      // Quem segue a curva Municipal não tem tabela própria para editar. A
-      // exceção é justamente a edição que a solta da curva: aí as linhas que
-      // vêm no mesmo patch passam a ser as dela.
-      const seguiraMunicipal = patch.municipal_reference ?? entity.municipal_reference;
-      if (entity.municipal_reference && seguiraMunicipal) {
-        throw new PricingError(
-          400,
-          `"${key}" segue a curva do Regime Geral Municipal — edite a tabela Municipal.`
-        );
-      }
-      if (entity.municipal_reference && !seguiraMunicipal && !patch.rows?.length) {
-        throw new PricingError(
-          400,
-          `"${key}" precisa de uma tabela própria para deixar de seguir a curva Municipal.`
-        );
-      }
+      checaEdicaoMunicipal(key, entity, patch);
 
       await client.query(
         `INSERT INTO pricing_history (entity_key, rows, fixed_deduction, description, changed_by, source)
