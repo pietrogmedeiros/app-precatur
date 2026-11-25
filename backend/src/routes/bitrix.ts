@@ -173,6 +173,12 @@ bitrixRouter.get("/deal", async (req, res) => {
     clientDoc: str(deal.UF_CRM_1769029151931),
     clientContact: joinContact(telefone, contactEmail),
     precatorioNumber: str(deal.UF_CRM_1769029222658),
+    // "Número Ofício" (geração 1769, funil padrão; a cópia 1776 é da Filial
+    // Salvador). NÃO é o "Nº Precatório" acima: aquele é o nº CNJ do precatório.
+    // O contrato preliminar cita o ofício requisitório pelo número do tribunal.
+    numeroOficio: str(deal.UF_CRM_1769029843593) ?? str(deal.UF_CRM_1776357858832),
+    // Nº CNJ do processo de origem (o contrato de cessão cita o ofício e o processo).
+    processo,
     tribunal: tribunalFromCNJ(processo),
     enteDevedor: str(deal.UF_CRM_1769029263875),
     natureza: normalizeNatureza(deal.UF_CRM_1769029436243),

@@ -331,6 +331,8 @@ export interface BitrixDeal {
   clientDoc: string | null;
   clientContact: string | null;
   precatorioNumber: string | null;
+  processo?: string | null;
+  numeroOficio?: string | null;
   tribunal: string | null;
   enteDevedor: string | null;
   natureza: "alimentar" | "comum" | null;

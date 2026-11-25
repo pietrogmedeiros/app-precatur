@@ -18,6 +18,7 @@ const PROPOSAL_NAV = [
   { href: "/mural", label: "Mural", icon: ClipboardList },
   { href: "/proposta", label: "Gerar Proposta", icon: FileText },
   { href: "/termo-vista", label: "Termo de Vista", icon: FileSignature },
+  { href: "/contrato-cessao", label: "Contrato Preliminar", icon: FileText },
   // Tabela de preço + calculadora + simulador: une as duas ferramentas avulsas.
   { href: "/precificacao", label: "Precificação", icon: Calculator },
   // Pré-Análise: motor determinístico de precatórios (cálculo + leitura dos PDFs).
@@ -47,7 +48,7 @@ const JURIDICO_NAV = [
 
 // Marca d'água do fundo por tela: o escudo da casa nas telas que fecham negócio;
 // o guilhoché, mais discreto, nas de apoio.
-const TELAS_COM_ESCUDO = ["/sales", "/proposta", "/termo-vista", "/precificacao", "/mural", "/pre-analise", "/alfred"];
+const TELAS_COM_ESCUDO = ["/sales", "/proposta", "/termo-vista", "/contrato-cessao", "/precificacao", "/mural", "/pre-analise", "/alfred"];
 
 function fundoDaRota(pathname: string): string {
   return TELAS_COM_ESCUDO.some((r) => pathname === r || pathname.startsWith(r + "/"))
