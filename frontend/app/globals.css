@@ -571,3 +571,150 @@ main[data-fundo="balanca"]::before {
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   Contrato Preliminar (A4 retrato, várias páginas, papel timbrado)
+   Mesmas medidas do Termo de Vista (Palatino 11pt, entrelinha 1,5, margem de
+   1"). Na tela é uma folha contínua com o cabeçalho e o rodapé do timbrado nas
+   pontas; no PDF o timbrado inteiro é o fundo de cada página (@page) e a
+   margem reserva o topo e o rodapé para o texto não passar por cima.
+   ========================================================================== */
+.contrato-doc {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  background: #fff;
+  color: #1a1a1a;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12), 0 8px 24px rgb(0 0 0 / 0.08);
+  overflow: hidden;
+}
+.contrato-doc::before,
+.contrato-doc::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: url("/papel-timbrado.png") no-repeat;
+  background-size: 100% auto;
+  pointer-events: none;
+}
+.contrato-doc::before {
+  top: 0;
+  height: 16cqw;
+  background-position: top;
+}
+.contrato-doc::after {
+  bottom: 0;
+  height: 14.3cqw;
+  background-position: bottom;
+}
+.contrato-folha {
+  position: relative;
+  z-index: 1;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, "URW Palladio L", serif;
+  font-size: 1.85cqw;
+  line-height: 1.5;
+  text-align: justify;
+  padding: 16cqw 12.1cqw 14.3cqw;
+}
+.contrato-folha p {
+  margin: 0;
+  orphans: 3;
+  widows: 3;
+}
+.contrato-folha p.sp {
+  margin-bottom: 1.5em;
+}
+.contrato-titulo {
+  text-align: center;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.contrato-clausula {
+  font-weight: 700;
+  text-decoration: underline;
+  break-after: avoid;
+}
+.contrato-linha {
+  display: inline-block;
+  max-width: 100%;
+  border-bottom: 1px solid #1a1a1a;
+  height: 1em;
+  vertical-align: baseline;
+}
+.contrato-final {
+  break-inside: avoid;
+}
+.contrato-data {
+  text-align: center;
+}
+.contrato-assinaturas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  margin-top: 3.5em;
+  text-align: center;
+  line-height: 1.35;
+}
+.contrato-assinatura-linha {
+  border-top: 1px solid #1a1a1a;
+  margin-bottom: 0.3em;
+}
+.contrato-testemunhas {
+  margin-top: 2.5em !important;
+}
+.contrato-testemunhas-linhas {
+  margin-top: 2.5em;
+  text-align: left;
+}
+
+@page contrato {
+  size: A4 portrait;
+  margin: 33.6mm 25.4mm 30mm;
+  /* O timbrado inteiro em CADA página. Um elemento fixo repetiria também, mas
+     como é mais alto que a área útil, o Chrome o fragmenta e vaza uma cópia
+     para a página seguinte. */
+  background: url("/papel-timbrado.png") no-repeat -25.4mm -33.6mm / 210mm 297mm;
+}
+@media print {
+  .contrato-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+  .contrato-page > * {
+    margin-top: 0 !important;
+  }
+  .contrato-layout {
+    display: block !important;
+  }
+  .contrato-preview {
+    position: static !important;
+    margin: 0 !important;
+  }
+  .contrato-doc {
+    page: contrato;
+    /* container-type vira bloco de contenção do elemento fixo: o timbrado
+       deixaria de repetir a cada página. Aqui as medidas são mm/pt. */
+    container-type: normal !important;
+    width: auto !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: none !important;
+  }
+  .contrato-doc::before,
+  .contrato-doc::after {
+    display: none !important;
+  }
+  .contrato-folha {
+    padding: 0 !important;
+    font-size: 11pt !important;
+  }
+  /* o escudo de fundo da tela sairia por cima do timbrado */
+  main:has(.contrato-doc)::before {
+    display: none !important;
+  }
+}
